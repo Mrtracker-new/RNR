@@ -23,7 +23,7 @@ Contact Section: Easy ways to get in touch with me.
 ---
 
 ## 🔧 How to View
-You can check out my portfolio by visiting: My Portfolio
+You can check out my portfolio by visiting: https://mrtracker-new.github.io/RNR/
 
 ---
 
