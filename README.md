@@ -6,7 +6,8 @@ Welcome to my personal portfolio website! This is my first project as a beginner
 ## 🚀 Project Overview
 This portfolio serves as a platform to display my work, share my skills, and provide a little about myself. I'm continuously learning, so expect this to evolve over time as I enhance my skills and add more features.
 
-#🛠️ Technologies Used
+---
+## 🛠️ Technologies Used
 HTML5: Structure of the website.
 CSS3: For styling and layout.
 JavaScript: Basic interactivity and functionality.
