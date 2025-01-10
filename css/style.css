@@ -39,6 +39,15 @@ h1,h2,h3,h4,h5,h6,p{
   color: #000000 !important;
 } 
 
+@media (max-width: 768px) {
+  .hire-me-btn {
+      display: block !important;
+      margin-top: 10px;
+  }
+  .about-img {
+      text-align: center;
+  }
+}
 /********** Template CSS ************/
 
 
@@ -185,6 +194,13 @@ h1,h2,h3,h4,h5,h6,p{
 }
 /* =================== Portfolio section ==================*/
 
+.portfolio-carousel .item {
+  padding: 15px;
+}
+.portfolio-carousel .item img {
+  border-radius: 10px;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+}
 
 .portfolio-item .portfolio-btn {
   position: absolute;
