@@ -54,7 +54,7 @@ Open the index.html file in your preferred web browser and start exploring! 🌍
 If you have any questions or would like to get in touch, feel free to contact me:
 
 Email: rolanlobo901@gmail.com 📧
-LinkedIn: Rolan Lobo 🔗
+LinkedIn: [Rolan Lobo](https://www.linkedin.com/in/rolan-lobo-93368a239/) 🔗
 
 ##Thank You 🙏
 Thank you for visiting my portfolio website! I hope you enjoy browsing through my projects. If you’re interested in collaborating or have any questions, don’t hesitate to reach out!
