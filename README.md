@@ -22,40 +22,40 @@ Feel free to explore and get in touch if you'd like to collaborate!
 - **Contact Form 📧**: Fill out the form to send a message directly.
 
 ## Technologies Used 💻
-HTML5 🌍
+- **HTML5 🌍**
 - **CSS3 🎨**
--JavaScript ⚡
--jQuery 🧑‍💻
--Bootstrap 4 🏗️
--Owl Carousel 🦉
--Isotope 🔍
--Font Awesome 🖋️
+- **JavaScript ⚡**
+- **jQuery 🧑‍💻**
+- **Bootstrap 4 🏗️**
+- **Owl Carousel 🦉**
+- **Isotope 🔍**
+- **Font Awesome 🖋️**
 
 ## Installation 🔧
 To run this project locally, follow these simple steps:
 
 Clone the repository:
 
-bash
-Copy code
-git clone https://github.com/your-username/rolan-lobo-portfolio.git
+    git clone https://github.com/Mrtracker-new/rnr
+
 Navigate to the project directory:
 
-bash
-Copy code
-cd rolan-lobo-portfolio
+    cd rnr
+
 Open the index.html file in your preferred web browser and start exploring! 🌍
 
-Usage 🚶‍♂️
-Navigation: Use the navigation bar to jump to different sections of the website.
-Dark Mode: Click the 🌙 moon icon in the navigation bar to toggle dark mode.
-Portfolio: Click on the project items in the portfolio section to view more details.
-Contact Form: Fill out the contact form to send me a message.
-Contact 📬
+## Usage 🚶‍♂️
+- **Navigation**: Use the navigation bar to jump to different sections of the website.
+- **Dark Mode**: Click the 🌙 moon icon in the navigation bar to toggle dark mode.
+- **Portfolio**: Click on the project items in the portfolio section to view more details.
+- **Contact Form**: Fill out the contact form to send me a message.
+
+## Contact 📬
 If you have any questions or would like to get in touch, feel free to contact me:
 
 Email: rolanlobo901@gmail.com 📧
 LinkedIn: Rolan Lobo 🔗
-Thank You 🙏
+
+##Thank You 🙏
 Thank you for visiting my portfolio website! I hope you enjoy browsing through my projects. If you’re interested in collaborating or have any questions, don’t hesitate to reach out!
 
