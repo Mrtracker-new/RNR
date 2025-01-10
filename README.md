@@ -2,18 +2,18 @@
 Welcome to the personal portfolio website of Rolan Lobo! This site showcases my skills, projects, and experience in web development and design. Whether you're a potential client, recruiter, or collaborator, feel free to explore my work!
 
 ## Table of Contents 📋
-- [Introduction](#introduction-👋)
+- [Introduction](#introduction)
 - [Features](#features)
 - [Technologies Used](#technologies-used)
 - [Installation](#installation)
 - [Usage](#usage)
 - [Contact](#contact)
 
-## Introduction 👋
+## Introduction  👋
 Welcome to my personal portfolio website! It's designed to showcase my skills, projects, and experience in web development and design. The site includes sections about my skills, qualifications, services, portfolio, testimonials, and contact information.
 Feel free to explore and get in touch if you'd like to collaborate!
 
-## Features 🚀
+## Features  🚀
 - **Responsive Design 📱**: Fully responsive across all devices.
 - **Dark Mode 🌙**: Toggle between light and dark modes.
 - **Smooth Scrolling 🌀**: Enjoy smooth scrolling for navigation.
