@@ -148,6 +148,14 @@ h1,h2,h3,h4,h5,h6,p{
     top: 30px;
    }
 }
+
+@media (max-width: 575.98px) {
+  .display-1 {
+    font-size: 80px;
+  }
+}
+
+
 /*===================== Progress Bar ====================*/
 
 .progress {
@@ -192,6 +200,8 @@ h1,h2,h3,h4,h5,h6,p{
   box-shadow: 0px 1px 13px rgba(27, 27, 27, 0.705); 
  
 }
+s
+
 /* =================== Portfolio section ==================*/
 
 .portfolio-carousel .item {
@@ -298,11 +308,12 @@ h1,h2,h3,h4,h5,h6,p{
 .game-section {
     padding: 60px 0;
     width: 100%;
-    overflow: visible;
+    overflow-x: hidden;
 }
 
 .game-section .owl-carousel {
     padding: 0 50px;
+    touch-action: none;
 }
 
 .game-section .owl-stage-outer {
@@ -403,7 +414,7 @@ h1,h2,h3,h4,h5,h6,p{
 
 @media (max-width: 991.98px) {
     .game-section {
-        padding: 40px 0;
+        padding: 30px 0;
     }
     
     .game-section .owl-carousel {
@@ -441,14 +452,14 @@ h1,h2,h3,h4,h5,h6,p{
 }
 
 @media (max-width: 575.98px) {
-    .game-section .item {
-        width: 200px;
-        height: 280px;
-    }
-    
-    .game-section .item.active {
-        width: 260px;
-    }
+  .game-section .item {
+      width: 200px;
+      height: 380px;
+  }
+  
+  .game-section .item.active {
+      width: 260px;
+  }
 }
 
 /* Update carousel navigation */
