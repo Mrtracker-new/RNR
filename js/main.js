@@ -129,29 +129,32 @@
 
     // Portfolio carousel
     $('.custom-carousel').owlCarousel({
-        loop: true,
+        loop: false,
         margin: 20,
         autoplay: true,
         autoplayTimeout: 3000,
         autoplayHoverPause: true,
         smartSpeed: 1000,
-        rewind: false,
+        rewind: true,
         animateOut: 'fadeOut',
         animateIn: 'fadeIn',
         responsive: {
             0: {
-                items: 1
+              items: 1,
+              nav: false,
+              loop: false
             },
             576: {
-                items: 1
+              items: 2,
+              nav: false,
+              loop: false
             },
             768: {
-                items: 2
-            },
-            992: {
-                items: 3
+              items: 3,
+              nav: false,
+              loop: false
             }
-        }
+          }
     });
 
     // Add this new contact form handler
