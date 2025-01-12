@@ -1,4 +1,4 @@
-# Rolan Lobo Portfolio 🌐
+# Portfolio 🌐
 Welcome to the personal portfolio website of Rolan Lobo! This site showcases my skills, projects, and experience in web development and design. Whether you're a potential client, recruiter, or collaborator, feel free to explore my work!
 
 ## Table of Contents 📋
