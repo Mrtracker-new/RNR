@@ -36,11 +36,11 @@ To run this project locally, follow these simple steps:
 
 Clone the repository:
 
-    git clone https://github.com/Mrtracker-new/rnr
+    git clone https://github.com/Mrtracker-new/RNR
 
 Navigate to the project directory:
 
-    cd rnr
+    cd RNR
 
 Open the index.html file in your preferred web browser and start exploring! 🌍
 
