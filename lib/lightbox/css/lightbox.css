@@ -7,13 +7,13 @@ html.lb-disable-scrolling {
 }
 
 .lightboxOverlay {
-  position: absolute;
+  position: fixed;
   top: 0;
   left: 0;
   z-index: 9999;
-  background-color: black;
-  filter: progid:DXImageTransform.Microsoft.Alpha(Opacity=80);
-  opacity: 0.8;
+  backdrop-filter: blur(5px);
+  background-color: rgba(0, 0, 0, 0.85);
+  transition: opacity 0.3s ease;
   display: none;
 }
 
@@ -30,12 +30,12 @@ html.lb-disable-scrolling {
 .lightbox .lb-image {
   display: block;
   height: auto;
-  max-width: inherit;
-  max-height: none;
-  border-radius: 3px;
-
-  /* Image border */
+  max-width: 90vw;
+  max-height: 90vh;
+  border-radius: 8px;
   border: 4px solid white;
+  box-shadow: 0 4px 16px rgba(0,0,0,0.2);
+  transition: transform 0.3s ease;
 }
 
 .lightbox a img {
@@ -69,6 +69,17 @@ html.lb-disable-scrolling {
   width: 100%;
   text-align: center;
   line-height: 0;
+  border: 3px solid #f3f3f3;
+  border-top: 3px solid #3498db;
+  border-radius: 50%;
+  width: 40px;
+  height: 40px;
+  animation: spin 1s linear infinite;
+}
+
+@keyframes spin {
+  0% { transform: rotate(0deg); }
+  100% { transform: rotate(360deg); }
 }
 
 .lb-cancel {
@@ -97,10 +108,13 @@ html.lb-disable-scrolling {
   background-image: url('data:image/gif;base64,R0lGODlhAQABAPAAAP///wAAACH5BAEAAAAALAAAAAABAAEAAAICRAEAOw==');
 }
 
-.lb-prev, .lb-next {
+.lb-nav a.lb-prev, .lb-nav a.lb-next {
   height: 100%;
   cursor: pointer;
   display: block;
+  opacity: 0.2;
+  transition: opacity 0.3s ease;
+  background-size: 32px;
 }
 
 .lb-nav a.lb-prev {
@@ -118,7 +132,7 @@ html.lb-disable-scrolling {
 
 .lb-nav a.lb-prev:hover {
   filter: progid:DXImageTransform.Microsoft.Alpha(Opacity=100);
-  opacity: 1;
+  opacity: 0.8;
 }
 
 .lb-nav a.lb-next {
@@ -136,7 +150,7 @@ html.lb-disable-scrolling {
 
 .lb-nav a.lb-next:hover {
   filter: progid:DXImageTransform.Microsoft.Alpha(Opacity=100);
-  opacity: 1;
+  opacity: 0.8;
 }
 
 .lb-dataContainer {
@@ -167,9 +181,11 @@ html.lb-disable-scrolling {
 }
 
 .lb-data .lb-caption {
-  font-size: 13px;
-  font-weight: bold;
-  line-height: 1em;
+  font-size: 16px;
+  font-weight: 500;
+  padding: 12px 0;
+  color: #ffffff;
+  text-shadow: 1px 1px 3px rgba(0,0,0,0.3);
 }
 
 .lb-data .lb-caption a {
@@ -187,21 +203,67 @@ html.lb-disable-scrolling {
 .lb-data .lb-close {
   display: block;
   float: right;
-  width: 30px;
-  height: 30px;
+  width: 36px;
+  height: 36px;
   background: url(../images/close.png) top right no-repeat;
   text-align: right;
   outline: none;
   filter: progid:DXImageTransform.Microsoft.Alpha(Opacity=70);
-  opacity: 0.7;
-  -webkit-transition: opacity 0.2s;
-  -moz-transition: opacity 0.2s;
-  -o-transition: opacity 0.2s;
-  transition: opacity 0.2s;
+  opacity: 0.8;
+  transition: all 0.3s ease;
+  transform: scale(1);
 }
 
 .lb-data .lb-close:hover {
   cursor: pointer;
-  filter: progid:DXImageTransform.Microsoft.Alpha(Opacity=100);
   opacity: 1;
+  transform: scale(1.1) rotate(90deg);
+}
+
+/* Mobile optimizations */
+@media (max-width: 768px) {
+  .lb-outerContainer {
+    width: 90vw !important;
+    height: auto !important;
+  }
+  
+  .lb-nav a.lb-prev,
+  .lb-nav a.lb-next {
+    opacity: 0.4;
+  }
+  
+  .lb-data .lb-caption {
+    font-size: 14px;
+  }
+  
+  .lb-data .lb-number {
+    font-size: 12px;
+  }
+}
+
+/* Touch device enhancements */
+@media (hover: none) {
+  .lb-nav a.lb-prev,
+  .lb-nav a.lb-next {
+    opacity: 0.5;
+  }
+}
+
+/* Dark mode support */
+@media (prefers-color-scheme: dark) {
+  .lb-outerContainer {
+    background-color: #1a1a1a;
+  }
+  
+  .lightbox .lb-image {
+    border-color: #333;
+  }
+  
+  .lb-data .lb-caption {
+    color: #ffffff;
+  }
+  
+  .lb-data .lb-number {
+    color: #bbbbbb;
+  }
 }
