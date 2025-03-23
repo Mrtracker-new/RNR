@@ -1,4 +1,10 @@
 # Portfolio 🌐
+
+<div align="center">
+  <img src="screenshots/rnr.jpeg" alt="RNR Logo" width="200"/>
+</div>
+
+
 Welcome to my personal portfolio website, This site showcases my skills, projects, and experience in web development and design. Whether you're a potential client, recruiter, or collaborator, feel free to explore my work!
 
 ## Table of Contents 📋
