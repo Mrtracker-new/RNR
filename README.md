@@ -1,6 +1,6 @@
 # Rolan Lobo - Personal Portfolio Website
 
-![Portfolio Preview](img/rnr.jpg)
+![Portfolio Preview](img/rnr.jpeg)
 
 ## 📋 Overview
 
