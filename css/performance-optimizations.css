@@ -1,0 +1,200 @@
+/* Performance Optimizations CSS */
+/* This file contains CSS optimizations to improve website performance across all devices */
+
+/* Optimize rendering performance with hardware acceleration where appropriate */
+.navbar, 
+.hero-image,
+.project-card,
+.testimonial-card,
+.skill-level,
+.btn {
+    /* Use transform: translate3d(0,0,0) to enable hardware acceleration */
+    transform: translate3d(0,0,0);
+    /* Inform the browser about properties that will change for better performance */
+    will-change: transform, opacity;
+    /* Ensure content is on its own layer for better performance */
+    backface-visibility: hidden;
+}
+
+/* Simplified animations for low-performance devices */
+.simplified-animations {
+    transition: all 0.3s ease !important;
+    transform: none !important;
+    animation: none !important;
+    will-change: auto !important; /* Reset will-change to avoid memory issues */
+}
+
+.simplified-animations:hover {
+    transform: translateY(-5px) !important;
+    box-shadow: 0 10px 20px rgba(0, 0, 0, 0.1) !important;
+    animation: none !important;
+}
+
+/* Optimize image rendering */
+img {
+    /* Prevent layout shifts during image loading */
+    aspect-ratio: attr(width) / attr(height);
+}
+
+/* Reduce animation complexity on mobile devices */
+@media (max-width: 768px) {
+    /* Simplify section transitions */
+    section {
+        transition: opacity 0.5s ease, transform 0.5s ease !important;
+    }
+    
+    /* Simplify staggered animations */
+    .stagger-animation {
+        transition: opacity 0.3s ease, transform 0.3s ease !important;
+    }
+    
+    /* Simplify card animations */
+    .project-card, .testimonial-card {
+        transition: all 0.3s ease !important;
+        transform: none !important;
+        animation: none !important;
+    }
+    
+    .project-card:hover, .testimonial-card:hover {
+        transform: translateY(-5px) !important;
+        box-shadow: 0 10px 20px rgba(0, 0, 0, 0.1) !important;
+        animation: none !important;
+    }
+    
+    /* Simplify skill bar animations */
+    .skill-level {
+        transition: width 0.5s ease-out !important;
+    }
+    
+    /* Disable complex animations */
+    @keyframes neonFlicker {
+        0%, 100% {
+            text-shadow: 0 0 5px rgba(0, 240, 255, 0.3);
+        }
+    }
+    
+    @keyframes textGlitch {
+        0%, 100% {
+            text-shadow: none;
+            transform: none;
+        }
+    }
+    
+    @keyframes cardHoverEffect {
+        0%, 100% {
+            box-shadow: 0 10px 20px rgba(0, 0, 0, 0.1);
+        }
+    }
+    
+    @keyframes testimonialHoverEffect {
+        0%, 100% {
+            box-shadow: 0 10px 20px rgba(0, 0, 0, 0.1);
+        }
+    }
+    
+    @keyframes enhancedBorderGlow {
+        0%, 100% {
+            filter: none;
+            box-shadow: none;
+        }
+    }
+    
+    @keyframes scanline {
+        0%, 100% {
+            background: none;
+            opacity: 0;
+        }
+    }
+    
+    @keyframes imageGlitch {
+        0%, 100% {
+            filter: none;
+            transform: none;
+        }
+    }
+    
+    /* Disable parallax effects on mobile */
+    .hero-image, .hero-content {
+        transform: none !important;
+        transition: none !important;
+    }
+}
+
+/* Optimize for low-end devices regardless of screen size */
+@media screen and (max-resolution: 1dppx), 
+       screen and (max-width: 768px) {
+    /* Reduce or eliminate text shadows */
+    h1, h2, h3, h4, .highlight {
+        text-shadow: none !important;
+    }
+    
+    /* Simplify box shadows */
+    .card, .btn, .project-card, .testimonial-card {
+        box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1) !important;
+    }
+    
+    /* Disable gradient animations */
+    .section-header::before,
+    .underline {
+        animation: none !important;
+        background: var(--primary-color) !important;
+    }
+}
+
+/* Optimize paint operations */
+.navbar.scrolled {
+    /* Use opacity instead of background-color for better performance */
+    opacity: 0.98;
+}
+
+/* Reduce repaints when scrolling */
+.back-to-top {
+    transform: translateZ(0);
+}
+
+/* Optimize transitions */
+.btn, .social-icons a, .nav-links a {
+    transition-property: transform, color !important;
+    transition-duration: 0.3s !important;
+}
+
+/* Optimize testimonial slider transitions */
+.testimonial-card {
+    transition: opacity 0.3s ease, transform 0.3s ease !important;
+}
+
+/* Optimize project filtering transitions */
+.projects-grid {
+    transition: height 0.3s ease !important;
+}
+
+/* Reduce animation duration for AOS elements */
+[data-aos] {
+    transition-duration: 600ms !important;
+}
+
+/* Optimize for devices with reduced motion preference */
+@media (prefers-reduced-motion: reduce) {
+    * {
+        animation-duration: 0.01ms !important;
+        animation-iteration-count: 1 !important;
+        transition-duration: 0.01ms !important;
+        scroll-behavior: auto !important;
+    }
+    
+    .stagger-animation,
+    .project-card,
+    .testimonial-card,
+    .btn,
+    .social-icons a,
+    .skill-level {
+        transition: none !important;
+        animation: none !important;
+        transform: none !important;
+    }
+    
+    [data-aos] {
+        opacity: 1 !important;
+        transform: none !important;
+    }
+}
