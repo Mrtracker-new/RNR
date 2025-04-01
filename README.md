@@ -1,6 +1,8 @@
 # Rolan Lobo - Personal Portfolio Website
 
-![Portfolio Preview](img/rnr.jpeg)
+<div align="center">
+  <img src="screenshots/rnr.jpeg" alt="RNR Logo" width="200"/>
+</div>
 
 ## 📋 Overview
 
