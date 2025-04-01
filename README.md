@@ -67,12 +67,12 @@ A modern, responsive personal portfolio website showcasing my skills, projects, 
 
 1. Clone the repository:
    ```bash
-   git clone https://github.com/Mrtracker-new/portfolio-website.git
+   git clone https://github.com/Mrtracker-new/portfolio-website.git](https://github.com/Mrtracker-new/RNR.git
    ```
 
 2. Navigate to the project directory:
    ```bash
-   cd portfolio-website
+   cd RNR
    ```
 
 3. Open `index.html` in your browser to view the website locally.
