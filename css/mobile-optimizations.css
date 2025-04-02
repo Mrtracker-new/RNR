@@ -1,0 +1,232 @@
+/* Mobile Performance Optimizations CSS */
+/* This file contains specific optimizations for mobile devices to reduce lag and improve performance */
+
+/* Apply these optimizations to mobile devices and low-performance devices */
+@media (max-width: 768px), (max-resolution: 1dppx) {
+    /* ===== CORE OPTIMIZATIONS ===== */
+    
+    /* Disable hardware-intensive properties */
+    .navbar, 
+    .hero-image,
+    .project-card,
+    .testimonial-card,
+    .skill-level,
+    .btn,
+    .card,
+    .stagger-animation,
+    [data-aos] {
+        /* Disable 3D transforms to reduce GPU usage */
+        transform: none !important;
+        transform-style: flat !important;
+        /* Disable will-change to reduce memory consumption */
+        will-change: auto !important;
+        /* Simplify transitions */
+        transition: opacity 0.3s ease, box-shadow 0.3s ease !important;
+        /* Ensure content is rendered properly */
+        backface-visibility: visible !important;
+    }
+    
+    /* Optimize hover states for touch devices */
+    .project-card:hover,
+    .testimonial-card:hover,
+    .btn:hover,
+    .social-icons a:hover {
+        /* Use minimal transforms for hover effects */
+        transform: translateY(-5px) !important;
+        /* Simplify shadows */
+        box-shadow: 0 10px 15px rgba(0, 0, 0, 0.1) !important;
+    }
+    
+    /* ===== ANIMATION OPTIMIZATIONS ===== */
+    
+    /* Disable complex animations */
+    @keyframes neonFlicker {
+        0%, 100% {
+            text-shadow: 0 0 5px rgba(0, 240, 255, 0.3);
+        }
+    }
+    
+    @keyframes textGlitch {
+        0%, 100% {
+            text-shadow: none;
+            transform: none;
+        }
+    }
+    
+    @keyframes cardHoverEffect {
+        0%, 100% {
+            box-shadow: 0 10px 15px rgba(0, 0, 0, 0.1);
+        }
+    }
+    
+    @keyframes testimonialHoverEffect {
+        0%, 100% {
+            box-shadow: 0 10px 15px rgba(0, 0, 0, 0.1);
+        }
+    }
+    
+    @keyframes enhancedBorderGlow {
+        0%, 100% {
+            filter: none;
+            box-shadow: none;
+        }
+    }
+    
+    @keyframes scanline {
+        0%, 100% {
+            background: none;
+            opacity: 0;
+        }
+    }
+    
+    @keyframes imageGlitch {
+        0%, 100% {
+            filter: none;
+            transform: none;
+        }
+    }
+    
+    @keyframes pulse {
+        0%, 50%, 100% {
+            transform: scale(1);
+            color: var(--text-color);
+        }
+    }
+    
+    /* ===== PROJECT CARDS OPTIMIZATIONS ===== */
+    
+    /* Simplify project cards */
+    .project-card {
+        /* Remove 3D effects */
+        transform-style: flat !important;
+        /* Simplify transitions */
+        transition: transform 0.3s ease, box-shadow 0.3s ease !important;
+    }
+    
+    /* Disable pseudo-elements with heavy animations */
+    .project-card::before,
+    .project-card::after {
+        display: none !important;
+    }
+    
+    /* Optimize project card images */
+    .project-card .project-img img {
+        transform: none !important;
+        transition: opacity 0.3s ease !important;
+        animation: none !important;
+    }
+    
+    /* ===== TESTIMONIAL CARDS OPTIMIZATIONS ===== */
+    
+    /* Simplify testimonial cards */
+    .testimonial-card {
+        transform-style: flat !important;
+        transition: transform 0.3s ease, box-shadow 0.3s ease !important;
+    }
+    
+    /* Disable pseudo-elements with heavy animations */
+    .testimonial-card::before,
+    .testimonial-card::after {
+        display: none !important;
+    }
+    
+    /* ===== TEXT AND SHADOW OPTIMIZATIONS ===== */
+    
+    /* Reduce or eliminate text shadows */
+    h1, h2, h3, h4, .highlight, .section-header h2 {
+        text-shadow: 0 0 5px rgba(0, 240, 255, 0.2) !important;
+        animation: none !important;
+    }
+    
+    /* Simplify box shadows */
+    .card, .btn, .project-card, .testimonial-card {
+        box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1) !important;
+    }
+    
+    /* ===== SKILL BARS OPTIMIZATIONS ===== */
+    
+    /* Optimize skill bars */
+    .skill-level {
+        transform: none !important;
+        transition: width 0.5s ease-out !important;
+        will-change: width;
+        animation: none !important;
+    }
+    
+    /* ===== SECTION TRANSITIONS OPTIMIZATIONS ===== */
+    
+    /* Simplify section transitions */
+    section {
+        opacity: 1 !important;
+        transform: none !important;
+        transition: none !important;
+        animation: none !important;
+    }
+    
+    /* Disable section reveal animations */
+    @keyframes sectionReveal {
+        0%, 100% {
+            clip-path: none;
+        }
+    }
+    
+    /* Simplify staggered animations */
+    .stagger-animation {
+        opacity: 1 !important;
+        transform: none !important;
+        transition: none !important;
+    }
+    
+    /* ===== PARALLAX EFFECTS OPTIMIZATIONS ===== */
+    
+    /* Disable parallax effects */
+    .hero-image, .hero-content {
+        transform: none !important;
+        transition: none !important;
+    }
+    
+    /* ===== AOS ANIMATIONS OPTIMIZATIONS ===== */
+    
+    /* Simplify AOS animations */
+    [data-aos] {
+        opacity: 1 !important;
+        transform: none !important;
+        transition: none !important;
+    }
+    
+    /* ===== GRADIENT AND GLOW EFFECTS OPTIMIZATIONS ===== */
+    
+    /* Simplify gradient animations */
+    .section-header::before,
+    .underline {
+        animation: none !important;
+        background: var(--primary-color) !important;
+    }
+    
+    /* ===== IMAGE OPTIMIZATIONS ===== */
+    
+    /* Optimize images */
+    img {
+        /* Ensure proper rendering */
+        transform: translateZ(0);
+        /* Prevent layout shifts */
+        min-height: 1px;
+    }
+    
+    /* Optimize lazy-loaded images */
+    .lazy-image {
+        opacity: 1 !important;
+        transform: none !important;
+        transition: opacity 0.3s ease !important;
+    }
+}
+
+/* Optimize for devices with reduced motion preference */
+@media (prefers-reduced-motion: reduce) {
+    * {
+        animation-duration: 0.01ms !important;
+        animation-iteration-count: 1 !important;
+        transition-duration: 0.01ms !important;
+        scroll-behavior: auto !important;
+    }
+}
