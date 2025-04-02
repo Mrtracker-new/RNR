@@ -1,0 +1,262 @@
+/* Enhanced Card Animations - Cyberpunk Theme */
+
+/* Project Cards Enhanced Animations */
+.project-card {
+    transition: all 0.5s cubic-bezier(0.2, 0.85, 0.4, 1.275);
+    transform-style: preserve-3d;
+    will-change: transform, box-shadow, opacity;
+    position: relative;
+    overflow: hidden;
+}
+
+.project-card::after {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: linear-gradient(125deg, rgba(0, 240, 255, 0.05) 0%, transparent 40%, rgba(255, 0, 160, 0.05) 100%);
+    opacity: 0;
+    transition: opacity 0.5s ease;
+    pointer-events: none;
+    z-index: 1;
+}
+
+.project-card:hover {
+    transform: translateY(-20px) scale(1.03) rotateX(8deg);
+    box-shadow: 0 25px 50px rgba(0, 0, 0, 0.5), 
+                0 0 30px rgba(0, 240, 255, 0.4),
+                0 0 15px rgba(255, 0, 160, 0.2);
+    animation: cardHoverEffect 3s infinite alternate;
+}
+
+.project-card:hover::after {
+    opacity: 1;
+    animation: scanline 2s linear infinite;
+}
+
+/* Alternate hover effects for odd/even cards */
+.project-card:nth-child(odd):hover {
+    transform: translateY(-20px) scale(1.03) rotateX(8deg) rotateZ(-1.5deg);
+}
+
+.project-card:nth-child(even):hover {
+    transform: translateY(-20px) scale(1.03) rotateX(8deg) rotateZ(1.5deg);
+}
+
+/* Enhanced border glow effect */
+.project-card::before {
+    transition: opacity 0.6s ease, filter 0.6s ease, box-shadow 0.6s ease;
+    background-size: 300% 300%;
+    animation: rotateBorder 8s linear infinite;
+}
+
+.project-card:hover::before {
+    opacity: 0.8;
+    filter: blur(2px);
+    animation: enhancedBorderGlow 4s infinite alternate;
+}
+
+/* Glitch effect on hover */
+.project-card:hover .project-content h3 {
+    animation: textGlitch 3s infinite;
+}
+
+/* Image zoom and glitch effect */
+.project-card .project-img img {
+    transition: transform 0.7s cubic-bezier(0.33, 1, 0.68, 1);
+}
+
+.project-card:hover .project-img img {
+    transform: scale(1.08);
+    animation: imageGlitch 5s infinite alternate;
+}
+
+/* Testimonial Cards Enhanced Animations */
+.testimonial-card {
+    transition: all 0.6s cubic-bezier(0.165, 0.84, 0.44, 1);
+    transform-style: preserve-3d;
+    will-change: transform, box-shadow;
+}
+
+.testimonial-card::after {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: linear-gradient(125deg, rgba(0, 240, 255, 0.05) 0%, transparent 40%, rgba(255, 0, 160, 0.05) 100%);
+    opacity: 0;
+    transition: opacity 0.5s ease;
+    pointer-events: none;
+    z-index: 1;
+}
+
+.testimonial-card:hover {
+    transform: translateY(-15px) scale(1.03) rotateX(5deg);
+    box-shadow: 0 30px 60px rgba(0, 0, 0, 0.5), 
+                0 0 30px rgba(0, 240, 255, 0.4),
+                0 0 15px rgba(255, 0, 160, 0.2);
+    animation: testimonialHoverEffect 3s infinite alternate;
+}
+
+.testimonial-card:hover::after {
+    opacity: 1;
+    animation: scanline 2s linear infinite;
+}
+
+.testimonial-card:hover::before {
+    opacity: 0.7;
+    animation: enhancedBorderGlow 4s infinite alternate;
+}
+
+/* Enhanced animations */
+@keyframes cardHoverEffect {
+    0% {
+        box-shadow: 0 25px 50px rgba(0, 0, 0, 0.5), 
+                  0 0 30px rgba(0, 240, 255, 0.4),
+                  0 0 15px rgba(255, 0, 160, 0.2);
+    }
+    50% {
+        box-shadow: 0 25px 50px rgba(0, 0, 0, 0.5), 
+                  0 0 40px rgba(0, 240, 255, 0.5),
+                  0 0 20px rgba(255, 0, 160, 0.3);
+    }
+    100% {
+        box-shadow: 0 25px 50px rgba(0, 0, 0, 0.5), 
+                  0 0 35px rgba(0, 240, 255, 0.6),
+                  0 0 25px rgba(255, 0, 160, 0.4);
+    }
+}
+
+@keyframes testimonialHoverEffect {
+    0% {
+        box-shadow: 0 30px 60px rgba(0, 0, 0, 0.5), 
+                  0 0 30px rgba(0, 240, 255, 0.4),
+                  0 0 15px rgba(255, 0, 160, 0.2);
+    }
+    50% {
+        box-shadow: 0 30px 60px rgba(0, 0, 0, 0.5), 
+                  0 0 40px rgba(0, 240, 255, 0.5),
+                  0 0 20px rgba(255, 0, 160, 0.3);
+    }
+    100% {
+        box-shadow: 0 30px 60px rgba(0, 0, 0, 0.5), 
+                  0 0 35px rgba(0, 240, 255, 0.6),
+                  0 0 25px rgba(255, 0, 160, 0.4);
+    }
+}
+
+@keyframes enhancedBorderGlow {
+    0% {
+        filter: blur(1.5px);
+        box-shadow: 0 0 10px rgba(0, 240, 255, 0.4), 0 0 20px rgba(255, 0, 160, 0.2);
+    }
+    50% {
+        filter: blur(2px);
+        box-shadow: 0 0 15px rgba(0, 240, 255, 0.6), 0 0 30px rgba(255, 0, 160, 0.3);
+    }
+    100% {
+        filter: blur(2.5px);
+        box-shadow: 0 0 20px rgba(0, 240, 255, 0.8), 0 0 40px rgba(255, 0, 160, 0.4);
+    }
+}
+
+@keyframes scanline {
+    0% {
+        background-position: 0 0;
+        background: linear-gradient(to bottom, transparent, rgba(0, 240, 255, 0.1) 50%, transparent);
+        background-size: 100% 8px;
+        opacity: 0.5;
+    }
+    50% {
+        background-position: 0 100%;
+        background: linear-gradient(to bottom, transparent, rgba(255, 0, 160, 0.1) 50%, transparent);
+        background-size: 100% 10px;
+        opacity: 0.7;
+    }
+    100% {
+        background-position: 0 0;
+        background: linear-gradient(to bottom, transparent, rgba(0, 240, 255, 0.1) 50%, transparent);
+        background-size: 100% 8px;
+        opacity: 0.5;
+    }
+}
+
+@keyframes imageGlitch {
+    0%, 100% {
+        filter: none;
+    }
+    92% {
+        filter: none;
+    }
+    92.5% {
+        filter: brightness(1.1) contrast(1.2) hue-rotate(5deg);
+        transform: scale(1.08) translate(-2px, 1px);
+    }
+    93% {
+        filter: brightness(0.9) contrast(1.1) hue-rotate(-5deg);
+        transform: scale(1.08) translate(2px, -1px);
+    }
+    93.5% {
+        filter: brightness(1.2) contrast(0.9) hue-rotate(0deg);
+        transform: scale(1.08) translate(0, 0);
+    }
+    94% {
+        filter: none;
+    }
+    98% {
+        filter: none;
+    }
+    98.2% {
+        filter: brightness(1.1) contrast(1.3) hue-rotate(-10deg);
+        transform: scale(1.08) translate(1px, 1px);
+    }
+    98.4% {
+        filter: brightness(0.8) contrast(1.2) hue-rotate(10deg);
+        transform: scale(1.08) translate(-1px, -1px);
+    }
+    98.6% {
+        filter: none;
+    }
+}
+
+/* Card entrance animation */
+@keyframes enhancedCardEntrance {
+    0% {
+        opacity: 0;
+        transform: translateY(40px) scale(0.8);
+        filter: blur(2px);
+    }
+    60% {
+        opacity: 0.8;
+        transform: translateY(-5px) scale(1.03);
+        filter: blur(0);
+    }
+    80% {
+        transform: translateY(2px) scale(0.99);
+    }
+    100% {
+        opacity: 1;
+        transform: translateY(0) scale(1);
+    }
+}
+
+.project-card.card-visible {
+    animation: enhancedCardEntrance 0.8s cubic-bezier(0.2, 0.85, 0.4, 1.275) forwards;
+}
+
+/* Responsive adjustments */
+@media (max-width: 768px) {
+    .project-card:hover,
+    .project-card:nth-child(odd):hover,
+    .project-card:nth-child(even):hover {
+        transform: translateY(-10px) scale(1.02) rotateX(5deg);
+    }
+    
+    .testimonial-card:hover {
+        transform: translateY(-10px) scale(1.02);
+    }
+}
