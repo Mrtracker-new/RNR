@@ -1,0 +1,19 @@
+.testimonial-slide {
+    display: flex;
+    position: relative;
+    transition: none; 
+    overflow-x: visible;
+    padding: 20px 0;
+}
+
+.testimonial-slide.active {
+    opacity: 1;
+    transform: translateX(0);
+    transition-delay: 0.3s;
+}
+
+.testimonial-slide.next {
+    opacity: 0;
+    transform: translateX(-30px);
+    transition-delay: 0s;
+}
