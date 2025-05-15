@@ -1,0 +1,28 @@
+plugins = []
+headers = []
+redirects = []
+
+[functions]
+
+[functions."*"]
+
+[build]
+publish = "C:\\Users\\rolan\\Desktop\\RNR\\wert\\portfolio\\build"
+publishOrigin = "ui"
+commandOrigin = "ui"
+base = "C:\\Users\\rolan\\Desktop\\RNR\\wert\\portfolio"
+command = "npm run build"
+
+[build.environment]
+
+[build.processing]
+
+[build.processing.css]
+
+[build.processing.html]
+
+[build.processing.images]
+
+[build.processing.js]
+
+[build.services]
