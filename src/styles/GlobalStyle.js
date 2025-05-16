@@ -147,11 +147,34 @@ const GlobalStyle = createGlobalStyle`
     outline-offset: 3px;
   }
   
-  /* Improve touch targets on mobile */
+  /* Improve touch interactions */
+  /* Improve readability on mobile */
   @media (max-width: 768px) {
-    button, a {
-      min-height: 44px;
-      min-width: 44px;
+    p {
+      line-height: 1.8;
+      font-size: 16px;
+    }
+    
+    section {
+      padding: 60px 0; /* Reduce section padding on mobile */
+    }
+    
+    .container {
+      width: 95%;
+      padding: 0 10px;
+    }
+  }
+  
+    /* Add tap highlight color for mobile */
+    a:active, button:active {
+      -webkit-tap-highlight-color: rgba(100, 255, 218, 0.2);
+    }
+    
+    /* Improve form elements spacing */
+    input, textarea, select {
+      font-size: 16px; /* Prevent zoom on focus in iOS */
+      margin-bottom: 16px;
+      padding: 12px;
     }
   }
   
