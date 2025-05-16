@@ -21,7 +21,7 @@ const Footer = () => {
         </SocialItem>
         <SocialItem
           as={motion.a}
-          href="https://linkedin.com/"
+          href="https://www.linkedin.com/in/rolan-lobo-93368a239/"
           target="_blank"
           rel="noopener noreferrer"
           whileHover={{ y: -5 }}
@@ -39,7 +39,7 @@ const Footer = () => {
         </SocialItem>
         <SocialItem
           as={motion.a}
-          href="https://www.instagram.com/rolan_r_n_r/?__pwa=1"
+          href="https://www.instagram.com/rolan_r_n_r/"
           target="_blank"
           rel="noopener noreferrer"
           whileHover={{ y: -5 }}
