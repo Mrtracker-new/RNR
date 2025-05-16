@@ -1,23 +1,23 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, lazy, Suspense } from 'react';
 import { BrowserRouter as Router, Routes, Route, useLocation } from 'react-router-dom';
 import { AnimatePresence, motion } from 'framer-motion';
 import { FiArrowUp } from 'react-icons/fi';
 import styled from 'styled-components';
+
+// Styles
+import GlobalStyle from './styles/GlobalStyle';
+import './App.css';
 
 // Components
 import Navbar from './components/Navbar';
 import Footer from './components/Footer';
 import BackgroundEffect from './components/BackgroundEffect';
 
-// Pages
-import Home from './pages/Home';
-import About from './pages/About';
-import Projects from './pages/Projects';
-import Contact from './pages/Contact';
-
-// Styles
-import GlobalStyle from './styles/GlobalStyle';
-import './App.css';
+// Lazy load pages for better performance
+const Home = lazy(() => import('./pages/Home'));
+const About = lazy(() => import('./pages/About'));
+const Projects = lazy(() => import('./pages/Projects'));
+const Contact = lazy(() => import('./pages/Contact'));
 
 // ScrollToTop component to handle scrolling to top on page change
 function ScrollToTop() {
@@ -33,7 +33,7 @@ function ScrollToTop() {
 function App() {
   const [showScrollTop, setShowScrollTop] = useState(false);
 
-  // Handle scroll effect
+  // Handle scroll effect with passive event listener for better performance
   useEffect(() => {
     const handleScroll = () => {
       // Show scroll to top button when user scrolls down 300px
@@ -44,9 +44,10 @@ function App() {
       }
     };
 
-    window.addEventListener('scroll', handleScroll);
+    // Use passive event listener for better scroll performance
+    window.addEventListener('scroll', handleScroll, { passive: true });
     return () => {
-      window.removeEventListener('scroll', handleScroll);
+      window.removeEventListener('scroll', handleScroll, { passive: true });
     };
   }, []);
 
@@ -64,12 +65,14 @@ function App() {
       <ScrollToTop />
       <Navbar />
       <AnimatePresence mode="wait">
-        <Routes>
-          <Route path="/" element={<Home />} />
-          <Route path="/about" element={<About />} />
-          <Route path="/projects" element={<Projects />} />
-          <Route path="/contact" element={<Contact />} />
-        </Routes>
+        <Suspense fallback={<LoadingFallback />}>
+          <Routes>
+            <Route path="/" element={<Home />} />
+            <Route path="/about" element={<About />} />
+            <Route path="/projects" element={<Projects />} />
+            <Route path="/contact" element={<Contact />} />
+          </Routes>
+        </Suspense>
       </AnimatePresence>
       <Footer />
       
@@ -92,6 +95,34 @@ function App() {
   );
 }
 
+// Loading fallback component for lazy-loaded routes
+const LoadingFallback = () => (
+  <LoadingContainer>
+    <LoadingSpinner />
+  </LoadingContainer>
+);
+
+const LoadingContainer = styled.div`
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 100vh;
+  width: 100%;
+`;
+
+const LoadingSpinner = styled.div`
+  width: 50px;
+  height: 50px;
+  border: 3px solid rgba(100, 255, 218, 0.3);
+  border-radius: 50%;
+  border-top-color: #64ffda;
+  animation: spin 1s ease-in-out infinite;
+  
+  @keyframes spin {
+    to { transform: rotate(360deg); }
+  }
+`;
+
 const ScrollTopButton = styled.button`
   position: fixed;
   bottom: 15px;
@@ -109,6 +140,7 @@ const ScrollTopButton = styled.button`
   box-shadow: 0 5px 15px rgba(0, 0, 0, 0.3);
   z-index: 999;
   transition: all 0.3s ease;
+  will-change: transform; /* Optimize for animations */
   
   &:hover {
     transform: translateY(-5px);

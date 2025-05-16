@@ -1,15 +1,31 @@
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import styled from 'styled-components';
 
 const BackgroundEffect = () => {
+  const [isMobile, setIsMobile] = useState(false);
+  
+  // Check if device is mobile for reduced animations
+  useEffect(() => {
+    const checkMobile = () => {
+      setIsMobile(window.innerWidth <= 768);
+    };
+    
+    checkMobile();
+    window.addEventListener('resize', checkMobile, { passive: true });
+    
+    return () => {
+      window.removeEventListener('resize', checkMobile, { passive: true });
+    };
+  }, []);
+  
   return (
     <BackgroundContainer>
       <GradientOverlay />
       <BackgroundPattern />
-      <GlowingOrbs>
-        <Orb className="orb-1" />
-        <Orb className="orb-2" />
-        <Orb className="orb-3" />
+      <GlowingOrbs isMobile={isMobile}>
+        <Orb className="orb-1" isMobile={isMobile} />
+        <Orb className="orb-2" isMobile={isMobile} />
+        <Orb className="orb-3" isMobile={isMobile} />
       </GlowingOrbs>
     </BackgroundContainer>
   );
@@ -53,21 +69,23 @@ const GlowingOrbs = styled.div`
   width: 100%;
   height: 100%;
   overflow: hidden;
-  opacity: 0.4;
+  opacity: ${props => props.isMobile ? '0.2' : '0.4'}; /* Reduce opacity on mobile for better performance */
+  will-change: opacity; /* Optimize for animations */
 `;
 
 const Orb = styled.div`
   position: absolute;
   border-radius: 50%;
-  filter: blur(60px);
+  filter: ${props => props.isMobile ? 'blur(40px)' : 'blur(60px)'}; /* Reduce blur on mobile */
   opacity: 0.3;
-  animation: float 15s infinite ease-in-out;
+  animation: ${props => props.isMobile ? 'float 20s' : 'float 15s'} infinite ease-in-out; /* Slower animation on mobile */
+  will-change: transform; /* Optimize for animations */
   
   &.orb-1 {
     top: 20%;
     left: 10%;
-    width: 300px;
-    height: 300px;
+    width: ${props => props.isMobile ? '200px' : '300px'}; /* Smaller on mobile */
+    height: ${props => props.isMobile ? '200px' : '300px'};
     background: rgba(100, 255, 218, 0.3);
     animation-delay: 0s;
   }
@@ -75,8 +93,8 @@ const Orb = styled.div`
   &.orb-2 {
     bottom: 10%;
     right: 15%;
-    width: 400px;
-    height: 400px;
+    width: ${props => props.isMobile ? '250px' : '400px'}; /* Smaller on mobile */
+    height: ${props => props.isMobile ? '250px' : '400px'};
     background: rgba(100, 200, 255, 0.2);
     animation-delay: -5s;
   }
@@ -84,8 +102,8 @@ const Orb = styled.div`
   &.orb-3 {
     top: 50%;
     right: 30%;
-    width: 200px;
-    height: 200px;
+    width: ${props => props.isMobile ? '150px' : '200px'}; /* Smaller on mobile */
+    height: ${props => props.isMobile ? '150px' : '200px'};
     background: rgba(149, 100, 255, 0.2);
     animation-delay: -10s;
   }
@@ -95,7 +113,7 @@ const Orb = styled.div`
       transform: translate(0, 0) scale(1);
     }
     50% {
-      transform: translate(30px, 20px) scale(1.05);
+      transform: translate(${props => props.isMobile ? '15px' : '30px'}, ${props => props.isMobile ? '10px' : '20px'}) scale(${props => props.isMobile ? '1.03' : '1.05'}); /* Smaller movement on mobile */
     }
     100% {
       transform: translate(0, 0) scale(1);

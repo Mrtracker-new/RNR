@@ -9,15 +9,19 @@ const GlobalStyle = createGlobalStyle`
 
   html {
     scroll-behavior: smooth;
+    -webkit-text-size-adjust: 100%; /* Prevent font scaling in landscape on iOS */
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
   }
 
   body {
-    font-family: 'Poppins', sans-serif;
+    font-family: 'Poppins', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif; /* System font fallbacks */
     background-color: #0a192f;
     color: #e6f1ff;
     overflow-x: hidden;
     transition: background-color 0.5s ease;
     position: relative;
+    text-rendering: optimizeLegibility;
   }
 
   a {
@@ -39,9 +43,12 @@ const GlobalStyle = createGlobalStyle`
   img {
     max-width: 100%;
     height: auto;
+    display: block; /* Prevent extra space below images */
+    -webkit-user-drag: none; /* Prevent image dragging in Safari */
   }
 
-  /* Scrollbar styling */
+  /* Cross-browser scrollbar styling */
+  /* Webkit browsers (Chrome, Safari, newer versions of Opera, etc) */
   ::-webkit-scrollbar {
     width: 8px;
   }
@@ -58,6 +65,22 @@ const GlobalStyle = createGlobalStyle`
   ::-webkit-scrollbar-thumb:hover {
     background: #4cdbbd;
   }
+  
+  /* Firefox */
+  * {
+    scrollbar-width: thin;
+    scrollbar-color: #64ffda #0a192f;
+  }
+  
+  /* Microsoft Edge and IE */
+  @supports (-ms-overflow-style: none) {
+    html {
+      scrollbar-face-color: #64ffda;
+      scrollbar-track-color: #0a192f;
+      scrollbar-arrow-color: #0a192f;
+      scrollbar-shadow-color: #0a192f;
+    }
+  }
 
   /* Typography */
   h1, h2, h3, h4, h5, h6 {
@@ -68,14 +91,17 @@ const GlobalStyle = createGlobalStyle`
 
   h1 {
     font-size: clamp(2.5rem, 5vw, 4rem);
+    -webkit-font-smoothing: antialiased;
   }
 
   h2 {
     font-size: clamp(2rem, 4vw, 3rem);
+    -webkit-font-smoothing: antialiased;
   }
 
   h3 {
     font-size: clamp(1.5rem, 3vw, 2.5rem);
+    -webkit-font-smoothing: antialiased;
   }
 
   p {
@@ -112,6 +138,29 @@ const GlobalStyle = createGlobalStyle`
   .btn:hover {
     background-color: rgba(100, 255, 218, 0.1);
     transform: translateY(-3px);
+    -webkit-transform: translateY(-3px);
+  }
+  
+  /* Add focus styles for accessibility */
+  a:focus, button:focus {
+    outline: 2px dashed #64ffda;
+    outline-offset: 3px;
+  }
+  
+  /* Improve touch targets on mobile */
+  @media (max-width: 768px) {
+    button, a {
+      min-height: 44px;
+      min-width: 44px;
+    }
+  }
+  
+  /* Prevent text size adjustment on orientation change */
+  @media screen and (orientation: landscape) {
+    html {
+      -webkit-text-size-adjust: 100%;
+      text-size-adjust: 100%;
+    }
   }
 `;
 
