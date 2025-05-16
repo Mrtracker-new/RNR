@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
+import { BrowserRouter as Router, Routes, Route, useLocation } from 'react-router-dom';
 import { AnimatePresence, motion } from 'framer-motion';
 import { FiArrowUp } from 'react-icons/fi';
 import styled from 'styled-components';
@@ -18,6 +18,17 @@ import Contact from './pages/Contact';
 // Styles
 import GlobalStyle from './styles/GlobalStyle';
 import './App.css';
+
+// ScrollToTop component to handle scrolling to top on page change
+function ScrollToTop() {
+  const { pathname } = useLocation();
+  
+  useEffect(() => {
+    window.scrollTo(0, 0);
+  }, [pathname]);
+  
+  return null;
+}
 
 function App() {
   const [showScrollTop, setShowScrollTop] = useState(false);
@@ -50,6 +61,7 @@ function App() {
     <Router>
       <GlobalStyle />
       <BackgroundEffect />
+      <ScrollToTop />
       <Navbar />
       <AnimatePresence mode="wait">
         <Routes>
