@@ -12,6 +12,10 @@ const GlobalStyle = createGlobalStyle`
     -webkit-text-size-adjust: 100%; /* Prevent font scaling in landscape on iOS */
     -webkit-font-smoothing: antialiased;
     -moz-osx-font-smoothing: grayscale;
+    text-size-adjust: 100%; /* Standard property for other browsers */
+    height: 100%;
+    width: 100%;
+    touch-action: manipulation; /* Prevents delays on mobile devices */
   }
 
   body {
@@ -22,6 +26,12 @@ const GlobalStyle = createGlobalStyle`
     transition: background-color 0.5s ease;
     position: relative;
     text-rendering: optimizeLegibility;
+    min-height: 100%;
+    width: 100%;
+    -webkit-tap-highlight-color: transparent; /* Removes tap highlight on mobile */
+    -webkit-overflow-scrolling: touch; /* Enables smooth scrolling on iOS */
+    backface-visibility: hidden; /* Prevents flickering on some browsers during animations */
+    -webkit-backface-visibility: hidden;
   }
 
   a {
@@ -45,6 +55,14 @@ const GlobalStyle = createGlobalStyle`
     height: auto;
     display: block; /* Prevent extra space below images */
     -webkit-user-drag: none; /* Prevent image dragging in Safari */
+    user-select: none; /* Prevents image selection */
+    -webkit-user-select: none;
+    -moz-user-select: none;
+    -ms-user-select: none;
+    object-fit: cover; /* Ensures images maintain aspect ratio */
+    will-change: transform; /* Optimizes animations by using GPU */
+    transform: translateZ(0); /* Forces GPU acceleration */
+    -webkit-transform: translateZ(0);
   }
 
   /* Cross-browser scrollbar styling */
@@ -79,6 +97,29 @@ const GlobalStyle = createGlobalStyle`
       scrollbar-track-color: #0a192f;
       scrollbar-arrow-color: #0a192f;
       scrollbar-shadow-color: #0a192f;
+    }
+  }
+
+  /* Performance optimizations */
+  .page-transition {
+    will-change: opacity, transform;
+    transform: translateZ(0);
+    backface-visibility: hidden;
+    perspective: 1000px;
+  }
+
+  /* Prevent FOIT (Flash of Invisible Text) */
+  @font-face {
+    font-display: swap;
+  }
+
+  /* Improve animation performance */
+  @media screen and (prefers-reduced-motion: reduce) {
+    * {
+      animation-duration: 0.01ms !important;
+      animation-iteration-count: 1 !important;
+      transition-duration: 0.01ms !important;
+      scroll-behavior: auto !important;
     }
   }
 
