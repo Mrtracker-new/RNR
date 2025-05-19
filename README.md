@@ -149,5 +149,5 @@ Project Link: [https://github.com/Mrtracker-new/RNR](https://github.com/Mrtracke
 ---
 
 <p align="center">
-  Made with ❤️ By Rolan in Yellapur, India
+  Made with ❤️ By Rolan 
 </p>
