@@ -2,7 +2,7 @@ import React from 'react';
 import styled from 'styled-components';
 import { motion } from 'framer-motion';
 import { Link } from 'react-router-dom';
-import { FiArrowRight, FiCode, FiDatabase, FiLayout, FiServer, FiStar, FiUser, FiMail } from 'react-icons/fi';
+import { FiArrowRight, FiCode, FiDatabase, FiLayout, FiServer, FiStar, FiMail } from 'react-icons/fi';
 
 const Home = () => {
   const fadeIn = {
@@ -36,7 +36,7 @@ const Home = () => {
       id: 3,
       title: 'Sortify',
       description: 'Smart File Organizer that automatically organizes files into categorized folders based on their formats.',
-      image: '/images/Sortify.jpeg',
+      image: '/images/Sortify.jpg',
       tech: ['Python', 'Automation', 'File Organization'],
     },
   ];
