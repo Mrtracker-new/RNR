@@ -42,10 +42,34 @@ const Home = () => {
   ];
 
   const skills = [
-    { name: 'Web Development', icon: <FiCode />, level: 90 },
-    { name: 'Database Design', icon: <FiDatabase />, level: 85 },
-    { name: 'UI/UX Design', icon: <FiLayout />, level: 80 },
-    { name: 'Backend Systems', icon: <FiServer />, level: 85 },
+    { 
+      name: 'Web Development', 
+      icon: <FiCode />, 
+      level: 90, 
+      description: 'Modern web applications with React, JavaScript & responsive design',
+      color: '#64ffda'
+    },
+    { 
+      name: 'Database Design', 
+      icon: <FiDatabase />, 
+      level: 85, 
+      description: 'Efficient database architecture and optimization strategies',
+      color: '#5aa7ff'
+    },
+    { 
+      name: 'UI/UX Design', 
+      icon: <FiLayout />, 
+      level: 80, 
+      description: 'User-centered design with modern interfaces and experiences',
+      color: '#ff6b9d'
+    },
+    { 
+      name: 'Backend Systems', 
+      icon: <FiServer />, 
+      level: 85, 
+      description: 'Scalable server architecture and API development',
+      color: '#ffab40'
+    },
   ];
 
   const testimonials = [
@@ -202,16 +226,57 @@ const Home = () => {
                 whileInView={{ opacity: 1, y: 0 }}
                 viewport={{ once: true }}
                 transition={{ duration: 0.5, delay: index * 0.1 }}
-                whileHover={{ y: -10, boxShadow: '0 10px 30px -10px rgba(2, 12, 27, 0.7)' }}
+                whileHover={{ 
+                  y: -10, 
+                  boxShadow: '0 15px 40px -15px rgba(100, 255, 218, 0.3)',
+                  borderColor: skill.color
+                }}
+                skillcolor={skill.color}
               >
-                <SkillIconContainer>
-                  {skill.icon}
+                <SkillNumber
+                  as={motion.span}
+                  initial={{ opacity: 0.3 }}
+                  whileHover={{ opacity: 1 }}
+                  transition={{ duration: 0.3 }}
+                >
+                  {(index + 1).toString().padStart(2, '0')}
+                </SkillNumber>
+                
+                <SkillIconContainer skillcolor={skill.color}>
+                  <motion.div
+                    whileHover={{ scale: 1.2, rotate: 5 }}
+                    transition={{ duration: 0.3 }}
+                  >
+                    {skill.icon}
+                  </motion.div>
                 </SkillIconContainer>
-                <h3>{skill.name}</h3>
-                <SkillBar>
-                  <SkillProgress width={skill.level} />
-                </SkillBar>
-                <SkillLevel>{skill.level}%</SkillLevel>
+                
+                <SkillHeader>
+                  <h3>{skill.name}</h3>
+                  <SkillHighlight
+                    as={motion.div}
+                    initial={{ width: 0 }}
+                    whileHover={{ width: '100%' }}
+                    transition={{ duration: 0.3 }}
+                    skillcolor={skill.color}
+                  />
+                </SkillHeader>
+                
+                <SkillDescription>{skill.description}</SkillDescription>
+                
+                <SkillBarContainer>
+                  <SkillBar>
+                    <SkillProgress 
+                      as={motion.div}
+                      initial={{ width: 0 }}
+                      whileInView={{ width: `${skill.level}%` }}
+                      viewport={{ once: true }}
+                      transition={{ duration: 1, delay: index * 0.2 }}
+                      skillcolor={skill.color}
+                    />
+                  </SkillBar>
+                  <SkillLevel skillcolor={skill.color}>{skill.level}%</SkillLevel>
+                </SkillBarContainer>
               </SkillCard>
             ))}
           </SkillsGrid>
@@ -613,53 +678,169 @@ const SkillsGrid = styled.div`
 `;
 
 const SkillCard = styled.div`
-  background-color: #0a192f;
-  border-radius: 8px;
+  background: linear-gradient(145deg, #0a192f 0%, #112240 100%);
+  border: 1px solid #233554;
+  border-radius: 12px;
   padding: 30px;
-  text-align: center;
-  box-shadow: 0 10px 30px -15px rgba(2, 12, 27, 0.7);
-  transition: all 0.3s ease;
+  position: relative;
+  overflow: hidden;
+  box-shadow: 0 8px 32px -8px rgba(2, 12, 27, 0.7);
+  transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
   
-  h3 {
-    color: #ccd6f6;
-    margin: 15px 0;
-    font-size: 20px;
+  &::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 2px;
+    background: linear-gradient(90deg, ${props => props.skillcolor || '#64ffda'}, transparent);
+    transform: scaleX(0);
+    transform-origin: left;
+    transition: transform 0.6s cubic-bezier(0.4, 0, 0.2, 1);
+  }
+  
+  &:hover::before {
+    transform: scaleX(1);
+  }
+  
+  &:hover {
+    border-color: ${props => props.skillcolor || '#64ffda'};
+    background: linear-gradient(145deg, #112240 0%, #0a192f 100%);
   }
 `;
 
+const SkillNumber = styled.span`
+  position: absolute;
+  top: 20px;
+  right: 20px;
+  font-family: 'SF Mono', 'Fira Code', monospace;
+  font-size: 14px;
+  color: #64ffda;
+  opacity: 0.3;
+  font-weight: 600;
+`;
+
 const SkillIconContainer = styled.div`
-  width: 60px;
-  height: 60px;
-  margin: 0 auto;
+  width: 70px;
+  height: 70px;
+  margin: 0 auto 20px;
   display: flex;
   align-items: center;
   justify-content: center;
-  background-color: rgba(100, 255, 218, 0.1);
-  border-radius: 50%;
-  color: #64ffda;
-  font-size: 28px;
+  background: linear-gradient(135deg, ${props => props.skillcolor}20, ${props => props.skillcolor}10);
+  border: 2px solid ${props => props.skillcolor}30;
+  border-radius: 16px;
+  color: ${props => props.skillcolor || '#64ffda'};
+  font-size: 32px;
+  position: relative;
+  
+  &::after {
+    content: '';
+    position: absolute;
+    inset: -2px;
+    padding: 2px;
+    background: linear-gradient(135deg, ${props => props.skillcolor}, transparent);
+    border-radius: 16px;
+    mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);
+    mask-composite: xor;
+    opacity: 0;
+    transition: opacity 0.3s ease;
+  }
+  
+  ${SkillCard}:hover &::after {
+    opacity: 1;
+  }
+`;
+
+const SkillHeader = styled.div`
+  position: relative;
+  margin-bottom: 15px;
+  
+  h3 {
+    color: #ccd6f6;
+    font-size: 20px;
+    font-weight: 600;
+    margin: 0;
+    text-align: center;
+  }
+`;
+
+const SkillHighlight = styled.div`
+  position: absolute;
+  bottom: -8px;
+  left: 50%;
+  transform: translateX(-50%);
+  height: 2px;
+  background: linear-gradient(90deg, ${props => props.skillcolor}, ${props => props.skillcolor}80);
+  border-radius: 2px;
+`;
+
+const SkillDescription = styled.p`
+  color: #8892b0;
+  font-size: 14px;
+  line-height: 1.5;
+  text-align: center;
+  margin-bottom: 25px;
+  min-height: 42px;
+`;
+
+const SkillBarContainer = styled.div`
+  display: flex;
+  align-items: center;
+  gap: 12px;
 `;
 
 const SkillBar = styled.div`
-  width: 100%;
-  height: 8px;
+  flex: 1;
+  height: 6px;
   background-color: #233554;
-  border-radius: 4px;
-  margin: 15px 0 5px;
+  border-radius: 8px;
   overflow: hidden;
+  position: relative;
+  
+  &::after {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: linear-gradient(90deg, transparent, rgba(255,255,255,0.1), transparent);
+    transform: translateX(-100%);
+    transition: transform 1.5s ease;
+  }
+  
+  ${SkillCard}:hover &::after {
+    transform: translateX(100%);
+  }
 `;
 
 const SkillProgress = styled.div`
   height: 100%;
-  background-color: #64ffda;
-  border-radius: 4px;
-  width: ${props => props.width}%;
+  background: linear-gradient(90deg, ${props => props.skillcolor}, ${props => props.skillcolor}80);
+  border-radius: 8px;
+  position: relative;
+  
+  &::after {
+    content: '';
+    position: absolute;
+    top: 0;
+    right: 0;
+    width: 4px;
+    height: 100%;
+    background: rgba(255, 255, 255, 0.3);
+    border-radius: 0 8px 8px 0;
+  }
 `;
 
 const SkillLevel = styled.span`
-  color: #64ffda;
+  color: ${props => props.skillcolor || '#64ffda'};
   font-size: 14px;
-  font-weight: 500;
+  font-weight: 600;
+  font-family: 'SF Mono', 'Fira Code', monospace;
+  min-width: 40px;
+  text-align: right;
 `;
 
 const ProjectsSection = styled.section`

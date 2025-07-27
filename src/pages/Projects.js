@@ -16,7 +16,8 @@ const Projects = () => {
       console.log('Filter after update:', newFilter);
     }, 100);
   };
-  const [searchTerm, setSearchTerm] = useState('');
+const [searchTerm, setSearchTerm] = useState('');
+  const [debouncedSearchTerm, setDebouncedSearchTerm] = useState('');
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [selectedProject, setSelectedProject] = useState(null);
   // Layout is always grid, no toggle needed
@@ -98,11 +99,12 @@ const Projects = () => {
     {
       id: 5,
       title: 'Contact-manager',
-      description: 'A modern, cross-platform contact management application built with React and Capacitor, designed to simplify contact organization with rich document attachment capabilities.',
-      longDescription: 'RNR Contact Manager is a modern contact management application that allows users to store contacts with rich profiles including photos, documents, tags, and group categorization. Built with React and Material UI, it offers a responsive interface that works seamlessly on both web and mobile platforms through Capacitor integration',
-      image: '/images/RNR Contact.jpeg',
-      tech: ['React', 'CSS'],
+      description: 'Contact Manager is a clean and responsive web application for managing contacts with ease. It lets users add, edit, delete, and search contacts efficiently. Built with a focus on simplicity, performance, and a user-friendly interface.',
+      longDescription: 'Contact Manager is a simple and responsive web application built to manage and organize your personal or professional contacts. It allows users to add, update, delete, and search contacts efficiently. Each contact can have files, notes, and useful links attached for better organization. Built with modern web technologies and a minimal UI for a seamless experience.',
+      image: '/images/Contact-Manager.png',
+      tech: ['TypeScript', 'Tailwind CSS'],
       github: 'https://github.com/Mrtracker-new/Contact-manager',
+      website: 'https://contact-manager-rnr.vercel.app/',
       downloadLink: 'https://github.com/Mrtracker-new/Contact-manager/releases/download/v1.0/Contact-Manager.apk',
       category: 'apk',
       featured: false,
@@ -139,6 +141,19 @@ const Projects = () => {
       github: 'https://github.com/Mrtracker-new/RNR',
       category: 'web',
       featured: false,
+    },
+    {
+      id: 9,
+      title: 'LinkNest',
+      description: 'LinkNest is a React Native app that helps users organize and manage their digital resources—like links, notes, and documents—locally with an elegant, user-friendly interface. Perfect for students, professionals, and researchers who want clutter-free access to important content.',
+      longDescription: 'LinkNest is a comprehensive React Native application designed for efficient digital resource management. It features link management with custom titles and descriptions, rich text note-taking capabilities, document storage with preview support, smart categorization using customizable categories and tags, a favorites system for quick access, powerful full-text search, advanced filtering options, dark mode support, and cross-platform compatibility. Built with modern technologies including TypeScript, React Navigation, and Material Design 3 components, LinkNest offers native performance on both iOS and Android platforms.',
+      image: '/images/LinkNest.png',
+      tech: ['React Native', 'TypeScript', 'React Navigation', 'Material Design 3', 'AsyncStorage'],
+      github: 'https://github.com/Mrtracker-new/LinkNest',
+      downloadLink: 'https://github.com/Mrtracker-new/LinkNest/releases/download/v1.0/LinkNest.apk',
+      fileType: 'apk',
+      category: 'apk',
+      featured: false,
     }
   ];
 
@@ -146,22 +161,22 @@ const Projects = () => {
   console.log('Current filter:', filter);
   console.log('Project data categories:', projectsData.map(p => ({ id: p.id, title: p.title, category: p.category })));
   
-  const filteredProjects = projectsData.filter(project => {
+const filteredProjects = projectsData.filter(project => {
     // Check if project category matches the selected filter
     // This is where the issue was - the condition wasn't correctly matching categories
     const matchesCategory = filter === 'all' || project.category === filter;
     
-    // Check if project matches the search term
-    const matchesSearch = searchTerm === '' || 
-                          project.title.toLowerCase().includes(searchTerm.toLowerCase()) || 
-                          project.description.toLowerCase().includes(searchTerm.toLowerCase()) ||
-                          project.tech.some(tech => tech.toLowerCase().includes(searchTerm.toLowerCase()));
+    // Check if project matches the debounced search term
+    const matchesSearch = debouncedSearchTerm === '' || 
+                          project.title.toLowerCase().includes(debouncedSearchTerm.toLowerCase()) || 
+                          project.description.toLowerCase().includes(debouncedSearchTerm.toLowerCase()) ||
+                          project.tech.some(tech => tech.toLowerCase().includes(debouncedSearchTerm.toLowerCase()));
     
     // Debug logging for each project
     console.log(`Project ${project.id} (${project.title}) - Category: ${project.category}, Matches filter '${filter}': ${matchesCategory}`);
     
     return matchesCategory && matchesSearch;
-  
+
   }).sort((a, b) => {
     // Always sort by newest (by id)
     return b.id - a.id;
@@ -215,13 +230,24 @@ const Projects = () => {
   }, [isModalOpen]);
 
   // Animate projects when filter or search changes
-  useEffect(() => {
+useEffect(() => {
     controls.start({
       opacity: 1,
       y: 0,
       transition: { staggerChildren: 0.1 }
     });
-  }, [filter, searchTerm, controls]);
+  }, [filter, debouncedSearchTerm, controls]);
+
+  // Debounce search term
+  useEffect(() => {
+    const handler = setTimeout(() => {
+      setDebouncedSearchTerm(searchTerm);
+    }, 300); // 300ms delay
+
+    return () => {
+      clearTimeout(handler);
+    };
+  }, [searchTerm]);
 
   return (
     <ProjectsContainer>
@@ -979,7 +1005,7 @@ const FeaturedImageContainer = styled.div`
   img {
     width: 100%;
     height: 100%;
-    object-fit: cover;
+    object-fit: contain;
     transition: transform 0.5s ease;
   }
   
@@ -1056,7 +1082,7 @@ const ProjectImageContainer = styled.div`
 const ProjectImage = styled.img`
   width: 100%;
   height: 100%;
-  object-fit: cover;
+  object-fit: contain;
   transition: transform 0.5s ease;
 `;
 
@@ -1229,7 +1255,7 @@ const ModalImageContainer = styled.div`
 const ModalImage = styled.img`
   width: 100%;
   height: 100%;
-  object-fit: cover;
+  object-fit: contain;
 `;
 
 const ModalBody = styled.div`

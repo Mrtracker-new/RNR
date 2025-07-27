@@ -1,7 +1,36 @@
-import React from 'react';
+import React, { memo } from 'react';
 import styled from 'styled-components';
 import { motion } from 'framer-motion';
 import { FiCode, FiDatabase, FiLayout, FiServer, FiBriefcase, FiBook, FiAward } from 'react-icons/fi';
+import { SiHtml5, SiJavascript, SiReact, SiPython, SiFlask, SiFigma, SiGit, SiMongodb, SiNodedotjs, SiTypescript, SiBootstrap } from 'react-icons/si';
+
+const MemoSkillItem = memo(({ skill, index }) => (
+  <SkillItem
+    as={motion.div}
+    initial={{ opacity: 0, x: -20 }}
+    whileInView={{ opacity: 1, x: 0 }}
+    viewport={{ once: true }}
+    transition={{ duration: 0.5, delay: index * 0.1 }}
+    index={index}
+  >
+    <SkillInfo>
+      <IconContainer>{skill.icon}</IconContainer>
+      <h3>{skill.name}</h3>
+      <span>{skill.level}%</span>
+    </SkillInfo>
+    <SkillBar>
+      <SkillProgress
+        as={motion.div}
+        initial={{ width: 0 }}
+        whileInView={{ width: `${skill.level}%` }}
+        viewport={{ once: true }}
+        transition={{ duration: 0.8, delay: 0.3 + index * 0.1 }}
+        style={{ background: skill.color }}
+      />
+    </SkillBar>
+    <SkillDescription>{skill.description}</SkillDescription>
+  </SkillItem>
+));
 
 const About = () => {
   const fadeIn = {
@@ -17,12 +46,102 @@ const About = () => {
   };
 
   const skills = [
-    { name: 'HTML/CSS', level: 90 },
-    { name: 'JavaScript', level: 85 },
-    { name: 'React', level: 80 },
-    { name: 'Python', level: 90 },
-    { name: 'Flask', level: 75 },
-    { name: 'UI/UX Design', level: 70 },
+    { 
+      name: 'HTML/CSS', 
+      level: 90, 
+      icon: <SiHtml5 />,
+      color: '#E34F26',
+      category: 'Frontend',
+      description: 'Semantic markup and responsive styling'
+    },
+    { 
+      name: 'JavaScript', 
+      level: 85, 
+      icon: <SiJavascript />,
+      color: '#F7DF1E',
+      category: 'Programming',
+      description: 'Modern ES6+ features and DOM manipulation'
+    },
+    { 
+      name: 'React', 
+      level: 80, 
+      icon: <SiReact />,
+      color: '#61DAFB',
+      category: 'Frontend',
+      description: 'Component-based UI development'
+    },
+    { 
+      name: 'Python', 
+      level: 90, 
+      icon: <SiPython />,
+      color: '#3776AB',
+      category: 'Programming',
+      description: 'Backend development and automation'
+    },
+    { 
+      name: 'Flask', 
+      level: 75, 
+      icon: <SiFlask />,
+      color: '#000000',
+      category: 'Backend',
+      description: 'Lightweight web framework for APIs'
+    },
+    { 
+      name: 'UI/UX Design', 
+      level: 70, 
+      icon: <SiFigma />,
+      color: '#F24E1E',
+      category: 'Design',
+      description: 'User-centered design principles'
+    },
+    { 
+      name: 'Git & Version Control', 
+      level: 85, 
+      icon: <SiGit />,
+      color: '#F05032',
+      category: 'Tools',
+      description: 'Code versioning and collaboration'
+    },
+    { 
+      name: 'MongoDB', 
+      level: 70, 
+      icon: <SiMongodb />,
+      color: '#47A248',
+      category: 'Database',
+      description: 'NoSQL database management'
+    },
+    { 
+      name: 'Node.js', 
+      level: 75, 
+      icon: <SiNodedotjs />,
+      color: '#339933',
+      category: 'Backend',
+      description: 'Server-side JavaScript runtime'
+    },
+    { 
+      name: 'TypeScript', 
+      level: 65, 
+      icon: <SiTypescript />,
+      color: '#3178C6',
+      category: 'Programming',
+      description: 'Type-safe JavaScript development'
+    },
+    { 
+      name: 'Bootstrap', 
+      level: 80, 
+      icon: <SiBootstrap />,
+      color: '#7952B3',
+      category: 'Frontend',
+      description: 'Responsive CSS framework'
+    },
+    { 
+      name: 'Problem Solving', 
+      level: 88, 
+      icon: <FiCode />,
+      color: '#64ffda',
+      category: 'Soft Skills',
+      description: 'Analytical thinking and debugging'
+    }
   ];
 
   const services = [
@@ -184,30 +303,8 @@ const About = () => {
             </motion.h2>
           </SectionTitle>
           <SkillsGrid>
-            {skills.map((skill, index) => (
-              <SkillItem
-                key={index}
-                as={motion.div}
-                initial={{ opacity: 0, x: -20 }}
-                whileInView={{ opacity: 1, x: 0 }}
-                viewport={{ once: true }}
-                transition={{ duration: 0.5, delay: index * 0.1 }}
-                index={index}
-              >
-                <SkillInfo>
-                  <h3>{skill.name}</h3>
-                  <span>{skill.level}%</span>
-                </SkillInfo>
-                <SkillBar>
-                  <SkillProgress 
-                    as={motion.div}
-                    initial={{ width: 0 }}
-                    whileInView={{ width: `${skill.level}%` }}
-                    viewport={{ once: true }}
-                    transition={{ duration: 0.8, delay: 0.3 + index * 0.1 }}
-                  />
-                </SkillBar>
-              </SkillItem>
+{skills.map((skill, index) => (
+              <MemoSkillItem skill={skill} index={index} key={index} />
             ))}
           </SkillsGrid>
         </SkillsSection>
@@ -419,6 +516,29 @@ const SectionTitle = styled.div`
   }
 `;
 
+const IconContainer = styled.div`
+  font-size: 24px;
+  margin-right: 12px;
+  display: flex;
+  align-items: center;
+  
+  svg {
+    transition: all 0.3s ease;
+  }
+  
+  ${({ children }) => {
+    const skillColor = children?.props?.style?.color || '#64ffda';
+    return `
+      color: ${skillColor};
+      
+      &:hover svg {
+        transform: scale(1.2) rotate(5deg);
+        filter: drop-shadow(0 0 8px ${skillColor}40);
+      }
+    `;
+  }}
+`;
+
 const SkillsSection = styled.section`
   margin-bottom: 100px;
   background: rgba(17, 34, 64, 0.5);
@@ -474,6 +594,23 @@ const SkillItem = styled.div`
   
   &:hover::before {
     opacity: 1;
+  }
+`;
+
+const SkillDescription = styled.p`
+  color: #8892b0;
+  font-size: 13px;
+  line-height: 1.5;
+  margin-top: 8px;
+  padding-left: 20px;
+  border-left: 2px solid rgba(100, 255, 218, 0.2);
+  transition: all 0.3s ease;
+  opacity: 0.8;
+  
+  ${SkillItem}:hover & {
+    opacity: 1;
+    transform: translateX(5px);
+    border-left-color: rgba(100, 255, 218, 0.5);
   }
 `;
 
