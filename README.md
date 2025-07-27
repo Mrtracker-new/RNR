@@ -50,22 +50,31 @@ This is my personal portfolio website built with React, showcasing my skills, pr
 
 ```
 /public
-  /images        # Project images and icons
-  index.html     # HTML template with meta tags
-  manifest.json  # PWA manifest
+  /images            # Project images and icons
+  index.html         # HTML template with meta tags
+  manifest.json      # PWA manifest
+  robots.txt         # Robots configuration
 /src
-  /components    # Reusable UI components
-    /Navbar      # Navigation components
-    /Footer      # Footer components
-    /BackgroundEffect # Visual effects
-  /pages         # Page components
-    /Home        # Landing page
-    /About       # About me section
-    /Projects    # Project showcase
-    /Contact     # Contact form
-  /styles        # Global styles and themes
-  /utils         # Utility functions
-  App.js         # Main application component
+  /components        # Reusable UI components
+    BackgroundEffect.js
+    Footer.js
+    Navbar.js
+  /hooks             # Custom hooks (empty currently)
+  /pages             # Page components
+    About.js
+    Contact.js
+    Home.js
+    Projects.js
+  /styles            # Global styles and themes
+    GlobalStyle.js
+  App.js             # Main application component
+  App.css            # Global CSS styles
+  App.test.js        # Test cases
+  index.js           # Entry point
+  index.css          # Base styles
+  logo.svg           # React logo asset
+  reportWebVitals.js # Performance measuring tool
+  setupTests.js      # Test setup file
 ```
 
 ## 🚀 Getting Started
