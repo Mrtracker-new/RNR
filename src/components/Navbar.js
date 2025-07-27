@@ -1,10 +1,10 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useCallback, memo } from 'react';
 import { Link, useLocation } from 'react-router-dom';
 import styled from 'styled-components';
 import { motion, AnimatePresence } from 'framer-motion';
 import { FiMenu, FiX, FiHome, FiUser, FiFolder, FiMail } from 'react-icons/fi';
 
-const Navbar = () => {
+const Navbar = memo(() => {
   const [isOpen, setIsOpen] = useState(false);
   const [scrolled, setScrolled] = useState(false);
   const location = useLocation();
@@ -14,24 +14,29 @@ const Navbar = () => {
     setIsOpen(false);
   }, [location]);
 
-  // Handle scroll effect
+  // Handle scroll effect with throttling
   useEffect(() => {
+    let ticking = false;
+    
     const handleScroll = () => {
-      const offset = window.scrollY;
-      if (offset > 50) {
-        setScrolled(true);
-      } else {
-        setScrolled(false);
+      if (!ticking) {
+        requestAnimationFrame(() => {
+          const offset = window.scrollY;
+          setScrolled(offset > 50);
+          ticking = false;
+        });
+        ticking = true;
       }
     };
 
-    window.addEventListener('scroll', handleScroll);
+    window.addEventListener('scroll', handleScroll, { passive: true });
     return () => {
-      window.removeEventListener('scroll', handleScroll);
+      window.removeEventListener('scroll', handleScroll, { passive: true });
     };
   }, []);
 
-  const toggleMenu = () => setIsOpen(!isOpen);
+  const toggleMenu = useCallback(() => setIsOpen(prev => !prev), []);
+  const closeMenu = useCallback(() => setIsOpen(false), []);
 
   return (
     <NavContainer scrolled={scrolled}>
@@ -46,22 +51,21 @@ const Navbar = () => {
         </Logo>
 
         <DesktopMenu>
-          {['Home', 'About', 'Projects', 'Contact'].map((item, index) => (
-            <NavItem 
-              key={item}
-              as={motion.li}
-              initial={{ opacity: 0, y: -20 }}
-              animate={{ opacity: 1, y: 0 }}
-              transition={{ duration: 0.3, delay: index * 0.1 }}
-            >
-              <NavLink 
-                to={item === 'Home' ? '/' : `/${item.toLowerCase()}`}
-                className={location.pathname === (item === 'Home' ? '/' : `/${item.toLowerCase()}`) ? 'active' : ''}
-              >
-                {item}
-              </NavLink>
-            </NavItem>
-          ))}
+          {['Home', 'About', 'Projects', 'Contact'].map((item, index) => {
+            const path = item === 'Home' ? '/' : `/${item.toLowerCase()}`;
+            const isActive = location.pathname === path;
+            
+            return (
+              <NavItem key={item}>
+                <NavLink 
+                  to={path}
+                  className={isActive ? 'active' : ''}
+                >
+                  {item}
+                </NavLink>
+              </NavItem>
+            );
+          })}
         </DesktopMenu>
 
         <MobileMenuToggle onClick={toggleMenu}>
@@ -77,17 +81,17 @@ const Navbar = () => {
                 animate={{ opacity: 1 }}
                 exit={{ opacity: 0 }}
                 transition={{ duration: 0.3 }}
-                onClick={() => setIsOpen(false)}
+                onClick={closeMenu}
               />
               <MobileMenu
                 as={motion.div}
                 initial={{ opacity: 0, x: '100%' }}
                 animate={{ opacity: 1, x: 0 }}
                 exit={{ opacity: 0, x: '100%' }}
-                transition={{ type: 'spring', stiffness: 300, damping: 30 }}
+                transition={{ duration: 0.3, ease: 'easeInOut' }}
               >
                 <MobileMenuHeader>
-                  <Logo to="/" onClick={() => setIsOpen(false)}>
+            <Logo to="/" onClick={closeMenu}>
                     <span className="highlight">R</span>olan
                   </Logo>
                   <CloseButton onClick={toggleMenu}>
@@ -100,24 +104,29 @@ const Navbar = () => {
                     { name: 'About', icon: <FiUser size={20} /> },
                     { name: 'Projects', icon: <FiFolder size={20} /> },
                     { name: 'Contact', icon: <FiMail size={20} /> }
-                  ].map((item, index) => (
-                    <MobileNavItem 
-                      key={item.name}
-                      as={motion.li}
-                      initial={{ opacity: 0, y: 20 }}
-                      animate={{ opacity: 1, y: 0 }}
-                      transition={{ duration: 0.3, delay: index * 0.1 }}
-                    >
-                      <MobileNavLink 
-                        to={item.name === 'Home' ? '/' : `/${item.name.toLowerCase()}`}
-                        className={location.pathname === (item.name === 'Home' ? '/' : `/${item.name.toLowerCase()}`) ? 'active' : ''}
-                        onClick={() => setIsOpen(false)}
+                  ].map((item, index) => {
+                    const path = item.name === 'Home' ? '/' : `/${item.name.toLowerCase()}`;
+                    const isActive = location.pathname === path;
+                    
+                    return (
+                      <MobileNavItem 
+                        key={item.name}
+                        as={motion.li}
+                        initial={{ opacity: 0, y: 15 }}
+                        animate={{ opacity: 1, y: 0 }}
+                        transition={{ duration: 0.2, delay: index * 0.05 }}
                       >
-                        <span className="icon">{item.icon}</span>
-                        <span>{item.name}</span>
-                      </MobileNavLink>
-                    </MobileNavItem>
-                  ))}
+                        <MobileNavLink 
+                          to={path}
+                          className={isActive ? 'active' : ''}
+                          onClick={closeMenu}
+                        >
+                          <span className="icon">{item.icon}</span>
+                          <span>{item.name}</span>
+                        </MobileNavLink>
+                      </MobileNavItem>
+                    );
+                  })}
                 </MobileMenuItems>
                 <MobileMenuFooter>
                   <p>© {new Date().getFullYear()} Rolan</p>
@@ -129,7 +138,7 @@ const Navbar = () => {
       </NavContent>
     </NavContainer>
   );
-};
+});
 
 const NavContainer = styled.nav`
   position: fixed;

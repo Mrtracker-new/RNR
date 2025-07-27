@@ -1,4 +1,4 @@
-import React, { useState, useEffect, lazy, Suspense } from 'react';
+import React, { useState, useEffect, lazy, Suspense, useCallback, memo } from 'react';
 import { BrowserRouter as Router, Routes, Route, useLocation } from 'react-router-dom';
 import { AnimatePresence, motion } from 'framer-motion';
 import { FiArrowUp } from 'react-icons/fi';
@@ -20,27 +20,42 @@ const Projects = lazy(() => import('./pages/Projects'));
 const Contact = lazy(() => import('./pages/Contact'));
 
 // ScrollToTop component to handle scrolling to top on page change
-function ScrollToTop() {
+const ScrollToTop = memo(() => {
   const { pathname } = useLocation();
   
   useEffect(() => {
-    window.scrollTo(0, 0);
+    window.scrollTo({ top: 0, left: 0, behavior: 'auto' });
   }, [pathname]);
   
   return null;
+});
+
+// Main App component that wraps everything in Router
+function App() {
+  return (
+    <Router>
+      <AppContent />
+    </Router>
+  );
 }
 
-function App() {
+// App content component that has access to location
+const AppContent = memo(() => {
   const [showScrollTop, setShowScrollTop] = useState(false);
+  const location = useLocation();
 
-  // Handle scroll effect with passive event listener for better performance
+  // Handle scroll effect with throttled passive event listener for better performance
   useEffect(() => {
+    let ticking = false;
+    
     const handleScroll = () => {
-      // Show scroll to top button when user scrolls down 300px
-      if (window.scrollY > 300) {
-        setShowScrollTop(true);
-      } else {
-        setShowScrollTop(false);
+      if (!ticking) {
+        requestAnimationFrame(() => {
+          const scrollY = window.scrollY;
+          setShowScrollTop(scrollY > 300);
+          ticking = false;
+        });
+        ticking = true;
       }
     };
 
@@ -51,29 +66,29 @@ function App() {
     };
   }, []);
 
-  const scrollToTop = () => {
+  const scrollToTop = useCallback(() => {
     window.scrollTo({
       top: 0,
       behavior: 'smooth'
     });
-  };
+  }, []);
 
   return (
-    <Router>
+    <>
       <GlobalStyle />
       <BackgroundEffect />
       <ScrollToTop />
       <Navbar />
-      <AnimatePresence mode="wait">
-        <Suspense fallback={<LoadingFallback />}>
-          <Routes>
-            <Route path="/" element={<Home />} />
-            <Route path="/about" element={<About />} />
-            <Route path="/projects" element={<Projects />} />
-            <Route path="/contact" element={<Contact />} />
+      <Suspense fallback={<LoadingFallback />}>
+        <AnimatePresence mode="wait">
+          <Routes location={location} key={location.pathname}>
+            <Route path="/" element={<PageWrapper><Home /></PageWrapper>} />
+            <Route path="/about" element={<PageWrapper><About /></PageWrapper>} />
+            <Route path="/projects" element={<PageWrapper><Projects /></PageWrapper>} />
+            <Route path="/contact" element={<PageWrapper><Contact /></PageWrapper>} />
           </Routes>
-        </Suspense>
-      </AnimatePresence>
+        </AnimatePresence>
+      </Suspense>
       <Footer />
       
       <AnimatePresence>
@@ -91,36 +106,63 @@ function App() {
           </ScrollTopButton>
         )}
       </AnimatePresence>
-    </Router>
+    </>
   );
-}
+});
+
+// Page wrapper for consistent transitions
+const PageWrapper = memo(({ children }) => {
+  const location = useLocation();
+  
+  return (
+    <motion.div
+      key={location.pathname}
+      initial={{ opacity: 0, y: 20 }}
+      animate={{ opacity: 1, y: 0 }}
+      exit={{ opacity: 0, y: -20 }}
+      transition={{ duration: 0.3, ease: "easeInOut" }}
+    >
+      {children}
+    </motion.div>
+  );
+});
 
 // Loading fallback component for lazy-loaded routes
-const LoadingFallback = () => (
+const LoadingFallback = memo(() => (
   <LoadingContainer>
     <LoadingSpinner />
+    <LoadingText>Loading...</LoadingText>
   </LoadingContainer>
-);
+));
 
 const LoadingContainer = styled.div`
   display: flex;
+  flex-direction: column;
   justify-content: center;
   align-items: center;
   height: 100vh;
   width: 100%;
+  gap: 20px;
 `;
 
 const LoadingSpinner = styled.div`
-  width: 50px;
-  height: 50px;
-  border: 3px solid rgba(100, 255, 218, 0.3);
+  width: 40px;
+  height: 40px;
+  border: 2px solid rgba(100, 255, 218, 0.2);
   border-radius: 50%;
   border-top-color: #64ffda;
-  animation: spin 1s ease-in-out infinite;
+  animation: spin 0.8s linear infinite;
+  will-change: transform;
   
   @keyframes spin {
     to { transform: rotate(360deg); }
   }
+`;
+
+const LoadingText = styled.p`
+  color: #64ffda;
+  font-size: 14px;
+  margin: 0;
 `;
 
 const ScrollTopButton = styled.button`

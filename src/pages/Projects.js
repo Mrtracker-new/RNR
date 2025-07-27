@@ -1,37 +1,28 @@
-import React, { useState, useRef, useEffect } from 'react';
+import React, { useState, useRef, useEffect, useMemo, useCallback, memo } from 'react';
 import styled from 'styled-components';
-import { motion, AnimatePresence, useAnimation } from 'framer-motion';
+import { motion, AnimatePresence } from 'framer-motion';
 import { FiFolder, FiGithub, FiExternalLink, FiDownload, FiX, FiSearch, FiCheck } from 'react-icons/fi';
 
-const Projects = () => {
+const Projects = memo(() => {
   const [filter, setFilter] = useState('all');
   
-  // Custom setFilter function with logging
-  const handleFilterChange = (newFilter) => {
-    console.log('Filter changing from', filter, 'to', newFilter);
-    // Force a re-render by using a callback to ensure state is updated
+  const handleFilterChange = useCallback((newFilter) => {
     setFilter(newFilter);
-    // Add a timeout to log the filter after state update
-    setTimeout(() => {
-      console.log('Filter after update:', newFilter);
-    }, 100);
-  };
-const [searchTerm, setSearchTerm] = useState('');
+  }, []);
+  const [searchTerm, setSearchTerm] = useState('');
   const [debouncedSearchTerm, setDebouncedSearchTerm] = useState('');
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [selectedProject, setSelectedProject] = useState(null);
-  // Layout is always grid, no toggle needed
-  // Sort by newest by default (no dropdown needed)
   const modalRef = useRef(null);
-  const projectsRef = useRef(null);
-  const controls = useAnimation();
 
-  // Add useEffect to handle filter changes
+  // Debounce search term for better performance
   useEffect(() => {
-    console.log('Filter changed in useEffect:', filter);
-    // Animate the controls when filter changes
-    controls.start({ opacity: 1, y: 0 });
-  }, [filter, controls]);
+    const timeoutId = setTimeout(() => {
+      setDebouncedSearchTerm(searchTerm);
+    }, 300);
+    
+    return () => clearTimeout(timeoutId);
+  }, [searchTerm]);
 
   // Helper function to get file type label
   const getFileTypeLabel = (fileType) => {
@@ -43,8 +34,8 @@ const [searchTerm, setSearchTerm] = useState('');
     }
   };
 
-  // Project data
-  const projectsData = [
+  // Memoized project data
+  const projectsData = useMemo(() => [
     {
       id: 1,
       title: 'InvisioVault-Desktop',
@@ -155,50 +146,40 @@ const [searchTerm, setSearchTerm] = useState('');
       category: 'apk',
       featured: false,
     }
-  ];
+  ], []);
 
-  // Filter and sort projects based on category, search term, and sort option
-  console.log('Current filter:', filter);
-  console.log('Project data categories:', projectsData.map(p => ({ id: p.id, title: p.title, category: p.category })));
+  // Memoized filtered and sorted projects for better performance
+  const filteredProjects = useMemo(() => {
+    return projectsData.filter(project => {
+      const matchesCategory = filter === 'all' || project.category === filter;
+      const matchesSearch = debouncedSearchTerm === '' || 
+                            project.title.toLowerCase().includes(debouncedSearchTerm.toLowerCase()) || 
+                            project.description.toLowerCase().includes(debouncedSearchTerm.toLowerCase()) ||
+                            project.tech.some(tech => tech.toLowerCase().includes(debouncedSearchTerm.toLowerCase()));
+      
+      return matchesCategory && matchesSearch;
+    }).sort((a, b) => b.id - a.id); // Sort by newest
+  }, [projectsData, filter, debouncedSearchTerm]);
   
-const filteredProjects = projectsData.filter(project => {
-    // Check if project category matches the selected filter
-    // This is where the issue was - the condition wasn't correctly matching categories
-    const matchesCategory = filter === 'all' || project.category === filter;
-    
-    // Check if project matches the debounced search term
-    const matchesSearch = debouncedSearchTerm === '' || 
-                          project.title.toLowerCase().includes(debouncedSearchTerm.toLowerCase()) || 
-                          project.description.toLowerCase().includes(debouncedSearchTerm.toLowerCase()) ||
-                          project.tech.some(tech => tech.toLowerCase().includes(debouncedSearchTerm.toLowerCase()));
-    
-    // Debug logging for each project
-    console.log(`Project ${project.id} (${project.title}) - Category: ${project.category}, Matches filter '${filter}': ${matchesCategory}`);
-    
-    return matchesCategory && matchesSearch;
-
-  }).sort((a, b) => {
-    // Always sort by newest (by id)
-    return b.id - a.id;
-  });
-  
-  console.log('Filtered projects:', filteredProjects.map(p => ({ id: p.id, title: p.title, category: p.category })));
-  
-  // Get featured projects for special display
-  const featuredProjects = projectsData.filter(project => project.featured);
+  // Memoized featured projects
+  const featuredProjects = useMemo(() => 
+    projectsData.filter(project => project.featured), 
+    [projectsData]
+  );
 
   // Handle project click to open modal
-  const handleProjectClick = (project) => {
+  const handleProjectClick = useCallback((project) => {
     setSelectedProject(project);
     setIsModalOpen(true);
-    document.body.style.overflow = 'hidden'; // Prevent scrolling when modal is open
-  };
+    document.body.style.overflow = 'hidden';
+  }, []);
 
   // Close modal
-  const closeModal = () => {
+  const closeModal = useCallback(() => {
     setIsModalOpen(false);
-    document.body.style.overflow = 'auto'; // Re-enable scrolling
-  };
+    document.body.style.overflow = 'auto';
+    setSelectedProject(null);
+  }, []);
 
   // Close modal on escape key press
   useEffect(() => {
@@ -210,7 +191,7 @@ const filteredProjects = projectsData.filter(project => {
 
     window.addEventListener('keydown', handleEscapeKey);
     return () => window.removeEventListener('keydown', handleEscapeKey);
-  }, []);
+  }, [closeModal]);
 
   // Close modal when clicking outside
   useEffect(() => {
@@ -227,27 +208,8 @@ const filteredProjects = projectsData.filter(project => {
     return () => {
       document.removeEventListener('mousedown', handleClickOutside);
     };
-  }, [isModalOpen]);
+  }, [isModalOpen, closeModal]);
 
-  // Animate projects when filter or search changes
-useEffect(() => {
-    controls.start({
-      opacity: 1,
-      y: 0,
-      transition: { staggerChildren: 0.1 }
-    });
-  }, [filter, debouncedSearchTerm, controls]);
-
-  // Debounce search term
-  useEffect(() => {
-    const handler = setTimeout(() => {
-      setDebouncedSearchTerm(searchTerm);
-    }, 300); // 300ms delay
-
-    return () => {
-      clearTimeout(handler);
-    };
-  }, [searchTerm]);
 
   return (
     <ProjectsContainer>
@@ -353,7 +315,7 @@ useEffect(() => {
             </motion.div>
           </NoResultsMessage>
         ) : (
-          <div ref={projectsRef}>
+          <div>
             {/* Featured Projects Section (only shown when filter is 'all' and no search term) */}
             {filter === 'all' && !searchTerm && featuredProjects.length > 0 && (
               <FeaturedSection>
@@ -449,7 +411,6 @@ useEffect(() => {
             
             <ProjectsGrid>
                 <AnimatePresence mode="wait" key={filter}>
-                  {console.log('Rendering projects in UI:', filteredProjects.map(p => p.title))}
                   {filteredProjects
                     .map((project) => (
                     <ProjectCard
@@ -552,7 +513,7 @@ useEffect(() => {
                 initial={{ scale: 0.8, opacity: 0 }}
                 animate={{ scale: 1, opacity: 1 }}
                 exit={{ scale: 0.8, opacity: 0 }}
-                transition={{ type: 'spring', damping: 25 }}
+                transition={{ type: 'spring', damping: 25, stiffness: 100 }}
                 onClick={(e) => e.stopPropagation()} // Prevent closing when clicking inside
               >
                 <ModalCloseButton onClick={closeModal}>
@@ -650,7 +611,7 @@ useEffect(() => {
       </Container>
     </ProjectsContainer>
   );
-};
+});
 
 // Styled Components
 const ProjectsContainer = styled.div`
@@ -1499,13 +1460,13 @@ const ModalLink = styled.a`
   display: inline-flex;
   align-items: center;
   margin-right: 20px;
-  color: var(--primary);
+  color: ${({ theme }) => theme.primary};
   text-decoration: none;
   font-weight: 500;
   transition: all 0.3s ease;
   
   &:hover, &:active {
-    color: var(--accent);
+    color: ${({ theme }) => theme.accent};
     transform: translateY(-2px);
   }
   

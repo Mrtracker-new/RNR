@@ -1,13 +1,30 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useState, memo } from 'react';
 import styled from 'styled-components';
 
-const BackgroundEffect = () => {
-  const [isMobile, setIsMobile] = useState(false);
+const BackgroundEffect = memo(() => {
+  const [isMobile, setIsMobile] = useState(window.innerWidth <= 768);
+  const [isReducedMotion, setIsReducedMotion] = useState(false);
+  
+  // Check for reduced motion preference
+  useEffect(() => {
+    const mediaQuery = window.matchMedia('(prefers-reduced-motion: reduce)');
+    setIsReducedMotion(mediaQuery.matches);
+    
+    const handleChange = (e) => setIsReducedMotion(e.matches);
+    mediaQuery.addEventListener('change', handleChange);
+    
+    return () => mediaQuery.removeEventListener('change', handleChange);
+  }, []);
   
   // Check if device is mobile for reduced animations
   useEffect(() => {
+    let timeoutId;
+    
     const checkMobile = () => {
-      setIsMobile(window.innerWidth <= 768);
+      clearTimeout(timeoutId);
+      timeoutId = setTimeout(() => {
+        setIsMobile(window.innerWidth <= 768);
+      }, 100); // Debounce resize events
     };
     
     checkMobile();
@@ -15,21 +32,27 @@ const BackgroundEffect = () => {
     
     return () => {
       window.removeEventListener('resize', checkMobile, { passive: true });
+      clearTimeout(timeoutId);
     };
   }, []);
+  
+  // Don't render orbs if user prefers reduced motion or on very small screens
+  const shouldShowOrbs = !isReducedMotion && window.innerWidth > 480;
   
   return (
     <BackgroundContainer>
       <GradientOverlay />
-      <BackgroundPattern />
-      <GlowingOrbs isMobile={isMobile}>
-        <Orb className="orb-1" isMobile={isMobile} />
-        <Orb className="orb-2" isMobile={isMobile} />
-        <Orb className="orb-3" isMobile={isMobile} />
-      </GlowingOrbs>
+      <BackgroundPattern isMobile={isMobile} />
+      {shouldShowOrbs && (
+        <GlowingOrbs isMobile={isMobile}>
+          <Orb className="orb-1" isMobile={isMobile} isReducedMotion={isReducedMotion} />
+          <Orb className="orb-2" isMobile={isMobile} isReducedMotion={isReducedMotion} />
+          <Orb className="orb-3" isMobile={isMobile} isReducedMotion={isReducedMotion} />
+        </GlowingOrbs>
+      )}
     </BackgroundContainer>
   );
-};
+});
 
 const BackgroundContainer = styled.div`
   position: fixed;
@@ -58,8 +81,8 @@ const BackgroundPattern = styled.div`
   width: 100%;
   height: 100%;
   background-image: radial-gradient(rgba(100, 255, 218, 0.1) 1px, transparent 1px);
-  background-size: 50px 50px;
-  opacity: 0.2;
+  background-size: ${props => props.isMobile ? '30px 30px' : '50px 50px'};
+  opacity: ${props => props.isMobile ? '0.1' : '0.2'};
 `;
 
 const GlowingOrbs = styled.div`
@@ -69,54 +92,59 @@ const GlowingOrbs = styled.div`
   width: 100%;
   height: 100%;
   overflow: hidden;
-  opacity: ${props => props.isMobile ? '0.2' : '0.4'}; /* Reduce opacity on mobile for better performance */
-  will-change: opacity; /* Optimize for animations */
+  opacity: ${props => props.isMobile ? '0.15' : '0.3'};
+  will-change: opacity;
+  pointer-events: none;
 `;
 
 const Orb = styled.div`
   position: absolute;
   border-radius: 50%;
-  filter: ${props => props.isMobile ? 'blur(40px)' : 'blur(60px)'}; /* Reduce blur on mobile */
-  opacity: 0.3;
-  animation: ${props => props.isMobile ? 'float 20s' : 'float 15s'} infinite ease-in-out; /* Slower animation on mobile */
-  will-change: transform; /* Optimize for animations */
+  filter: ${props => props.isMobile ? 'blur(30px)' : 'blur(50px)'};
+  opacity: ${props => props.isMobile ? '0.2' : '0.25'};
+  animation: ${props => {
+    if (props.isReducedMotion) return 'none';
+    return props.isMobile ? 'float 25s' : 'float 20s';
+  }} infinite ease-in-out;
+  will-change: ${props => props.isReducedMotion ? 'auto' : 'transform'};
+  pointer-events: none;
   
   &.orb-1 {
     top: 20%;
     left: 10%;
-    width: ${props => props.isMobile ? '200px' : '300px'}; /* Smaller on mobile */
-    height: ${props => props.isMobile ? '200px' : '300px'};
-    background: rgba(100, 255, 218, 0.3);
+    width: ${props => props.isMobile ? '150px' : '250px'};
+    height: ${props => props.isMobile ? '150px' : '250px'};
+    background: rgba(100, 255, 218, 0.2);
     animation-delay: 0s;
   }
   
   &.orb-2 {
     bottom: 10%;
     right: 15%;
-    width: ${props => props.isMobile ? '250px' : '400px'}; /* Smaller on mobile */
-    height: ${props => props.isMobile ? '250px' : '400px'};
-    background: rgba(100, 200, 255, 0.2);
-    animation-delay: -5s;
+    width: ${props => props.isMobile ? '200px' : '300px'};
+    height: ${props => props.isMobile ? '200px' : '300px'};
+    background: rgba(100, 200, 255, 0.15);
+    animation-delay: -8s;
   }
   
   &.orb-3 {
     top: 50%;
     right: 30%;
-    width: ${props => props.isMobile ? '150px' : '200px'}; /* Smaller on mobile */
-    height: ${props => props.isMobile ? '150px' : '200px'};
-    background: rgba(149, 100, 255, 0.2);
-    animation-delay: -10s;
+    width: ${props => props.isMobile ? '120px' : '180px'};
+    height: ${props => props.isMobile ? '120px' : '180px'};
+    background: rgba(149, 100, 255, 0.15);
+    animation-delay: -15s;
   }
   
   @keyframes float {
-    0% {
+    0%, 100% {
       transform: translate(0, 0) scale(1);
     }
-    50% {
-      transform: translate(${props => props.isMobile ? '15px' : '30px'}, ${props => props.isMobile ? '10px' : '20px'}) scale(${props => props.isMobile ? '1.03' : '1.05'}); /* Smaller movement on mobile */
+    33% {
+      transform: translate(${props => props.isMobile ? '10px' : '20px'}, ${props => props.isMobile ? '5px' : '10px'}) scale(${props => props.isMobile ? '1.01' : '1.02'});
     }
-    100% {
-      transform: translate(0, 0) scale(1);
+    66% {
+      transform: translate(${props => props.isMobile ? '-8px' : '-15px'}, ${props => props.isMobile ? '8px' : '15px'}) scale(${props => props.isMobile ? '1.02' : '1.03'});
     }
   }
 `;

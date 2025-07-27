@@ -1,51 +1,79 @@
-import React, { memo } from 'react';
+import React, { memo, useState, useCallback, useMemo } from 'react';
 import styled from 'styled-components';
 import { motion } from 'framer-motion';
 import { FiCode, FiDatabase, FiLayout, FiServer, FiBriefcase, FiBook, FiAward } from 'react-icons/fi';
 import { SiHtml5, SiJavascript, SiReact, SiPython, SiFlask, SiFigma, SiGit, SiMongodb, SiNodedotjs, SiTypescript, SiBootstrap } from 'react-icons/si';
 
-const MemoSkillItem = memo(({ skill, index }) => (
-  <SkillItem
-    as={motion.div}
-    initial={{ opacity: 0, x: -20 }}
-    whileInView={{ opacity: 1, x: 0 }}
-    viewport={{ once: true }}
-    transition={{ duration: 0.5, delay: index * 0.1 }}
-    index={index}
-  >
-    <SkillInfo>
-      <IconContainer>{skill.icon}</IconContainer>
-      <h3>{skill.name}</h3>
-      <span>{skill.level}%</span>
-    </SkillInfo>
-    <SkillBar>
-      <SkillProgress
-        as={motion.div}
-        initial={{ width: 0 }}
-        whileInView={{ width: `${skill.level}%` }}
-        viewport={{ once: true }}
-        transition={{ duration: 0.8, delay: 0.3 + index * 0.1 }}
-        style={{ background: skill.color }}
-      />
-    </SkillBar>
-    <SkillDescription>{skill.description}</SkillDescription>
-  </SkillItem>
-));
+const MemoSkillItem = memo(({ skill, index, isVisible }) => {
+  const [isHovered, setIsHovered] = useState(false);
+  
+  const handleMouseEnter = useCallback(() => {
+    setIsHovered(true);
+  }, []);
+  
+  const handleMouseLeave = useCallback(() => {
+    setIsHovered(false);
+  }, []);
+  
+  return (
+    <SkillItem
+      as={motion.div}
+      initial={{ opacity: 0, y: 20 }}
+      animate={isVisible ? { opacity: 1, y: 0 } : { opacity: 0, y: 20 }}
+      transition={{ duration: 0.4, delay: index * 0.05 }}
+      index={index}
+      onMouseEnter={handleMouseEnter}
+      onMouseLeave={handleMouseLeave}
+      isHovered={isHovered}
+    >
+      <SkillInfo>
+        <IconContainer skill={skill} isHovered={isHovered}>
+          {skill.icon}
+        </IconContainer>
+        <SkillText>
+          <h3>{skill.name}</h3>
+          <span>{skill.level}%</span>
+        </SkillText>
+      </SkillInfo>
+      <SkillBar>
+        <SkillProgress
+          as={motion.div}
+          initial={{ scaleX: 0 }}
+          animate={isVisible ? { scaleX: skill.level / 100 } : { scaleX: 0 }}
+          transition={{ duration: 0.6, delay: 0.2 + index * 0.03, ease: "easeOut" }}
+          style={{ 
+            background: `linear-gradient(90deg, ${skill.color}, ${skill.color}cc)`,
+            transformOrigin: 'left'
+          }}
+        />
+      </SkillBar>
+      <SkillDescription isHovered={isHovered}>
+        {skill.description}
+      </SkillDescription>
+    </SkillItem>
+  );
+});
 
 const About = () => {
+  const [skillsVisible, setSkillsVisible] = useState(false);
+  
   const fadeIn = {
     hidden: { opacity: 0, y: 20 },
     visible: (i) => ({
       opacity: 1,
       y: 0,
       transition: {
-        delay: i * 0.2,
-        duration: 0.5,
+        delay: i * 0.1,
+        duration: 0.4,
       },
     }),
   };
+  
+  const handleSkillsInView = useCallback(() => {
+    setSkillsVisible(true);
+  }, []);
 
-  const skills = [
+  const skills = useMemo(() => [
     { 
       name: 'HTML/CSS', 
       level: 90, 
@@ -142,7 +170,7 @@ const About = () => {
       category: 'Soft Skills',
       description: 'Analytical thinking and debugging'
     }
-  ];
+  ], []);
 
   const services = [
     {
@@ -297,14 +325,20 @@ const About = () => {
               initial={{ opacity: 0, y: 20 }}
               whileInView={{ opacity: 1, y: 0 }}
               viewport={{ once: true }}
-              transition={{ duration: 0.5 }}
+              transition={{ duration: 0.4 }}
+              onViewportEnter={handleSkillsInView}
             >
               My Skills
             </motion.h2>
           </SectionTitle>
           <SkillsGrid>
-{skills.map((skill, index) => (
-              <MemoSkillItem skill={skill} index={index} key={index} />
+            {skills.map((skill, index) => (
+              <MemoSkillItem 
+                skill={skill} 
+                index={index} 
+                key={`skill-${skill.name}`}
+                isVisible={skillsVisible}
+              />
             ))}
           </SkillsGrid>
         </SkillsSection>
@@ -521,22 +555,13 @@ const IconContainer = styled.div`
   margin-right: 12px;
   display: flex;
   align-items: center;
+  color: ${({ skill }) => skill.color};
+  will-change: transform;
   
   svg {
-    transition: all 0.3s ease;
+    transition: transform 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+    transform: ${({ isHovered }) => isHovered ? 'scale(1.1)' : 'scale(1)'};
   }
-  
-  ${({ children }) => {
-    const skillColor = children?.props?.style?.color || '#64ffda';
-    return `
-      color: ${skillColor};
-      
-      &:hover svg {
-        transform: scale(1.2) rotate(5deg);
-        filter: drop-shadow(0 0 8px ${skillColor}40);
-      }
-    `;
-  }}
 `;
 
 const SkillsSection = styled.section`
@@ -547,53 +572,38 @@ const SkillsSection = styled.section`
   backdrop-filter: blur(5px);
   box-shadow: 0 10px 30px -15px rgba(2, 12, 27, 0.7);
   border: 1px solid rgba(100, 255, 218, 0.1);
-  transition: all 0.3s ease;
-  
-  &:hover {
-    box-shadow: 0 20px 30px -15px rgba(2, 12, 27, 0.7);
-    border-color: rgba(100, 255, 218, 0.2);
-  }
 `;
 
 const SkillsGrid = styled.div`
   display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(400px, 1fr));
-  gap: 30px;
+  grid-template-columns: repeat(auto-fit, minmax(min(400px, 100%), 1fr));
+  gap: 25px;
   
   @media (max-width: 768px) {
     grid-template-columns: 1fr;
+    gap: 20px;
+  }
+  
+  @media (max-width: 480px) {
+    gap: 15px;
   }
 `;
 
 const SkillItem = styled.div`
-  margin-bottom: 30px;
+  margin-bottom: 25px;
   position: relative;
-  transition: all 0.3s ease;
+  padding: 20px;
+  background: rgba(10, 25, 47, 0.3);
+  border-radius: 8px;
+  border: 1px solid rgba(100, 255, 218, 0.1);
+  will-change: transform;
+  transition: transform 0.2s cubic-bezier(0.4, 0, 0.2, 1);
   
-  &:hover {
-    transform: translateY(-5px);
-  }
+  transform: ${({ isHovered }) => isHovered ? 'translateY(-3px)' : 'translateY(0)'};
   
-  &::before {
-    content: '${props => props.index + 1}';
-    position: absolute;
-    left: -30px;
-    top: 0;
-    width: 24px;
-    height: 24px;
-    background: rgba(100, 255, 218, 0.2);
-    border-radius: 50%;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    font-size: 12px;
-    color: #64ffda;
-    opacity: 0;
-    transition: opacity 0.3s ease;
-  }
-  
-  &:hover::before {
-    opacity: 1;
+  @media (max-width: 768px) {
+    margin-bottom: 20px;
+    padding: 15px;
   }
 `;
 
@@ -602,116 +612,77 @@ const SkillDescription = styled.p`
   font-size: 13px;
   line-height: 1.5;
   margin-top: 8px;
-  padding-left: 20px;
+  padding-left: 15px;
   border-left: 2px solid rgba(100, 255, 218, 0.2);
-  transition: all 0.3s ease;
-  opacity: 0.8;
+  transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+  opacity: ${({ isHovered }) => isHovered ? '1' : '0.8'};
+  transform: ${({ isHovered }) => isHovered ? 'translateX(3px)' : 'translateX(0)'};
+  border-left-color: ${({ isHovered }) => isHovered ? 'rgba(100, 255, 218, 0.5)' : 'rgba(100, 255, 218, 0.2)'};
   
-  ${SkillItem}:hover & {
-    opacity: 1;
-    transform: translateX(5px);
-    border-left-color: rgba(100, 255, 218, 0.5);
+  @media (max-width: 768px) {
+    font-size: 12px;
+    padding-left: 12px;
   }
 `;
 
 const SkillInfo = styled.div`
   display: flex;
+  align-items: center;
   justify-content: space-between;
-  margin-bottom: 10px;
+  margin-bottom: 12px;
+`;
+
+const SkillText = styled.div`
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  flex: 1;
   
   h3 {
     color: #ccd6f6;
     font-size: 16px;
     font-weight: 500;
-    position: relative;
-    display: inline-block;
-    transition: all 0.3s ease;
+    margin: 0;
     
-    &::before {
-      content: '⚡';
-      margin-right: 8px;
-      color: #64ffda;
-      opacity: 0;
-      transform: translateX(-10px);
-      transition: all 0.3s ease;
+    @media (max-width: 768px) {
+      font-size: 15px;
     }
   }
   
   span {
     color: #64ffda;
     font-size: 14px;
-    font-weight: bold;
+    font-weight: 600;
     background: rgba(100, 255, 218, 0.1);
-    padding: 2px 8px;
-    border-radius: 10px;
-  }
-  
-  &:hover h3::before {
-    opacity: 1;
-    transform: translateX(0);
+    padding: 3px 8px;
+    border-radius: 12px;
+    
+    @media (max-width: 768px) {
+      font-size: 13px;
+      padding: 2px 6px;
+    }
   }
 `;
 
 const SkillBar = styled.div`
-  height: 10px;
+  height: 8px;
   background-color: #112240;
-  border-radius: 10px;
+  border-radius: 4px;
   overflow: hidden;
-  box-shadow: inset 0 1px 3px rgba(0, 0, 0, 0.2);
+  box-shadow: inset 0 1px 2px rgba(0, 0, 0, 0.2);
   position: relative;
+  margin-bottom: 10px;
   
-  &::after {
-    content: '';
-    position: absolute;
-    top: 0;
-    left: 0;
-    width: 100%;
-    height: 100%;
-    background: linear-gradient(90deg, transparent 75%, rgba(255, 255, 255, 0.1) 80%, transparent 85%);
-    background-size: 200% 100%;
-    animation: shimmer 1.5s infinite;
-  }
-  
-  @keyframes shimmer {
-    0% {
-      background-position: 200% 0;
-    }
-    100% {
-      background-position: -200% 0;
-    }
+  @media (max-width: 768px) {
+    height: 6px;
   }
 `;
 
 const SkillProgress = styled.div`
   height: 100%;
-  background: linear-gradient(90deg, #64ffda, #4cdbbd);
-  border-radius: 10px;
+  border-radius: 4px;
   position: relative;
-  
-  &::before {
-    content: '';
-    position: absolute;
-    top: 0;
-    left: 0;
-    width: 100%;
-    height: 100%;
-    background: linear-gradient(90deg, 
-      rgba(255, 255, 255, 0.1) 0%, 
-      rgba(255, 255, 255, 0.2) 20%, 
-      rgba(255, 255, 255, 0.1) 40%
-    );
-    background-size: 200% 100%;
-    animation: shimmer 2s infinite linear;
-  }
-  
-  @keyframes shimmer {
-    0% {
-      background-position: 0% 0;
-    }
-    100% {
-      background-position: 200% 0;
-    }
-  }
+  will-change: transform;
 `;
 
 const ServicesSection = styled.section`
