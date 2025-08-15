@@ -22,5 +22,16 @@ npm-debug.log*
 yarn-debug.log*
 yarn-error.log*
 
-# netlify
+# Netlify
 .netlify/
+.netlify
+.env
+.env.netlify
+
+# Netlify Forms
+/functions/
+/.netlify/
+netlify.toml
+
+# Local Netlify folder
+.netlify
