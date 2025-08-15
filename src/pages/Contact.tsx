@@ -382,8 +382,8 @@ const Contact: React.FC = () => {
     setSubmitError('');
 
     try {
-      // Prepare form data for Netlify Forms
-      const formDataToSubmit = new FormData();
+      // Create form data in the format Netlify expects
+      const formDataToSubmit = new URLSearchParams();
       formDataToSubmit.append('form-name', 'contact');
       formDataToSubmit.append('name', formData.name);
       formDataToSubmit.append('email', formData.email);
@@ -394,7 +394,7 @@ const Contact: React.FC = () => {
       const response = await fetch('/', {
         method: 'POST',
         headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
-        body: new URLSearchParams(formDataToSubmit as any).toString()
+        body: formDataToSubmit.toString()
       });
 
       if (response.ok) {
@@ -485,8 +485,11 @@ const Contact: React.FC = () => {
                   </SubmitErrorMessage>
                 )}
 
-                <form name="contact" method="POST" data-netlify="true" onSubmit={handleSubmit}>
+                <form name="contact" method="POST" data-netlify="true" data-netlify-honeypot="bot-field" onSubmit={handleSubmit}>
                   <input type="hidden" name="form-name" value="contact" />
+                  <p hidden>
+                    <label>Don't fill this out: <input name="bot-field" /></label>
+                  </p>
                   
                   <FormGroup>
                     <FormLabel htmlFor="name">Your Name</FormLabel>
