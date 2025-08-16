@@ -311,21 +311,51 @@ const CloseButton = styled.button`
   position: absolute;
   top: var(--spacing-4);
   right: var(--spacing-4);
-  width: 40px;
-  height: 40px;
+  width: 44px;
+  height: 44px;
   border-radius: 50%;
-  background: var(--dark-700);
-  border: 1px solid var(--dark-600);
-  color: var(--dark-300);
+  background: rgba(255, 255, 255, 0.1);
+  border: 1px solid rgba(255, 255, 255, 0.2);
+  color: var(--dark-200);
   display: flex;
   align-items: center;
   justify-content: center;
   cursor: pointer;
   transition: var(--transition-normal);
+  font-size: 20px;
+  font-weight: normal;
+  z-index: 10;
+  backdrop-filter: blur(10px);
+  
+  /* Refined mobile design */
+  @media (max-width: 768px) {
+    width: 40px;
+    height: 40px;
+    font-size: 18px;
+    top: var(--spacing-4);
+    right: var(--spacing-4);
+    background: rgba(0, 0, 0, 0.6);
+    border: 1px solid rgba(255, 255, 255, 0.15);
+  }
 
   &:hover {
-    background: var(--dark-600);
+    background: rgba(255, 255, 255, 0.15);
     color: var(--accent-primary);
+    border-color: var(--accent-primary);
+    transform: scale(1.05);
+  }
+  
+  &:active {
+    transform: scale(0.95);
+    background: rgba(255, 255, 255, 0.2);
+  }
+  
+  /* Touch-friendly on mobile */
+  @media (hover: none) and (pointer: coarse) {
+    &:active {
+      background: rgba(255, 255, 255, 0.2);
+      color: var(--accent-primary);
+    }
   }
 `;
 
