@@ -1,6 +1,7 @@
 import React, { useEffect, useRef, useState } from 'react';
 import styled from 'styled-components';
 import { motion } from 'framer-motion';
+import { scrollOptimizer, animationOptimizer } from '../utils/performance';
 
 const BackgroundContainer = styled.div`
   position: fixed;
@@ -116,6 +117,34 @@ const BackgroundEffect: React.FC = () => {
   const lastCallTime = useRef<number>(0);
   const [isMobile, setIsMobile] = useState(false);
   const [prefersReducedMotion, setPrefersReducedMotion] = useState(false);
+  const [shouldPauseAnimations, setShouldPauseAnimations] = useState(false);
+
+  // Scroll performance optimization
+  useEffect(() => {
+    const handleScrollUpdate = (scrollData: any) => {
+      const { isScrolling: scrolling } = scrollData;
+      // Pause animations during scroll on mobile for better performance
+      setShouldPauseAnimations(scrolling && isMobile);
+    };
+
+    const unsubscribe = scrollOptimizer.subscribe(handleScrollUpdate);
+    
+    return () => {
+      if (unsubscribe) unsubscribe();
+    };
+  }, [isMobile]);
+
+  // Register with animation optimizer
+  useEffect(() => {
+    const container = containerRef.current;
+    if (!container) return;
+
+    animationOptimizer.registerAnimation(container);
+    
+    return () => {
+      animationOptimizer.unregisterAnimation(container);
+    };
+  }, []);
 
   useEffect(() => {
     // Check for mobile devices and reduced motion preferences
@@ -126,7 +155,7 @@ const BackgroundEffect: React.FC = () => {
     setPrefersReducedMotion(checkReducedMotion());
 
     const handleResize = () => setIsMobile(checkMobile());
-    window.addEventListener('resize', handleResize);
+    window.addEventListener('resize', handleResize, { passive: true });
     
     return () => window.removeEventListener('resize', handleResize);
   }, []);
@@ -199,14 +228,16 @@ const BackgroundEffect: React.FC = () => {
             y: element.y,
             opacity: 0 
           }}
-          animate={prefersReducedMotion ? { opacity: 0.5 } : { 
+          animate={prefersReducedMotion || shouldPauseAnimations ? { 
+            opacity: shouldPauseAnimations ? 0.3 : 0.5 
+          } : { 
             x: [element.x, `calc(${element.x} + 30px)`, element.x], // Reduced movement
             y: [element.y, `calc(${element.y} - 20px)`, element.y], // Reduced movement
             opacity: [0, 0.8, 0.8, 0] // Reduced max opacity
           }}
           transition={{
             duration: element.duration,
-            repeat: prefersReducedMotion ? 0 : Infinity,
+            repeat: (prefersReducedMotion || shouldPauseAnimations) ? 0 : Infinity,
             ease: "easeInOut",
             delay: index * 1.5 // Reduced delay
           }}
@@ -231,18 +262,23 @@ const BackgroundEffect: React.FC = () => {
             left: `${Math.random() * 100}%`,
             top: `${Math.random() * 100}%`,
             opacity: Math.random() * 0.4 + 0.1, // Reduced opacity
-            willChange: 'transform, opacity'
+            willChange: shouldPauseAnimations ? 'auto' : 'transform, opacity',
+            visibility: shouldPauseAnimations ? 'hidden' : 'visible'
           }}
-          animate={{
+          animate={shouldPauseAnimations ? {
+            opacity: 0.1,
+            scale: 1,
+            y: 0
+          } : {
             y: [0, -20, 0], // Reduced movement
             opacity: [0.1, 0.6, 0.1], // Reduced max opacity
             scale: [1, 1.1, 1], // Reduced scale change
           }}
           transition={{
-            duration: Math.random() * 8 + 12, // Slower animation
-            repeat: Infinity,
+            duration: shouldPauseAnimations ? 0.2 : Math.random() * 8 + 12, // Faster transition when paused
+            repeat: shouldPauseAnimations ? 0 : Infinity,
             ease: "easeInOut",
-            delay: Math.random() * 3,
+            delay: shouldPauseAnimations ? 0 : Math.random() * 3,
           }}
         />
       ))}

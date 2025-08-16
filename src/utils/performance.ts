@@ -118,6 +118,11 @@ export const throttle = <T extends (...args: any[]) => any>(
   };
 };
 
+// RequestAnimationFrame utility
+export const raf = (callback: () => void): number => {
+  return window.requestAnimationFrame(callback);
+};
+
 // Memory cleanup utilities
 export const cleanup = {
   timers: new Set<NodeJS.Timeout>(),
@@ -282,3 +287,310 @@ export const getOptimalImageSettings = (originalWidth: number, originalHeight: n
     format: device.isMobile ? 'webp' : 'auto',
   };
 };
+
+// Scroll performance utilities
+export class ScrollOptimizer {
+  private isScrolling = false;
+  private scrollTimeout: NodeJS.Timeout | null = null;
+  private observers = new Set<Function>();
+  private lastScrollY = 0;
+  private scrollDirection: 'up' | 'down' = 'down';
+  private animationFrameId: number | null = null;
+
+  constructor() {
+    this.init();
+  }
+
+  private init() {
+    // Optimized scroll listener using passive events
+    const handleScroll = () => {
+      if (this.animationFrameId) {
+        cancelAnimationFrame(this.animationFrameId);
+      }
+
+      this.animationFrameId = requestAnimationFrame(() => {
+        const currentScrollY = window.scrollY;
+        this.scrollDirection = currentScrollY > this.lastScrollY ? 'down' : 'up';
+        this.lastScrollY = currentScrollY;
+
+        // Notify observers
+        this.observers.forEach(callback => {
+          callback({
+            scrollY: currentScrollY,
+            direction: this.scrollDirection,
+            isScrolling: true,
+          });
+        });
+
+        // Set scrolling state
+        if (!this.isScrolling) {
+          this.isScrolling = true;
+          document.body.classList.add('is-scrolling');
+        }
+
+        // Clear timeout and reset scrolling state
+        if (this.scrollTimeout) {
+          clearTimeout(this.scrollTimeout);
+        }
+
+        this.scrollTimeout = setTimeout(() => {
+          this.isScrolling = false;
+          document.body.classList.remove('is-scrolling');
+          
+          // Notify observers that scrolling ended
+          this.observers.forEach(callback => {
+            callback({
+              scrollY: currentScrollY,
+              direction: this.scrollDirection,
+              isScrolling: false,
+            });
+          });
+        }, 150);
+      });
+    };
+
+    window.addEventListener('scroll', handleScroll, { passive: true });
+    
+    // Cleanup on page unload
+    window.addEventListener('beforeunload', () => {
+      if (this.animationFrameId) {
+        cancelAnimationFrame(this.animationFrameId);
+      }
+      if (this.scrollTimeout) {
+        clearTimeout(this.scrollTimeout);
+      }
+    });
+  }
+
+  // Subscribe to scroll events
+  subscribe(callback: Function) {
+    this.observers.add(callback);
+    return () => this.observers.delete(callback);
+  }
+
+  // Get current scroll info
+  getScrollInfo() {
+    return {
+      scrollY: this.lastScrollY,
+      direction: this.scrollDirection,
+      isScrolling: this.isScrolling,
+    };
+  }
+
+  // Smooth scroll to element
+  scrollToElement(element: Element | string, offset = 0) {
+    const target = typeof element === 'string' ? document.querySelector(element) : element;
+    if (!target) return;
+
+    const targetPosition = target.getBoundingClientRect().top + window.pageYOffset - offset;
+    
+    // Use native smooth scrolling if supported
+    if ('scrollBehavior' in document.documentElement.style) {
+      window.scrollTo({
+        top: targetPosition,
+        behavior: 'smooth'
+      });
+    } else {
+      // Fallback for older browsers
+      this.smoothScrollPolyfill(targetPosition);
+    }
+  }
+
+  private smoothScrollPolyfill(targetPosition: number) {
+    const startPosition = window.pageYOffset;
+    const distance = targetPosition - startPosition;
+    const duration = Math.min(Math.abs(distance) / 2, 1000); // Max 1 second
+    let start: number | null = null;
+
+    const animation = (timestamp: number) => {
+      if (start === null) start = timestamp;
+      const progress = timestamp - start;
+      const percentage = Math.min(progress / duration, 1);
+      
+      // Easing function for smooth animation
+      const ease = 1 - Math.pow(1 - percentage, 3);
+      
+      window.scrollTo(0, startPosition + (distance * ease));
+      
+      if (progress < duration) {
+        requestAnimationFrame(animation);
+      }
+    };
+
+    requestAnimationFrame(animation);
+  }
+}
+
+// Global scroll optimizer instance
+export const scrollOptimizer = new ScrollOptimizer();
+
+// Scroll performance CSS injection
+export const injectScrollOptimizations = () => {
+  if (typeof document === 'undefined') return;
+
+  const style = document.createElement('style');
+  style.textContent = `
+    /* Scroll performance optimizations */
+    .is-scrolling {
+      pointer-events: none;
+    }
+    
+    .is-scrolling * {
+      animation-play-state: paused !important;
+    }
+    
+    /* Optimize transforms during scroll */
+    .scroll-optimize {
+      will-change: transform;
+      backface-visibility: hidden;
+      perspective: 1000px;
+    }
+    
+    /* Hide elements during fast scrolling on mobile */
+    @media (max-width: 768px) {
+      .is-scrolling .scroll-hide-on-mobile {
+        opacity: 0.5;
+        transition: opacity 0.1s ease;
+      }
+    }
+  `;
+  
+  document.head.appendChild(style);
+};
+
+// Initialize scroll optimizations
+if (typeof window !== 'undefined') {
+  // Inject optimizations when DOM is ready
+  if (document.readyState === 'loading') {
+    document.addEventListener('DOMContentLoaded', injectScrollOptimizations);
+  } else {
+    injectScrollOptimizations();
+  }
+}
+
+// Intersection Observer for scroll-based animations
+export class IntersectionOptimizer {
+  private observer: IntersectionObserver | null = null;
+  private callbacks = new Map<Element, (entry: IntersectionObserverEntry) => void>();
+  private rootMargin = '20% 0px';
+  private threshold = [0, 0.25, 0.5, 0.75, 1];
+
+  constructor() {
+    this.init();
+  }
+
+  private init() {
+    if (!('IntersectionObserver' in window)) {
+      console.warn('IntersectionObserver not supported');
+      return;
+    }
+
+    this.observer = new IntersectionObserver(
+      (entries) => {
+        entries.forEach(entry => {
+          const callback = this.callbacks.get(entry.target);
+          if (callback) {
+            raf(() => callback(entry));
+          }
+        });
+      },
+      {
+        rootMargin: this.rootMargin,
+        threshold: this.threshold
+      }
+    );
+  }
+
+  observe(element: Element, callback: (entry: IntersectionObserverEntry) => void) {
+    if (!this.observer || !element) return;
+
+    this.callbacks.set(element, callback);
+    this.observer.observe(element);
+  }
+
+  unobserve(element: Element) {
+    if (!this.observer || !element) return;
+
+    this.callbacks.delete(element);
+    this.observer.unobserve(element);
+  }
+
+  disconnect() {
+    if (this.observer) {
+      this.observer.disconnect();
+      this.callbacks.clear();
+    }
+  }
+}
+
+// Performance-aware animation utilities
+export class AnimationOptimizer {
+  private animatingElements = new Set<Element>();
+  private isScrolling = false;
+  private scrollTimeout: number | null = null;
+
+  constructor() {
+    this.setupScrollListener();
+  }
+
+  private setupScrollListener() {
+    let ticking = false;
+    
+    const handleScroll = () => {
+      if (!ticking) {
+        raf(() => {
+          this.isScrolling = true;
+          this.pauseExpensiveAnimations();
+          
+          if (this.scrollTimeout) {
+            clearTimeout(this.scrollTimeout);
+          }
+          
+          this.scrollTimeout = window.setTimeout(() => {
+            this.isScrolling = false;
+            this.resumeAnimations();
+          }, 150);
+          
+          ticking = false;
+        });
+        ticking = true;
+      }
+    };
+
+    window.addEventListener('scroll', handleScroll, { passive: true });
+  }
+
+  registerAnimation(element: Element) {
+    this.animatingElements.add(element);
+  }
+
+  unregisterAnimation(element: Element) {
+    this.animatingElements.delete(element);
+  }
+
+  private pauseExpensiveAnimations() {
+    this.animatingElements.forEach(element => {
+      if (element instanceof HTMLElement) {
+        element.style.animationPlayState = 'paused';
+        element.classList.add('scroll-paused');
+      }
+    });
+  }
+
+  private resumeAnimations() {
+    this.animatingElements.forEach(element => {
+      if (element instanceof HTMLElement) {
+        element.style.animationPlayState = 'running';
+        element.classList.remove('scroll-paused');
+      }
+    });
+  }
+
+  isCurrentlyScrolling(): boolean {
+    return this.isScrolling;
+  }
+}
+
+// Initialize performance utilities
+export const intersectionOptimizer = new IntersectionOptimizer();
+export const animationOptimizer = new AnimationOptimizer();

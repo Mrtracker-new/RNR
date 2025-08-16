@@ -2,6 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { Link, useLocation } from 'react-router-dom';
 import styled from 'styled-components';
 import { motion, AnimatePresence } from 'framer-motion';
+import { scrollOptimizer } from '../utils/performance';
 
 const NavbarContainer = styled(motion.nav)<{ scrolled: boolean }>`
   position: fixed;
@@ -11,12 +12,22 @@ const NavbarContainer = styled(motion.nav)<{ scrolled: boolean }>`
   z-index: 1000;
   background: ${props => props.scrolled ? 'rgba(15, 23, 42, 0.95)' : 'transparent'};
   backdrop-filter: ${props => props.scrolled ? 'blur(10px)' : 'none'};
+  -webkit-backdrop-filter: ${props => props.scrolled ? 'blur(10px)' : 'none'};
   border-bottom: ${props => props.scrolled ? '1px solid var(--dark-700)' : '1px solid transparent'};
-  transition: var(--transition-normal);
+  transition: background-color 0.3s ease, border-color 0.3s ease;
+  will-change: background-color, backdrop-filter;
   padding: var(--spacing-4) 0;
+  contain: layout style;
 
   @media (max-width: 768px) {
     padding: var(--spacing-3) 0;
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    transition: none;
+    backdrop-filter: ${props => props.scrolled ? 'none' : 'none'};
+    -webkit-backdrop-filter: ${props => props.scrolled ? 'none' : 'none'};
+    background: ${props => props.scrolled ? 'rgba(15, 23, 42, 0.98)' : 'transparent'};
   }
 `;
 
@@ -195,17 +206,20 @@ const Navbar: React.FC = () => {
   const location = useLocation();
 
   useEffect(() => {
-    const handleScroll = () => {
-      const scrollTop = window.scrollY;
+    const handleScrollUpdate = (scrollData: any) => {
+      const { scrollY } = scrollData;
       const docHeight = document.documentElement.scrollHeight - window.innerHeight;
-      const scrollPercent = (scrollTop / docHeight) * 100;
-
-      setScrolled(scrollTop > 50);
+      const scrollPercent = (scrollY / Math.max(docHeight, 1)) * 100;
+      
+      setScrolled(scrollY > 50);
       setScrollProgress(scrollPercent);
     };
 
-    window.addEventListener('scroll', handleScroll);
-    return () => window.removeEventListener('scroll', handleScroll);
+    const unsubscribe = scrollOptimizer.subscribe(handleScrollUpdate);
+    
+    return () => {
+      if (unsubscribe) unsubscribe();
+    };
   }, []);
 
   const toggleMobileMenu = () => {

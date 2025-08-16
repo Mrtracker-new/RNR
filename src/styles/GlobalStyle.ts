@@ -98,11 +98,20 @@ export const GlobalStyle = createGlobalStyle`
     margin: 0;
     padding: 0;
     box-sizing: border-box;
+    /* Hardware acceleration for smooth scrolling */
+    -webkit-backface-visibility: hidden;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
   }
 
   html {
     scroll-behavior: smooth;
     font-size: 16px;
+    overflow-x: hidden;
+    scroll-padding-top: 80px;
+    /* Scroll performance optimizations */
+    -webkit-text-size-adjust: 100%;
+    contain: layout style;
   }
 
   body {
@@ -113,6 +122,26 @@ export const GlobalStyle = createGlobalStyle`
     overflow-x: hidden;
     min-height: 100vh;
     position: relative;
+    
+    /* iOS smooth scrolling */
+    -webkit-overflow-scrolling: touch;
+    /* Prevent bounce scrolling */
+    overscroll-behavior: none;
+    /* GPU acceleration */
+    will-change: scroll-position;
+    transform: translateZ(0);
+    contain: layout style;
+  }
+  
+  /* Optimize elements that commonly cause scroll jank */
+  section, div, main, article {
+    contain: layout;
+  }
+  
+  /* Performance-critical elements */
+  img, video, iframe {
+    will-change: auto;
+    contain: layout;
   }
 
   /* Custom Scrollbar */
