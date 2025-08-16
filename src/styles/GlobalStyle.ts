@@ -270,40 +270,7 @@ export const GlobalStyle = createGlobalStyle`
     z-index: -1;
   }
 
-  /* Animation Classes */
-  @keyframes fadeIn {
-    from {
-      opacity: 0;
-      transform: translateY(20px);
-    }
-    to {
-      opacity: 1;
-      transform: translateY(0);
-    }
-  }
-
-  @keyframes slideInLeft {
-    from {
-      opacity: 0;
-      transform: translateX(-50px);
-    }
-    to {
-      opacity: 1;
-      transform: translateX(0);
-    }
-  }
-
-  @keyframes slideInRight {
-    from {
-      opacity: 0;
-      transform: translateX(50px);
-    }
-    to {
-      opacity: 1;
-      transform: translateX(0);
-    }
-  }
-
+  /* Essential Animation Classes Only */
   @keyframes pulse {
     0%, 100% {
       opacity: 1;
@@ -322,24 +289,21 @@ export const GlobalStyle = createGlobalStyle`
     }
   }
 
-  .animate-fadeIn {
-    animation: fadeIn 0.6s ease-out;
-  }
-
-  .animate-slideInLeft {
-    animation: slideInLeft 0.6s ease-out;
-  }
-
-  .animate-slideInRight {
-    animation: slideInRight 0.6s ease-out;
-  }
-
   .animate-pulse {
     animation: pulse 2s cubic-bezier(0.4, 0, 0.6, 1) infinite;
   }
 
   .animate-spin {
     animation: spin 1s linear infinite;
+  }
+  
+  /* Performance optimizations */
+  @media (prefers-reduced-motion: reduce) {
+    *, *::before, *::after {
+      animation-duration: 0.01ms !important;
+      animation-iteration-count: 1 !important;
+      transition-duration: 0.01ms !important;
+    }
   }
 `;
 

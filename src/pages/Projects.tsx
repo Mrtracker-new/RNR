@@ -2,6 +2,7 @@ import React, { useState, useMemo } from 'react';
 import styled from 'styled-components';
 import { motion, AnimatePresence } from 'framer-motion';
 import { Container, Section, Grid, Card, Button, Badge } from '../styles/GlobalStyle';
+import OptimizedImage from '../components/OptimizedImage';
 
 // Import project images
 import invisioVaultDesktopImg from '../assets/images/InvisioVault_Suit.png';
@@ -650,7 +651,21 @@ const Projects: React.FC = () => {
                 <ProjectCard>
                   <ProjectImageContainer bgColor={project.bgColor}>
                     {project.image && (
-                      <ProjectImageElement src={project.image} alt={project.title} />
+                      <OptimizedImage 
+                        src={project.image} 
+                        alt={project.title}
+                        loading="lazy"
+                        width="100%"
+                        height="200px"
+                        style={{
+                          position: 'absolute',
+                          top: 0,
+                          left: 0,
+                          padding: 'var(--spacing-4)',
+                          objectFit: 'contain',
+                          objectPosition: 'center'
+                        }}
+                      />
                     )}
                     {!project.image && (
                       <ProjectIconOverlay>

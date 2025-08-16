@@ -1,4 +1,4 @@
-import React, { useEffect, useRef } from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 import styled from 'styled-components';
 import { motion } from 'framer-motion';
 
@@ -112,30 +112,65 @@ const GlowOrbs = styled.div`
 
 const BackgroundEffect: React.FC = () => {
   const containerRef = useRef<HTMLDivElement>(null);
+  const animationFrameRef = useRef<number | undefined>(undefined);
+  const lastCallTime = useRef<number>(0);
+  const [isMobile, setIsMobile] = useState(false);
+  const [prefersReducedMotion, setPrefersReducedMotion] = useState(false);
+
+  useEffect(() => {
+    // Check for mobile devices and reduced motion preferences
+    const checkMobile = () => window.innerWidth <= 768;
+    const checkReducedMotion = () => window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+    
+    setIsMobile(checkMobile());
+    setPrefersReducedMotion(checkReducedMotion());
+
+    const handleResize = () => setIsMobile(checkMobile());
+    window.addEventListener('resize', handleResize);
+    
+    return () => window.removeEventListener('resize', handleResize);
+  }, []);
 
   useEffect(() => {
     const container = containerRef.current;
-    if (!container) return;
+    if (!container || prefersReducedMotion) return;
 
     const handleMouseMove = (e: MouseEvent) => {
-      const rect = container.getBoundingClientRect();
-      const x = e.clientX - rect.left;
-      const y = e.clientY - rect.top;
+      const now = performance.now();
+      // Throttle to 60fps maximum
+      if (now - lastCallTime.current < 16) return;
+      lastCallTime.current = now;
 
-      const elements = container.querySelectorAll('.mouse-follow');
-      elements.forEach((element, index) => {
-        const el = element as HTMLElement;
-        const speed = (index + 1) * 0.02;
-        const xOffset = (x - rect.width / 2) * speed;
-        const yOffset = (y - rect.height / 2) * speed;
-        
-        el.style.transform = `translate(${xOffset}px, ${yOffset}px)`;
+      if (animationFrameRef.current) {
+        cancelAnimationFrame(animationFrameRef.current);
+      }
+
+      animationFrameRef.current = requestAnimationFrame(() => {
+        const rect = container.getBoundingClientRect();
+        const x = e.clientX - rect.left;
+        const y = e.clientY - rect.top;
+
+        const elements = container.querySelectorAll('.mouse-follow');
+        elements.forEach((element, index) => {
+          const el = element as HTMLElement;
+          const speed = (index + 1) * 0.015; // Reduced speed for smoother animation
+          const xOffset = (x - rect.width / 2) * speed;
+          const yOffset = (y - rect.height / 2) * speed;
+          
+          el.style.transform = `translate(${xOffset}px, ${yOffset}px)`;
+        });
       });
     };
 
-    window.addEventListener('mousemove', handleMouseMove);
-    return () => window.removeEventListener('mousemove', handleMouseMove);
-  }, []);
+    // Use passive listener for better performance
+    window.addEventListener('mousemove', handleMouseMove, { passive: true });
+    return () => {
+      window.removeEventListener('mousemove', handleMouseMove);
+      if (animationFrameRef.current) {
+        cancelAnimationFrame(animationFrameRef.current);
+      }
+    };
+  }, [prefersReducedMotion]);
 
   const floatingElements = [
     { size: 200, color: 'rgba(100, 255, 218, 0.1)', x: '10%', y: '20%', duration: 20 },
@@ -144,6 +179,9 @@ const BackgroundEffect: React.FC = () => {
     { size: 120, color: 'rgba(139, 92, 246, 0.08)', x: '70%', y: '70%', duration: 18 },
     { size: 80, color: 'rgba(100, 255, 218, 0.06)', x: '50%', y: '30%', duration: 22 }
   ];
+
+  // Reduce particle count based on device capabilities
+  const particleCount = isMobile ? 8 : prefersReducedMotion ? 0 : 15;
 
   return (
     <BackgroundContainer ref={containerRef}>
@@ -161,48 +199,50 @@ const BackgroundEffect: React.FC = () => {
             y: element.y,
             opacity: 0 
           }}
-          animate={{ 
-            x: [element.x, `calc(${element.x} + 50px)`, element.x],
-            y: [element.y, `calc(${element.y} - 30px)`, element.y],
-            opacity: [0, 1, 1, 0]
+          animate={prefersReducedMotion ? { opacity: 0.5 } : { 
+            x: [element.x, `calc(${element.x} + 30px)`, element.x], // Reduced movement
+            y: [element.y, `calc(${element.y} - 20px)`, element.y], // Reduced movement
+            opacity: [0, 0.8, 0.8, 0] // Reduced max opacity
           }}
           transition={{
             duration: element.duration,
-            repeat: Infinity,
+            repeat: prefersReducedMotion ? 0 : Infinity,
             ease: "easeInOut",
-            delay: index * 2
+            delay: index * 1.5 // Reduced delay
           }}
           style={{
             left: element.x,
             top: element.y,
+            willChange: prefersReducedMotion ? 'auto' : 'transform, opacity'
           }}
         />
       ))}
 
-      {/* Animated particles */}
-      {Array.from({ length: 50 }, (_, i) => (
+      {/* Optimized animated particles */}
+      {Array.from({ length: particleCount }, (_, i) => (
         <motion.div
           key={`particle-${i}`}
           style={{
             position: 'absolute',
-            width: Math.random() * 4 + 1,
-            height: Math.random() * 4 + 1,
+            width: Math.random() * 3 + 1, // Smaller particles
+            height: Math.random() * 3 + 1,
             background: Math.random() > 0.5 ? 'var(--accent-primary)' : 'var(--secondary-400)',
             borderRadius: '50%',
             left: `${Math.random() * 100}%`,
             top: `${Math.random() * 100}%`,
-            opacity: Math.random() * 0.6 + 0.1,
+            opacity: Math.random() * 0.4 + 0.1, // Reduced opacity
+            willChange: 'transform, opacity'
           }}
           animate={{
-            y: [0, -30, 0],
-            opacity: [0.1, 0.8, 0.1],
-            scale: [1, 1.2, 1],
+            y: [0, -20, 0], // Reduced movement
+            opacity: [0.1, 0.6, 0.1], // Reduced max opacity
+            scale: [1, 1.1, 1], // Reduced scale change
           }}
           transition={{
-            duration: Math.random() * 10 + 10,
+            duration: Math.random() * 8 + 12, // Slower animation
             repeat: Infinity,
             ease: "easeInOut",
-            delay: Math.random() * 5,
+            delay: Math.random() * 3,
           }}
         />
       ))}

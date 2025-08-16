@@ -3,6 +3,7 @@ import styled from 'styled-components';
 import { motion } from 'framer-motion';
 import { Link } from 'react-router-dom';
 import { Container, Button, Badge } from '../styles/GlobalStyle';
+import { getAnimationConfig, getDeviceInfo } from '../utils/performance';
 import profileImage from '../assets/images/Home_dp.jpg';
 
 const HeroSection = styled.section`
@@ -304,6 +305,8 @@ const WaveHand = styled(motion.span)`
 
 const Home: React.FC = () => {
   const [currentTime, setCurrentTime] = useState(new Date());
+  const animConfig = getAnimationConfig();
+  const deviceInfo = getDeviceInfo();
 
   useEffect(() => {
     const timer = setInterval(() => {
@@ -328,20 +331,30 @@ const Home: React.FC = () => {
     visible: {
       opacity: 1,
       transition: {
-        staggerChildren: 0.2,
-        delayChildren: 0.1
+        staggerChildren: animConfig.stagger,
+        delayChildren: 0.1,
+        duration: animConfig.duration
       }
     }
   };
 
   const itemVariants = {
-    hidden: { opacity: 0, y: 20 },
-    visible: { opacity: 1, y: 0 }
+    hidden: { opacity: 0, y: deviceInfo.isMobile ? 10 : 20 },
+    visible: { 
+      opacity: 1, 
+      y: 0,
+      transition: { duration: animConfig.duration }
+    }
   };
 
   const profileVariants = {
-    hidden: { opacity: 0, scale: 0.8, rotate: -10 },
-    visible: { opacity: 1, scale: 1, rotate: 0 }
+    hidden: { opacity: 0, scale: 0.9, rotate: animConfig.reducedMotion ? 0 : -5 },
+    visible: { 
+      opacity: 1, 
+      scale: 1, 
+      rotate: 0,
+      transition: { duration: animConfig.duration * 1.5 }
+    }
   };
 
   const floatingIconVariants = {
@@ -349,11 +362,11 @@ const Home: React.FC = () => {
     visible: {
       opacity: 1,
       scale: 1,
-      transition: { duration: 0.6, delay: 0.8 }
+      transition: { duration: animConfig.duration, delay: 0.8 }
     },
     hover: {
-      y: -10,
-      transition: { duration: 0.3 }
+      y: animConfig.reducedMotion ? 0 : -8,
+      transition: { duration: animConfig.duration * 0.5 }
     }
   };
 
@@ -466,59 +479,61 @@ const Home: React.FC = () => {
                   transition={{ duration: 0.3 }}
                 />
                 
-                <FloatingElements>
-                  <FloatingIcon
-                    top="10%"
-                    left="80%"
-                    variants={floatingIconVariants}
-                    whileHover="hover"
-                    animate={{
-                      y: [0, -10, 0],
-                      transition: { duration: 3, repeat: Infinity }
-                    }}
-                  >
-                    ⚛️
-                  </FloatingIcon>
-                  
-                  <FloatingIcon
-                    top="70%"
-                    left="85%"
-                    variants={floatingIconVariants}
-                    whileHover="hover"
-                    animate={{
-                      y: [0, -15, 0],
-                      transition: { duration: 4, repeat: Infinity, delay: 1 }
-                    }}
-                  >
-                    🐍
-                  </FloatingIcon>
-                  
-                  <FloatingIcon
-                    top="20%"
-                    left="-10%"
-                    variants={floatingIconVariants}
-                    whileHover="hover"
-                    animate={{
-                      y: [0, -12, 0],
-                      transition: { duration: 3.5, repeat: Infinity, delay: 0.5 }
-                    }}
-                  >
-                    💻
-                  </FloatingIcon>
-                  
-                  <FloatingIcon
-                    top="75%"
-                    left="-5%"
-                    variants={floatingIconVariants}
-                    whileHover="hover"
-                    animate={{
-                      y: [0, -8, 0],
-                      transition: { duration: 4.5, repeat: Infinity, delay: 2 }
-                    }}
-                  >
-                    🎨
-                  </FloatingIcon>
-                </FloatingElements>
+                {!deviceInfo.isMobile && (
+                  <FloatingElements>
+                    <FloatingIcon
+                      top="10%"
+                      left="80%"
+                      variants={floatingIconVariants}
+                      whileHover="hover"
+                      animate={animConfig.reducedMotion ? {} : {
+                        y: [0, -10, 0],
+                        transition: { duration: 3, repeat: Infinity }
+                      }}
+                    >
+                      ⚛️
+                    </FloatingIcon>
+                    
+                    <FloatingIcon
+                      top="70%"
+                      left="85%"
+                      variants={floatingIconVariants}
+                      whileHover="hover"
+                      animate={animConfig.reducedMotion ? {} : {
+                        y: [0, -15, 0],
+                        transition: { duration: 4, repeat: Infinity, delay: 1 }
+                      }}
+                    >
+                      🐍
+                    </FloatingIcon>
+                    
+                    <FloatingIcon
+                      top="20%"
+                      left="-10%"
+                      variants={floatingIconVariants}
+                      whileHover="hover"
+                      animate={animConfig.reducedMotion ? {} : {
+                        y: [0, -12, 0],
+                        transition: { duration: 3.5, repeat: Infinity, delay: 0.5 }
+                      }}
+                    >
+                      💻
+                    </FloatingIcon>
+                    
+                    <FloatingIcon
+                      top="75%"
+                      left="-5%"
+                      variants={floatingIconVariants}
+                      whileHover="hover"
+                      animate={animConfig.reducedMotion ? {} : {
+                        y: [0, -8, 0],
+                        transition: { duration: 4.5, repeat: Infinity, delay: 2 }
+                      }}
+                    >
+                      🎨
+                    </FloatingIcon>
+                  </FloatingElements>
+                )}
               </ProfileImageContainer>
             </ProfileSection>
           </HeroContent>
