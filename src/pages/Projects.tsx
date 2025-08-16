@@ -114,7 +114,7 @@ const ProjectCard = styled(Card)`
 
 const ProjectImageContainer = styled.div<{ bgColor: string }>`
   width: 100%;
-  height: 200px;
+  height: 240px;
   background: ${props => props.bgColor};
   border-radius: var(--radius-lg);
   margin-bottom: var(--spacing-6);
@@ -124,6 +124,14 @@ const ProjectImageContainer = styled.div<{ bgColor: string }>`
   align-items: center;
   justify-content: center;
 
+  @media (max-width: 768px) {
+    height: 200px;
+  }
+
+  @media (max-width: 480px) {
+    height: 180px;
+  }
+
   &::after {
     content: '';
     position: absolute;
@@ -131,8 +139,9 @@ const ProjectImageContainer = styled.div<{ bgColor: string }>`
     left: 0;
     right: 0;
     bottom: 0;
-    background: linear-gradient(135deg, transparent 0%, rgba(0, 0, 0, 0.4) 100%);
+    background: linear-gradient(135deg, transparent 0%, rgba(0, 0, 0, 0.2) 100%);
     z-index: 1;
+    pointer-events: none;
   }
 `;
 
@@ -655,15 +664,18 @@ const Projects: React.FC = () => {
                         src={project.image} 
                         alt={project.title}
                         loading="lazy"
-                        width="100%"
-                        height="200px"
                         style={{
-                          position: 'absolute',
-                          top: 0,
-                          left: 0,
-                          padding: 'var(--spacing-4)',
+                          width: '85%',
+                          height: '85%',
+                          maxWidth: '300px',
+                          maxHeight: '180px',
                           objectFit: 'contain',
-                          objectPosition: 'center'
+                          objectPosition: 'center',
+                          borderRadius: 'var(--radius-md)',
+                          position: 'relative',
+                          zIndex: 0,
+                          backgroundColor: 'rgba(255, 255, 255, 0.05)',
+                          padding: 'var(--spacing-2)',
                         }}
                       />
                     )}
