@@ -269,7 +269,7 @@ const ModalOverlay = styled(motion.div)`
   padding: var(--spacing-4);
   overflow-y: auto;
   
-  /* Ensure modal is always centered */
+  /* Ensure modal appears in current viewport */
   @media (max-height: 700px) {
     align-items: flex-start;
     padding-top: var(--spacing-8);
@@ -488,6 +488,11 @@ interface ProjectModalProps {
 
 const ProjectModal: React.FC<ProjectModalProps> = ({ project, isOpen, onClose }) => {
   if (!isOpen || !project) return null;
+  
+  // Calculate initial position based on current scroll
+  const scrollY = window.scrollY || window.pageYOffset;
+  const viewportHeight = window.innerHeight;
+  const modalPosition = scrollY + (viewportHeight * 0.2); // 20% from top of current viewport
 
   return (
     <AnimatePresence>
@@ -496,12 +501,14 @@ const ProjectModal: React.FC<ProjectModalProps> = ({ project, isOpen, onClose })
         animate={{ opacity: 1 }}
         exit={{ opacity: 0 }}
         onClick={onClose}
+        style={{ alignItems: 'flex-start' }} // Always align from top
       >
         <ModalContent
-          initial={{ opacity: 0, scale: 0.8 }}
-          animate={{ opacity: 1, scale: 1 }}
+          initial={{ opacity: 0, scale: 0.8, y: modalPosition }}
+          animate={{ opacity: 1, scale: 1, y: modalPosition }}
           exit={{ opacity: 0, scale: 0.8 }}
           onClick={(e) => e.stopPropagation()}
+          style={{ marginTop: 0 }} // Remove default margin
         >
           <CloseButton onClick={onClose}>×</CloseButton>
           
@@ -597,9 +604,8 @@ const Projects: React.FC = () => {
   const openModal = (project: any) => {
     setSelectedProject(project);
     setIsModalOpen(true);
-    // Prevent body scroll and scroll to top for better modal experience
+    // Prevent body scroll but don't change scroll position
     document.body.style.overflow = 'hidden';
-    window.scrollTo({ top: 0, behavior: 'smooth' });
   };
 
   const closeModal = () => {
