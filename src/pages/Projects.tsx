@@ -267,6 +267,14 @@ const ModalOverlay = styled(motion.div)`
   justify-content: center;
   z-index: 1000;
   padding: var(--spacing-4);
+  overflow-y: auto;
+  
+  /* Ensure modal is always centered */
+  @media (max-height: 700px) {
+    align-items: flex-start;
+    padding-top: var(--spacing-8);
+    padding-bottom: var(--spacing-8);
+  }
 `;
 
 const ModalContent = styled(motion.div)`
@@ -276,9 +284,27 @@ const ModalContent = styled(motion.div)`
   padding: var(--spacing-8);
   max-width: 800px;
   width: 100%;
-  max-height: 90vh;
+  max-height: 85vh;
   overflow-y: auto;
   position: relative;
+  margin: auto;
+  
+  /* Ensure proper sizing on different screen sizes */
+  @media (max-width: 1024px) {
+    max-width: 95vw;
+    padding: var(--spacing-6);
+  }
+  
+  @media (max-width: 768px) {
+    max-width: 90vw;
+    padding: var(--spacing-4);
+    max-height: 80vh;
+  }
+  
+  @media (max-height: 600px) {
+    max-height: 95vh;
+    padding: var(--spacing-4);
+  }
 `;
 
 const CloseButton = styled.button`
@@ -571,11 +597,16 @@ const Projects: React.FC = () => {
   const openModal = (project: any) => {
     setSelectedProject(project);
     setIsModalOpen(true);
+    // Prevent body scroll and scroll to top for better modal experience
+    document.body.style.overflow = 'hidden';
+    window.scrollTo({ top: 0, behavior: 'smooth' });
   };
 
   const closeModal = () => {
     setIsModalOpen(false);
     setSelectedProject(null);
+    // Restore body scroll
+    document.body.style.overflow = 'unset';
   };
 
   const containerVariants = {
