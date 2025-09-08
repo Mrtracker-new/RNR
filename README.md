@@ -1,17 +1,22 @@
-# 🚀 RNR Portfolio - My Personal Website
+# 🚀 Rolan - Developer Portfolio
 
-A modern, responsive portfolio website showcasing my skills, projects, and journey as an aspiring software engineer and freelancer. Built with React, TypeScript, and cutting-edge web technologies.
+> A stunning, modern portfolio website showcasing expertise in full-stack development, desktop applications, and innovative software solutions. Built with React 19, TypeScript, and modern design principles.
 
-![Portfolio Preview](https://img.shields.io/badge/React-19.1.1-61DAFB?style=for-the-badge&logo=react&logoColor=white)
+[![Live Demo](https://img.shields.io/badge/Live_Demo-Visit_Portfolio-64ffda?style=for-the-badge&logo=vercel)](https://your-portfolio-url.com)
+[![GitHub](https://img.shields.io/badge/Source_Code-GitHub-181717?style=for-the-badge&logo=github)](https://github.com/Mrtracker-new/RNR)
+
+![React](https://img.shields.io/badge/React-19.1.1-61DAFB?style=for-the-badge&logo=react&logoColor=white)
 ![TypeScript](https://img.shields.io/badge/TypeScript-4.9.5-3178C6?style=for-the-badge&logo=typescript&logoColor=white)
 ![Styled Components](https://img.shields.io/badge/Styled_Components-6.1.19-DB7093?style=for-the-badge&logo=styled-components&logoColor=white)
 
-## 🌟 Features
+## ✨ Features
 
-### ✨ Modern Design
-- **Responsive Layout**: Fully responsive design that works seamlessly across all devices
-- **Dark Theme**: Beautiful dark theme with gradient accents and smooth animations
-- **Interactive Elements**: Hover effects, smooth transitions, and engaging micro-interactions
+### 🎨 **Enhanced Modern Design**
+- **Glassmorphism UI**: Modern glass-effect cards with backdrop blur
+- **Gradient Typography**: Beautiful gradient titles and headings
+- **Sophisticated Dark Theme**: Elegant dark theme with vibrant accent colors
+- **Enhanced Animations**: Smooth hover effects, micro-interactions, and page transitions
+- **Visual Depth**: Advanced shadow system and layered design elements
 
 ### 🧭 Navigation
 - **Smart Navbar**: Fixed navigation with scroll progress indicator
@@ -22,7 +27,7 @@ A modern, responsive portfolio website showcasing my skills, projects, and journ
 - **Home**: Hero section with animated elements, tech stack display, and call-to-action buttons
 - **About**: Personal story, journey timeline, skills with animated progress bars, and services offered
 - **Projects**: Interactive project showcase with filtering, search, and detailed modals
-- **Contact**: Contact form and information (if implemented)
+- **Contact**: Working contact form with Netlify integration and social links
 
 ### 🎨 Advanced Features
 - **Framer Motion Animations**: Smooth page transitions and element animations
@@ -31,6 +36,8 @@ A modern, responsive portfolio website showcasing my skills, projects, and journ
 - **Project Filtering**: Filter projects by category (Desktop, Web, Android)
 - **Project Search**: Real-time search through projects by title, description, or technology
 - **Modal System**: Detailed project views with technology stacks and links
+- **PWA Support**: Installable as "Rolan" app with custom branding
+- **Enhanced Modals**: Properly centered project modals with glassmorphism design
 
 ### 📊 Project Showcase
 Featured projects include:
@@ -126,10 +133,12 @@ portfolio/
 
 ## 🎨 Design System
 
-### Color Palette
-- **Primary Colors**: Dark theme with blue-gray backgrounds
-- **Accent Colors**: Cyan primary (#64ffda) and purple secondary (#a78bfa)
-- **Gradients**: Dynamic gradients for interactive elements
+### **Color Palette**
+- **Primary Dark**: `#09090b` (Dark-950) - Main background
+- **Accent Primary**: `#64ffda` - Vibrant cyan for highlights
+- **Accent Secondary**: `#8b5cf6` - Elegant purple for gradients
+- **Text Colors**: Carefully selected contrast ratios for accessibility
+- **Glassmorphism**: Semi-transparent layers with backdrop blur
 
 ### Typography
 - **Font Family**: Inter system font stack
@@ -203,11 +212,16 @@ This creates an optimized production build in the `build` folder.
 
 This project is open source and available under the [MIT License](LICENSE).
 
-## 📞 Contact
+## 📦 Contact
 
-**Rolan Lobo**
-- GitHub: [@Mrtracker-new](https://github.com/Mrtracker-new)
-- Location: Yellapur, Karnataka, India
+**Rolan Lobo** - Full Stack Developer & Software Engineer
+
+- 🌐 **Portfolio**: [your-portfolio-url.com](https://your-portfolio-url.com)
+- 📧 **Email**: rolanlobo901@gmail.com  
+- 💼 **LinkedIn**: [rolan-lobo](https://www.linkedin.com/in/rolan-lobo-93368a239/)
+- 🐙 **GitHub**: [@Mrtracker-new](https://github.com/Mrtracker-new)
+- 📍 **Location**: Yellapur, Karnataka, India
+- ⏰ **Timezone**: IST (UTC +5:30)
 
 ## 🙏 Acknowledgments
 
