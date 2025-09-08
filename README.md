@@ -2,7 +2,7 @@
 
 > A stunning, modern portfolio website showcasing expertise in full-stack development, desktop applications, and innovative software solutions. Built with React 19, TypeScript, and modern design principles.
 
-[![Live Demo](https://img.shields.io/badge/Live_Demo-Visit_Portfolio-64ffda?style=for-the-badge&logo=vercel)](https://your-portfolio-url.com)
+[![Live Demo](https://img.shields.io/badge/Live_Demo-Visit_Portfolio-64ffda?style=for-the-badge&logo=netlify)](https://rolan-rnr.netlify.app/)
 [![GitHub](https://img.shields.io/badge/Source_Code-GitHub-181717?style=for-the-badge&logo=github)](https://github.com/Mrtracker-new/RNR)
 
 ![React](https://img.shields.io/badge/React-19.1.1-61DAFB?style=for-the-badge&logo=react&logoColor=white)
@@ -216,7 +216,7 @@ This project is open source and available under the [MIT License](LICENSE).
 
 **Rolan Lobo** - Full Stack Developer & Software Engineer
 
-- 🌐 **Portfolio**: [your-portfolio-url.com](https://your-portfolio-url.com)
+- 🌐 **Portfolio**: [rolan-rnr.netlify.app](https://rolan-rnr.netlify.app/)
 - 📧 **Email**: rolanlobo901@gmail.com  
 - 💼 **LinkedIn**: [rolan-lobo](https://www.linkedin.com/in/rolan-lobo-93368a239/)
 - 🐙 **GitHub**: [@Mrtracker-new](https://github.com/Mrtracker-new)
