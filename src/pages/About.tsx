@@ -24,10 +24,12 @@ const AboutHero = styled(Section)`
 const HeroTitle = styled(motion.h1)`
   font-size: clamp(2.5rem, 6vw, 3.5rem);
   margin-bottom: var(--spacing-6);
-  background: linear-gradient(135deg, var(--accent-primary) 0%, var(--secondary-400) 100%);
+  background: linear-gradient(135deg, var(--accent-primary) 0%, var(--accent-secondary) 100%);
   -webkit-background-clip: text;
   -webkit-text-fill-color: transparent;
   background-clip: text;
+  font-weight: var(--font-extrabold);
+  letter-spacing: -0.025em;
 `;
 
 const HeroSubtitle = styled(motion.p)`
@@ -50,9 +52,14 @@ const AboutImageContainer = styled.div`
   height: 450px;
   border-radius: var(--radius-2xl);
   overflow: hidden;
-  border: 3px solid var(--accent-primary);
-  box-shadow: 0 20px 40px rgba(100, 255, 218, 0.2);
+  border: 2px solid var(--dark-800);
+  box-shadow: var(--shadow-lg);
   margin: 0 auto;
+  transition: var(--transition-normal);
+
+  &:hover {
+    border-color: var(--accent-primary);
+  }
 
   @media (max-width: 768px) {
     width: 400px;
@@ -115,7 +122,7 @@ const TimelineContainer = styled.div`
     top: 0;
     bottom: 0;
     width: 2px;
-    background: linear-gradient(180deg, var(--accent-primary) 0%, var(--secondary-500) 100%);
+    background: var(--dark-700);
     transform: translateX(-50%);
 
     @media (max-width: 768px) {
@@ -172,15 +179,17 @@ const TimelineDate = styled.div`
   left: 50%;
   top: 15px;
   transform: translateX(-50%);
-  background: var(--dark-800);
-  color: var(--accent-primary);
+  background: linear-gradient(135deg, var(--accent-primary) 0%, var(--accent-secondary) 100%);
+  color: var(--dark-950);
   padding: var(--spacing-2) var(--spacing-4);
-  border-radius: var(--radius-full);
+  border-radius: var(--radius-lg);
   font-size: var(--text-sm);
-  font-weight: var(--font-medium);
-  border: 2px solid var(--accent-primary);
+  font-weight: var(--font-semibold);
+  border: 1px solid transparent;
   white-space: nowrap;
   z-index: 2;
+  box-shadow: var(--shadow-accent);
+  backdrop-filter: blur(10px);
 
   @media (max-width: 768px) {
     left: 10px;
@@ -188,6 +197,7 @@ const TimelineDate = styled.div`
     transform: none;
     font-size: var(--text-xs);
     padding: var(--spacing-1) var(--spacing-3);
+    border-radius: var(--radius-md);
   }
 `;
 
@@ -207,9 +217,10 @@ const TimelineCategory = styled.span`
   background: rgba(100, 255, 218, 0.1);
   color: var(--accent-primary);
   padding: var(--spacing-1) var(--spacing-3);
-  border-radius: var(--radius-full);
+  border-radius: var(--radius-md);
   font-size: var(--text-xs);
   font-weight: var(--font-medium);
+  border: 1px solid rgba(100, 255, 218, 0.3);
 `;
 
 const SkillsSection = styled(Section)`
@@ -249,18 +260,20 @@ const SkillDescription = styled.p`
 
 const SkillProgressContainer = styled.div`
   position: relative;
-  background: var(--dark-700);
-  border-radius: var(--radius-full);
-  height: 8px;
+  background: var(--dark-800);
+  border-radius: var(--radius-sm);
+  height: 10px;
   margin-bottom: var(--spacing-4);
   overflow: hidden;
+  border: 1px solid var(--dark-700);
 `;
 
 const SkillProgressBar = styled(motion.div)<{ percentage: number }>`
   height: 100%;
-  background: linear-gradient(90deg, var(--accent-primary) 0%, var(--secondary-500) 100%);
-  border-radius: var(--radius-full);
+  background: linear-gradient(90deg, var(--accent-primary) 0%, var(--accent-secondary) 100%);
+  border-radius: var(--radius-sm);
   position: relative;
+  box-shadow: inset 0 1px 2px rgba(100, 255, 218, 0.2);
   
   &::after {
     content: '';
@@ -268,14 +281,16 @@ const SkillProgressBar = styled(motion.div)<{ percentage: number }>`
     top: 0;
     right: 0;
     bottom: 0;
-    width: 20px;
-    background: linear-gradient(90deg, transparent 0%, rgba(255, 255, 255, 0.3) 100%);
-    animation: shimmer 2s infinite;
+    width: 30px;
+    background: linear-gradient(90deg, transparent 0%, rgba(255, 255, 255, 0.4) 50%, transparent 100%);
+    animation: shimmer 3s ease-in-out infinite;
+    border-radius: var(--radius-sm);
   }
 
   @keyframes shimmer {
-    0% { transform: translateX(-100%); }
-    100% { transform: translateX(100%); }
+    0% { transform: translateX(-150%); opacity: 0; }
+    50% { opacity: 1; }
+    100% { transform: translateX(150%); opacity: 0; }
   }
 `;
 

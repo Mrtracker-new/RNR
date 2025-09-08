@@ -21,7 +21,7 @@ const FloatingElement = styled(motion.div)<{ size: number; color: string }>`
   background: ${props => props.color};
   border-radius: 50%;
   filter: blur(40px);
-  opacity: 0.1;
+  opacity: 0.15;
 `;
 
 const GridOverlay = styled.div`
@@ -34,11 +34,12 @@ const GridOverlay = styled.div`
     linear-gradient(rgba(100, 255, 218, 0.03) 1px, transparent 1px),
     linear-gradient(90deg, rgba(100, 255, 218, 0.03) 1px, transparent 1px);
   background-size: 100px 100px;
-  animation: gridPulse 10s ease-in-out infinite alternate;
+  opacity: 0.8;
+  animation: gridPulse 8s ease-in-out infinite alternate;
 
   @keyframes gridPulse {
-    0% { opacity: 0.5; }
-    100% { opacity: 1; }
+    0% { opacity: 0.4; }
+    100% { opacity: 0.8; }
   }
 `;
 
@@ -88,13 +89,13 @@ const GlowOrbs = styled.div`
       transform: translate(0, 0) rotate(0deg);
     }
     25% {
-      transform: translate(30px, -30px) rotate(90deg);
+      transform: translate(20px, -20px) rotate(90deg);
     }
     50% {
-      transform: translate(-20px, 20px) rotate(180deg);
+      transform: translate(-15px, 15px) rotate(180deg);
     }
     75% {
-      transform: translate(20px, 40px) rotate(270deg);
+      transform: translate(15px, 25px) rotate(270deg);
     }
   }
 
@@ -103,10 +104,10 @@ const GlowOrbs = styled.div`
       transform: translate(0, 0) rotate(0deg);
     }
     33% {
-      transform: translate(-40px, -20px) rotate(120deg);
+      transform: translate(-25px, -15px) rotate(120deg);
     }
     66% {
-      transform: translate(30px, -40px) rotate(240deg);
+      transform: translate(20px, -25px) rotate(240deg);
     }
   }
 `;
@@ -203,13 +204,13 @@ const BackgroundEffect: React.FC = () => {
 
   const floatingElements = [
     { size: 200, color: 'rgba(100, 255, 218, 0.1)', x: '10%', y: '20%', duration: 20 },
-    { size: 150, color: 'rgba(139, 92, 246, 0.1)', x: '80%', y: '10%', duration: 25 },
-    { size: 100, color: 'rgba(100, 255, 218, 0.08)', x: '20%', y: '80%', duration: 30 },
-    { size: 120, color: 'rgba(139, 92, 246, 0.08)', x: '70%', y: '70%', duration: 18 },
-    { size: 80, color: 'rgba(100, 255, 218, 0.06)', x: '50%', y: '30%', duration: 22 }
+    { size: 150, color: 'rgba(139, 92, 246, 0.08)', x: '80%', y: '10%', duration: 25 },
+    { size: 100, color: 'rgba(100, 255, 218, 0.06)', x: '20%', y: '80%', duration: 30 },
+    { size: 120, color: 'rgba(139, 92, 246, 0.07)', x: '70%', y: '70%', duration: 18 },
+    { size: 80, color: 'rgba(100, 255, 218, 0.05)', x: '50%', y: '30%', duration: 22 }
   ];
 
-  // Reduce particle count based on device capabilities
+  // Restore particle count for more life
   const particleCount = isMobile ? 8 : prefersReducedMotion ? 0 : 15;
 
   return (
@@ -229,11 +230,11 @@ const BackgroundEffect: React.FC = () => {
             opacity: 0 
           }}
           animate={prefersReducedMotion || shouldPauseAnimations ? { 
-            opacity: shouldPauseAnimations ? 0.3 : 0.5 
+            opacity: shouldPauseAnimations ? 0.2 : 0.6 
           } : { 
-            x: [element.x, `calc(${element.x} + 30px)`, element.x], // Reduced movement
-            y: [element.y, `calc(${element.y} - 20px)`, element.y], // Reduced movement
-            opacity: [0, 0.8, 0.8, 0] // Reduced max opacity
+            x: [element.x, `calc(${element.x} + 30px)`, element.x],
+            y: [element.y, `calc(${element.y} - 20px)`, element.y],
+            opacity: [0, 0.8, 0.8, 0]
           }}
           transition={{
             duration: element.duration,
@@ -270,9 +271,9 @@ const BackgroundEffect: React.FC = () => {
             scale: 1,
             y: 0
           } : {
-            y: [0, -20, 0], // Reduced movement
-            opacity: [0.1, 0.6, 0.1], // Reduced max opacity
-            scale: [1, 1.1, 1], // Reduced scale change
+            y: [0, -20, 0],
+            opacity: [0.1, 0.6, 0.1],
+            scale: [1, 1.1, 1],
           }}
           transition={{
             duration: shouldPauseAnimations ? 0.2 : Math.random() * 8 + 12, // Faster transition when paused

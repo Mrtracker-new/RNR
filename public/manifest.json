@@ -1,6 +1,7 @@
 {
-  "short_name": "React App",
-  "name": "Create React App Sample",
+  "short_name": "Rolan",
+  "name": "Rolan - Portfolio",
+  "description": "Rolan Lobo - Full Stack Developer & Software Engineer Portfolio",
   "icons": [
     {
       "src": "favicon.ico",
@@ -20,6 +21,6 @@
   ],
   "start_url": ".",
   "display": "standalone",
-  "theme_color": "#000000",
-  "background_color": "#ffffff"
+  "theme_color": "#64ffda",
+  "background_color": "#09090b"
 }

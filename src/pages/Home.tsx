@@ -58,13 +58,14 @@ const ProfileSection = styled(motion.div)`
 `;
 
 const Greeting = styled(motion.p)`
-  font-size: var(--text-lg);
+  font-size: var(--text-base);
   color: var(--accent-primary);
-  font-weight: var(--font-medium);
-  margin-bottom: var(--spacing-4);
+  font-weight: var(--font-normal);
+  margin-bottom: var(--spacing-3);
   display: flex;
   align-items: center;
   gap: var(--spacing-2);
+  opacity: 0.9;
 
   @media (max-width: 768px) {
     justify-content: center;
@@ -72,47 +73,69 @@ const Greeting = styled(motion.p)`
 `;
 
 const MainTitle = styled(motion.h1)`
-  font-size: clamp(2.5rem, 8vw, 4rem);
+  font-size: clamp(3rem, 8vw, 5rem);
   font-weight: var(--font-extrabold);
-  line-height: 1.1;
-  margin-bottom: var(--spacing-6);
-  background: linear-gradient(135deg, var(--dark-50) 0%, var(--accent-primary) 50%, var(--secondary-400) 100%);
+  line-height: 0.9;
+  margin-bottom: var(--spacing-4);
+  background: linear-gradient(135deg, var(--dark-50) 0%, var(--accent-primary) 50%, var(--accent-secondary) 100%);
   -webkit-background-clip: text;
   -webkit-text-fill-color: transparent;
   background-clip: text;
+  letter-spacing: -0.05em;
+  position: relative;
+
+  &::after {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: linear-gradient(135deg, var(--accent-primary) 0%, var(--accent-secondary) 100%);
+    opacity: 0;
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+    transition: opacity 0.3s ease;
+  }
+
+  &:hover::after {
+    opacity: 0.3;
+  }
 `;
 
 const Subtitle = styled(motion.h2)`
-  font-size: clamp(1.5rem, 4vw, 2rem);
-  font-weight: var(--font-semibold);
-  color: var(--dark-300);
+  font-size: clamp(1.25rem, 3vw, 1.5rem);
+  font-weight: var(--font-normal);
+  color: var(--dark-400);
   margin-bottom: var(--spacing-8);
-  line-height: 1.3;
+  line-height: 1.4;
+  opacity: 0.8;
 `;
 
 const Description = styled(motion.p)`
-  font-size: var(--text-lg);
-  color: var(--dark-400);
-  line-height: 1.8;
-  margin-bottom: var(--spacing-10);
-  max-width: 500px;
+  font-size: var(--text-base);
+  color: var(--dark-500);
+  line-height: 1.7;
+  margin-bottom: var(--spacing-8);
+  max-width: 480px;
 
   @media (max-width: 968px) {
     max-width: 100%;
-    margin-bottom: var(--spacing-8);
+    margin-bottom: var(--spacing-6);
   }
 
   @media (max-width: 480px) {
-    font-size: var(--text-base);
-    margin-bottom: var(--spacing-6);
+    font-size: var(--text-sm);
+    margin-bottom: var(--spacing-5);
     line-height: 1.6;
   }
 `;
 
 const StatusBadges = styled(motion.div)`
   display: flex;
-  gap: var(--spacing-4);
-  margin-bottom: var(--spacing-8);
+  gap: var(--spacing-3);
+  margin-bottom: var(--spacing-6);
   flex-wrap: wrap;
 
   @media (max-width: 968px) {
@@ -123,10 +146,11 @@ const StatusBadges = styled(motion.div)`
 const LocationInfo = styled(motion.div)`
   display: flex;
   align-items: center;
-  gap: var(--spacing-3);
-  color: var(--dark-400);
-  font-size: var(--text-sm);
-  margin-bottom: var(--spacing-6);
+  gap: var(--spacing-2);
+  color: var(--dark-500);
+  font-size: var(--text-xs);
+  margin-bottom: var(--spacing-4);
+  opacity: 0.8;
 
   @media (max-width: 968px) {
     justify-content: center;
@@ -138,9 +162,10 @@ const LiveTimeDisplay = styled(motion.div)`
   align-items: center;
   gap: var(--spacing-2);
   color: var(--accent-primary);
-  font-size: var(--text-sm);
-  font-weight: var(--font-medium);
+  font-size: var(--text-xs);
+  font-weight: var(--font-normal);
   margin-bottom: var(--spacing-6);
+  opacity: 0.9;
 
   @media (max-width: 968px) {
     justify-content: center;
@@ -168,7 +193,7 @@ const ActionButtons = styled(motion.div)`
 
 const TechStack = styled(motion.div)`
   display: flex;
-  gap: var(--spacing-6);
+  gap: var(--spacing-4);
   align-items: center;
   flex-wrap: wrap;
 
@@ -177,17 +202,18 @@ const TechStack = styled(motion.div)`
   }
 
   @media (max-width: 480px) {
-    gap: var(--spacing-4);
+    gap: var(--spacing-3);
   }
 `;
 
 const TechStackTitle = styled.h3`
-  font-size: var(--text-sm);
-  color: var(--dark-400);
+  font-size: var(--text-xs);
+  color: var(--dark-500);
   font-weight: var(--font-medium);
-  margin-bottom: var(--spacing-4);
+  margin-bottom: var(--spacing-3);
   text-transform: uppercase;
-  letter-spacing: 1px;
+  letter-spacing: 0.1em;
+  opacity: 0.8;
 
   @media (max-width: 968px) {
     text-align: center;
@@ -205,21 +231,24 @@ const TechItem = styled(motion.div)`
   border-radius: var(--radius-lg);
   transition: var(--transition-normal);
   cursor: pointer;
+  backdrop-filter: blur(10px);
 
   &:hover {
     border-color: var(--accent-primary);
     background: rgba(100, 255, 218, 0.1);
-    transform: translateY(-2px);
+    transform: translateY(-3px);
+    box-shadow: var(--shadow-accent);
   }
 
   span:first-child {
-    font-size: var(--text-lg);
+    font-size: var(--text-base);
+    opacity: 0.9;
   }
 
   span:last-child {
     font-size: var(--text-xs);
-    color: var(--dark-300);
-    font-weight: var(--font-medium);
+    color: var(--dark-400);
+    font-weight: var(--font-normal);
   }
 `;
 
@@ -244,15 +273,17 @@ const ProfileImage = styled(motion.div)`
   width: 100%;
   height: 100%;
   border-radius: 50%;
-  background: linear-gradient(135deg, var(--accent-primary) 0%, var(--secondary-500) 100%);
-  padding: 6px;
+  background: linear-gradient(135deg, var(--accent-primary) 0%, var(--accent-secondary) 100%);
+  padding: 4px;
   position: relative;
   overflow: hidden;
+  transition: var(--transition-normal);
+  box-shadow: var(--shadow-lg);
 
   &::before {
     content: '';
     position: absolute;
-    inset: 6px;
+    inset: 4px;
     background: var(--dark-800);
     border-radius: 50%;
     z-index: 1;
@@ -261,10 +292,20 @@ const ProfileImage = styled(motion.div)`
   &::after {
     content: '';
     position: absolute;
-    inset: 12px;
+    inset: 8px;
     background: url(${profileImage}) center/cover;
     border-radius: 50%;
     z-index: 2;
+    transition: var(--transition-normal);
+  }
+
+  &:hover {
+    transform: scale(1.05);
+    box-shadow: var(--shadow-glow);
+  }
+
+  &:hover::after {
+    transform: scale(1.02);
   }
 `;
 
@@ -290,10 +331,19 @@ const FloatingIcon = styled(motion.div)<{ top: string; left: string }>`
   backdrop-filter: blur(10px);
   color: var(--accent-primary);
   font-size: var(--text-xl);
+  transition: var(--transition-normal);
+  box-shadow: var(--shadow-md);
+
+  &:hover {
+    border-color: var(--accent-primary);
+    background: rgba(100, 255, 218, 0.15);
+    transform: translateY(-5px);
+    box-shadow: var(--shadow-glow);
+  }
 
   @media (max-width: 768px) {
-    width: 45px;
-    height: 45px;
+    width: 40px;
+    height: 40px;
     font-size: var(--text-base);
   }
 `;

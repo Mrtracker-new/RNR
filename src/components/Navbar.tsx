@@ -10,24 +10,19 @@ const NavbarContainer = styled(motion.nav)<{ scrolled: boolean }>`
   left: 0;
   right: 0;
   z-index: 1000;
-  background: ${props => props.scrolled ? 'rgba(15, 23, 42, 0.95)' : 'transparent'};
-  backdrop-filter: ${props => props.scrolled ? 'blur(10px)' : 'none'};
-  -webkit-backdrop-filter: ${props => props.scrolled ? 'blur(10px)' : 'none'};
-  border-bottom: ${props => props.scrolled ? '1px solid var(--dark-700)' : '1px solid transparent'};
-  transition: background-color 0.3s ease, border-color 0.3s ease;
-  will-change: background-color, backdrop-filter;
-  padding: var(--spacing-4) 0;
-  contain: layout style;
+  background: ${props => props.scrolled ? 'rgba(9, 9, 11, 0.95)' : 'transparent'};
+  backdrop-filter: ${props => props.scrolled ? 'blur(12px)' : 'none'};
+  border-bottom: ${props => props.scrolled ? '1px solid var(--dark-800)' : '1px solid transparent'};
+  transition: var(--transition-normal);
+  padding: var(--spacing-5) 0;
 
   @media (max-width: 768px) {
-    padding: var(--spacing-3) 0;
+    padding: var(--spacing-4) 0;
   }
 
   @media (prefers-reduced-motion: reduce) {
-    transition: none;
-    backdrop-filter: ${props => props.scrolled ? 'none' : 'none'};
-    -webkit-backdrop-filter: ${props => props.scrolled ? 'none' : 'none'};
-    background: ${props => props.scrolled ? 'rgba(15, 23, 42, 0.98)' : 'transparent'};
+    backdrop-filter: none;
+    background: ${props => props.scrolled ? 'var(--dark-950)' : 'transparent'};
   }
 `;
 
@@ -59,22 +54,24 @@ const NavContent = styled.div`
 const Logo = styled(Link)`
   font-size: var(--text-xl);
   font-weight: var(--font-bold);
-  background: linear-gradient(135deg, var(--accent-primary) 0%, var(--secondary-400) 100%);
+  background: linear-gradient(135deg, var(--accent-primary) 0%, var(--accent-secondary) 100%);
   -webkit-background-clip: text;
   -webkit-text-fill-color: transparent;
   background-clip: text;
   text-decoration: none;
   transition: var(--transition-normal);
+  letter-spacing: -0.025em;
 
   &:hover {
     transform: scale(1.05);
+    filter: drop-shadow(0 0 8px rgba(100, 255, 218, 0.3));
   }
 `;
 
 const NavLinks = styled.div`
   display: flex;
   align-items: center;
-  gap: var(--spacing-8);
+  gap: var(--spacing-6);
 
   @media (max-width: 768px) {
     display: none;
@@ -83,32 +80,33 @@ const NavLinks = styled.div`
 
 const NavLink = styled(Link)<{ active: boolean }>`
   position: relative;
-  padding: var(--spacing-2) var(--spacing-4);
+  padding: var(--spacing-2) var(--spacing-3);
   font-weight: var(--font-medium);
-  color: ${props => props.active ? 'var(--accent-primary)' : 'var(--dark-300)'};
+  font-size: var(--text-sm);
+  color: ${props => props.active ? 'var(--accent-primary)' : 'var(--dark-400)'};
   text-decoration: none;
-  transition: var(--transition-normal);
-  border-radius: var(--radius-md);
+  transition: var(--transition-fast);
+  border-radius: var(--radius-sm);
 
   &:hover {
-    color: var(--accent-primary);
+    color: var(--dark-200);
   }
 
   &::after {
     content: '';
     position: absolute;
-    bottom: 0;
+    bottom: -2px;
     left: 50%;
-    width: ${props => props.active ? '80%' : '0'};
+    width: ${props => props.active ? '20px' : '0'};
     height: 2px;
-    background: linear-gradient(135deg, var(--accent-primary) 0%, var(--secondary-400) 100%);
+    background: var(--accent-primary);
     transform: translateX(-50%);
-    transition: var(--transition-normal);
+    transition: var(--transition-fast);
     border-radius: var(--radius-full);
   }
 
   &:hover::after {
-    width: 80%;
+    width: 20px;
   }
 `;
 
@@ -117,26 +115,32 @@ const MobileMenuButton = styled.button<{ open: boolean }>`
   flex-direction: column;
   align-items: center;
   justify-content: center;
-  width: 30px;
-  height: 30px;
+  width: 32px;
+  height: 32px;
   background: transparent;
   border: none;
   cursor: pointer;
-  flex-shrink: 0;
-  margin-left: auto;
+  padding: var(--spacing-1);
+  border-radius: var(--radius-sm);
+  transition: var(--transition-fast);
 
   @media (max-width: 768px) {
     display: flex;
   }
 
+  &:hover {
+    background: var(--dark-800);
+  }
+
   span {
     display: block;
-    width: 20px;
+    width: 18px;
     height: 2px;
-    background: var(--dark-100);
+    background: var(--dark-300);
     margin: 2px 0;
-    transition: var(--transition-normal);
+    transition: var(--transition-fast);
     transform-origin: center;
+    border-radius: var(--radius-full);
 
     &:nth-child(1) {
       transform: ${props => props.open ? 'rotate(45deg) translate(5px, 5px)' : 'none'};
@@ -147,7 +151,7 @@ const MobileMenuButton = styled.button<{ open: boolean }>`
     }
 
     &:nth-child(3) {
-      transform: ${props => props.open ? 'rotate(-45deg) translate(7px, -6px)' : 'none'};
+      transform: ${props => props.open ? 'rotate(-45deg) translate(5px, -5px)' : 'none'};
     }
   }
 `;
@@ -157,10 +161,10 @@ const MobileMenu = styled(motion.div)`
   top: 100%;
   left: 0;
   right: 0;
-  background: rgba(15, 23, 42, 0.98);
-  backdrop-filter: blur(10px);
-  border-bottom: 1px solid var(--dark-700);
-  padding: var(--spacing-6) 0;
+  background: rgba(9, 9, 11, 0.98);
+  backdrop-filter: blur(12px);
+  border-bottom: 1px solid var(--dark-800);
+  padding: var(--spacing-4) 0;
 
   @media (min-width: 769px) {
     display: none;
@@ -171,15 +175,16 @@ const MobileNavLink = styled(Link)<{ active: boolean }>`
   display: block;
   padding: var(--spacing-3) var(--spacing-6);
   font-weight: var(--font-medium);
-  color: ${props => props.active ? 'var(--accent-primary)' : 'var(--dark-300)'};
+  font-size: var(--text-sm);
+  color: ${props => props.active ? 'var(--accent-primary)' : 'var(--dark-400)'};
   text-decoration: none;
-  transition: var(--transition-normal);
-  border-left: ${props => props.active ? '3px solid var(--accent-primary)' : '3px solid transparent'};
+  transition: var(--transition-fast);
+  border-left: ${props => props.active ? '2px solid var(--accent-primary)' : '2px solid transparent'};
 
   &:hover {
-    color: var(--accent-primary);
+    color: var(--dark-200);
     border-left-color: var(--accent-primary);
-    background: rgba(100, 255, 218, 0.05);
+    background: var(--dark-900);
   }
 `;
 
@@ -188,8 +193,9 @@ const ScrollProgress = styled(motion.div)`
   bottom: 0;
   left: 0;
   height: 3px;
-  background: linear-gradient(90deg, var(--accent-primary) 0%, var(--secondary-500) 100%);
+  background: linear-gradient(90deg, var(--accent-primary) 0%, var(--accent-secondary) 100%);
   transform-origin: left;
+  box-shadow: 0 0 10px rgba(100, 255, 218, 0.5);
 `;
 
 const navItems = [

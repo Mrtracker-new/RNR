@@ -19,10 +19,12 @@ const ProjectsHero = styled(Section)`
 const HeroTitle = styled(motion.h1)`
   font-size: clamp(2.5rem, 6vw, 3.5rem);
   margin-bottom: var(--spacing-6);
-  background: linear-gradient(135deg, var(--accent-primary) 0%, var(--secondary-400) 100%);
+  background: linear-gradient(135deg, var(--accent-primary) 0%, var(--accent-secondary) 100%);
   -webkit-background-clip: text;
   -webkit-text-fill-color: transparent;
   background-clip: text;
+  font-weight: var(--font-extrabold);
+  letter-spacing: -0.025em;
 `;
 
 const HeroSubtitle = styled(motion.p)`
@@ -42,24 +44,32 @@ const FilterSection = styled(motion.div)`
 `;
 
 const FilterButton = styled(motion.button)<{ active: boolean }>`
-  padding: var(--spacing-3) var(--spacing-6);
-  border-radius: var(--radius-full);
+  padding: var(--spacing-3) var(--spacing-5);
+  border-radius: var(--radius-lg);
   font-weight: var(--font-medium);
+  font-size: var(--text-sm);
   transition: var(--transition-normal);
   cursor: pointer;
+  position: relative;
+  overflow: hidden;
   
   ${props => props.active ? `
-    background: linear-gradient(135deg, var(--accent-primary) 0%, var(--secondary-500) 100%);
-    color: var(--dark-900);
-    border: 2px solid transparent;
+    background: linear-gradient(135deg, var(--accent-primary) 0%, var(--accent-secondary) 100%);
+    color: var(--dark-950);
+    border: 1px solid transparent;
+    box-shadow: var(--shadow-accent);
   ` : `
-    background: transparent;
-    color: var(--dark-400);
-    border: 2px solid var(--dark-600);
+    background: rgba(30, 41, 59, 0.6);
+    color: var(--dark-300);
+    border: 1px solid var(--dark-700);
+    backdrop-filter: blur(10px);
     
     &:hover {
       border-color: var(--accent-primary);
       color: var(--accent-primary);
+      background: rgba(100, 255, 218, 0.1);
+      transform: translateY(-2px);
+      box-shadow: var(--shadow-md);
     }
   `}
 `;
@@ -75,15 +85,15 @@ const SearchInput = styled.input`
   max-width: 400px;
   padding: var(--spacing-4) var(--spacing-6);
   font-size: var(--text-base);
-  border: 2px solid var(--dark-600);
-  border-radius: var(--radius-xl);
-  background: var(--dark-800);
+  border: 1px solid var(--dark-700);
+  border-radius: var(--radius-lg);
+  background: var(--dark-900);
   color: var(--dark-100);
   transition: var(--transition-normal);
 
   &:focus {
     border-color: var(--accent-primary);
-    box-shadow: 0 0 0 3px rgba(100, 255, 218, 0.1);
+    box-shadow: 0 0 0 1px var(--accent-primary);
   }
 
   &::placeholder {
@@ -229,9 +239,9 @@ const ProjectTech = styled.div`
 
 const TechTag = styled.span`
   background: rgba(139, 92, 246, 0.1);
-  color: var(--secondary-400);
+  color: var(--accent-secondary);
   padding: var(--spacing-1) var(--spacing-3);
-  border-radius: var(--radius-full);
+  border-radius: var(--radius-sm);
   font-size: var(--text-xs);
   font-weight: var(--font-medium);
   border: 1px solid rgba(139, 92, 246, 0.3);
@@ -268,28 +278,21 @@ const ModalOverlay = styled(motion.div)`
   z-index: 1000;
   padding: var(--spacing-4);
   overflow-y: auto;
-  
-  /* Ensure modal appears in current viewport */
-  @media (max-height: 700px) {
-    align-items: flex-start;
-    padding-top: var(--spacing-8);
-    padding-bottom: var(--spacing-8);
-  }
 `;
 
 const ModalContent = styled(motion.div)`
-  background: var(--dark-800);
+  background: rgba(30, 41, 59, 0.95);
+  backdrop-filter: blur(20px);
   border: 1px solid var(--dark-700);
   border-radius: var(--radius-2xl);
   padding: var(--spacing-8);
   max-width: 800px;
   width: 100%;
-  max-height: 85vh;
+  max-height: 90vh;
   overflow-y: auto;
   position: relative;
-  margin: auto;
+  box-shadow: var(--shadow-xl);
   
-  /* Ensure proper sizing on different screen sizes */
   @media (max-width: 1024px) {
     max-width: 95vw;
     padding: var(--spacing-6);
@@ -297,8 +300,8 @@ const ModalContent = styled(motion.div)`
   
   @media (max-width: 768px) {
     max-width: 90vw;
-    padding: var(--spacing-4);
-    max-height: 80vh;
+    padding: var(--spacing-5);
+    max-height: 85vh;
   }
   
   @media (max-height: 600px) {
@@ -518,11 +521,6 @@ interface ProjectModalProps {
 
 const ProjectModal: React.FC<ProjectModalProps> = ({ project, isOpen, onClose }) => {
   if (!isOpen || !project) return null;
-  
-  // Calculate initial position based on current scroll
-  const scrollY = window.scrollY || window.pageYOffset;
-  const viewportHeight = window.innerHeight;
-  const modalPosition = scrollY + (viewportHeight * 0.2); // 20% from top of current viewport
 
   return (
     <AnimatePresence>
@@ -531,14 +529,12 @@ const ProjectModal: React.FC<ProjectModalProps> = ({ project, isOpen, onClose })
         animate={{ opacity: 1 }}
         exit={{ opacity: 0 }}
         onClick={onClose}
-        style={{ alignItems: 'flex-start' }} // Always align from top
       >
         <ModalContent
-          initial={{ opacity: 0, scale: 0.8, y: modalPosition }}
-          animate={{ opacity: 1, scale: 1, y: modalPosition }}
-          exit={{ opacity: 0, scale: 0.8 }}
+          initial={{ opacity: 0, scale: 0.8, y: 50 }}
+          animate={{ opacity: 1, scale: 1, y: 0 }}
+          exit={{ opacity: 0, scale: 0.8, y: 50 }}
           onClick={(e) => e.stopPropagation()}
-          style={{ marginTop: 0 }} // Remove default margin
         >
           <CloseButton onClick={onClose}>×</CloseButton>
           

@@ -11,10 +11,12 @@ const ContactHero = styled(Section)`
 const HeroTitle = styled(motion.h1)`
   font-size: clamp(2.5rem, 6vw, 3.5rem);
   margin-bottom: var(--spacing-6);
-  background: linear-gradient(135deg, var(--accent-primary) 0%, var(--secondary-400) 100%);
+  background: linear-gradient(135deg, var(--accent-primary) 0%, var(--accent-secondary) 100%);
   -webkit-background-clip: text;
   -webkit-text-fill-color: transparent;
   background-clip: text;
+  font-weight: var(--font-extrabold);
+  letter-spacing: -0.025em;
 `;
 
 const HeroSubtitle = styled(motion.p)`
@@ -153,14 +155,15 @@ const ContactCard = styled(Card)`
 const ContactIcon = styled.div`
   width: 80px;
   height: 80px;
-  background: linear-gradient(135deg, var(--accent-primary) 0%, var(--secondary-500) 100%);
+  background: linear-gradient(135deg, var(--accent-primary) 0%, var(--accent-secondary) 100%);
   border-radius: 50%;
   display: flex;
   align-items: center;
   justify-content: center;
   font-size: var(--text-3xl);
   margin: 0 auto var(--spacing-6);
-  color: var(--dark-900);
+  color: var(--dark-950);
+  box-shadow: var(--shadow-accent);
 `;
 
 const ContactTitle = styled.h3`

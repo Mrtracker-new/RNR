@@ -25,17 +25,17 @@ const Spinner = styled.div<{ size?: 'sm' | 'md' | 'lg' }>`
   ${props => {
     const size = props.size || 'md';
     const sizes = {
-      sm: '24px',
-      md: '40px',
-      lg: '60px'
+      sm: '20px',
+      md: '32px',
+      lg: '48px'
     };
     return `width: ${sizes[size]}; height: ${sizes[size]};`;
   }}
   
-  border: 3px solid var(--dark-700);
-  border-top: 3px solid var(--accent-primary);
+  border: 2px solid var(--dark-800);
+  border-top: 2px solid var(--accent-primary);
   border-radius: 50%;
-  animation: ${spin} 1s linear infinite;
+  animation: ${spin} 0.8s linear infinite;
 `;
 
 const DotsSpinner = styled.div`
@@ -44,12 +44,13 @@ const DotsSpinner = styled.div`
 `;
 
 const Dot = styled.div<{ delay: number }>`
-  width: 8px;
-  height: 8px;
+  width: 6px;
+  height: 6px;
   background: var(--accent-primary);
   border-radius: 50%;
-  animation: ${pulse} 1.4s ease-in-out infinite;
+  animation: ${pulse} 1.2s ease-in-out infinite;
   animation-delay: ${props => props.delay}s;
+  opacity: 0.8;
 `;
 
 const RippleSpinner = styled.div<{ size?: 'sm' | 'md' | 'lg' }>`
@@ -92,17 +93,9 @@ const RippleElement = styled.div<{ delay: number }>`
 
 const LoadingText = styled.p<{ variant?: 'default' | 'gradient' }>`
   font-size: var(--text-sm);
-  font-weight: var(--font-medium);
-  color: ${props => props.variant === 'gradient' ? 'transparent' : 'var(--dark-300)'};
-  
-  ${props => props.variant === 'gradient' && `
-    background: linear-gradient(135deg, var(--accent-primary) 0%, var(--secondary-400) 100%);
-    -webkit-background-clip: text;
-    -webkit-text-fill-color: transparent;
-    background-clip: text;
-  `}
-  
-  animation: ${pulse} 2s ease-in-out infinite;
+  font-weight: var(--font-normal);
+  color: ${props => props.variant === 'gradient' ? 'var(--accent-primary)' : 'var(--dark-400)'};
+  opacity: 0.9;
 `;
 
 interface LoadingSpinnerProps {
@@ -163,8 +156,8 @@ export const LoadingOverlay = styled(motion.div)`
   left: 0;
   right: 0;
   bottom: 0;
-  background: rgba(15, 23, 42, 0.9);
-  backdrop-filter: blur(10px);
+  background: rgba(9, 9, 11, 0.95);
+  backdrop-filter: blur(8px);
   display: flex;
   align-items: center;
   justify-content: center;
