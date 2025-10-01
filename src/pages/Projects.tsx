@@ -1,8 +1,12 @@
-import React, { useState, useMemo } from 'react';
+import React, { useState, useMemo, useEffect } from 'react';
 import styled from 'styled-components';
 import { motion, AnimatePresence } from 'framer-motion';
 import { Container, Section, Grid, Card, Button, Badge } from '../styles/GlobalStyle';
+import SEO from '../components/SEO';
 import OptimizedImage from '../components/OptimizedImage';
+import PageTransition from '../components/PageTransition';
+import { SkeletonGrid } from '../components/Skeleton';
+import { StaggerContainer, StaggerItem } from '../components/ScrollReveal';
 
 // Import project images
 import invisioVaultDesktopImg from '../assets/images/InvisioVault_Suit.png';
@@ -110,10 +114,9 @@ const ProjectCard = styled(Card)`
   position: relative;
   overflow: hidden;
   transition: var(--transition-normal);
-  height: 100%;
   display: flex;
   flex-direction: column;
-  min-height: 520px;
+  height: 600px;
   
   &:hover {
     transform: translateY(-10px);
@@ -155,17 +158,6 @@ const ProjectImageContainer = styled.div<{ bgColor: string }>`
   }
 `;
 
-const ProjectImageElement = styled.img`
-  width: 100%;
-  height: 100%;
-  object-fit: contain;
-  object-position: center;
-  position: absolute;
-  top: 0;
-  left: 0;
-  padding: var(--spacing-4);
-  transition: var(--transition-normal);
-`;
 
 const ProjectIconOverlay = styled.div`
   position: absolute;
@@ -214,18 +206,7 @@ const ProjectDescription = styled.p`
   -webkit-line-clamp: 3;
   -webkit-box-orient: vertical;
   overflow: hidden;
-  flex: 1;
-  min-height: 72px;
-
-  @media (max-width: 768px) {
-    -webkit-line-clamp: 4;
-    min-height: 96px;
-  }
-
-  @media (max-width: 480px) {
-    -webkit-line-clamp: 5;
-    min-height: 120px;
-  }
+  height: 72px;
 `;
 
 const ProjectTech = styled.div`
@@ -233,8 +214,9 @@ const ProjectTech = styled.div`
   flex-wrap: wrap;
   gap: var(--spacing-2);
   margin-bottom: var(--spacing-6);
-  min-height: 32px;
+  height: 32px;
   align-items: flex-start;
+  overflow: hidden;
 `;
 
 const TechTag = styled.span`
@@ -616,6 +598,16 @@ const Projects: React.FC = () => {
   const [searchQuery, setSearchQuery] = useState('');
   const [selectedProject, setSelectedProject] = useState<any>(null);
   const [isModalOpen, setIsModalOpen] = useState(false);
+  const [isLoading, setIsLoading] = useState(true);
+
+  // Simulate initial loading
+  useEffect(() => {
+    const timer = setTimeout(() => {
+      setIsLoading(false);
+    }, 800); // Simulate loading time
+    
+    return () => clearTimeout(timer);
+  }, []);
 
   const filteredProjects = useMemo(() => {
     return projectsData.filter(project => {
@@ -658,7 +650,12 @@ const Projects: React.FC = () => {
   };
 
   return (
-    <>
+    <PageTransition>
+      <SEO
+        title="Projects - Rolan Lobo Portfolio"
+        description="Explore my portfolio of software projects including desktop applications, web development, and security tools. InvisioVault, BAR, Sortify, and more."
+        url="https://rolan-rnr.netlify.app/projects"
+      />
       <ProjectsHero>
         <Container>
           <motion.div
@@ -702,25 +699,25 @@ const Projects: React.FC = () => {
 
       <Section>
         <Container>
-          <ProjectsGrid
-            as={motion.div}
-            variants={containerVariants}
-            initial="hidden"
-            animate="visible"
-          >
-            <AnimatePresence>
-              {filteredProjects.map((project, index) => (
-                <motion.div
-                  key={project.id}
-                  variants={itemVariants}
-                  layout
-                  initial={{ opacity: 0, scale: 0.8 }}
-                  animate={{ opacity: 1, scale: 1 }}
-                  exit={{ opacity: 0, scale: 0.8 }}
-                  transition={{ duration: 0.5, delay: index * 0.1 }}
-                  onClick={() => openModal(project)}
-                >
-                <ProjectCard>
+          {isLoading ? (
+            <ProjectsGrid>
+              <SkeletonGrid count={6} />
+            </ProjectsGrid>
+          ) : (
+            <StaggerContainer staggerDelay={0.15}>
+              <ProjectsGrid>
+                <AnimatePresence>
+                  {filteredProjects.map((project, index) => (
+                  <StaggerItem key={project.id} variant="scaleUp">
+                    <motion.div
+                      layout
+                      initial={{ opacity: 0, scale: 0.8 }}
+                      animate={{ opacity: 1, scale: 1 }}
+                      exit={{ opacity: 0, scale: 0.8 }}
+                      transition={{ duration: 0.5 }}
+                      onClick={() => openModal(project)}
+                    >
+                    <ProjectCard>
                   <ProjectImageContainer bgColor={project.bgColor}>
                     {project.image && (
                       <OptimizedImage 
@@ -781,11 +778,14 @@ const Projects: React.FC = () => {
                       </ActionButton>
                     </ProjectActions>
                   </ProjectContent>
-                </ProjectCard>
-                </motion.div>
-              ))}
-            </AnimatePresence>
-          </ProjectsGrid>
+                  </ProjectCard>
+                  </motion.div>
+                </StaggerItem>
+                  ))}
+                </AnimatePresence>
+              </ProjectsGrid>
+            </StaggerContainer>
+          )}
 
           {filteredProjects.length === 0 && (
             <motion.div
@@ -811,7 +811,7 @@ const Projects: React.FC = () => {
         isOpen={isModalOpen}
         onClose={closeModal}
       />
-    </>
+    </PageTransition>
   );
 };
 

@@ -4,6 +4,8 @@ import { motion } from 'framer-motion';
 import { Link } from 'react-router-dom';
 import { Container, Button, Badge } from '../styles/GlobalStyle';
 import { getAnimationConfig, getDeviceInfo } from '../utils/performance';
+import SEO from '../components/SEO';
+import PageTransition from '../components/PageTransition';
 import profileImage from '../assets/images/Home_dp.jpg';
 
 const HeroSection = styled.section`
@@ -421,7 +423,13 @@ const Home: React.FC = () => {
   };
 
   return (
-    <HeroSection>
+    <PageTransition>
+      <SEO
+        title="Rolan Lobo - Full Stack Developer & Software Engineer"
+        description="Full Stack Developer & Freelancer specializing in modern web applications, desktop software, and security-focused solutions. Expert in React, Python, Node.js, and more."
+        url="https://rolan-rnr.netlify.app/"
+      />
+      <HeroSection>
       <Container>
         <motion.div
           variants={containerVariants}
@@ -590,6 +598,7 @@ const Home: React.FC = () => {
         </motion.div>
       </Container>
     </HeroSection>
+    </PageTransition>
   );
 };
 

@@ -6,6 +6,8 @@ import Navbar from './components/Navbar';
 import BackgroundEffect from './components/BackgroundEffect';
 import { FullScreenLoading } from './components/LoadingSpinner';
 import ScrollToTop from './components/ScrollToTop';
+import CursorEffect from './components/CursorEffect';
+import ExitIntentPopup from './components/ExitIntentPopup';
 import Home from './pages/Home';
 import About from './pages/About';
 import Projects from './pages/Projects';
@@ -48,6 +50,8 @@ function App() {
       <GlobalStyle />
       <ScrollToTop />
       <BackgroundEffect />
+      <CursorEffect />
+      <ExitIntentPopup />
       <Navbar />
       <AnimatePresence mode="wait">
         <Routes>

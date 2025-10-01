@@ -33,11 +33,16 @@
 - **Framer Motion Animations**: Smooth page transitions and element animations
 - **Scroll Progress**: Visual scroll progress indicator in the navbar
 - **Loading Screen**: Custom loading animation on initial page load
+- **Skeleton Loading**: Beautiful skeleton screens for improved perceived performance
 - **Project Filtering**: Filter projects by category (Desktop, Web, Android)
 - **Project Search**: Real-time search through projects by title, description, or technology
 - **Modal System**: Detailed project views with technology stacks and links
 - **PWA Support**: Installable as "Rolan" app with custom branding
 - **Enhanced Modals**: Properly centered project modals with glassmorphism design
+- **SEO Optimized**: Meta tags, Open Graph, Twitter Cards, and structured data
+- **Custom Cursor Effect**: Interactive particle cursor for enhanced UX
+- **Exit Intent Popup**: Smart newsletter/contact popup on exit intent
+- **Scroll Reveal Animations**: Progressive content reveals on scroll
 
 ### 📊 Project Showcase
 Featured projects include:
@@ -113,9 +118,16 @@ portfolio/
 ├── src/
 │   ├── components/          # Reusable components
 │   │   ├── BackgroundEffect.tsx
+│   │   ├── CursorEffect.tsx      # NEW: Particle cursor effect
+│   │   ├── ExitIntentPopup.tsx   # NEW: Exit intent detection
 │   │   ├── LoadingSpinner.tsx
 │   │   ├── Navbar.tsx
-│   │   └── ScrollToTop.tsx
+│   │   ├── OptimizedImage.tsx    # NEW: Lazy loading images
+│   │   ├── PageTransition.tsx    # NEW: Route transitions
+│   │   ├── ScrollReveal.tsx      # NEW: Scroll animations
+│   │   ├── ScrollToTop.tsx
+│   │   ├── SEO.tsx              # NEW: SEO meta tags
+│   │   └── Skeleton.tsx         # NEW: Loading skeletons
 │   ├── pages/              # Main page components
 │   │   ├── About.tsx
 │   │   ├── Contact.tsx
@@ -164,19 +176,40 @@ The website is fully responsive and optimized for:
 - Fixed position with scroll-based transparency
 - Mobile hamburger menu with smooth animations
 - Active page indicators with gradient underlines
+- Scroll progress indicator
 
 ### Project Cards
+- **Uniform Card Heights**: Consistent sizing across all project cards
 - Interactive hover effects with transform animations
 - Technology badges and category labels
 - Modal system for detailed project views
+- Lazy-loaded optimized images
+
+### Service Cards (About Page)
+- **Consistent Dimensions**: All service cards have equal heights
+- Glassmorphism design with hover effects
+- Icon-based visual hierarchy
+- Feature lists with checkmarks
 
 ### Loading System
 - Custom loading spinner with animations
+- Skeleton loading screens for content
 - Smooth page transitions between routes
+- Progressive content reveals
 
-### Background Effects
-- Animated background elements for visual interest
-- Responsive particle system (if implemented)
+### SEO & Performance
+- **Meta Tags**: Dynamic meta tags for each page
+- **Open Graph**: Optimized social media sharing
+- **Twitter Cards**: Enhanced Twitter previews
+- **Sitemap**: XML sitemap for search engines
+- **Robots.txt**: Proper crawler directives
+- **Lazy Loading**: Images load only when needed
+
+### Interactive Effects
+- **Cursor Effect**: Custom particle cursor following mouse
+- **Exit Intent**: Newsletter popup on exit detection
+- **Scroll Reveal**: Elements fade in as you scroll
+- **Stagger Animations**: Sequential content appearance
 
 ## 🚢 Deployment
 
@@ -188,17 +221,44 @@ npm run build
 This creates an optimized production build in the `build` folder.
 
 ### Deployment Options
-- **Vercel**: Recommended for React apps
-- **Netlify**: Great for static site hosting
+- **Netlify**: Currently deployed (Recommended) ⭐
+- **Vercel**: Alternative React deployment
 - **GitHub Pages**: Free hosting for public repositories
 - **Firebase Hosting**: Google's hosting platform
 
-## 📊 Performance
+### Environment Configuration
+The project uses `.gitignore` to protect sensitive files:
+- ✅ `.env*` files excluded
+- ✅ `netlify.toml` kept private
+- ✅ Build artifacts ignored
+- ✅ IDE files excluded
 
+## 📊 Performance & SEO
+
+### Performance Optimizations
 - **Lighthouse Score**: Optimized for performance, accessibility, and SEO
 - **Code Splitting**: Automatic code splitting with React.lazy
 - **Asset Optimization**: Optimized images and minified CSS/JS
 - **Loading States**: Smooth loading experiences throughout the app
+- **Lazy Loading**: Images and components load on demand
+- **Skeleton Screens**: Perceived performance improvements
+
+### SEO Features
+- **Dynamic Meta Tags**: Unique titles and descriptions per page
+- **Open Graph Protocol**: Rich social media previews
+- **Twitter Cards**: Optimized Twitter sharing
+- **Structured Data**: JSON-LD schema for better indexing
+- **Canonical URLs**: Proper URL canonicalization
+- **Sitemap.xml**: Complete site structure for crawlers
+- **Robots.txt**: Search engine crawler directives
+- **Alt Tags**: All images have descriptive alt text
+
+### Accessibility
+- **ARIA Labels**: Proper accessibility labels
+- **Keyboard Navigation**: Full keyboard support
+- **Semantic HTML**: Proper HTML5 semantic structure
+- **Color Contrast**: WCAG AA compliant contrast ratios
+- **Focus Indicators**: Clear focus states for navigation
 
 ## 🤝 Contributing
 
@@ -223,12 +283,22 @@ This project is open source and available under the [MIT License](LICENSE).
 - 📍 **Location**: Yellapur, Karnataka, India
 - ⏰ **Timezone**: IST (UTC +5:30)
 
+## 🔒 Security & Best Practices
+
+- **Environment Variables**: Sensitive data stored in `.env` files (gitignored)
+- **Secure Configuration**: Deployment configs kept private
+- **No Hardcoded Secrets**: API keys and tokens properly managed
+- **Comprehensive .gitignore**: Protects sensitive files from accidental commits
+- **Clean Git History**: No sensitive data in repository
+
 ## 🙏 Acknowledgments
 
 - **React Team** - For the amazing React framework
-- **Framer Motion** - For smooth animations
+- **Framer Motion** - For smooth animations and transitions
 - **Styled Components** - For powerful CSS-in-JS styling
 - **Create React App** - For the excellent development setup
+- **Netlify** - For seamless deployment and hosting
+- **Open Source Community** - For inspiration and tools
 
 ---
 

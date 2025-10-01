@@ -2,6 +2,8 @@ import React, { useState } from 'react';
 import styled from 'styled-components';
 import { motion } from 'framer-motion';
 import { Container, Section, Grid, Card, Button, Badge } from '../styles/GlobalStyle';
+import SEO from '../components/SEO';
+import PageTransition from '../components/PageTransition';
 
 const ContactHero = styled(Section)`
   padding-top: 140px;
@@ -225,11 +227,6 @@ const LinkedInIcon = () => (
   </svg>
 );
 
-const TwitterIcon = () => (
-  <svg viewBox="0 0 24 24" fill="currentColor">
-    <path d="M23.953 4.57a10 10 0 01-2.825.775 4.958 4.958 0 002.163-2.723c-.951.555-2.005.959-3.127 1.184a4.92 4.92 0 00-8.384 4.482C7.69 8.095 4.067 6.13 1.64 3.162a4.822 4.822 0 00-.666 2.475c0 1.71.87 3.213 2.188 4.096a4.904 4.904 0 01-2.228-.616v.06a4.923 4.923 0 003.946 4.827 4.996 4.996 0 01-2.212.085 4.936 4.936 0 004.604 3.417 9.867 9.867 0 01-6.102 2.105c-.39 0-.779-.023-1.17-.067a13.995 13.995 0 007.557 2.209c9.053 0 13.998-7.496 13.998-13.985 0-.21 0-.42-.015-.63A9.935 9.935 0 0024 4.59z"/>
-  </svg>
-);
 
 const InstagramIcon = () => (
   <svg viewBox="0 0 24 24" fill="currentColor">
@@ -266,44 +263,6 @@ const LocationDetails = styled.div`
   }
 `;
 
-const StatsSection = styled(Card)`
-  text-align: center;
-  background: linear-gradient(135deg, rgba(100, 255, 218, 0.05) 0%, rgba(139, 92, 246, 0.05) 100%);
-`;
-
-const StatsTitle = styled.h3`
-  font-size: var(--text-xl);
-  color: var(--dark-100);
-  margin-bottom: var(--spacing-6);
-`;
-
-const StatsGrid = styled.div`
-  display: grid;
-  grid-template-columns: repeat(3, 1fr);
-  gap: var(--spacing-6);
-
-  @media (max-width: 480px) {
-    grid-template-columns: 1fr;
-    gap: var(--spacing-4);
-  }
-`;
-
-const StatItem = styled.div`
-  text-align: center;
-  
-  h4 {
-    font-size: var(--text-2xl);
-    font-weight: var(--font-bold);
-    color: var(--accent-primary);
-    margin-bottom: var(--spacing-1);
-  }
-  
-  p {
-    font-size: var(--text-sm);
-    color: var(--dark-400);
-    white-space: nowrap;
-  }
-`;
 
 interface FormData {
   name: string;
@@ -432,7 +391,12 @@ const Contact: React.FC = () => {
   };
 
   return (
-    <>
+    <PageTransition>
+      <SEO
+        title="Contact Rolan Lobo - Get In Touch"
+        description="Get in touch with Rolan Lobo for freelance projects, collaboration, or software development inquiries. Available for hire."
+        url="https://rolan-rnr.netlify.app/contact"
+      />
       <ContactHero>
         <Container>
           <motion.div
@@ -650,7 +614,7 @@ const Contact: React.FC = () => {
           </ContactGrid>
         </Container>
       </ContactSection>
-    </>
+    </PageTransition>
   );
 };
 

@@ -2,7 +2,10 @@ import React, { useRef } from 'react';
 import styled from 'styled-components';
 import { motion, useInView } from 'framer-motion';
 import { Container, Section, Grid, Card } from '../styles/GlobalStyle';
+import SEO from '../components/SEO';
+import PageTransition from '../components/PageTransition';
 import aboutImage from '../assets/images/Aboutme.jpg';
+import { StaggerContainer, StaggerItem } from '../components/ScrollReveal';
 
 const AboutHero = styled(Section)`
   padding-top: 140px;
@@ -325,6 +328,10 @@ const ServicesGrid = styled(Grid)`
 const ServiceCard = styled(Card)`
   text-align: center;
   transition: var(--transition-normal);
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+  min-height: 450px;
 
   &:hover {
     transform: translateY(-5px);
@@ -356,18 +363,21 @@ const ServiceDescription = styled.p`
   color: var(--dark-400);
   line-height: 1.6;
   margin-bottom: var(--spacing-4);
+  min-height: 50px;
 `;
 
 const ServiceFeatures = styled.ul`
   text-align: left;
   list-style: none;
   padding: 0;
+  flex: 1;
   
   li {
     color: var(--dark-400);
-    margin-bottom: var(--spacing-2);
+    margin-bottom: var(--spacing-3);
     position: relative;
     padding-left: var(--spacing-6);
+    line-height: 1.5;
     
     &::before {
       content: '✓';
@@ -490,7 +500,12 @@ const About: React.FC = () => {
   };
 
   return (
-    <>
+    <PageTransition>
+      <SEO
+        title="About Rolan Lobo - Full Stack Developer"
+        description="Learn about Rolan Lobo, an aspiring software engineer and freelancer from Yellapur, India. Journey through education, work experience, skills, and services offered."
+        url="https://rolan-rnr.netlify.app/about"
+      />
       {/* Hero Section */}
       <AboutHero>
         <Container>
@@ -609,30 +624,35 @@ const About: React.FC = () => {
             Services Offered
           </SectionTitle>
           
-          <ServicesGrid>
-            {servicesData.map((service, index) => (
-              <ServiceCard
-                key={service.title}
-                as={motion.div}
-                initial={{ opacity: 0, y: 30 }}
-                whileInView={{ opacity: 1, y: 0 }}
-                transition={{ duration: 0.6, delay: index * 0.1 }}
-                viewport={{ once: true }}
-              >
-                <ServiceIcon>{service.icon}</ServiceIcon>
-                <ServiceTitle>{service.title}</ServiceTitle>
-                <ServiceDescription>{service.description}</ServiceDescription>
-                <ServiceFeatures>
-                  {service.features.map((feature, featureIndex) => (
-                    <li key={featureIndex}>{feature}</li>
-                  ))}
-                </ServiceFeatures>
-              </ServiceCard>
-            ))}
-          </ServicesGrid>
+          <StaggerContainer staggerDelay={0.15}>
+            <ServicesGrid>
+              {servicesData.map((service, index) => (
+                <StaggerItem key={service.title} variant="scaleUp">
+                  <ServiceCard
+                    as={motion.div}
+                    whileHover={{ scale: 1.05 }}
+                  >
+                    <motion.div
+                      whileHover={{ rotate: [0, -10, 10, -10, 0], scale: 1.1 }}
+                      transition={{ duration: 0.5 }}
+                    >
+                      <ServiceIcon>{service.icon}</ServiceIcon>
+                    </motion.div>
+                    <ServiceTitle>{service.title}</ServiceTitle>
+                    <ServiceDescription>{service.description}</ServiceDescription>
+                    <ServiceFeatures>
+                      {service.features.map((feature, featureIndex) => (
+                        <li key={featureIndex}>{feature}</li>
+                      ))}
+                    </ServiceFeatures>
+                  </ServiceCard>
+                </StaggerItem>
+              ))}
+            </ServicesGrid>
+          </StaggerContainer>
         </Container>
       </ServicesSection>
-    </>
+    </PageTransition>
   );
 };
 
