@@ -413,7 +413,7 @@ const projectsData = [
     id: 2,
     title: 'BAR (Burn After Reading)',
     category: 'Desktop Application',
-    description: 'BAR (Burn After Reading) is a secure, offline desktop app for managing sensitive files. It scans for and handles .bar files across your devices, with no server dependencies to ensure your data stays local.',
+    description: 'BAR (Burn After Reading) is my project to showcase skills in security, cryptography, and logic design. It’s an offline desktop app for sensitive file management with encryption and self-destruction features.',
     longDescription: 'BAR (Burn After Reading) is a powerful desktop application designed for secure file management with advanced security features including self-destruction capabilities. Operating entirely offline with no server dependencies, BAR ensures your sensitive data never leaves your machine.',
     technologies: ['Python', 'PyQt5', 'AES-256-GCM', 'PBKDF2'],
     github: 'https://github.com/Mrtracker-new/BAR',
