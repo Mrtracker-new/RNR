@@ -118,6 +118,16 @@ const ProjectCard = styled(Card)`
   flex-direction: column;
   height: 600px;
   
+  @media (max-width: 768px) {
+    height: auto;
+    min-height: 520px;
+  }
+  
+  @media (max-width: 480px) {
+    height: auto;
+    min-height: 480px;
+  }
+  
   &:hover {
     transform: translateY(-10px);
     border-color: var(--accent-primary);
@@ -189,6 +199,10 @@ const ProjectContent = styled.div`
   flex: 1;
   display: flex;
   flex-direction: column;
+  
+  @media (max-width: 768px) {
+    flex: none;
+  }
 `;
 
 const ProjectTitle = styled.h3`
@@ -207,6 +221,11 @@ const ProjectDescription = styled.p`
   -webkit-box-orient: vertical;
   overflow: hidden;
   height: 72px;
+  
+  @media (max-width: 768px) {
+    height: auto;
+    min-height: 72px;
+  }
 `;
 
 const ProjectTech = styled.div`
@@ -217,6 +236,11 @@ const ProjectTech = styled.div`
   height: 32px;
   align-items: flex-start;
   overflow: hidden;
+  
+  @media (max-width: 768px) {
+    height: auto;
+    min-height: 32px;
+  }
 `;
 
 const TechTag = styled.span`
