@@ -123,6 +123,11 @@ user_data/
 # SECURITY_AUDIT.md
 # WARP.md
 
+# Performance Optimization Documentation
+OPTIMIZATION_SUMMARY.md
+PERFORMANCE_IMPROVEMENTS.md
+QUICK_REFERENCE.md
+
 # Debug Files
 npm-debug.log*
 yarn-debug.log*

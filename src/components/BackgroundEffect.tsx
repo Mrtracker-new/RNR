@@ -210,8 +210,9 @@ const BackgroundEffect: React.FC = () => {
     { size: 80, color: 'rgba(100, 255, 218, 0.05)', x: '50%', y: '30%', duration: 22 }
   ];
 
-  // Restore particle count for more life
-  const particleCount = isMobile ? 8 : prefersReducedMotion ? 0 : 15;
+  // Optimized particle count for better performance
+  // Reduced from 15 to 6 on desktop for 60% less animation overhead
+  const particleCount = isMobile ? 3 : prefersReducedMotion ? 0 : 6;
 
   return (
     <BackgroundContainer ref={containerRef}>

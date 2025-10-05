@@ -3,14 +3,32 @@
   <head>
     <meta charset="utf-8" />
     <link rel="icon" href="%PUBLIC_URL%/favicon.ico" />
-    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    
+    <!-- Viewport and Display Meta Tags -->
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=5, viewport-fit=cover" />
     <meta name="theme-color" content="#64ffda" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    
+    <!-- Performance Optimization Meta Tags -->
+    <meta http-equiv="x-dns-prefetch-control" content="on" />
+    <meta name="format-detection" content="telephone=no" />
+    <meta name="mobile-web-app-capable" content="yes" />
+    <meta name="apple-mobile-web-app-capable" content="yes" />
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
     
     <!-- Performance optimizations -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link rel="dns-prefetch" href="https://fonts.googleapis.com">
     <link rel="dns-prefetch" href="https://fonts.gstatic.com">
+    
+    <!-- Optimized font loading: Async load with fallback for critical fonts -->
+    <link rel="preload" href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" as="style" onload="this.onload=null;this.rel='stylesheet'">
+    <link rel="preload" href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500;600&display=swap" as="style" onload="this.onload=null;this.rel='stylesheet'">
+    <noscript>
+      <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap">
+      <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500;600&display=swap">
+    </noscript>
     
     <!-- Prevent FOUC -->
     <style>
@@ -26,10 +44,40 @@
         min-height: 100vh;
       }
     </style>
+    <!-- SEO Meta Tags -->
     <meta
       name="description"
       content="Rolan Lobo - Full Stack Developer & Software Engineer Portfolio. Showcasing modern web development, desktop applications, and innovative software solutions."
     />
+    <meta name="keywords" content="Rolan Lobo, Full Stack Developer, Software Engineer, React, Python, Node.js, Portfolio, Web Development, Freelancer" />
+    <meta name="author" content="Rolan Lobo" />
+    <meta name="robots" content="index, follow" />
+    <meta name="language" content="English" />
+    <meta name="revisit-after" content="7 days" />
+    <meta name="rating" content="general" />
+    
+    <!-- Open Graph / Facebook Meta Tags -->
+    <meta property="og:type" content="website" />
+    <meta property="og:url" content="%PUBLIC_URL%/" />
+    <meta property="og:title" content="Rolan Lobo - Full Stack Developer & Software Engineer" />
+    <meta property="og:description" content="Full Stack Developer & Freelancer specializing in modern web applications, desktop software, and security-focused solutions." />
+    <meta property="og:image" content="%PUBLIC_URL%/logo192.png" />
+    <meta property="og:image:width" content="192" />
+    <meta property="og:image:height" content="192" />
+    <meta property="og:site_name" content="Rolan Lobo Portfolio" />
+    <meta property="og:locale" content="en_US" />
+    
+    <!-- Twitter Card Meta Tags -->
+    <meta name="twitter:card" content="summary_large_image" />
+    <meta name="twitter:url" content="%PUBLIC_URL%/" />
+    <meta name="twitter:title" content="Rolan Lobo - Full Stack Developer & Software Engineer" />
+    <meta name="twitter:description" content="Full Stack Developer & Freelancer specializing in modern web applications, desktop software, and security-focused solutions." />
+    <meta name="twitter:image" content="%PUBLIC_URL%/logo192.png" />
+    <meta name="twitter:image:alt" content="Rolan Lobo Portfolio Logo" />
+    <!-- Security Meta Tags -->
+    <meta name="referrer" content="strict-origin-when-cross-origin" />
+    <meta http-equiv="Content-Security-Policy" content="upgrade-insecure-requests" />
+    
     <link rel="apple-touch-icon" href="%PUBLIC_URL%/logo192.png" />
     <!--
       manifest.json provides metadata used when your web app is installed on a

@@ -1,3 +1,2 @@
-/* Custom fonts can be imported here with optimizations */
-@import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap');
-@import url('https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500;600&display=swap');
+/* Fonts are now loaded via preload in index.html for better performance */
+/* This prevents render-blocking and improves First Contentful Paint (FCP) */
