@@ -12,6 +12,7 @@ import { StaggerContainer, StaggerItem } from '../components/ScrollReveal';
 import invisioVaultDesktopImg from '../assets/images/InvisioVault_Suit.png';
 import barLogoImg from '../assets/images/BAR_logo.png';
 import sortifyImg from '../assets/images/Sortify.jpg';
+import ytDownloaderImg from '../assets/images/YT.png';
 import linkNestImg from '../assets/images/LinkNest.png';
 import contactManagerImg from '../assets/images/Contact_Manager.png';
 
@@ -454,13 +455,15 @@ const projectsData = [
     id: 5,
     title: 'YT-Downloader',
     category: 'Web Application',
-    description: 'A modern YouTube video/audio downloader web application with theme support, preview functionality, and download management.',
-    longDescription: 'A modern and user-friendly YouTube video and audio downloader web application featuring both dark and light themes, video preview functionality, and advanced download management with progress tracking, real-time speed monitoring, and resume/pause capabilities.',
-    technologies: ['Python', 'JavaScript', 'HTML', 'CSS'],
+    description: 'A simple app to download YouTube videos or audio using React, Node.js, and yt-dlp.',
+    longDescription: 'A simple full-stack web app to download YouTube videos or audio. Built with React, Node.js, and yt-dlp, it lets you paste a link, choose quality, and download instantly with a clean Material-UI interface.',
+    technologies: ['React', 'Node.js', 'yt-dlp'],
     github: 'https://github.com/Mrtracker-new/YT-Downloader',
+    liveDemo:'https://yt-downloader-frontend-aa2k.onrender.com/',
     featured: false,
     icon: '📺',
-    bgColor: '#000000'
+    bgColor: '#000000',
+    image: ytDownloaderImg
   },
   {
     id: 6,
