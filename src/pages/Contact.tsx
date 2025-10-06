@@ -4,6 +4,7 @@ import { motion } from 'framer-motion';
 import { Container, Section, Grid, Card, Button, Badge } from '../styles/GlobalStyle';
 import SEO from '../components/SEO';
 import PageTransition from '../components/PageTransition';
+import FAQSchema from '../components/FAQSchema';
 
 const ContactHero = styled(Section)`
   padding-top: 140px;
@@ -397,6 +398,7 @@ const Contact: React.FC = () => {
         description="Get in touch with Rolan Lobo for freelance projects, collaboration, or software development inquiries. Available for hire."
         url="https://rolan-rnr.netlify.app/contact"
       />
+      <FAQSchema />
       <ContactHero>
         <Container>
           <motion.div

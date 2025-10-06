@@ -459,6 +459,16 @@ const Home: React.FC = () => {
               <StatusBadges variants={itemVariants}>
                 <Badge variant="success">✅ Available for projects</Badge>
                 <Badge variant="info">🚀 Freelancer</Badge>
+                <Badge 
+                  as="a" 
+                  href="https://rnr-still-figuring-things-out.hashnode.dev/" 
+                  target="_blank" 
+                  rel="noopener noreferrer"
+                  variant="info"
+                  style={{ cursor: 'pointer', textDecoration: 'none' }}
+                >
+                  📝 Check out my blog
+                </Badge>
               </StatusBadges>
 
               <LocationInfo variants={itemVariants}>

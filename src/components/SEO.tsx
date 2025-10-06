@@ -66,6 +66,7 @@ const SEO: React.FC<SEOProps> = ({
           sameAs: [
             'https://github.com/Mrtracker-new',
             'https://www.linkedin.com/in/rolan-lobo-93368a239/',
+            'https://rnr-still-figuring-things-out.hashnode.dev/'
           ],
           jobTitle: 'Full Stack Developer',
           worksFor: {

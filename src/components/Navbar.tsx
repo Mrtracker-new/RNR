@@ -202,6 +202,7 @@ const navItems = [
   { path: '/', label: 'Home' },
   { path: '/about', label: 'About' },
   { path: '/projects', label: 'Projects' },
+  { path: 'https://rnr-still-figuring-things-out.hashnode.dev/', label: 'Blog', external: true },
   { path: '/contact', label: 'Contact' }
 ];
 
@@ -250,13 +251,36 @@ const Navbar: React.FC = () => {
 
         <NavLinks>
           {navItems.map(item => (
-            <NavLink
-              key={item.path}
-              to={item.path}
-              active={location.pathname === item.path}
-            >
-              {item.label}
-            </NavLink>
+            item.external ? (
+              <a
+                key={item.path}
+                href={item.path}
+                target="_blank"
+                rel="noopener noreferrer"
+                style={{
+                  position: 'relative',
+                  padding: 'var(--spacing-2) var(--spacing-3)',
+                  fontWeight: 'var(--font-medium)',
+                  fontSize: 'var(--text-sm)',
+                  color: 'var(--dark-400)',
+                  textDecoration: 'none',
+                  transition: 'var(--transition-fast)',
+                  borderRadius: 'var(--radius-sm)'
+                }}
+                onMouseEnter={(e) => e.currentTarget.style.color = 'var(--dark-200)'}
+                onMouseLeave={(e) => e.currentTarget.style.color = 'var(--dark-400)'}
+              >
+                {item.label} ↗
+              </a>
+            ) : (
+              <NavLink
+                key={item.path}
+                to={item.path}
+                active={location.pathname === item.path}
+              >
+                {item.label}
+              </NavLink>
+            )
           ))}
         </NavLinks>
 
@@ -280,14 +304,36 @@ const Navbar: React.FC = () => {
             transition={{ duration: 0.3 }}
           >
             {navItems.map(item => (
-              <MobileNavLink
-                key={item.path}
-                to={item.path}
-                active={location.pathname === item.path}
-                onClick={closeMobileMenu}
-              >
-                {item.label}
-              </MobileNavLink>
+              item.external ? (
+                <a
+                  key={item.path}
+                  href={item.path}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  onClick={closeMobileMenu}
+                  style={{
+                    display: 'block',
+                    padding: 'var(--spacing-3) var(--spacing-6)',
+                    fontWeight: 'var(--font-medium)',
+                    fontSize: 'var(--text-sm)',
+                    color: 'var(--dark-400)',
+                    textDecoration: 'none',
+                    transition: 'var(--transition-fast)',
+                    borderLeft: '2px solid transparent'
+                  }}
+                >
+                  {item.label} ↗
+                </a>
+              ) : (
+                <MobileNavLink
+                  key={item.path}
+                  to={item.path}
+                  active={location.pathname === item.path}
+                  onClick={closeMobileMenu}
+                >
+                  {item.label}
+                </MobileNavLink>
+              )
             ))}
           </MobileMenu>
         )}

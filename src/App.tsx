@@ -8,6 +8,7 @@ import { FullScreenLoading } from './components/LoadingSpinner';
 import ScrollToTop from './components/ScrollToTop';
 import CursorEffect from './components/CursorEffect';
 import ExitIntentPopup from './components/ExitIntentPopup';
+import Breadcrumb from './components/Breadcrumb';
 
 // Lazy load pages for code splitting and better performance
 const Home = lazy(() => import('./pages/Home'));
@@ -54,6 +55,7 @@ function App() {
       <BackgroundEffect />
       <CursorEffect />
       <ExitIntentPopup />
+      <Breadcrumb />
       <Navbar />
       <Suspense fallback={
         <FullScreenLoading 

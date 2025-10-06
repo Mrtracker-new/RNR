@@ -37,14 +37,17 @@
 
 ### 🧭 Navigation
 - **Smart Navbar**: Fixed navigation with scroll progress indicator
+- **Blog Link**: Direct link to Hashnode blog in navigation (opens in new tab)
 - **Mobile Menu**: Hamburger menu with smooth animations for mobile devices
 - **Active States**: Visual indicators for current page and hover states
+- **External Link Indicators**: Visual arrow indicators for external links
 
 ### 📱 Pages & Sections
-- **Home**: Hero section with animated elements, tech stack display, and call-to-action buttons
-- **About**: Personal story, journey timeline, skills with animated progress bars, and services offered
+- **Home**: Hero section with animated elements, tech stack display, blog badge, and call-to-action buttons
+- **About**: Personal story, journey timeline, skills with animated progress bars, and services offered (including tech writing/blogging)
 - **Projects**: Interactive project showcase with filtering, search, and detailed modals
 - **Contact**: Working contact form with Netlify integration and social links
+- **Blog**: External integration with Hashnode blog platform
 
 ### 🎯 Advanced Features
 - **⚡ Code Splitting**: React.lazy loading for all routes (5 separate chunks)
@@ -353,6 +356,7 @@ This project is open source and available under the [MIT License](LICENSE).
 **Rolan Lobo** - Full Stack Developer & Software Engineer
 
 - 🌐 **Portfolio**: [rolan-rnr.netlify.app](https://rolan-rnr.netlify.app/)
+- 📝 **Blog**: [rnr-still-figuring-things-out.hashnode.dev](https://rnr-still-figuring-things-out.hashnode.dev/)
 - 📧 **Email**: rolanlobo901@gmail.com  
 - 💼 **LinkedIn**: [rolan-lobo](https://www.linkedin.com/in/rolan-lobo-93368a239/)
 - 🐙 **GitHub**: [@Mrtracker-new](https://github.com/Mrtracker-new)

@@ -476,6 +476,17 @@ const servicesData = [
       'Data privacy solutions',
       'Steganography applications'
     ]
+  },
+  {
+    icon: '📝',
+    title: 'Tech Writing & Blogging',
+    description: 'Sharing insights, experiences, and learnings from my journey in tech.',
+    features: [
+      'Development tutorials',
+      'Personal tech journey',
+      'Problem-solving insights',
+      'Beginner-friendly content'
+    ]
   }
 ];
 
