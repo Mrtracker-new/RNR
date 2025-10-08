@@ -515,6 +515,7 @@ const About: React.FC = () => {
       <SEO
         title="About Rolan Lobo - Full Stack Developer"
         description="Learn about Rolan Lobo, an aspiring software engineer and freelancer from Yellapur, India. Journey through education, work experience, skills, and services offered."
+        image="https://rolan-rnr.netlify.app/about-rolan-lobo.jpg"
         url="https://rolan-rnr.netlify.app/about"
       />
       {/* Hero Section */}

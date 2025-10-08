@@ -19,7 +19,7 @@ const SEO: React.FC<SEOProps> = ({
   type = 'website'
 }) => {
   const siteName = 'Rolan Lobo Portfolio';
-  const twitterHandle = '@YourTwitterHandle'; // Update with your Twitter handle
+  const twitterHandle = '@RolanLobo4';
 
   return (
     <Helmet>
@@ -54,7 +54,7 @@ const SEO: React.FC<SEOProps> = ({
       <meta name="revisit-after" content="7 days" />
       <meta name="theme-color" content="#64ffda" />
 
-      {/* Structured Data (JSON-LD) */}
+      {/* Structured Data (JSON-LD) - Person Schema */}
       <script type="application/ld+json">
         {JSON.stringify({
           '@context': 'https://schema.org',
@@ -93,6 +93,71 @@ const SEO: React.FC<SEOProps> = ({
             'Software Engineering',
             'Cybersecurity',
             'Data Encryption'
+          ]
+        })}
+      </script>
+
+      {/* Structured Data (JSON-LD) - Organization Schema */}
+      <script type="application/ld+json">
+        {JSON.stringify({
+          '@context': 'https://schema.org',
+          '@type': 'Organization',
+          '@id': 'https://rolan-rnr.netlify.app/#organization',
+          name: 'RNR - Rolan Lobo Portfolio',
+          alternateName: 'RNR',
+          url: 'https://rolan-rnr.netlify.app/',
+          logo: {
+            '@type': 'ImageObject',
+            url: 'https://rolan-rnr.netlify.app/logo512.png',
+            width: 512,
+            height: 512
+          },
+          description: 'Full Stack Developer & Software Engineer specializing in modern web applications, desktop software, and security-focused solutions.',
+          foundingDate: '2023',
+          founder: {
+            '@type': 'Person',
+            name: 'Rolan Lobo'
+          },
+          address: {
+            '@type': 'PostalAddress',
+            addressLocality: 'Yellapur',
+            addressRegion: 'Karnataka',
+            addressCountry: 'IN'
+          },
+          contactPoint: {
+            '@type': 'ContactPoint',
+            email: 'rolanlobo901@gmail.com',
+            contactType: 'Customer Service',
+            availableLanguage: ['English', 'Hindi', 'Kannada']
+          },
+          sameAs: [
+            'https://github.com/Mrtracker-new',
+            'https://www.linkedin.com/in/rolan-lobo-93368a239/',
+            'https://rnr-still-figuring-things-out.hashnode.dev/'
+          ],
+          areaServed: {
+            '@type': 'Place',
+            name: 'Worldwide'
+          },
+          serviceType: [
+            'Web Development',
+            'Desktop Application Development',
+            'UI/UX Design',
+            'Software Engineering',
+            'Cybersecurity Solutions'
+          ],
+          knowsAbout: [
+            'React',
+            'Python',
+            'Node.js',
+            'TypeScript',
+            'Flask',
+            'MongoDB',
+            'Full Stack Development',
+            'Desktop Applications',
+            'Data Security',
+            'AES Encryption',
+            'Steganography'
           ]
         })}
       </script>

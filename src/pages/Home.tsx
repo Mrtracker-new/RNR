@@ -427,6 +427,7 @@ const Home: React.FC = () => {
       <SEO
         title="Rolan Lobo - Full Stack Developer & Software Engineer"
         description="Full Stack Developer & Freelancer specializing in modern web applications, desktop software, and security-focused solutions. Expert in React, Python, Node.js, and more."
+        image="https://rolan-rnr.netlify.app/rolan-lobo-home.jpg"
         url="https://rolan-rnr.netlify.app/"
       />
       <HeroSection>
