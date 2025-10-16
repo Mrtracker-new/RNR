@@ -513,8 +513,9 @@ const About: React.FC = () => {
   return (
     <PageTransition>
       <SEO
-        title="About Rolan Lobo - Full Stack Developer"
-        description="Learn about Rolan Lobo, an aspiring software engineer and freelancer from Yellapur, India. Journey through education, work experience, skills, and services offered."
+        title="About Rolan Lobo - Full Stack Developer & Software Engineer from India"
+        description="Learn about Rolan Lobo, a passionate software engineer and freelancer from Yellapur, Karnataka, India. Specializing in React, Python, Node.js, TypeScript, and React Native development. Journey through education, work experience, skills in web development, desktop applications, security tools, and professional services offered. Creator of innovative projects like YouTube Downloader, InvisioVault, BAR, and more."
+        keywords="About Rolan Lobo, Software Engineer India, Full Stack Developer Yellapur, Karnataka Developer, Freelance Web Developer, React Developer India, Python Developer, Desktop Application Developer, Security Software Developer, Software Engineer Biography, Developer Portfolio, Indian Software Developer"
         image="https://rolan-rnr.netlify.app/about-rolan-lobo.jpg"
         url="https://rolan-rnr.netlify.app/about"
       />

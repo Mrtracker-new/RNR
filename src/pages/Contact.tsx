@@ -394,8 +394,9 @@ const Contact: React.FC = () => {
   return (
     <PageTransition>
       <SEO
-        title="Contact Rolan Lobo - Get In Touch"
-        description="Get in touch with Rolan Lobo for freelance projects, collaboration, or software development inquiries. Available for hire."
+        title="Contact Rolan Lobo - Hire Full Stack Developer | Freelance Web & Software Development"
+        description="Get in touch with Rolan Lobo for freelance web development, desktop applications, React projects, Python development, and custom software solutions. Available for hire for YouTube video tools, security applications, file management systems, and more. Fast response, competitive rates, quality work guaranteed."
+        keywords="Contact Rolan Lobo, Hire Full Stack Developer, Freelance Web Developer, Hire React Developer, Hire Python Developer, Software Development Services, Custom Web Applications, Desktop Software Development, Freelance Developer India, Web Developer for Hire, Freelance Programmer, Software Engineering Services"
         url="https://rolan-rnr.netlify.app/contact"
       />
       <FAQSchema />

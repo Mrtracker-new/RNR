@@ -12,8 +12,8 @@ interface SEOProps {
 
 const SEO: React.FC<SEOProps> = ({
   title = 'Rolan Lobo - Full Stack Developer & Software Engineer',
-  description = 'Full Stack Developer & Freelancer specializing in modern web applications, desktop software, and security-focused solutions. Expert in React, Python, Node.js, and more.',
-  keywords = 'Full Stack Developer, Web Developer, Python Developer, React Developer, Software Engineer, Freelancer, Desktop Applications, Security Applications, Steganography, Rolan Lobo, RNR',
+  description = 'Full Stack Developer & Freelancer specializing in modern web applications, desktop software, and security-focused solutions. Creator of YouTube Downloader, file encryption tools, steganography apps, and more. Expert in React, Python, Node.js, TypeScript, and React Native.',
+  keywords = 'Full Stack Developer, Web Developer, Python Developer, React Developer, Software Engineer, Freelancer, YouTube Downloader, Video Downloader, YouTube to MP3, File Encryption Software, Steganography, Desktop Applications, Security Applications, File Manager, Contact Manager, Accessibility Software, React Native Apps, Android Apps, InvisioVault, BAR, Sortify, Rolan Lobo, RNR',
   image = 'https://rolan-rnr.netlify.app/logo512.png',
   url = 'https://rolan-rnr.netlify.app/',
   type = 'website'

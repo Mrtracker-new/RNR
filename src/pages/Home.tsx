@@ -425,8 +425,9 @@ const Home: React.FC = () => {
   return (
     <PageTransition>
       <SEO
-        title="Rolan Lobo - Full Stack Developer & Software Engineer"
-        description="Full Stack Developer & Freelancer specializing in modern web applications, desktop software, and security-focused solutions. Expert in React, Python, Node.js, and more."
+        title="Rolan Lobo - Full Stack Developer & Software Engineer | YouTube Downloader, Security Tools"
+        description="Full Stack Developer & Freelancer from India specializing in modern web applications, desktop software, and security-focused solutions. Creator of YouTube Downloader (YT-Downloader), file encryption tools (InvisioVault, BAR), and more. Expert in React, Python, Node.js, TypeScript, and React Native. Available for freelance projects."
+        keywords="Rolan Lobo, Full Stack Developer, Software Engineer, Freelance Developer, YouTube Downloader, YT-Downloader, File Encryption Software, Steganography, InvisioVault, BAR, Sortify, React Developer, Python Developer, Node.js, TypeScript, React Native, Web Development, Desktop Applications, Security Applications, Hire Developer, India"
         image="https://rolan-rnr.netlify.app/rolan-lobo-home.jpg"
         url="https://rolan-rnr.netlify.app/"
       />
