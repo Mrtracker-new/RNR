@@ -394,9 +394,9 @@ const Contact: React.FC = () => {
   return (
     <PageTransition>
       <SEO
-        title="Contact Rolan Lobo - Hire Full Stack Developer | Freelance Web & Software Development"
-        description="Get in touch with Rolan Lobo for freelance web development, desktop applications, React projects, Python development, and custom software solutions. Available for hire for YouTube video tools, security applications, file management systems, and more. Fast response, competitive rates, quality work guaranteed."
-        keywords="Contact Rolan Lobo, Hire Full Stack Developer, Freelance Web Developer, Hire React Developer, Hire Python Developer, Software Development Services, Custom Web Applications, Desktop Software Development, Freelance Developer India, Web Developer for Hire, Freelance Programmer, Software Engineering Services"
+        title="Contact Rolan Lobo - Hire Freelance Full Stack Developer | Security & Web Development"
+        description="Hire Rolan Lobo - Freelance Full Stack Developer for web development, security applications, steganography tools, file encryption, React projects, Python/Flask development, and custom software solutions. Available for freelance projects: security tools (encryption, file hiding, polyglot files), web applications, desktop software, YouTube tools, and more. Fast response, competitive rates, quality work guaranteed."
+        keywords="Contact Rolan Lobo, Hire Full Stack Developer, Hire Freelance Developer, Freelance Web Developer India, Hire Security Developer, Hire Steganography Developer, Hire React Developer, Hire Python Developer, Hire Flask Developer, Freelance Software Developer, Custom Web Applications, Security Application Development, Desktop Software Development, Freelance Developer for Hire India, Web Developer for Hire, Freelance Programmer India, Software Development Services"
         url="https://rolan-rnr.netlify.app/contact"
       />
       <FAQSchema />
