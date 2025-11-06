@@ -10,6 +10,7 @@ import { StaggerContainer, StaggerItem } from '../components/ScrollReveal';
 
 // Import project images
 import invisioVaultDesktopImg from '../assets/images/InvisioVault_Suit.png';
+import invisioVaultWebImg from '../assets/images/InvisioVault.png';
 import barLogoImg from '../assets/images/BAR_logo.png';
 import sortifyImg from '../assets/images/Sortify.jpg';
 import ytDownloaderImg from '../assets/images/YT.png';
@@ -440,16 +441,17 @@ const projectsData = [
   },
   {
     id: 4,
-    title: 'InvisioVault (Web Version)',
+    title: 'InvisioVault',
     category: 'Web Application',
-    description: 'Free online steganography tool - Hide files in images securely using your browser. Web-based file hiding application with compression. Embed documents, photos, and files inside images online.',
-    longDescription: 'InvisioVault Web is a powerful online steganography tool that lets you hide any file type inside images directly in your browser. This free web application uses advanced compression algorithms to embed large files into smaller images without visible changes. Perfect for secure file sharing, digital watermarking, and privacy-focused file storage. No software installation required - works entirely in your web browser. Features include: hide files in images online, extract hidden files from images, support for all file types (documents, PDFs, photos, videos), advanced compression for space efficiency, secure client-side processing, mobile-friendly responsive design, and instant results. Built with Flask, Python, HTML, and CSS for reliable performance. Your privacy is protected - all processing happens securely without storing your files.',
-    technologies: ['Python', 'Flask', 'HTML5', 'CSS3', 'Steganography', 'Compression'],
+    description: 'Hide anything inside images, or create wild dual-format polyglot files — all in a slick React + Flask app. 🔐✨',
+    longDescription: 'InvisioVault is your secret-keeping Swiss Army knife! Hide files in images like a digital magician using steganography, OR go full inception mode with polyglot files that work as TWO formats at once. Built with a slick React frontend and Flask backend because we\'re fancy like that. 🎩✨',
+    technologies: ['React', 'Flask', 'Python', 'Steganography', 'AES-256', 'Polyglot Files'],
     github: 'https://github.com/Mrtracker-new/InvisioVault',
     liveDemo: 'https://invisio-vault.vercel.app/',
     featured: false,
     icon: '🌐',
-    bgColor: '#000000'
+    bgColor: '#000000',
+    image: invisioVaultWebImg
   },
   {
     id: 5,
@@ -679,9 +681,9 @@ const Projects: React.FC = () => {
   return (
     <PageTransition>
       <SEO
-        title="Projects - Rolan Lobo Portfolio | YouTube Downloader, Security Tools & More"
-        description="Explore my portfolio of innovative software projects: YT-Downloader (free YouTube video & audio downloader), InvisioVault (file encryption), BAR (secure file management), Sortify, and more web/desktop applications."
-        keywords="YouTube Downloader, Video Downloader, YouTube to MP3, Free YouTube Downloader, Desktop Applications, Web Development, Security Tools, File Encryption, InvisioVault, BAR, Sortify, React Projects, Python Projects, Node.js, Rolan Lobo"
+        title="Projects - Rolan Lobo Portfolio | Steganography, Security Tools & Web Apps"
+        description="Explore my portfolio of innovative software projects: InvisioVault (steganography & polyglot files), YT-Downloader (free YouTube video & audio downloader), BAR (secure file management), Sortify, and more full-stack web/desktop applications."
+        keywords="Steganography, Polyglot Files, Hide Files in Images, YouTube Downloader, Video Downloader, YouTube to MP3, File Encryption, Security Tools, InvisioVault, BAR, Sortify, React Projects, Python Projects, Flask, Full Stack Developer, Rolan Lobo"
         url="https://rolan-rnr.netlify.app/projects"
       />
       <ProjectsHero>
