@@ -425,9 +425,9 @@ const Home: React.FC = () => {
   return (
     <PageTransition>
       <SEO
-        title="Rolan Lobo - Full Stack Developer & Software Engineer | YouTube Downloader, Security Tools"
-        description="Full Stack Developer & Freelancer from India specializing in modern web applications, desktop software, and security-focused solutions. Creator of YouTube Downloader (YT-Downloader), file encryption tools (InvisioVault, BAR), and more. Expert in React, Python, Node.js, TypeScript, and React Native. Available for freelance projects."
-        keywords="Rolan Lobo, Full Stack Developer, Software Engineer, Freelance Developer, YouTube Downloader, YT-Downloader, File Encryption Software, Steganography, InvisioVault, BAR, Sortify, React Developer, Python Developer, Node.js, TypeScript, React Native, Web Development, Desktop Applications, Security Applications, Hire Developer, India"
+        title="Rolan Lobo - Full Stack Developer & Software Engineer | Freelance Web & Security Developer"
+        description="Freelance Full Stack Developer & Software Engineer from India specializing in security applications, steganography, polyglot files, web development, and desktop software. Creator of InvisioVault (hide files in images & create polyglot files), YT-Downloader (free YouTube video & MP3 downloader), BAR (file encryption with AES-256), Sortify, and more. Expert in React, Python, Flask, Node.js, TypeScript, React Native. Available for hire - freelance projects worldwide."
+        keywords="Rolan Lobo, Full Stack Developer, Software Engineer, Freelance Developer, Freelancer India, Hire Freelance Developer, Steganography Developer, Polyglot Files, Hide Files in Images, File Hiding App, YouTube Downloader, YT-Downloader, YouTube to MP3, File Encryption Software, AES Encryption, Cryptography, Security Applications, InvisioVault, BAR, Sortify, React Developer, Python Developer, Flask Developer, Node.js Developer, TypeScript, React Native, Web Development, Desktop Applications, Freelance Web Developer India, Hire Full Stack Developer"
         image="https://rolan-rnr.netlify.app/rolan-lobo-home.jpg"
         url="https://rolan-rnr.netlify.app/"
       />
