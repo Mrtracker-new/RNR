@@ -12,8 +12,8 @@ interface SEOProps {
 
 const SEO: React.FC<SEOProps> = ({
   title = 'Rolan Lobo - Full Stack Developer & Software Engineer',
-  description = 'Full Stack Developer & Freelancer specializing in modern web applications, desktop software, and security-focused solutions. Creator of YouTube Downloader, file encryption tools, steganography apps, and more. Expert in React, Python, Node.js, TypeScript, and React Native.',
-  keywords = 'Full Stack Developer, Web Developer, Python Developer, React Developer, Software Engineer, Freelancer, YouTube Downloader, Video Downloader, YouTube to MP3, File Encryption Software, Steganography, Desktop Applications, Security Applications, File Manager, Contact Manager, Accessibility Software, React Native Apps, Android Apps, InvisioVault, BAR, Sortify, Rolan Lobo, RNR',
+  description = 'Freelance Full Stack Developer & Software Engineer specializing in security applications, steganography, polyglot files, web development, and desktop software. Creator of InvisioVault (hide files in images & polyglot files), YouTube Downloader, file encryption tools, and more. Expert in React, Python, Flask, Node.js, TypeScript, and React Native. Available for freelance projects worldwide.',
+  keywords = 'Full Stack Developer, Software Engineer, Freelance Developer, Freelancer India, Web Developer, Python Developer, Flask Developer, React Developer, Steganography, Polyglot Files, Hide Files in Images, File Hiding, Cryptography, AES Encryption, YouTube Downloader, Video Downloader, YouTube to MP3, File Encryption Software, Security Applications, Desktop Applications, File Manager, Contact Manager, React Native Apps, Android Apps, InvisioVault, BAR, Sortify, Hire Freelance Developer, Rolan Lobo, RNR',
   image = 'https://rolan-rnr.netlify.app/logo512.png',
   url = 'https://rolan-rnr.netlify.app/',
   type = 'website'
@@ -92,7 +92,13 @@ const SEO: React.FC<SEOProps> = ({
             'Web Development',
             'Software Engineering',
             'Cybersecurity',
-            'Data Encryption'
+            'Data Encryption',
+            'Steganography',
+            'Polyglot Files',
+            'File Hiding',
+            'Cryptography',
+            'Security Applications',
+            'Freelance Development'
           ]
         })}
       </script>
@@ -157,7 +163,13 @@ const SEO: React.FC<SEOProps> = ({
             'Desktop Applications',
             'Data Security',
             'AES Encryption',
-            'Steganography'
+            'Steganography',
+            'Polyglot Files',
+            'File Hiding in Images',
+            'Cryptography',
+            'Security Applications',
+            'File Encryption',
+            'Freelance Development'
           ]
         })}
       </script>
