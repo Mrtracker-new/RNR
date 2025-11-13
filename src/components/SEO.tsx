@@ -75,7 +75,6 @@ const SEO: React.FC<SEOProps> = ({
           },
           address: {
             '@type': 'PostalAddress',
-            addressLocality: 'Yellapur',
             addressRegion: 'Karnataka',
             addressCountry: 'India'
           },
@@ -126,7 +125,6 @@ const SEO: React.FC<SEOProps> = ({
           },
           address: {
             '@type': 'PostalAddress',
-            addressLocality: 'Yellapur',
             addressRegion: 'Karnataka',
             addressCountry: 'IN'
           },
