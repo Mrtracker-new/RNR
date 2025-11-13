@@ -35,7 +35,7 @@ const FAQSchema: React.FC = () => {
         name: 'Where is Rolan Lobo located?',
         acceptedAnswer: {
           '@type': 'Answer',
-          text: 'I am based in Yellapur, Karnataka, India (IST timezone - UTC +5:30). I work remotely and collaborate with clients worldwide.'
+          text: 'I am based in Karnataka, India (IST timezone - UTC +5:30). I work remotely and collaborate with clients worldwide.'
         }
       },
       {
