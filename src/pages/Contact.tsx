@@ -594,7 +594,7 @@ const Contact: React.FC = () => {
                 <LocationDetails>
                   <p>
                     <span>🏠</span>
-                    <span><strong>Based in:</strong> Yellapur, Karnataka, India</span>
+                    <span><strong>Based in:</strong> Karnataka, India (IST)</span>
                   </p>
                   <p>
                     <span>🌍</span>
