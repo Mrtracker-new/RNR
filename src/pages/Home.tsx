@@ -475,9 +475,7 @@ const Home: React.FC = () => {
 
               <LocationInfo variants={itemVariants}>
                 <span>📍</span>
-                <span>Yellapur, Karnataka, India</span>
-                <span>•</span>
-                <span>IST Timezone</span>
+                <span>Karnataka, India (IST)</span>
               </LocationInfo>
 
               <LiveTimeDisplay variants={itemVariants}>
