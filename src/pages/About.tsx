@@ -514,8 +514,8 @@ const About: React.FC = () => {
     <PageTransition>
       <SEO
         title="About Rolan Lobo - Full Stack Developer & Software Engineer | Freelance Developer"
-        description="Learn about Rolan Lobo, a passionate freelance software engineer from Yellapur, Karnataka, India. Specializing in security applications (steganography, file encryption, polyglot files), web development (React, Flask), and desktop applications. Journey through education, work experience, skills, and professional freelance services. Creator of InvisioVault (hide files in images & polyglot files), YT-Downloader (YouTube downloader), BAR (file encryption), Sortify, and more innovative projects."
-        keywords="About Rolan Lobo, Software Engineer India, Full Stack Developer India, Freelance Developer India, Yellapur Karnataka Developer, Freelance Web Developer, Security Software Developer, Steganography Developer, Polyglot Files Developer, React Developer India, Python Developer India, Flask Developer, Desktop Application Developer, Freelance Programmer India, Software Engineer Biography, Developer Portfolio, Indian Software Developer"
+        description="Learn about Rolan Lobo, a passionate freelance software engineer from Karnataka, India. Specializing in security applications (steganography, file encryption, polyglot files), web development (React, Flask), and desktop applications. Journey through education, work experience, skills, and professional freelance services. Creator of InvisioVault (hide files in images & polyglot files), YT-Downloader (YouTube downloader), BAR (file encryption), Sortify, and more innovative projects."
+        keywords="About Rolan Lobo, Software Engineer India, Full Stack Developer India, Freelance Developer India, Karnataka Developer, Freelance Web Developer, Security Software Developer, Steganography Developer, Polyglot Files Developer, React Developer India, Python Developer India, Flask Developer, Desktop Application Developer, Freelance Programmer India, Software Engineer Biography, Developer Portfolio, Indian Software Developer"
         image="https://rolan-rnr.netlify.app/about-rolan-lobo.jpg"
         url="https://rolan-rnr.netlify.app/about"
       />
@@ -531,7 +531,7 @@ const About: React.FC = () => {
               About Me
             </HeroTitle>
             <HeroSubtitle variants={itemVariants}>
-              I'm Rolan, an aspiring software engineer and freelancer from Yellapur, India. 
+              I'm Rolan, an aspiring software engineer and freelancer from Karnataka, India. 
               I'm passionate about creating innovative, functional, and visually appealing digital solutions 
               that solve real-world problems.
             </HeroSubtitle>
