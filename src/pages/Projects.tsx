@@ -18,8 +18,14 @@ import linkNestImg from '../assets/images/LinkNest.png';
 import contactManagerImg from '../assets/images/Contact_Manager.png';
 
 const ProjectsHero = styled(Section)`
-  padding-top: 140px;
+  padding-top: 100px;
+  padding-bottom: 40px;
   text-align: center;
+  
+  @media (max-width: 768px) {
+    padding-top: 80px;
+    padding-bottom: 20px;
+  }
 `;
 
 const HeroTitle = styled(motion.h1)`
@@ -37,7 +43,7 @@ const HeroSubtitle = styled(motion.p)`
   font-size: var(--text-xl);
   color: var(--dark-400);
   max-width: 600px;
-  margin: 0 auto var(--spacing-16);
+  margin: 0 auto var(--spacing-10);
   line-height: 1.7;
 `;
 
@@ -45,7 +51,7 @@ const FilterSection = styled(motion.div)`
   display: flex;
   justify-content: center;
   gap: var(--spacing-4);
-  margin-bottom: var(--spacing-16);
+  margin-bottom: var(--spacing-8);
   flex-wrap: wrap;
 `;
 
@@ -83,64 +89,122 @@ const FilterButton = styled(motion.button)<{ active: boolean }>`
 const SearchContainer = styled(motion.div)`
   display: flex;
   justify-content: center;
-  margin-bottom: var(--spacing-16);
+  margin-bottom: var(--spacing-8);
 `;
 
 const SearchInput = styled.input`
   width: 100%;
-  max-width: 400px;
+  max-width: 500px;
   padding: var(--spacing-4) var(--spacing-6);
   font-size: var(--text-base);
-  border: 1px solid var(--dark-700);
+  border: 1px solid rgba(100, 255, 218, 0.2);
   border-radius: var(--radius-lg);
-  background: var(--dark-900);
+  background: rgba(30, 41, 59, 0.6);
+  backdrop-filter: blur(12px);
   color: var(--dark-100);
   transition: var(--transition-normal);
+  box-shadow: inset 0 2px 4px rgba(0, 0, 0, 0.2);
 
   &:focus {
     border-color: var(--accent-primary);
-    box-shadow: 0 0 0 1px var(--accent-primary);
+    box-shadow: 
+      0 0 0 3px rgba(100, 255, 218, 0.1),
+      inset 0 2px 4px rgba(0, 0, 0, 0.2);
+    background: rgba(30, 41, 59, 0.8);
+    outline: none;
   }
 
   &::placeholder {
     color: var(--dark-500);
   }
+  
+  @media (max-width: 640px) {
+    max-width: 100%;
+  }
 `;
 
 const ProjectsGrid = styled(Grid)`
-  grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
-  gap: var(--spacing-8);
+  grid-template-columns: repeat(auto-fill, minmax(min(100%, 380px), 1fr));
+  gap: clamp(1.5rem, 3vw, 2.5rem);
+  grid-auto-rows: 1fr;
+  
+  @media (max-width: 640px) {
+    grid-template-columns: 1fr;
+    gap: var(--spacing-6);
+    grid-auto-rows: auto;
+  }
+  
+  @media (min-width: 641px) and (max-width: 1024px) {
+    grid-template-columns: repeat(auto-fill, minmax(min(100%, 340px), 1fr));
+    gap: var(--spacing-6);
+  }
+  
+  @media (min-width: 1536px) {
+    grid-template-columns: repeat(auto-fill, minmax(min(100%, 360px), 1fr));
+  }
 `;
 
 const ProjectCard = styled(Card)`
   position: relative;
   overflow: hidden;
-  transition: var(--transition-normal);
   display: flex;
   flex-direction: column;
-  height: 600px;
+  height: 100%;
+  min-height: 560px;
+  cursor: pointer;
+  background: rgba(30, 41, 59, 0.4);
+  backdrop-filter: blur(16px);
+  border: 1px solid rgba(100, 255, 218, 0.08);
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
   
-  @media (max-width: 768px) {
-    height: auto;
-    min-height: 520px;
+  @media (max-width: 640px) {
+    min-height: auto;
   }
   
-  @media (max-width: 480px) {
-    height: auto;
-    min-height: 480px;
+  &::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: linear-gradient(135deg, 
+      rgba(100, 255, 218, 0.02) 0%, 
+      rgba(139, 92, 246, 0.02) 100%);
+    opacity: 0;
+    transition: opacity 0.3s ease;
+    pointer-events: none;
+    z-index: 0;
   }
   
   &:hover {
-    transform: translateY(-10px);
-    border-color: var(--accent-primary);
-    box-shadow: 0 30px 60px rgba(100, 255, 218, 0.15);
+    transform: translateY(-6px);
+    border-color: rgba(100, 255, 218, 0.4);
+    box-shadow: 0 20px 40px rgba(0, 0, 0, 0.4);
+    background: rgba(30, 41, 59, 0.55);
+    
+    &::before {
+      opacity: 0.5;
+    }
+  }
+  
+  @media (max-width: 768px) {
+    &:hover {
+      transform: translateY(-4px);
+      box-shadow: 0 15px 30px rgba(0, 0, 0, 0.3);
+      border-color: rgba(100, 255, 218, 0.25);
+    }
+  }
+  
+  @media (max-width: 640px) {
+    backdrop-filter: blur(12px);
   }
 `;
 
 const ProjectImageContainer = styled.div<{ bgColor: string }>`
   width: 100%;
-  height: 240px;
-  background: ${props => props.bgColor};
+  aspect-ratio: 16 / 9;
+  background: linear-gradient(135deg, ${props => props.bgColor} 0%, rgba(0, 0, 0, 0.8) 100%);
   border-radius: var(--radius-lg);
   margin-bottom: var(--spacing-6);
   position: relative;
@@ -148,25 +212,47 @@ const ProjectImageContainer = styled.div<{ bgColor: string }>`
   display: flex;
   align-items: center;
   justify-content: center;
-
-  @media (max-width: 768px) {
-    height: 200px;
+  
+  &::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background: radial-gradient(circle at 50% 50%, 
+      rgba(100, 255, 218, 0.05) 0%, 
+      transparent 70%);
+    z-index: 1;
+    pointer-events: none;
   }
-
-  @media (max-width: 480px) {
-    height: 180px;
-  }
-
+  
   &::after {
     content: '';
     position: absolute;
-    top: 0;
-    left: 0;
-    right: 0;
-    bottom: 0;
-    background: linear-gradient(135deg, transparent 0%, rgba(0, 0, 0, 0.2) 100%);
+    inset: 0;
+    background: linear-gradient(135deg, 
+      rgba(100, 255, 218, 0.05) 0%, 
+      rgba(139, 92, 246, 0.05) 100%);
     z-index: 1;
     pointer-events: none;
+    opacity: 0;
+    transition: opacity 0.4s ease;
+  }
+  
+  ${ProjectCard}:hover & {
+    &::after {
+      opacity: 1;
+    }
+    
+    img {
+      transform: scale(1.08);
+    }
+  }
+  
+  img {
+    transition: transform 0.6s cubic-bezier(0.4, 0, 0.2, 1);
+  }
+  
+  @media (max-width: 640px) {
+    aspect-ratio: 4 / 3;
   }
 `;
 
@@ -186,6 +272,12 @@ const ProjectBadge = styled(Badge)`
   top: var(--spacing-4);
   left: var(--spacing-4);
   z-index: 2;
+  backdrop-filter: blur(12px);
+  background: rgba(30, 41, 59, 0.8);
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.3);
+  border: 1px solid rgba(100, 255, 218, 0.3);
+  font-weight: var(--font-semibold);
+  letter-spacing: 0.025em;
 `;
 
 const FeaturedBadge = styled(Badge)`
@@ -193,6 +285,11 @@ const FeaturedBadge = styled(Badge)`
   top: var(--spacing-4);
   right: var(--spacing-4);
   z-index: 2;
+  backdrop-filter: blur(12px);
+  background: linear-gradient(135deg, rgba(34, 197, 94, 0.2), rgba(34, 197, 94, 0.1));
+  box-shadow: 0 2px 8px rgba(34, 197, 94, 0.25);
+  border: 1px solid rgba(34, 197, 94, 0.4);
+  font-weight: var(--font-semibold);
 `;
 
 const ProjectContent = styled.div`
@@ -201,33 +298,34 @@ const ProjectContent = styled.div`
   flex: 1;
   display: flex;
   flex-direction: column;
-  
-  @media (max-width: 768px) {
-    flex: none;
-  }
+  min-height: 0;
 `;
 
 const ProjectTitle = styled.h3`
-  font-size: var(--text-xl);
-  color: var(--dark-100);
+  font-size: clamp(1.125rem, 2vw, 1.25rem);
+  color: var(--dark-50);
   margin-bottom: var(--spacing-3);
-  font-weight: var(--font-semibold);
+  font-weight: var(--font-bold);
+  letter-spacing: -0.025em;
+  line-height: 1.3;
+  transition: color 0.3s ease;
+  
+  ${ProjectCard}:hover & {
+    color: var(--accent-primary);
+  }
 `;
 
 const ProjectDescription = styled.p`
-  color: var(--dark-400);
-  line-height: 1.6;
+  color: var(--dark-300);
+  line-height: 1.65;
   margin-bottom: var(--spacing-6);
+  font-size: clamp(0.875rem, 1.5vw, 0.9375rem);
   display: -webkit-box;
   -webkit-line-clamp: 3;
   -webkit-box-orient: vertical;
   overflow: hidden;
-  height: 72px;
-  
-  @media (max-width: 768px) {
-    height: auto;
-    min-height: 72px;
-  }
+  flex-shrink: 0;
+  height: 4.95em;
 `;
 
 const ProjectTech = styled.div`
@@ -235,24 +333,34 @@ const ProjectTech = styled.div`
   flex-wrap: wrap;
   gap: var(--spacing-2);
   margin-bottom: var(--spacing-6);
-  height: 32px;
   align-items: flex-start;
-  overflow: hidden;
-  
-  @media (max-width: 768px) {
-    height: auto;
-    min-height: 32px;
-  }
+  min-height: 4.5rem;
+  max-height: 5rem;
+  overflow: visible;
 `;
 
 const TechTag = styled.span`
-  background: rgba(139, 92, 246, 0.1);
-  color: var(--accent-secondary);
+  background: linear-gradient(135deg, 
+    rgba(139, 92, 246, 0.15), 
+    rgba(100, 255, 218, 0.1));
+  color: var(--accent-primary);
   padding: var(--spacing-1) var(--spacing-3);
-  border-radius: var(--radius-sm);
+  border-radius: var(--radius-md);
   font-size: var(--text-xs);
-  font-weight: var(--font-medium);
-  border: 1px solid rgba(139, 92, 246, 0.3);
+  font-weight: var(--font-semibold);
+  border: 1px solid rgba(100, 255, 218, 0.25);
+  backdrop-filter: blur(8px);
+  transition: all 0.3s ease;
+  letter-spacing: 0.025em;
+  
+  &:hover {
+    transform: scale(1.02);
+    border-color: var(--accent-primary);
+    background: linear-gradient(135deg, 
+      rgba(139, 92, 246, 0.25), 
+      rgba(100, 255, 218, 0.2));
+    box-shadow: 0 2px 8px rgba(100, 255, 218, 0.15);
+  }
 `;
 
 const ProjectActions = styled.div`
@@ -260,6 +368,7 @@ const ProjectActions = styled.div`
   gap: var(--spacing-3);
   align-items: center;
   margin-top: auto;
+  padding-top: var(--spacing-2);
 `;
 
 const ActionButton = styled(Button)`
@@ -269,6 +378,31 @@ const ActionButton = styled(Button)`
   align-items: center;
   justify-content: center;
   gap: var(--spacing-2);
+  font-weight: var(--font-semibold);
+  position: relative;
+  overflow: hidden;
+  
+  &::before {
+    content: '';
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    width: 0;
+    height: 0;
+    border-radius: 50%;
+    background: rgba(255, 255, 255, 0.1);
+    transform: translate(-50%, -50%);
+    transition: width 0.6s, height 0.6s;
+  }
+  
+  &:hover::before {
+    width: 300px;
+    height: 300px;
+  }
+  
+  &:active {
+    transform: scale(0.96);
+  }
 `;
 
 // Modal Styles
@@ -278,28 +412,38 @@ const ModalOverlay = styled(motion.div)`
   left: 0;
   right: 0;
   bottom: 0;
-  background: rgba(0, 0, 0, 0.8);
-  backdrop-filter: blur(10px);
+  background: rgba(0, 0, 0, 0.85);
+  backdrop-filter: blur(20px);
   display: flex;
   align-items: center;
   justify-content: center;
   z-index: 1000;
   padding: var(--spacing-4);
   overflow-y: auto;
+  
+  @media (max-width: 640px) {
+    align-items: flex-start;
+    padding: 0;
+  }
 `;
 
 const ModalContent = styled(motion.div)`
-  background: rgba(30, 41, 59, 0.95);
-  backdrop-filter: blur(20px);
-  border: 1px solid var(--dark-700);
+  background: linear-gradient(135deg, 
+    rgba(30, 41, 59, 0.98) 0%, 
+    rgba(15, 23, 42, 0.98) 100%);
+  backdrop-filter: blur(30px);
+  border: 1px solid rgba(100, 255, 218, 0.2);
   border-radius: var(--radius-2xl);
   padding: var(--spacing-8);
-  max-width: 800px;
+  max-width: 900px;
   width: 100%;
   max-height: 90vh;
   overflow-y: auto;
   position: relative;
-  box-shadow: var(--shadow-xl);
+  box-shadow: 
+    0 25px 50px rgba(0, 0, 0, 0.5),
+    0 0 0 1px rgba(100, 255, 218, 0.1),
+    inset 0 1px 0 rgba(255, 255, 255, 0.1);
   
   @media (max-width: 1024px) {
     max-width: 95vw;
@@ -310,6 +454,14 @@ const ModalContent = styled(motion.div)`
     max-width: 90vw;
     padding: var(--spacing-5);
     max-height: 85vh;
+    border-radius: var(--radius-xl);
+  }
+  
+  @media (max-width: 640px) {
+    max-width: 100vw;
+    max-height: 100vh;
+    border-radius: 0;
+    border: none;
   }
   
   @media (max-height: 600px) {
@@ -371,15 +523,19 @@ const CloseButton = styled.button`
 `;
 
 const ModalTitle = styled.h2`
-  font-size: var(--text-2xl);
-  color: var(--dark-100);
-  margin-bottom: var(--spacing-4);
+  font-size: clamp(1.5rem, 3vw, 1.875rem);
+  color: var(--dark-50);
+  margin-bottom: var(--spacing-2);
+  font-weight: var(--font-bold);
+  letter-spacing: -0.025em;
+  line-height: 1.2;
 `;
 
 const ModalDescription = styled.p`
-  color: var(--dark-400);
-  line-height: 1.7;
+  color: var(--dark-300);
+  line-height: 1.75;
   margin-bottom: var(--spacing-6);
+  font-size: clamp(0.9375rem, 1.5vw, 1rem);
 `;
 
 const ModalTech = styled.div`
@@ -727,7 +883,7 @@ const Projects: React.FC = () => {
         </Container>
       </ProjectsHero>
 
-      <Section>
+      <Section padding="0 0 80px 0">
         <Container>
           {isLoading ? (
             <ProjectsGrid>
