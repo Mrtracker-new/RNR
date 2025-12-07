@@ -10,11 +10,13 @@ const NavbarContainer = styled(motion.nav)<{ scrolled: boolean }>`
   left: 0;
   right: 0;
   z-index: 1000;
-  background: ${props => props.scrolled ? 'rgba(9, 9, 11, 0.95)' : 'transparent'};
-  backdrop-filter: ${props => props.scrolled ? 'blur(12px)' : 'none'};
-  border-bottom: ${props => props.scrolled ? '1px solid var(--dark-800)' : '1px solid transparent'};
+  background: ${props => props.scrolled ? 'rgba(9, 9, 11, 0.85)' : 'transparent'};
+  backdrop-filter: ${props => props.scrolled ? 'blur(16px)' : 'none'};
+  -webkit-backdrop-filter: ${props => props.scrolled ? 'blur(16px)' : 'none'};
+  border-bottom: ${props => props.scrolled ? '1px solid rgba(100, 255, 218, 0.1)' : '1px solid transparent'};
   transition: var(--transition-normal);
   padding: var(--spacing-5) 0;
+  box-shadow: ${props => props.scrolled ? '0 4px 12px rgba(0, 0, 0, 0.3)' : 'none'};
 
   @media (max-width: 768px) {
     padding: var(--spacing-4) 0;
@@ -22,7 +24,8 @@ const NavbarContainer = styled(motion.nav)<{ scrolled: boolean }>`
 
   @media (prefers-reduced-motion: reduce) {
     backdrop-filter: none;
-    background: ${props => props.scrolled ? 'var(--dark-950)' : 'transparent'};
+    -webkit-backdrop-filter: none;
+    background: ${props => props.scrolled ? 'rgba(9, 9, 11, 0.95)' : 'rgba(9, 9, 11, 0.3)'};
   }
 `;
 
@@ -192,10 +195,10 @@ const ScrollProgress = styled(motion.div)`
   position: absolute;
   bottom: 0;
   left: 0;
-  height: 3px;
+  height: 2px;
   background: linear-gradient(90deg, var(--accent-primary) 0%, var(--accent-secondary) 100%);
   transform-origin: left;
-  box-shadow: 0 0 10px rgba(100, 255, 218, 0.5);
+  box-shadow: 0 0 4px rgba(100, 255, 218, 0.3);
 `;
 
 const navItems = [

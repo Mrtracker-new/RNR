@@ -200,12 +200,57 @@ const SocialLink = styled(motion.a)`
   color: var(--dark-300);
   text-decoration: none;
   transition: var(--transition-normal);
+  position: relative;
+
+  &::after {
+    content: attr(data-tooltip);
+    position: absolute;
+    bottom: 100%;
+    left: 50%;
+    transform: translateX(-50%) translateY(-8px);
+    background: linear-gradient(135deg, var(--accent-primary), var(--accent-secondary));
+    color: var(--dark-950);
+    padding: var(--spacing-2) var(--spacing-4);
+    border-radius: var(--radius-md);
+    font-size: var(--text-xs);
+    font-weight: var(--font-semibold);
+    white-space: nowrap;
+    opacity: 0;
+    pointer-events: none;
+    transition: all 0.3s ease;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
+    z-index: 10;
+  }
+
+  &::before {
+    content: '';
+    position: absolute;
+    bottom: 100%;
+    left: 50%;
+    transform: translateX(-50%) translateY(-2px);
+    border: 6px solid transparent;
+    border-top-color: var(--accent-primary);
+    opacity: 0;
+    pointer-events: none;
+    transition: all 0.3s ease;
+    z-index: 10;
+  }
 
   &:hover {
     background: var(--accent-primary);
     color: var(--dark-900);
     border-color: var(--accent-primary);
     transform: translateY(-2px);
+
+    &::after {
+      opacity: 1;
+      transform: translateX(-50%) translateY(-12px);
+    }
+
+    &::before {
+      opacity: 1;
+      transform: translateX(-50%) translateY(-6px);
+    }
   }
 
   svg {
@@ -559,7 +604,8 @@ const Contact: React.FC = () => {
                     rel="noopener noreferrer"
                     whileHover={{ scale: 1.1 }}
                     whileTap={{ scale: 0.9 }}
-                    title="GitHub Profile"
+                    data-tooltip="View GitHub"
+                    aria-label="GitHub Profile"
                   >
                     <GitHubIcon />
                   </SocialLink>
@@ -569,7 +615,8 @@ const Contact: React.FC = () => {
                     rel="noopener noreferrer"
                     whileHover={{ scale: 1.1 }}
                     whileTap={{ scale: 0.9 }}
-                    title="LinkedIn Profile"
+                    data-tooltip="Connect on LinkedIn"
+                    aria-label="LinkedIn Profile"
                   >
                     <LinkedInIcon />
                   </SocialLink>
@@ -579,7 +626,8 @@ const Contact: React.FC = () => {
                     rel="noopener noreferrer"
                     whileHover={{ scale: 1.1 }}
                     whileTap={{ scale: 0.9 }}
-                    title="Instagram Profile"
+                    data-tooltip="Follow on Instagram"
+                    aria-label="Instagram Profile"
                   >
                     <InstagramIcon />
                   </SocialLink>
