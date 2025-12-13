@@ -1,6 +1,6 @@
 import React, { useRef } from 'react';
 import styled from 'styled-components';
-import { motion, useInView } from 'framer-motion';
+import { motion, useScroll, useSpring, useInView, Variants } from 'framer-motion';
 import { Container, Section, Grid, Card } from '../styles/GlobalStyle';
 import SEO from '../components/SEO';
 import PageTransition from '../components/PageTransition';
@@ -92,139 +92,222 @@ const AboutImage = styled.img`
   }
 `;
 
-const TimelineSection = styled(Section)`
+/* --- NEW JOURNEY SECTION STYLES --- */
+
+const JourneySection = styled(Section)`
   position: relative;
-  
-  @media (max-width: 768px) {
-    padding-left: var(--spacing-4);
-    padding-right: var(--spacing-4);
-  }
-  
-  @media (max-width: 480px) {
-    padding-left: var(--spacing-3);
-    padding-right: var(--spacing-3);
-  }
+  overflow: hidden;
 `;
 
-const SectionTitle = styled(motion.h2)`
-  font-size: var(--text-4xl);
+const JourneyHeader = styled.div`
   text-align: center;
-  margin-bottom: var(--spacing-16);
-  color: var(--dark-100);
+  margin-bottom: var(--spacing-20);
+  position: relative;
+  z-index: 2;
 `;
 
-const TimelineContainer = styled.div`
-  position: relative;
-  max-width: 800px;
+const JourneyTitle = styled(motion.h2)`
+  font-size: var(--text-4xl);
+  color: var(--dark-100);
+  margin-bottom: var(--spacing-4);
+  display: inline-block;
+  position: relative; /* For Pseudo-element */
+  
+  &::after {
+      content: '';
+      position: absolute;
+      bottom: -10px;
+      left: 50%;
+      transform: translateX(-50%);
+      width: 60px;
+      height: 4px;
+      background: var(--accent-gradient);
+      border-radius: var(--radius-full);
+  }
+`;
+
+const JourneySubtitle = styled(motion.p)`
+  color: var(--dark-400);
+  font-size: var(--text-lg);
+  max-width: 500px;
   margin: 0 auto;
+`;
+
+const JourneyContainer = styled.div`
+  max-width: 1000px;
+  margin: 0 auto;
+  position: relative;
+  padding: var(--spacing-4) 0;
+`;
+
+const ProgressLineContainer = styled.div`
+  position: absolute;
+  left: 50%; /* Center on desktop */
+  top: 0;
+  bottom: 0;
+  width: 4px;
+  background: var(--dark-800);
+  transform: translateX(-50%);
+  z-index: 1;
+  border-radius: var(--radius-full);
+  overflow: hidden; 
+
+  @media (max-width: 768px) {
+    left: 24px; /* Move to left on mobile */
+  }
+`;
+
+const ProgressLine = styled(motion.div)`
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  background: var(--accent-gradient);
+  transform-origin: top;
+  width: 100%;
+  height: 100%;
+`;
+
+const JourneyItemWrapper = styled.div<{ align: 'left' | 'right' }>`
+  display: flex;
+  justify-content: ${props => props.align === 'left' ? 'flex-end' : 'flex-start'};
+  padding-bottom: var(--spacing-16);
+  position: relative;
+  width: 50%;
+  ${props => props.align === 'left' ? 'margin-right: auto; padding-right: 40px;' : 'margin-left: auto; padding-left: 40px;'}
+
+  @media (max-width: 768px) {
+    width: 100%;
+    justify-content: flex-start;
+    padding-left: 60px; /* Space for line */
+    padding-right: 0;
+    margin: 0;
+    padding-bottom: var(--spacing-12);
+  }
+`;
+
+const Marker = styled(motion.div) <{ align: 'left' | 'right' }>`
+    position: absolute;
+    top: 24px;
+    width: 16px;
+    height: 16px;
+    background: var(--dark-950);
+    border: 3px solid var(--accent-primary);
+    border-radius: 50%;
+    z-index: 5;
+    box-shadow: 0 0 0 4px rgba(30, 41, 59, 0.5), 0 0 15px var(--accent-primary);
+    
+    /* Desktop Positioning */
+    ${props => props.align === 'left' ? 'right: -10px;' : 'left: -10px;'} /* -8px for perfect center + border adj */
+
+    @media (max-width: 768px) {
+        /* Mobile Positioning - Independent of align prop */
+        left: 18px; /* Line is at 24px center. Marker 16px wide. 24 - 8 = 16. + visual tweak */
+        right: auto;
+    }
+`;
+
+
+const JourneyCard = styled(motion.div)`
+  background: rgba(30, 41, 59, 0.4);
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+  border: 1px solid rgba(255, 255, 255, 0.05);
+  padding: var(--spacing-6);
+  border-radius: var(--radius-xl);
+  width: 100%;
+  position: relative;
+  overflow: hidden;
+  /* Specific transitions to avoid conflict with Framer Motion */
+  transition: background 0.3s ease, border-color 0.3s ease, box-shadow 0.3s ease;
+  will-change: transform, opacity;
+  text-align: left; /* Force clear alignment */
+
+  &:hover {
+    background: rgba(30, 41, 59, 0.6);
+    border-color: rgba(100, 255, 218, 0.3);
+    box-shadow: 0 10px 40px -10px rgba(0,0,0,0.5);
+    transform: translateY(-5px);
+  }
 
   &::before {
     content: '';
     position: absolute;
-    left: 50%;
     top: 0;
-    bottom: 0;
+    left: 0;
     width: 2px;
-    background: var(--dark-700);
-    transform: translateX(-50%);
-
-    @media (max-width: 768px) {
-      left: 30px;
-    }
+    height: 100%;
+    background: var(--accent-gradient);
+    opacity: 0.7;
   }
 `;
 
-const TimelineItem = styled(motion.div)<{ index: number }>`
-  position: relative;
-  margin-bottom: var(--spacing-12);
+const JourneyYear = styled.span`
+  display: inline-block;
+  font-family: var(--font-mono);
+  font-size: var(--text-sm);
+  color: var(--accent-primary);
+  margin-bottom: var(--spacing-2);
+  padding: 4px 12px;
+  background: rgba(100, 255, 218, 0.1);
+  border-radius: var(--radius-md);
+  border: 1px solid rgba(100, 255, 218, 0.2);
+`;
+
+const JourneyCardTitle = styled.h3`
+  font-size: 1.25rem;
+  color: var(--dark-50);
+  margin-bottom: var(--spacing-2);
+  font-weight: 700;
+`;
+
+const JourneyCardRole = styled.h4`
+  font-size: 1rem;
+  color: var(--dark-200);
+  margin-bottom: var(--spacing-3);
+  font-weight: 500;
   display: flex;
   align-items: center;
-  justify-content: ${props => props.index % 2 === 0 ? 'flex-start' : 'flex-end'};
-
-  @media (max-width: 768px) {
-    justify-content: flex-start;
-    padding-left: 80px;
-    padding-top: var(--spacing-8);
-  }
-`;
-
-const TimelineContent = styled(Card)<{ direction: 'left' | 'right' }>`
-  width: 45%;
-  position: relative;
+  gap: var(--spacing-2);
   
   &::before {
-    content: '';
-    position: absolute;
-    top: 20px;
-    ${props => props.direction === 'left' ? 'right: -15px;' : 'left: -15px;'}
-    width: 0;
-    height: 0;
-    border: 15px solid transparent;
-    ${props => props.direction === 'left' ? 
-      'border-left-color: var(--dark-700);' : 
-      'border-right-color: var(--dark-700);'
-    }
-
-    @media (max-width: 768px) {
-      left: -15px;
-      border-right-color: var(--dark-700);
-      border-left-color: transparent;
-    }
-  }
-
-  @media (max-width: 768px) {
-    width: calc(100% - 60px);
+      content: '';
+      display: inline-block;
+      width: 6px;
+      height: 6px;
+      background-color: var(--accent-secondary);
+      border-radius: 50%;
   }
 `;
 
-const TimelineDate = styled.div`
-  position: absolute;
-  left: 50%;
-  top: 15px;
-  transform: translateX(-50%);
-  background: linear-gradient(135deg, var(--accent-primary) 0%, var(--accent-secondary) 100%);
-  color: var(--dark-950);
-  padding: var(--spacing-2) var(--spacing-4);
-  border-radius: var(--radius-lg);
-  font-size: var(--text-sm);
-  font-weight: var(--font-semibold);
-  border: 1px solid transparent;
-  white-space: nowrap;
-  z-index: 2;
-  box-shadow: var(--shadow-accent);
-  backdrop-filter: blur(10px);
-
-  @media (max-width: 768px) {
-    left: 10px;
-    top: 10px;
-    transform: none;
-    font-size: var(--text-xs);
-    padding: var(--spacing-1) var(--spacing-3);
-    border-radius: var(--radius-md);
-  }
-`;
-
-const TimelineTitle = styled.h3`
-  font-size: var(--text-xl);
-  color: var(--dark-100);
-  margin-bottom: var(--spacing-3);
-`;
-
-const TimelineDescription = styled.p`
+const JourneyDescription = styled.p`
+  font-size: var(--text-base);
   color: var(--dark-400);
   line-height: 1.6;
-  margin-bottom: var(--spacing-3);
 `;
 
-const TimelineCategory = styled.span`
-  background: rgba(100, 255, 218, 0.1);
-  color: var(--accent-primary);
-  padding: var(--spacing-1) var(--spacing-3);
-  border-radius: var(--radius-md);
-  font-size: var(--text-xs);
-  font-weight: var(--font-medium);
-  border: 1px solid rgba(100, 255, 218, 0.3);
+const JourneyTechStack = styled.div`
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  margin-top: var(--spacing-4);
 `;
+
+const TechTag = styled.span`
+  font-size: 0.75rem;
+  color: var(--dark-300);
+  background: rgba(255, 255, 255, 0.05);
+  padding: 2px 8px;
+  border-radius: 4px;
+  transition: var(--transition-fast);
+
+  &:hover {
+      color: var(--accent-primary);
+      background: rgba(100, 255, 218, 0.1);
+  }
+`;
+
+/* --- SKILLS & SERVICES STYLES (Keep existing or slightly refined) --- */
 
 const SkillsSection = styled(Section)`
   background: rgba(30, 41, 59, 0.3);
@@ -271,7 +354,7 @@ const SkillProgressContainer = styled.div`
   border: 1px solid var(--dark-700);
 `;
 
-const SkillProgressBar = styled(motion.div)<{ percentage: number }>`
+const SkillProgressBar = styled(motion.div) <{ percentage: number }>`
   height: 100%;
   background: linear-gradient(90deg, var(--accent-primary) 0%, var(--accent-secondary) 100%);
   border-radius: var(--radius-sm);
@@ -389,31 +472,42 @@ const ServiceFeatures = styled.ul`
   }
 `;
 
+const SectionTitle = styled(motion.h2)`
+  font-size: var(--text-4xl);
+  text-align: center;
+  margin-bottom: var(--spacing-16);
+  color: var(--dark-100);
+`;
+
 // Data
 const timelineData = [
   {
     year: '2024 - Present',
-    title: 'Computer Science Degree — ready for what\'s next.',
-    description: 'Studying advanced programming concepts, algorithms, and software development methodologies.',
-    category: 'Education'
+    title: 'Computer Science Degree',
+    role: 'Student & Freelancer',
+    description: 'Pursuing advanced studies in Computer Science while actively freelancing. Deepening knowledge in algorithms, system design, and AI/ML foundations while building real-world projects for clients.',
+    tags: ['Algorithms', 'System Design', 'AI Foundations', 'Freelancing']
   },
   {
     year: '2022 - 2023',
-    title: 'Hands-on industry experience — and the journey continues.',
+    title: 'Industry Experience',
+    role: 'Tool & Die Making Intern/Designer',
     description: 'I worked in the industry, where I developed problem-solving skills and gained a solid understanding of both machines and software.',
-    category: 'Work Experience'
+    tags: ['Team Collaboration', 'Agile', 'Clean Code', 'Debugging']
   },
   {
     year: '2019 - 2022',
-    title: 'Diploma done — this is just the beginning of what\'s next.',
-    description: 'With a diploma in DTDM and a strong base in practical skills, I\'ve now started my journey into software — learning, building, and exploring new technologies.',
-    category: 'Education'
+    title: 'Diploma in DTDM',
+    role: 'Student',
+    description: 'Graduated with a Diploma in Tool & Die Making (DTDM). Developed a strong engineering mindset, precision, and problem-solving skills that translated seamlessly into software engineering.',
+    tags: ['Engineering Fundamentals', 'Precision', 'Problem Solving', 'Logic']
   },
   {
     year: '2019',
-    title: 'Started my journey — this is where it begins.',
-    description: 'Every journey starts somewhere — I began mine by truly learning, coding, creating, and exploring new technologies.',
-    category: 'Career Beginning'
+    title: 'The Spark',
+    role: 'Aspiring Developer',
+    description: 'The beginning of my journey into technology. Started self-learning programming basics, exploring Python and web technologies, and writing my first lines of code.',
+    tags: ['Python Base', 'Web Basics', 'Self-Learning', 'Curiosity']
   }
 ];
 
@@ -493,6 +587,19 @@ const servicesData = [
 const About: React.FC = () => {
   const skillsRef = useRef(null);
   const skillsInView = useInView(skillsRef, { once: true, margin: '-100px' });
+  const journeyRef = useRef(null);
+
+  // Scroll Progress Animation for Journey
+  const { scrollYProgress } = useScroll({
+    target: journeyRef,
+    offset: ["start end", "end center"]
+  });
+
+  const scaleY = useSpring(scrollYProgress, {
+    stiffness: 100,
+    damping: 30,
+    restDelta: 0.001
+  });
 
   const containerVariants = {
     hidden: { opacity: 0 },
@@ -508,6 +615,22 @@ const About: React.FC = () => {
   const itemVariants = {
     hidden: { opacity: 0, y: 30 },
     visible: { opacity: 1, y: 0 }
+  };
+
+  const cardVariants: Variants = {
+    offscreen: {
+      y: 50,
+      opacity: 0,
+    },
+    onscreen: {
+      y: 0,
+      opacity: 1,
+      transition: {
+        type: "spring",
+        bounce: 0.4,
+        duration: 0.8
+      }
+    }
   };
 
   return (
@@ -531,16 +654,16 @@ const About: React.FC = () => {
               About Me
             </HeroTitle>
             <HeroSubtitle variants={itemVariants}>
-              I'm Rolan, an aspiring software engineer and freelancer from Karnataka, India. 
-              I'm passionate about creating innovative, functional, and visually appealing digital solutions 
+              I'm Rolan, an aspiring software engineer and freelancer from Karnataka, India.
+              I'm passionate about creating innovative, functional, and visually appealing digital solutions
               that solve real-world problems.
             </HeroSubtitle>
-            
+
             <AboutImageSection variants={itemVariants}>
               <AboutImageContainer>
-                <AboutImage 
-                  src={aboutImage} 
-                  alt="About Rolan Lobo" 
+                <AboutImage
+                  src={aboutImage}
+                  alt="About Rolan Lobo"
                 />
               </AboutImageContainer>
             </AboutImageSection>
@@ -548,42 +671,56 @@ const About: React.FC = () => {
         </Container>
       </AboutHero>
 
-      {/* Timeline Section */}
-      <TimelineSection>
-        <Container>
-          <SectionTitle
-            initial={{ opacity: 0, y: 30 }}
+      {/* RE-DESIGNED Journey Section */}
+      <JourneySection ref={journeyRef}>
+        <JourneyHeader>
+          <JourneyTitle
+            initial={{ opacity: 0, y: 20 }}
             whileInView={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.6 }}
+            transition={{ duration: 0.5 }}
             viewport={{ once: true }}
           >
-            My Journey
-          </SectionTitle>
-          
-          <TimelineContainer>
-            {timelineData.map((item, index) => (
-              <TimelineItem
-                key={index}
-                index={index}
-                initial={{ opacity: 0, x: index % 2 === 0 ? -50 : 50 }}
-                whileInView={{ opacity: 1, x: 0 }}
-                transition={{ duration: 0.6, delay: index * 0.2 }}
-                viewport={{ once: true }}
+            My Story
+          </JourneyTitle>
+          <br />
+          <JourneySubtitle
+            initial={{ opacity: 0 }}
+            whileInView={{ opacity: 1 }}
+            transition={{ delay: 0.2, duration: 0.5 }}
+            viewport={{ once: true }}
+          >
+            A timeline of my professional growth and milestones.
+          </JourneySubtitle>
+        </JourneyHeader>
+
+        <JourneyContainer>
+          <ProgressLineContainer>
+            <ProgressLine style={{ scaleY }} />
+          </ProgressLineContainer>
+
+          {timelineData.map((item, index) => (
+            <JourneyItemWrapper key={index} align={index % 2 === 0 ? 'left' : 'right'}>
+              <Marker align={index % 2 === 0 ? 'left' : 'right'} />
+              <JourneyCard
+                initial="offscreen"
+                whileInView="onscreen"
+                viewport={{ once: true, amount: 0.1, margin: "-50px" }}
+                variants={cardVariants}
               >
-                <TimelineContent 
-                  direction={index % 2 === 0 ? 'right' : 'left'}
-                  hover
-                >
-                  <TimelineTitle>{item.title}</TimelineTitle>
-                  <TimelineDescription>{item.description}</TimelineDescription>
-                  <TimelineCategory>{item.category}</TimelineCategory>
-                </TimelineContent>
-                <TimelineDate>{item.year}</TimelineDate>
-              </TimelineItem>
-            ))}
-          </TimelineContainer>
-        </Container>
-      </TimelineSection>
+                <JourneyYear>{item.year}</JourneyYear>
+                <JourneyCardTitle>{item.title}</JourneyCardTitle>
+                <JourneyCardRole>{item.role}</JourneyCardRole>
+                <JourneyDescription>{item.description}</JourneyDescription>
+                <JourneyTechStack>
+                  {item.tags.map(tag => (
+                    <TechTag key={tag}>{tag}</TechTag>
+                  ))}
+                </JourneyTechStack>
+              </JourneyCard>
+            </JourneyItemWrapper>
+          ))}
+        </JourneyContainer>
+      </JourneySection>
 
       {/* Skills Section */}
       <SkillsSection ref={skillsRef}>
@@ -596,7 +733,7 @@ const About: React.FC = () => {
           >
             Skills & Expertise
           </SectionTitle>
-          
+
           <SkillsGrid>
             {skillsData.map((skill, index) => (
               <SkillCard
@@ -636,7 +773,7 @@ const About: React.FC = () => {
           >
             Services Offered
           </SectionTitle>
-          
+
           <StaggerContainer staggerDelay={0.15}>
             <ServicesGrid>
               {servicesData.map((service, index) => (
@@ -670,3 +807,4 @@ const About: React.FC = () => {
 };
 
 export default About;
+
