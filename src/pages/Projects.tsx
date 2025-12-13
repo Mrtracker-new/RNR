@@ -378,9 +378,10 @@ const ModalTitle = styled.h2`
 
 const ModalDescription = styled.p`
   color: var(--dark-300);
-  line-height: 1.75;
+  line-height: 1.8; /* Increased line-height for better readability */
   margin-bottom: var(--spacing-6);
-  font-size: clamp(0.9375rem, 1.5vw, 1rem);
+  font-size: clamp(0.95rem, 1.5vw, 1.05rem);
+  white-space: pre-line; /* Allows newline characters to create paragraphs */
 `;
 
 const ModalTech = styled.div`
@@ -396,6 +397,8 @@ const ModalActions = styled.div`
   flex-wrap: wrap;
 `;
 
+/* ... existing code ... */
+
 // Project Data
 const projectsData = [
   {
@@ -403,7 +406,7 @@ const projectsData = [
     title: 'InvisioVault_R',
     category: 'Desktop Application',
     description: 'Advanced file steganography software with AES-256 encryption. Hide confidential files, documents, photos, and videos inside images (PNG, JPG, BMP). Free desktop app with batch processing for Windows.',
-    longDescription: 'InvisioVault_R is a powerful desktop steganography application that combines military-grade AES-256 encryption with advanced file hiding technology. This free Windows software lets you securely hide any file type - PDFs, documents, photos, videos, or entire folders - inside ordinary-looking images without detection. Perfect for privacy-conscious users, security professionals, and anyone needing secure file storage. Features include batch processing for multiple files, support for PNG/JPG/BMP image formats, password protection, and a clean intuitive interface. Built with Python and advanced cryptography libraries for maximum security.',
+    longDescription: 'InvisioVault_R is a powerful desktop steganography application that combines military-grade AES-256 encryption with advanced file hiding technology.\n\nThis free Windows software lets you securely hide any file type - PDFs, documents, photos, videos, or entire folders - inside ordinary-looking images without detection. Perfect for privacy-conscious users, security professionals, and anyone needing secure file storage.\n\nFeatures include batch processing for multiple files, support for PNG/JPG/BMP image formats, password protection, and a clean intuitive interface. Built with Python and advanced cryptography libraries for maximum security.',
     technologies: ['Python', 'Pillow (PIL)', 'AES-256', 'Cryptography', 'Steganography'],
     github: 'https://github.com/Mrtracker-new/InvisioVault_R',
     download: 'https://github.com/Mrtracker-new/InvisioVault_R/releases/',
@@ -417,7 +420,7 @@ const projectsData = [
     title: 'BAR (Burn After Reading)',
     category: 'Desktop Application',
     description: 'Secure file encryption software with self-destruct feature. Offline desktop app with AES-256-GCM encryption, password protection, and automatic file destruction. Perfect for confidential document management.',
-    longDescription: 'BAR (Burn After Reading) is an advanced secure file management application designed for maximum privacy and security. This offline-only desktop software features military-grade AES-256-GCM encryption, PBKDF2 key derivation, and unique self-destruction capabilities that automatically delete sensitive files after reading. Ideal for journalists, lawyers, security professionals, and privacy advocates who handle confidential documents. All operations are performed locally with zero cloud dependency, ensuring your sensitive data never leaves your computer. Features include: timed file deletion, secure password hashing, encrypted storage, intuitive PyQt5 interface, and complete offline functionality. No internet connection required - your data stays 100% private.',
+    longDescription: 'BAR (Burn After Reading) is an advanced secure file management application designed for maximum privacy and security. This offline-only desktop software features military-grade AES-256-GCM encryption, PBKDF2 key derivation, and unique self-destruction capabilities that automatically delete sensitive files after reading.\n\nIdeal for journalists, lawyers, security professionals, and privacy advocates who handle confidential documents. All operations are performed locally with zero cloud dependency, ensuring your sensitive data never leaves your computer.\n\nFeatures include: timed file deletion, secure password hashing, encrypted storage, intuitive PyQt5 interface, and complete offline functionality.',
     technologies: ['Python', 'PyQt5', 'AES-256-GCM', 'PBKDF2', 'Cryptography'],
     github: 'https://github.com/Mrtracker-new/BAR',
     download: 'https://github.com/Mrtracker-new/BAR/releases/download/v1.0/BAR.exe',
@@ -431,7 +434,7 @@ const projectsData = [
     title: 'Sortify',
     category: 'Desktop Application',
     description: 'Automatic file organizer and manager for Windows. Smart desktop software that sorts and organizes files by type, date, and format. Clean cluttered folders instantly with one-click file organization.',
-    longDescription: 'Sortify is an intelligent automatic file organization software that transforms chaotic folders into perfectly organized file systems. This smart Windows desktop application automatically sorts files by type (documents, images, videos, music), date, size, and custom categories. Perfect for professionals, students, and anyone struggling with messy downloads folders or disorganized file systems. Features include: one-click automatic sorting, custom organization rules, batch file processing, duplicate file detection, safe file handling with undo support, and lightning-fast performance. Whether you have thousands of downloads, photos, or documents, Sortify cleans and organizes everything in seconds. Free desktop utility built with Python for reliable, fast file management.',
+    longDescription: 'Sortify is an intelligent automatic file organization software that transforms chaotic folders into perfectly organized file systems. This smart Windows desktop application automatically sorts files by type (documents, images, videos, music), date, size, and custom categories.\n\nPerfect for professionals, students, and anyone struggling with messy downloads folders or disorganized file systems. Features include: one-click automatic sorting, custom organization rules, batch file processing, duplicate file detection, safe file handling with undo support, and lightning-fast performance.\n\nWhether you have thousands of downloads, photos, or documents, Sortify cleans and organizes everything in seconds.',
     technologies: ['Python', 'File Management', 'OS', 'shutil', 'Automation'],
     github: 'https://github.com/Mrtracker-new/Sortify',
     download: 'https://github.com/Mrtracker-new/Sortify/releases/download/v1.0/Sortify_Setup.exe',
@@ -445,7 +448,7 @@ const projectsData = [
     title: 'InvisioVault',
     category: 'Web Application',
     description: 'Hide anything inside images, or create wild dual-format polyglot files — all in a slick React + Flask app. 🔐✨',
-    longDescription: 'InvisioVault is your secret-keeping Swiss Army knife! Hide files in images like a digital magician using steganography, OR go full inception mode with polyglot files that work as TWO formats at once. Built with a slick React frontend and Flask backend because we\'re fancy like that. 🎩✨',
+    longDescription: 'InvisioVault is your secret-keeping Swiss Army knife! Hide files in images like a digital magician using steganography, OR go full inception mode with polyglot files that work as TWO formats at once.\n\nBuilt with a slick React frontend and Flask backend because we\'re fancy like that. 🎩✨',
     technologies: ['React', 'Flask', 'Python', 'Steganography', 'AES-256', 'Polyglot Files'],
     github: 'https://github.com/Mrtracker-new/InvisioVault',
     liveDemo: 'https://invisio-vault.vercel.app/',
