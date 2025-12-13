@@ -330,36 +330,48 @@ const SkillsGrid = styled(Grid)`
 
 const SkillCard = styled(Card)`
   text-align: center;
+  background: rgba(30, 41, 59, 0.4);
+  backdrop-filter: blur(12px);
+  border: 1px solid rgba(255, 255, 255, 0.05);
+  transition: all 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275); 
+
+  &:hover {
+    transform: translateY(-8px);
+    background: rgba(30, 41, 59, 0.6);
+    border-color: var(--accent-primary);
+    box-shadow: 0 10px 30px -10px rgba(100, 255, 218, 0.15);
+  }
 `;
 
 const SkillName = styled.h3`
   font-size: var(--text-lg);
-  color: var(--dark-100);
-  margin-bottom: var(--spacing-4);
+  color: var(--dark-50);
+  margin-bottom: var(--spacing-2);
+  font-weight: 700;
 `;
 
 const SkillDescription = styled.p`
-  color: var(--dark-400);
-  font-size: var(--text-sm);
-  margin-bottom: var(--spacing-6);
+  color: var(--dark-300);
+  font-size: 0.85rem;
+  margin-bottom: var(--spacing-5);
+  min-height: 40px; /* Alignment fix */
 `;
 
 const SkillProgressContainer = styled.div`
   position: relative;
-  background: var(--dark-800);
-  border-radius: var(--radius-sm);
-  height: 10px;
-  margin-bottom: var(--spacing-4);
+  background: rgba(0, 0, 0, 0.3);
+  border-radius: 3px;
+  height: 8px;
+  margin-bottom: var(--spacing-3);
   overflow: hidden;
-  border: 1px solid var(--dark-700);
 `;
 
 const SkillProgressBar = styled(motion.div) <{ percentage: number }>`
   height: 100%;
-  background: linear-gradient(90deg, var(--accent-primary) 0%, var(--accent-secondary) 100%);
-  border-radius: var(--radius-sm);
+  background: var(--accent-gradient);
+  border-radius: 3px;
   position: relative;
-  box-shadow: inset 0 1px 2px rgba(100, 255, 218, 0.2);
+  box-shadow: 0 0 10px rgba(100, 255, 218, 0.3);
   
   &::after {
     content: '';
@@ -367,40 +379,46 @@ const SkillProgressBar = styled(motion.div) <{ percentage: number }>`
     top: 0;
     right: 0;
     bottom: 0;
-    width: 30px;
-    background: linear-gradient(90deg, transparent 0%, rgba(255, 255, 255, 0.4) 50%, transparent 100%);
-    animation: shimmer 3s ease-in-out infinite;
-    border-radius: var(--radius-sm);
+    width: 20px;
+    background: linear-gradient(90deg, transparent 0%, rgba(255, 255, 255, 0.5) 50%, transparent 100%);
+    animation: shimmer 2s linear infinite;
   }
 
   @keyframes shimmer {
-    0% { transform: translateX(-150%); opacity: 0; }
-    50% { opacity: 1; }
-    100% { transform: translateX(150%); opacity: 0; }
+    0% { transform: translateX(-150%); }
+    100% { transform: translateX(250%); }
   }
 `;
 
 const SkillPercentage = styled.div`
   text-align: right;
   color: var(--accent-primary);
-  font-weight: var(--font-medium);
-  font-size: var(--text-sm);
+  font-weight: var(--font-bold);
+  font-size: var(--text-xs);
+  font-family: var(--font-mono);
 `;
 
 const ServicesSection = styled(Section)`
-  @media (max-width: 768px) {
-    padding-left: var(--spacing-4);
-    padding-right: var(--spacing-4);
-  }
-  
-  @media (max-width: 480px) {
-    padding-left: var(--spacing-3);
-    padding-right: var(--spacing-3);
+  position: relative;
+  overflow: hidden;
+
+  /* Ambient Background Effect */
+  &::before {
+    content: '';
+    position: absolute;
+    top: 20%;
+    right: 0;
+    width: 600px;
+    height: 600px;
+    background: radial-gradient(circle, rgba(139, 92, 246, 0.05) 0%, transparent 70%);
+    z-index: -1;
+    pointer-events: none;
   }
 `;
 
 const ServicesGrid = styled(Grid)`
-  grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+  grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+  gap: var(--spacing-8);
   
   @media (max-width: 768px) {
     grid-template-columns: 1fr;
@@ -408,66 +426,110 @@ const ServicesGrid = styled(Grid)`
   }
 `;
 
-const ServiceCard = styled(Card)`
-  text-align: center;
-  transition: var(--transition-normal);
+const ServiceCard = styled(motion.div)`
+  background: rgba(30, 41, 59, 0.3);
+  backdrop-filter: blur(16px);
+  -webkit-backdrop-filter: blur(16px);
+  border: 1px solid rgba(255, 255, 255, 0.05);
+  border-radius: var(--radius-2xl);
+  padding: var(--spacing-8);
   display: flex;
   flex-direction: column;
   height: 100%;
-  min-height: 450px;
+  transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+  position: relative;
+  overflow: hidden;
+
+  /* Subtle gradient overlay on hover */
+  &::after {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background: linear-gradient(180deg, rgba(255,255,255,0) 0%, rgba(100, 255, 218, 0.03) 100%);
+    opacity: 0;
+    transition: opacity 0.3s ease;
+  }
 
   &:hover {
-    transform: translateY(-5px);
-    border-color: var(--accent-primary);
-    box-shadow: 0 20px 40px rgba(100, 255, 218, 0.1);
+    transform: translateY(-8px);
+    background: rgba(30, 41, 59, 0.5);
+    border-color: rgba(100, 255, 218, 0.4);
+    box-shadow: 0 20px 40px -10px rgba(0,0,0,0.3), 0 0 20px rgba(100, 255, 218, 0.1);
+
+    &::after {
+      opacity: 1;
+    }
+
+    /* Icon Animation Target */
+    .service-icon {
+      transform: scale(1.1) rotate(5deg);
+      color: var(--accent-secondary);
+      background: rgba(139, 92, 246, 0.2);
+    }
   }
 `;
 
-const ServiceIcon = styled.div`
-  width: 80px;
-  height: 80px;
-  background: linear-gradient(135deg, var(--accent-primary) 0%, var(--secondary-500) 100%);
-  border-radius: 50%;
+const ServiceIconContainer = styled.div`
+  width: 64px;
+  height: 64px;
+  background: rgba(100, 255, 218, 0.1);
+  border-radius: var(--radius-xl);
   display: flex;
   align-items: center;
   justify-content: center;
-  font-size: var(--text-3xl);
-  margin: 0 auto var(--spacing-6);
-  color: var(--dark-900);
+  margin-bottom: var(--spacing-6);
+  color: var(--accent-primary);
+  font-size: 1.75rem;
+  transition: all 0.3s ease;
+  border: 1px solid rgba(100, 255, 218, 0.2);
+`;
+
+const ServiceContent = styled.div`
+  flex: 1;
+  display: flex;
+  flex-direction: column;
 `;
 
 const ServiceTitle = styled.h3`
-  font-size: var(--text-xl);
-  color: var(--dark-100);
-  margin-bottom: var(--spacing-4);
+  font-size: 1.5rem;
+  font-weight: 700;
+  color: var(--dark-50);
+  margin-bottom: var(--spacing-3);
+  letter-spacing: -0.01em;
 `;
 
 const ServiceDescription = styled.p`
-  color: var(--dark-400);
+  color: var(--dark-300);
   line-height: 1.6;
-  margin-bottom: var(--spacing-4);
-  min-height: 50px;
+  font-size: 1rem;
+  margin-bottom: var(--spacing-6);
+`;
+
+const Divider = styled.div`
+  height: 1px;
+  background: linear-gradient(90deg, rgba(255,255,255,0.1) 0%, rgba(255,255,255,0.05) 100%);
+  margin-bottom: var(--spacing-6);
 `;
 
 const ServiceFeatures = styled.ul`
-  text-align: left;
   list-style: none;
   padding: 0;
-  flex: 1;
+  margin: 0;
   
   li {
     color: var(--dark-400);
     margin-bottom: var(--spacing-3);
+    padding-left: 24px;
     position: relative;
-    padding-left: var(--spacing-6);
-    line-height: 1.5;
+    font-size: 0.9rem;
     
     &::before {
-      content: '✓';
+      content: '▹';
       position: absolute;
       left: 0;
+      top: 1px;
       color: var(--accent-primary);
-      font-weight: bold;
+      font-size: 12px;
     }
   }
 `;
@@ -743,7 +805,6 @@ const About: React.FC = () => {
                 whileInView={{ opacity: 1, y: 0 }}
                 transition={{ duration: 0.6, delay: index * 0.1 }}
                 viewport={{ once: true }}
-                hover
               >
                 <SkillName>{skill.name}</SkillName>
                 <SkillDescription>{skill.description}</SkillDescription>
@@ -774,27 +835,24 @@ const About: React.FC = () => {
             Services Offered
           </SectionTitle>
 
-          <StaggerContainer staggerDelay={0.15}>
+          <StaggerContainer staggerDelay={0.1}>
             <ServicesGrid>
               {servicesData.map((service, index) => (
-                <StaggerItem key={service.title} variant="scaleUp">
-                  <ServiceCard
-                    as={motion.div}
-                    whileHover={{ scale: 1.05 }}
-                  >
-                    <motion.div
-                      whileHover={{ rotate: [0, -10, 10, -10, 0], scale: 1.1 }}
-                      transition={{ duration: 0.5 }}
-                    >
-                      <ServiceIcon>{service.icon}</ServiceIcon>
-                    </motion.div>
-                    <ServiceTitle>{service.title}</ServiceTitle>
-                    <ServiceDescription>{service.description}</ServiceDescription>
-                    <ServiceFeatures>
-                      {service.features.map((feature, featureIndex) => (
-                        <li key={featureIndex}>{feature}</li>
-                      ))}
-                    </ServiceFeatures>
+                <StaggerItem key={service.title} variant="fadeInUp">
+                  <ServiceCard>
+                    <ServiceIconContainer className="service-icon">
+                      {service.icon}
+                    </ServiceIconContainer>
+                    <ServiceContent>
+                      <ServiceTitle>{service.title}</ServiceTitle>
+                      <ServiceDescription>{service.description}</ServiceDescription>
+                      <Divider />
+                      <ServiceFeatures>
+                        {service.features.map((feature, featureIndex) => (
+                          <li key={featureIndex}>{feature}</li>
+                        ))}
+                      </ServiceFeatures>
+                    </ServiceContent>
                   </ServiceCard>
                 </StaggerItem>
               ))}
