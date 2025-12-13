@@ -1,12 +1,11 @@
 import React, { useState, useMemo, useEffect } from 'react';
 import styled from 'styled-components';
 import { motion, AnimatePresence } from 'framer-motion';
-import { Container, Section, Grid, Card, Button, Badge } from '../styles/GlobalStyle';
+import { Container, Section, Grid, Badge } from '../styles/GlobalStyle';
 import SEO from '../components/SEO';
 import OptimizedImage from '../components/OptimizedImage';
 import PageTransition from '../components/PageTransition';
-import { SkeletonGrid } from '../components/Skeleton';
-import { StaggerContainer, StaggerItem } from '../components/ScrollReveal';
+import { StaggerItem } from '../components/ScrollReveal';
 
 // Import project images
 import invisioVaultDesktopImg from '../assets/images/InvisioVault_Suit.png';
@@ -14,7 +13,7 @@ import invisioVaultWebImg from '../assets/images/InvisioVault.png';
 import barLogoImg from '../assets/images/BAR_logo.png';
 import sortifyImg from '../assets/images/Sortify.jpg';
 import ytDownloaderImg from '../assets/images/YT.png';
-import linkNestImg from '../assets/images/LinkNest.png';
+import linkNestImg from '../assets/images/LN.png';
 import contactManagerImg from '../assets/images/Contact_Manager.png';
 
 const ProjectsHero = styled(Section)`
@@ -55,354 +54,201 @@ const FilterSection = styled(motion.div)`
   flex-wrap: wrap;
 `;
 
-const FilterButton = styled(motion.button)<{ active: boolean }>`
-  padding: var(--spacing-3) var(--spacing-5);
+const FilterButton = styled(motion.button) <{ active: boolean }>`
+  padding: var(--spacing-3) var(--spacing-6);
   border-radius: var(--radius-lg);
-  font-weight: var(--font-medium);
+  font-weight: var(--font-semibold);
   font-size: var(--text-sm);
   transition: var(--transition-normal);
   cursor: pointer;
   position: relative;
   overflow: hidden;
+  letter-spacing: 0.02em;
   
   ${props => props.active ? `
-    background: linear-gradient(135deg, var(--accent-primary) 0%, var(--accent-secondary) 100%);
+    background: var(--accent-gradient);
     color: var(--dark-950);
     border: 1px solid transparent;
-    box-shadow: var(--shadow-accent);
+    box-shadow: 0 4px 12px rgba(100, 255, 218, 0.3);
   ` : `
-    background: rgba(30, 41, 59, 0.6);
+    background: rgba(30, 41, 59, 0.3);
     color: var(--dark-300);
-    border: 1px solid var(--dark-700);
-    backdrop-filter: blur(10px);
+    border: 1px solid rgba(255, 255, 255, 0.05);
+    backdrop-filter: blur(12px);
     
     &:hover {
       border-color: var(--accent-primary);
       color: var(--accent-primary);
-      background: rgba(100, 255, 218, 0.1);
+      background: rgba(30, 41, 59, 0.5);
       transform: translateY(-2px);
-      box-shadow: var(--shadow-md);
     }
   `}
 `;
 
-const SearchContainer = styled(motion.div)`
-  display: flex;
-  justify-content: center;
-  margin-bottom: var(--spacing-8);
-`;
-
-const SearchInput = styled.input`
-  width: 100%;
-  max-width: 500px;
-  padding: var(--spacing-4) var(--spacing-6);
-  font-size: var(--text-base);
-  border: 1px solid rgba(100, 255, 218, 0.2);
-  border-radius: var(--radius-lg);
-  background: rgba(30, 41, 59, 0.6);
-  backdrop-filter: blur(12px);
-  color: var(--dark-100);
-  transition: var(--transition-normal);
-  box-shadow: inset 0 2px 4px rgba(0, 0, 0, 0.2);
-
-  &:focus {
-    border-color: var(--accent-primary);
-    box-shadow: 
-      0 0 0 3px rgba(100, 255, 218, 0.1),
-      inset 0 2px 4px rgba(0, 0, 0, 0.2);
-    background: rgba(30, 41, 59, 0.8);
-    outline: none;
-  }
-
-  &::placeholder {
-    color: var(--dark-500);
-  }
-  
-  @media (max-width: 640px) {
-    max-width: 100%;
-  }
-`;
-
 const ProjectsGrid = styled(Grid)`
-  grid-template-columns: repeat(auto-fill, minmax(min(100%, 380px), 1fr));
-  gap: clamp(1.5rem, 3vw, 2.5rem);
-  grid-auto-rows: 1fr;
+  grid-template-columns: repeat(auto-fill, minmax(360px, 1fr));
+  gap: var(--spacing-8);
   
-  @media (max-width: 640px) {
+  @media (max-width: 768px) {
     grid-template-columns: 1fr;
-    gap: var(--spacing-6);
-    grid-auto-rows: auto;
-  }
-  
-  @media (min-width: 641px) and (max-width: 1024px) {
-    grid-template-columns: repeat(auto-fill, minmax(min(100%, 340px), 1fr));
-    gap: var(--spacing-6);
-  }
-  
-  @media (min-width: 1536px) {
-    grid-template-columns: repeat(auto-fill, minmax(min(100%, 360px), 1fr));
+    gap: var(--spacing-8);
   }
 `;
 
-const ProjectCard = styled(Card)`
+const ProjectCard = styled(motion.div)`
   position: relative;
-  overflow: hidden;
   display: flex;
   flex-direction: column;
   height: 100%;
-  min-height: 560px;
-  cursor: pointer;
-  background: rgba(30, 41, 59, 0.4);
+  background: rgba(30, 41, 59, 0.3);
   backdrop-filter: blur(16px);
-  border: 1px solid rgba(100, 255, 218, 0.08);
-  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  -webkit-backdrop-filter: blur(16px);
+  border: 1px solid rgba(255, 255, 255, 0.05);
+  border-radius: var(--radius-2xl);
+  overflow: hidden;
+  transition: border-color 0.3s ease;
   
-  @media (max-width: 640px) {
-    min-height: auto;
-  }
-  
-  &::before {
-    content: '';
-    position: absolute;
-    top: 0;
-    left: 0;
-    right: 0;
-    bottom: 0;
-    background: linear-gradient(135deg, 
-      rgba(100, 255, 218, 0.02) 0%, 
-      rgba(139, 92, 246, 0.02) 100%);
-    opacity: 0;
-    transition: opacity 0.3s ease;
-    pointer-events: none;
-    z-index: 0;
-  }
-  
+  /* Hover State for Card */
   &:hover {
-    transform: translateY(-6px);
-    border-color: rgba(100, 255, 218, 0.4);
-    box-shadow: 0 20px 40px rgba(0, 0, 0, 0.4);
-    background: rgba(30, 41, 59, 0.55);
+    border-color: rgba(100, 255, 218, 0.3);
     
-    &::before {
-      opacity: 0.5;
+    .project-image {
+      transform: scale(1.05);
     }
-  }
-  
-  @media (max-width: 768px) {
-    &:hover {
-      transform: translateY(-4px);
-      box-shadow: 0 15px 30px rgba(0, 0, 0, 0.3);
-      border-color: rgba(100, 255, 218, 0.25);
+    
+    .project-overlay {
+      opacity: 1;
     }
-  }
-  
-  @media (max-width: 640px) {
-    backdrop-filter: blur(12px);
   }
 `;
 
 const ProjectImageContainer = styled.div<{ bgColor: string }>`
   width: 100%;
-  aspect-ratio: 16 / 9;
-  background: linear-gradient(135deg, ${props => props.bgColor} 0%, rgba(0, 0, 0, 0.8) 100%);
-  border-radius: var(--radius-lg);
-  margin-bottom: var(--spacing-6);
+  height: 240px;
   position: relative;
   overflow: hidden;
+  background: ${props => props.bgColor};
   display: flex;
   align-items: center;
   justify-content: center;
   
-  &::before {
-    content: '';
-    position: absolute;
-    inset: 0;
-    background: radial-gradient(circle at 50% 50%, 
-      rgba(100, 255, 218, 0.05) 0%, 
-      transparent 70%);
-    z-index: 1;
-    pointer-events: none;
+  img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    transition: transform 0.6s cubic-bezier(0.4, 0, 0.2, 1);
   }
-  
+
   &::after {
     content: '';
     position: absolute;
     inset: 0;
-    background: linear-gradient(135deg, 
-      rgba(100, 255, 218, 0.05) 0%, 
-      rgba(139, 92, 246, 0.05) 100%);
-    z-index: 1;
-    pointer-events: none;
-    opacity: 0;
-    transition: opacity 0.4s ease;
+    background: linear-gradient(to top, rgba(15, 23, 42, 0.9) 0%, transparent 100%);
+    opacity: 0.6;
   }
-  
-  ${ProjectCard}:hover & {
-    &::after {
-      opacity: 1;
-    }
-    
-    img {
-      transform: scale(1.08);
-    }
-  }
-  
-  img {
-    transition: transform 0.6s cubic-bezier(0.4, 0, 0.2, 1);
-  }
-  
-  @media (max-width: 640px) {
-    aspect-ratio: 4 / 3;
-  }
-`;
-
-
-const ProjectIconOverlay = styled.div`
-  position: absolute;
-  top: 50%;
-  left: 50%;
-  transform: translate(-50%, -50%);
-  font-size: var(--text-6xl);
-  z-index: 2;
-  text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.8);
-`;
-
-const ProjectBadge = styled(Badge)`
-  position: absolute;
-  top: var(--spacing-4);
-  left: var(--spacing-4);
-  z-index: 2;
-  backdrop-filter: blur(12px);
-  background: rgba(30, 41, 59, 0.8);
-  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.3);
-  border: 1px solid rgba(100, 255, 218, 0.3);
-  font-weight: var(--font-semibold);
-  letter-spacing: 0.025em;
-`;
-
-const FeaturedBadge = styled(Badge)`
-  position: absolute;
-  top: var(--spacing-4);
-  right: var(--spacing-4);
-  z-index: 2;
-  backdrop-filter: blur(12px);
-  background: linear-gradient(135deg, rgba(34, 197, 94, 0.2), rgba(34, 197, 94, 0.1));
-  box-shadow: 0 2px 8px rgba(34, 197, 94, 0.25);
-  border: 1px solid rgba(34, 197, 94, 0.4);
-  font-weight: var(--font-semibold);
 `;
 
 const ProjectContent = styled.div`
-  position: relative;
-  z-index: 1;
+  padding: var(--spacing-6);
   flex: 1;
   display: flex;
   flex-direction: column;
-  min-height: 0;
 `;
 
 const ProjectTitle = styled.h3`
-  font-size: clamp(1.125rem, 2vw, 1.25rem);
+  font-size: 1.5rem;
+  font-weight: 700;
   color: var(--dark-50);
-  margin-bottom: var(--spacing-3);
-  font-weight: var(--font-bold);
-  letter-spacing: -0.025em;
-  line-height: 1.3;
-  transition: color 0.3s ease;
+  margin-bottom: var(--spacing-2);
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
   
-  ${ProjectCard}:hover & {
-    color: var(--accent-primary);
+  a {
+    transition: color 0.3s ease;
+    &:hover {
+      color: var(--accent-primary);
+    }
   }
 `;
 
 const ProjectDescription = styled.p`
   color: var(--dark-300);
-  line-height: 1.65;
+  line-height: 1.6;
+  font-size: 0.95rem;
   margin-bottom: var(--spacing-6);
-  font-size: clamp(0.875rem, 1.5vw, 0.9375rem);
   display: -webkit-box;
   -webkit-line-clamp: 3;
   -webkit-box-orient: vertical;
   overflow: hidden;
-  flex-shrink: 0;
-  height: 4.95em;
 `;
 
 const ProjectTech = styled.div`
   display: flex;
   flex-wrap: wrap;
-  gap: var(--spacing-2);
+  gap: 8px;
+  margin-top: auto;
   margin-bottom: var(--spacing-6);
-  align-items: flex-start;
-  min-height: 4.5rem;
-  max-height: 5rem;
-  overflow: visible;
 `;
 
 const TechTag = styled.span`
-  background: linear-gradient(135deg, 
-    rgba(139, 92, 246, 0.15), 
-    rgba(100, 255, 218, 0.1));
-  color: var(--accent-primary);
-  padding: var(--spacing-1) var(--spacing-3);
+  font-size: 0.75rem;
+  color: var(--dark-200);
+  background: rgba(255, 255, 255, 0.05);
+  padding: 4px 10px;
   border-radius: var(--radius-md);
-  font-size: var(--text-xs);
-  font-weight: var(--font-semibold);
-  border: 1px solid rgba(100, 255, 218, 0.25);
-  backdrop-filter: blur(8px);
-  transition: all 0.3s ease;
-  letter-spacing: 0.025em;
-  
+  border: 1px solid rgba(255, 255, 255, 0.05);
+  transition: all 0.2s ease;
+
   &:hover {
-    transform: scale(1.02);
-    border-color: var(--accent-primary);
-    background: linear-gradient(135deg, 
-      rgba(139, 92, 246, 0.25), 
-      rgba(100, 255, 218, 0.2));
-    box-shadow: 0 2px 8px rgba(100, 255, 218, 0.15);
+    color: var(--accent-primary);
+    background: rgba(100, 255, 218, 0.1);
+    border-color: rgba(100, 255, 218, 0.2);
   }
 `;
 
 const ProjectActions = styled.div`
   display: flex;
-  gap: var(--spacing-3);
-  align-items: center;
-  margin-top: auto;
-  padding-top: var(--spacing-2);
+  gap: var(--spacing-4);
+  margin-top: var(--spacing-2);
 `;
 
-const ActionButton = styled(Button)`
+const ActionButton = styled.a<{ variant?: 'primary' | 'secondary' | 'outline' }>`
   flex: 1;
-  text-align: center;
-  display: flex;
+  display: inline-flex;
   align-items: center;
   justify-content: center;
   gap: var(--spacing-2);
-  font-weight: var(--font-semibold);
-  position: relative;
-  overflow: hidden;
-  
-  &::before {
-    content: '';
-    position: absolute;
-    top: 50%;
-    left: 50%;
-    width: 0;
-    height: 0;
-    border-radius: 50%;
-    background: rgba(255, 255, 255, 0.1);
-    transform: translate(-50%, -50%);
-    transition: width 0.6s, height 0.6s;
-  }
-  
-  &:hover::before {
-    width: 300px;
-    height: 300px;
-  }
-  
-  &:active {
-    transform: scale(0.96);
-  }
+  padding: 10px 16px;
+  border-radius: var(--radius-lg);
+  font-size: 0.9rem;
+  font-weight: 600;
+  text-decoration: none;
+  transition: all 0.3s ease;
+  cursor: pointer;
+
+  ${props => props.variant === 'primary' && `
+    background: var(--accent-gradient);
+    color: var(--dark-950);
+    box-shadow: 0 4px 14px rgba(100, 255, 218, 0.2);
+    
+    &:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 6px 20px rgba(100, 255, 218, 0.3);
+    }
+  `}
+
+  ${props => props.variant === 'secondary' && `
+    background: rgba(255, 255, 255, 0.05);
+    color: var(--dark-100);
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    
+    &:hover {
+      background: rgba(255, 255, 255, 0.1);
+      border-color: var(--dark-100);
+      transform: translateY(-2px);
+    }
+  `}
 `;
 
 // Modal Styles
@@ -704,18 +550,18 @@ const ProjectModal: React.FC<ProjectModalProps> = ({ project, isOpen, onClose })
           onClick={(e) => e.stopPropagation()}
         >
           <CloseButton onClick={onClose}>×</CloseButton>
-          
+
           <div style={{ display: 'flex', alignItems: 'center', gap: 'var(--spacing-4)', marginBottom: 'var(--spacing-6)' }}>
-            <div style={{ 
-              fontSize: 'var(--text-3xl)', 
-              background: project.bgColor, 
-              padding: 'var(--spacing-4)', 
-              borderRadius: '50%', 
-              width: '70px', 
-              height: '70px', 
-              display: 'flex', 
-              alignItems: 'center', 
-              justifyContent: 'center' 
+            <div style={{
+              fontSize: 'var(--text-3xl)',
+              background: project.bgColor,
+              padding: 'var(--spacing-4)',
+              borderRadius: '50%',
+              width: '70px',
+              height: '70px',
+              display: 'flex',
+              alignItems: 'center',
+              justifyContent: 'center'
             }}>
               {project.icon}
             </div>
@@ -740,20 +586,20 @@ const ProjectModal: React.FC<ProjectModalProps> = ({ project, isOpen, onClose })
           </div>
 
           <ModalActions>
-            <ActionButton 
-              as="a" 
-              href={project.github} 
-              target="_blank" 
+            <ActionButton
+              as="a"
+              href={project.github}
+              target="_blank"
               rel="noopener noreferrer"
               variant="primary"
             >
               📂 View Code
             </ActionButton>
             {project.liveDemo && (
-              <ActionButton 
-                as="a" 
-                href={project.liveDemo} 
-                target="_blank" 
+              <ActionButton
+                as="a"
+                href={project.liveDemo}
+                target="_blank"
                 rel="noopener noreferrer"
                 variant="secondary"
               >
@@ -761,10 +607,10 @@ const ProjectModal: React.FC<ProjectModalProps> = ({ project, isOpen, onClose })
               </ActionButton>
             )}
             {project.download && (
-              <ActionButton 
-                as="a" 
-                href={project.download} 
-                target="_blank" 
+              <ActionButton
+                as="a"
+                href={project.download}
+                target="_blank"
                 rel="noopener noreferrer"
                 variant="outline"
               >
@@ -790,7 +636,7 @@ const Projects: React.FC = () => {
     const timer = setTimeout(() => {
       setIsLoading(false);
     }, 800); // Simulate loading time
-    
+
     return () => clearTimeout(timer);
   }, []);
 
@@ -798,8 +644,8 @@ const Projects: React.FC = () => {
     return projectsData.filter(project => {
       const matchesCategory = selectedCategory === 'All' || project.category === selectedCategory;
       const matchesSearch = project.title.toLowerCase().includes(searchQuery.toLowerCase()) ||
-                           project.description.toLowerCase().includes(searchQuery.toLowerCase()) ||
-                           project.technologies.some(tech => tech.toLowerCase().includes(searchQuery.toLowerCase()));
+        project.description.toLowerCase().includes(searchQuery.toLowerCase()) ||
+        project.technologies.some(tech => tech.toLowerCase().includes(searchQuery.toLowerCase()));
       return matchesCategory && matchesSearch;
     });
   }, [selectedCategory, searchQuery]);
@@ -844,158 +690,139 @@ const Projects: React.FC = () => {
       />
       <ProjectsHero>
         <Container>
-          <motion.div
-            variants={containerVariants}
-            initial="hidden"
-            animate="visible"
+          <HeroTitle
+            initial={{ opacity: 0, y: 30 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.6 }}
           >
-            <HeroTitle variants={itemVariants}>
-              My Projects
-            </HeroTitle>
-            <HeroSubtitle variants={itemVariants}>
-              A showcase of my work spanning desktop applications, web development, 
-              and mobile apps. Each project represents a unique solution to real-world problems.
-            </HeroSubtitle>
+            My Projects
+          </HeroTitle>
+          <HeroSubtitle
+            initial={{ opacity: 0, y: 20 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.6, delay: 0.2 }}
+          >
+            A curated showcase of applications, tools, and experiments.
+            <br />
+            Built with a focus on performance, security, and user experience.
+          </HeroSubtitle>
 
-            <FilterSection variants={itemVariants}>
-              {categories.map(category => (
-                <FilterButton
-                  key={category}
-                  active={selectedCategory === category}
-                  onClick={() => setSelectedCategory(category)}
-                  whileHover={{ scale: 1.05 }}
-                  whileTap={{ scale: 0.95 }}
-                >
-                  {category}
-                </FilterButton>
-              ))}
-            </FilterSection>
-
-            <SearchContainer variants={itemVariants}>
-              <SearchInput
-                type="text"
-                placeholder="🔍 Search projects..."
-                value={searchQuery}
-                onChange={(e) => setSearchQuery(e.target.value)}
-              />
-            </SearchContainer>
-          </motion.div>
+          <FilterSection
+            initial={{ opacity: 0, y: 20 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.6, delay: 0.3 }}
+          >
+            {categories.map((category) => (
+              <FilterButton
+                key={category}
+                active={selectedCategory === category}
+                onClick={() => setSelectedCategory(category)}
+                whileHover={{ scale: 1.05 }}
+                whileTap={{ scale: 0.95 }}
+              >
+                {category}
+              </FilterButton>
+            ))}
+          </FilterSection>
         </Container>
       </ProjectsHero>
 
-      <Section padding="0 0 80px 0">
+      <Section style={{ paddingTop: 0 }}>
         <Container>
-          {isLoading ? (
-            <ProjectsGrid>
-              <SkeletonGrid count={6} />
-            </ProjectsGrid>
-          ) : (
-            <StaggerContainer staggerDelay={0.15}>
-              <ProjectsGrid>
-                <AnimatePresence>
-                  {filteredProjects.map((project, index) => (
-                  <StaggerItem key={project.id} variant="scaleUp">
-                    <motion.div
-                      layout
-                      initial={{ opacity: 0, scale: 0.8 }}
-                      animate={{ opacity: 1, scale: 1 }}
-                      exit={{ opacity: 0, scale: 0.8 }}
-                      transition={{ duration: 0.5 }}
-                      onClick={() => openModal(project)}
-                    >
-                    <ProjectCard>
-                  <ProjectImageContainer bgColor={project.bgColor}>
-                    {project.image && (
-                      <OptimizedImage 
-                        src={project.image} 
-                        alt={project.title}
-                        loading="lazy"
-                        style={{
-                          width: '85%',
-                          height: '85%',
-                          maxWidth: '300px',
-                          maxHeight: '180px',
-                          objectFit: 'contain',
-                          objectPosition: 'center',
-                          borderRadius: 'var(--radius-md)',
-                          position: 'relative',
-                          zIndex: 0,
-                          backgroundColor: 'rgba(255, 255, 255, 0.05)',
-                          padding: 'var(--spacing-2)',
-                        }}
-                      />
-                    )}
-                    {!project.image && (
-                      <ProjectIconOverlay>
-                        {project.icon}
-                      </ProjectIconOverlay>
-                    )}
-                    <ProjectBadge variant="info">{project.category}</ProjectBadge>
-                    {project.featured && (
-                      <FeaturedBadge variant="success">⭐ Featured</FeaturedBadge>
-                    )}
-                  </ProjectImageContainer>
-
-                  <ProjectContent>
-                    <ProjectTitle>{project.title}</ProjectTitle>
-                    <ProjectDescription>{project.description}</ProjectDescription>
-                    <ProjectTech>
-                      {project.technologies.slice(0, 3).map((tech, techIndex) => (
-                        <TechTag key={techIndex}>{tech}</TechTag>
-                      ))}
-                      {project.technologies.length > 3 && (
-                        <TechTag>+{project.technologies.length - 3} more</TechTag>
+          <AnimatePresence mode="wait">
+            {!isLoading && (
+              <ProjectsGrid
+                as={motion.div}
+                initial={{ opacity: 0 }}
+                animate={{ opacity: 1 }}
+                exit={{ opacity: 0 }}
+                key={selectedCategory} // Force re-render on category change for stagger effect
+              >
+                {filteredProjects.map((project, index) => (
+                  <ProjectCard
+                    key={project.id}
+                    initial={{ opacity: 0, y: 20 }}
+                    animate={{ opacity: 1, y: 0 }}
+                    transition={{ duration: 0.5, delay: index * 0.1 }}
+                    whileHover={{ y: -8 }}
+                    onClick={() => {
+                      setSelectedProject(project);
+                      setIsModalOpen(true);
+                    }}
+                  >
+                    <ProjectImageContainer bgColor={project.bgColor} className="project-image">
+                      {project.image ? (
+                        <OptimizedImage
+                          src={project.image}
+                          alt={project.title}
+                          width="100%"
+                          height="100%"
+                          style={{ objectFit: 'cover' }}
+                        />
+                      ) : (
+                        <div style={{ fontSize: '4rem' }}>{project.icon}</div>
                       )}
-                    </ProjectTech>
-                    <ProjectActions>
-                      <ActionButton variant="primary" size="sm">
-                        View Details
-                      </ActionButton>
-                      <ActionButton 
-                        as="a" 
-                        href={project.github} 
-                        target="_blank" 
-                        rel="noopener noreferrer"
-                        variant="outline" 
-                        size="sm"
-                        onClick={(e: React.MouseEvent) => e.stopPropagation()}
-                      >
-                        📂 Code
-                      </ActionButton>
-                    </ProjectActions>
-                  </ProjectContent>
-                  </ProjectCard>
-                  </motion.div>
-                </StaggerItem>
-                  ))}
-                </AnimatePresence>
-              </ProjectsGrid>
-            </StaggerContainer>
-          )}
+                    </ProjectImageContainer>
 
-          {filteredProjects.length === 0 && (
-            <motion.div
-              initial={{ opacity: 0 }}
-              animate={{ opacity: 1 }}
-              style={{ 
-                textAlign: 'center', 
-                padding: 'var(--spacing-16)', 
-                color: 'var(--dark-400)' 
-              }}
-            >
-              <h3 style={{ fontSize: 'var(--text-2xl)', marginBottom: 'var(--spacing-4)' }}>
-                No projects found
-              </h3>
-              <p>Try adjusting your search or filter criteria.</p>
-            </motion.div>
-          )}
+                    <ProjectContent>
+                      <ProjectTitle>{project.title}</ProjectTitle>
+                      <ProjectDescription>{project.description}</ProjectDescription>
+
+                      <ProjectTech>
+                        {project.technologies.slice(0, 4).map((tech: string, i: number) => (
+                          <TechTag key={i}>{tech}</TechTag>
+                        ))}
+                        {project.technologies.length > 4 && (
+                          <TechTag>+{project.technologies.length - 4}</TechTag>
+                        )}
+                      </ProjectTech>
+
+                      <ProjectActions>
+                        <ActionButton
+                          as="a"
+                          href={project.github}
+                          target="_blank"
+                          variant="secondary"
+                          onClick={(e: React.MouseEvent) => e.stopPropagation()}
+                        >
+                          GitHub
+                        </ActionButton>
+                        {project.liveDemo && (
+                          <ActionButton
+                            as="a"
+                            href={project.liveDemo}
+                            target="_blank"
+                            variant="primary"
+                            onClick={(e: React.MouseEvent) => e.stopPropagation()}
+                          >
+                            Live Demo
+                          </ActionButton>
+                        )}
+                        {!project.liveDemo && project.download && (
+                          <ActionButton
+                            as="a"
+                            href={project.download}
+                            target="_blank"
+                            variant="primary"
+                            onClick={(e: React.MouseEvent) => e.stopPropagation()}
+                          >
+                            Download
+                          </ActionButton>
+                        )}
+                      </ProjectActions>
+                    </ProjectContent>
+                  </ProjectCard>
+                ))}
+              </ProjectsGrid>
+            )}
+          </AnimatePresence>
         </Container>
       </Section>
 
-      <ProjectModal 
+      <ProjectModal
         project={selectedProject}
         isOpen={isModalOpen}
-        onClose={closeModal}
+        onClose={() => setIsModalOpen(false)}
       />
     </PageTransition>
   );
