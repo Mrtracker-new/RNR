@@ -5,7 +5,6 @@ import { Container, Section, Grid, Badge } from '../styles/GlobalStyle';
 import SEO from '../components/SEO';
 import OptimizedImage from '../components/OptimizedImage';
 import PageTransition from '../components/PageTransition';
-import { StaggerItem } from '../components/ScrollReveal';
 
 // Import project images
 import invisioVaultDesktopImg from '../assets/images/InvisioVault_Suit.png';
@@ -512,11 +511,11 @@ const projectsData = [
     id: 9,
     title: 'LinkNest',
     category: 'Android App',
-    description: 'React Native bookmark manager and note-taking app for Android. Organize links, documents, and notes with categories, tags, and search. Free offline-first digital resource manager APK.',
-    longDescription: 'LinkNest is a comprehensive digital resource management app for Android built with React Native. This powerful bookmark manager and note-taking application helps you organize all your digital resources in one place with offline-first functionality. Save and organize bookmarks with custom titles and descriptions, create rich text notes with formatting, store documents with preview support, and categorize everything with tags and folders. Perfect for students, researchers, developers, and professionals managing large collections of links and resources. Features include: advanced link/bookmark management, rich text note editor, document storage and preview, smart categorization with custom tags, favorites system for quick access, powerful full-text search across all content, advanced filtering and sorting, dark mode with Material Design 3 UI, offline-first architecture with local storage, cross-platform (Android/iOS), export and backup functionality, and native performance. Built with React Native, TypeScript, and modern mobile development best practices. Download the free Android APK and keep your digital life organized.',
-    technologies: ['React Native', 'TypeScript', 'React Navigation', 'Material Design 3', 'AsyncStorage', 'Android', 'iOS'],
+    description: 'LinkNest is your personal knowledge vault that lives entirely on your device. Organize links, documents, and notes with categories, tags, and search. Free offline-first digital resource manager APK.',
+    longDescription: 'LinkNest is your personal knowledge vault that lives entirely on your device. No cloud sync to betray your secrets, no subscription fees to drain your wallet, no "oops we got hacked" emails. Just you, your data, and sweet, sweet privacy. 🔒',
+    technologies: ['Flutter', 'Dart', 'C++', 'Android', 'iOS'],
     github: 'https://github.com/Mrtracker-new/LinkNest',
-    download: 'https://github.com/Mrtracker-new/LinkNest/releases/download/v1.0/LinkNest.apk',
+    download: 'https://github.com/Mrtracker-new/LinkNest/releases/download/v2.0/LinkNest-v2.0.apk',
     featured: false,
     icon: '🔗',
     bgColor: '#000000',
@@ -626,7 +625,6 @@ const ProjectModal: React.FC<ProjectModalProps> = ({ project, isOpen, onClose })
 
 const Projects: React.FC = () => {
   const [selectedCategory, setSelectedCategory] = useState('All');
-  const [searchQuery, setSearchQuery] = useState('');
   const [selectedProject, setSelectedProject] = useState<any>(null);
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [isLoading, setIsLoading] = useState(true);
@@ -642,43 +640,9 @@ const Projects: React.FC = () => {
 
   const filteredProjects = useMemo(() => {
     return projectsData.filter(project => {
-      const matchesCategory = selectedCategory === 'All' || project.category === selectedCategory;
-      const matchesSearch = project.title.toLowerCase().includes(searchQuery.toLowerCase()) ||
-        project.description.toLowerCase().includes(searchQuery.toLowerCase()) ||
-        project.technologies.some(tech => tech.toLowerCase().includes(searchQuery.toLowerCase()));
-      return matchesCategory && matchesSearch;
+      return selectedCategory === 'All' || project.category === selectedCategory;
     });
-  }, [selectedCategory, searchQuery]);
-
-  const openModal = (project: any) => {
-    setSelectedProject(project);
-    setIsModalOpen(true);
-    // Prevent body scroll but don't change scroll position
-    document.body.style.overflow = 'hidden';
-  };
-
-  const closeModal = () => {
-    setIsModalOpen(false);
-    setSelectedProject(null);
-    // Restore body scroll
-    document.body.style.overflow = 'unset';
-  };
-
-  const containerVariants = {
-    hidden: { opacity: 0 },
-    visible: {
-      opacity: 1,
-      transition: {
-        staggerChildren: 0.1,
-        delayChildren: 0.1
-      }
-    }
-  };
-
-  const itemVariants = {
-    hidden: { opacity: 0, y: 30 },
-    visible: { opacity: 1, y: 0 }
-  };
+  }, [selectedCategory]);
 
   return (
     <PageTransition>
