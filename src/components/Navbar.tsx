@@ -4,201 +4,193 @@ import styled from 'styled-components';
 import { motion, AnimatePresence } from 'framer-motion';
 import { scrollOptimizer } from '../utils/performance';
 
-const NavbarContainer = styled(motion.nav)<{ scrolled: boolean }>`
+// Fixed container ensuring it stays on top
+const FixedContainer = styled.div`
   position: fixed;
   top: 0;
   left: 0;
   right: 0;
   z-index: 1000;
-  background: ${props => props.scrolled ? 'rgba(9, 9, 11, 0.85)' : 'transparent'};
-  backdrop-filter: ${props => props.scrolled ? 'blur(16px)' : 'none'};
-  -webkit-backdrop-filter: ${props => props.scrolled ? 'blur(16px)' : 'none'};
-  border-bottom: ${props => props.scrolled ? '1px solid rgba(100, 255, 218, 0.1)' : '1px solid transparent'};
-  transition: var(--transition-normal);
-  padding: var(--spacing-5) 0;
-  box-shadow: ${props => props.scrolled ? '0 4px 12px rgba(0, 0, 0, 0.3)' : 'none'};
+  padding: var(--spacing-4);
+  pointer-events: none; /* Let clicks pass through the padding area */
+  display: flex;
+  justify-content: center;
 
   @media (max-width: 768px) {
-    padding: var(--spacing-4) 0;
-  }
-
-  @media (prefers-reduced-motion: reduce) {
-    backdrop-filter: none;
-    -webkit-backdrop-filter: none;
-    background: ${props => props.scrolled ? 'rgba(9, 9, 11, 0.95)' : 'rgba(9, 9, 11, 0.3)'};
+    padding: 0;
   }
 `;
 
-const NavContent = styled.div`
-  max-width: var(--breakpoint-xl);
-  margin: 0 auto;
-  padding: 0 var(--spacing-4);
+// The actual "Island" navbar
+const NavbarIsland = styled(motion.nav) <{ scrolled: boolean }>`
+  pointer-events: auto; /* Re-enable clicks */
+  width: 100%;
+  max-width: var(--breakpoint-lg);
+  background: rgba(9, 9, 11, 0.6);
+  backdrop-filter: blur(20px);
+  -webkit-backdrop-filter: blur(20px);
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  border-radius: var(--radius-2xl);
+  padding: var(--spacing-3) var(--spacing-6);
   display: flex;
   align-items: center;
   justify-content: space-between;
+  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.2);
+  transition: all 0.4s cubic-bezier(0.16, 1, 0.3, 1);
 
-  @media (max-width: 480px) {
-    padding: 0 var(--spacing-4);
+  /* Desktop: Floating Island */
+  @media (min-width: 769px) {
+    margin-top: ${props => props.scrolled ? 'var(--spacing-2)' : 'var(--spacing-4)'};
+    background: ${props => props.scrolled ? 'rgba(9, 9, 11, 0.8)' : 'rgba(9, 9, 11, 0.5)'};
+    width: ${props => props.scrolled ? 'auto' : '100%'}; /* Shrink on scroll? maybe just stay wide */
+    min-width: 600px;
   }
 
-  @media (max-width: 360px) {
-    padding: 0 var(--spacing-3);
-  }
-
-  @media (min-width: 640px) {
-    padding: 0 var(--spacing-6);
-  }
-
-  @media (min-width: 1024px) {
-    padding: 0 var(--spacing-8);
+  /* Mobile: Full width top bar */
+  @media (max-width: 768px) {
+    border-radius: 0;
+    border-top: none;
+    border-left: none;
+    border-right: none;
+    background: rgba(9, 9, 11, 0.9);
+    padding: var(--spacing-4);
   }
 `;
 
 const Logo = styled(Link)`
-  font-size: var(--text-xl);
-  font-weight: var(--font-bold);
-  background: linear-gradient(135deg, var(--accent-primary) 0%, var(--accent-secondary) 100%);
-  -webkit-background-clip: text;
-  -webkit-text-fill-color: transparent;
-  background-clip: text;
+  font-size: var(--text-lg);
+  font-weight: var(--font-extrabold);
+  color: var(--dark-100);
   text-decoration: none;
-  transition: var(--transition-normal);
-  letter-spacing: -0.025em;
-
-  &:hover {
-    transform: scale(1.05);
-    filter: drop-shadow(0 0 8px rgba(100, 255, 218, 0.3));
+  display: flex;
+  align-items: center;
+  gap: var(--spacing-2);
+  z-index: 10;
+  position: relative;
+  
+  span {
+    background: var(--accent-gradient);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
   }
 `;
 
 const NavLinks = styled.div`
   display: flex;
-  align-items: center;
-  gap: var(--spacing-6);
+  gap: var(--spacing-1);
+  position: relative;
+  background: rgba(255, 255, 255, 0.03);
+  padding: 4px;
+  border-radius: var(--radius-lg); // Changed from radius-full
+  border: 1px solid rgba(255, 255, 255, 0.05);
 
   @media (max-width: 768px) {
     display: none;
   }
 `;
 
-const NavLink = styled(Link)<{ active: boolean }>`
+const NavItem = styled(Link) <{ active: boolean }>`
   position: relative;
-  padding: var(--spacing-2) var(--spacing-3);
-  font-weight: var(--font-medium);
+  padding: 8px 16px;
   font-size: var(--text-sm);
+  font-weight: var(--font-medium);
   color: ${props => props.active ? 'var(--accent-primary)' : 'var(--dark-400)'};
   text-decoration: none;
-  transition: var(--transition-fast);
-  border-radius: var(--radius-sm);
+  transition: color 0.3s ease;
+  z-index: 1;
+  border-radius: var(--radius-md);
+  display: flex; // Ensure block model
+  align-items: center;
+  justify-content: center;
 
   &:hover {
-    color: var(--dark-200);
-  }
-
-  &::after {
-    content: '';
-    position: absolute;
-    bottom: -2px;
-    left: 50%;
-    width: ${props => props.active ? '20px' : '0'};
-    height: 2px;
-    background: var(--accent-primary);
-    transform: translateX(-50%);
-    transition: var(--transition-fast);
-    border-radius: var(--radius-full);
-  }
-
-  &:hover::after {
-    width: 20px;
+    color: var(--dark-100);
   }
 `;
 
-const MobileMenuButton = styled.button<{ open: boolean }>`
-  display: none;
-  flex-direction: column;
+const NavItemExternal = styled.a`
+  position: relative;
+  padding: 8px 16px;
+  font-size: var(--text-sm);
+  font-weight: var(--font-medium);
+  color: var(--dark-400);
+  text-decoration: none;
+  transition: color 0.3s ease;
+  z-index: 1;
+  border-radius: var(--radius-md);
+  display: flex; // Ensure block model
   align-items: center;
   justify-content: center;
-  width: 32px;
-  height: 32px;
-  background: transparent;
-  border: none;
-  cursor: pointer;
-  padding: var(--spacing-1);
-  border-radius: var(--radius-sm);
-  transition: var(--transition-fast);
-
-  @media (max-width: 768px) {
-    display: flex;
-  }
 
   &:hover {
-    background: var(--dark-800);
+    color: var(--dark-100);
   }
+`;
 
-  span {
+const ActivePill = styled(motion.div)`
+  position: absolute;
+  inset: 0;
+  border-radius: var(--radius-md);
+  background: rgba(255, 255, 255, 0.08);
+  z-index: -1; // Behind content
+`;
+
+const MobileToggle = styled.button`
+  display: none;
+  background: none;
+  border: none;
+  color: var(--dark-100);
+  padding: var(--spacing-2);
+  cursor: pointer;
+  z-index: 20;
+
+  @media (max-width: 768px) {
     display: block;
-    width: 18px;
-    height: 2px;
-    background: var(--dark-300);
-    margin: 2px 0;
-    transition: var(--transition-fast);
-    transform-origin: center;
-    border-radius: var(--radius-full);
-
-    &:nth-child(1) {
-      transform: ${props => props.open ? 'rotate(45deg) translate(5px, 5px)' : 'none'};
-    }
-
-    &:nth-child(2) {
-      opacity: ${props => props.open ? '0' : '1'};
-    }
-
-    &:nth-child(3) {
-      transform: ${props => props.open ? 'rotate(-45deg) translate(5px, -5px)' : 'none'};
-    }
   }
 `;
 
 const MobileMenu = styled(motion.div)`
-  position: absolute;
-  top: 100%;
+  position: fixed;
+  top: 0;
   left: 0;
   right: 0;
-  background: rgba(9, 9, 11, 0.98);
-  backdrop-filter: blur(12px);
-  border-bottom: 1px solid var(--dark-800);
-  padding: var(--spacing-4) 0;
-
-  @media (min-width: 769px) {
-    display: none;
-  }
-`;
-
-const MobileNavLink = styled(Link)<{ active: boolean }>`
-  display: block;
-  padding: var(--spacing-3) var(--spacing-6);
-  font-weight: var(--font-medium);
-  font-size: var(--text-sm);
-  color: ${props => props.active ? 'var(--accent-primary)' : 'var(--dark-400)'};
-  text-decoration: none;
-  transition: var(--transition-fast);
-  border-left: ${props => props.active ? '2px solid var(--accent-primary)' : '2px solid transparent'};
-
-  &:hover {
-    color: var(--dark-200);
-    border-left-color: var(--accent-primary);
-    background: var(--dark-900);
-  }
-`;
-
-const ScrollProgress = styled(motion.div)`
-  position: absolute;
   bottom: 0;
-  left: 0;
-  height: 2px;
-  background: linear-gradient(90deg, var(--accent-primary) 0%, var(--accent-secondary) 100%);
-  transform-origin: left;
-  box-shadow: 0 0 4px rgba(100, 255, 218, 0.3);
+  background: var(--dark-950);
+  z-index: 15;
+  padding: 80px var(--spacing-6) var(--spacing-6);
+  display: flex;
+  flex-direction: column;
+  gap: var(--spacing-4);
+`;
+
+const MobileLink = styled(Link)`
+  font-size: var(--text-2xl);
+  font-weight: var(--font-bold);
+  color: var(--dark-200);
+  text-decoration: none;
+  padding: var(--spacing-4);
+  border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+
+  &:active {
+    color: var(--accent-primary);
+    background: rgba(255, 255, 255, 0.02);
+  }
+`;
+
+const MobileLinkExternal = styled.a`
+  font-size: var(--text-2xl);
+  font-weight: var(--font-bold);
+  color: var(--dark-200);
+  text-decoration: none;
+  padding: var(--spacing-4);
+  border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
 `;
 
 const navItems = [
@@ -212,140 +204,126 @@ const navItems = [
 const Navbar: React.FC = () => {
   const [scrolled, setScrolled] = useState(false);
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
-  const [scrollProgress, setScrollProgress] = useState(0);
   const location = useLocation();
 
   useEffect(() => {
-    const handleScrollUpdate = (scrollData: any) => {
-      const { scrollY } = scrollData;
-      const docHeight = document.documentElement.scrollHeight - window.innerHeight;
-      const scrollPercent = (scrollY / Math.max(docHeight, 1)) * 100;
-      
-      setScrolled(scrollY > 50);
-      setScrollProgress(scrollPercent);
+    const handleScrollUpdate = ({ scrollY }: { scrollY: number }) => {
+      setScrolled(scrollY > 20);
     };
-
     const unsubscribe = scrollOptimizer.subscribe(handleScrollUpdate);
-    
     return () => {
       if (unsubscribe) unsubscribe();
     };
   }, []);
 
-  const toggleMobileMenu = () => {
-    setMobileMenuOpen(!mobileMenuOpen);
-  };
-
-  const closeMobileMenu = () => {
-    setMobileMenuOpen(false);
-  };
+  // Lock body scroll when mobile menu is open
+  useEffect(() => {
+    if (mobileMenuOpen) {
+      document.body.style.overflow = 'hidden';
+    } else {
+      document.body.style.overflow = 'unset';
+    }
+  }, [mobileMenuOpen]);
 
   return (
-    <NavbarContainer
-      scrolled={scrolled}
-      initial={{ y: -100 }}
-      animate={{ y: 0 }}
-      transition={{ duration: 0.5 }}
-    >
-      <NavContent>
-        <Logo to="/" onClick={closeMobileMenu}>
-          RNR
-        </Logo>
-
-        <NavLinks>
-          {navItems.map(item => (
-            item.external ? (
-              <a
-                key={item.path}
-                href={item.path}
-                target="_blank"
-                rel="noopener noreferrer"
-                style={{
-                  position: 'relative',
-                  padding: 'var(--spacing-2) var(--spacing-3)',
-                  fontWeight: 'var(--font-medium)',
-                  fontSize: 'var(--text-sm)',
-                  color: 'var(--dark-400)',
-                  textDecoration: 'none',
-                  transition: 'var(--transition-fast)',
-                  borderRadius: 'var(--radius-sm)'
-                }}
-                onMouseEnter={(e) => e.currentTarget.style.color = 'var(--dark-200)'}
-                onMouseLeave={(e) => e.currentTarget.style.color = 'var(--dark-400)'}
-              >
-                {item.label} ↗
-              </a>
-            ) : (
-              <NavLink
-                key={item.path}
-                to={item.path}
-                active={location.pathname === item.path}
-              >
-                {item.label}
-              </NavLink>
-            )
-          ))}
-        </NavLinks>
-
-        <MobileMenuButton
-          open={mobileMenuOpen}
-          onClick={toggleMobileMenu}
-          aria-label="Toggle mobile menu"
+    <>
+      <FixedContainer>
+        <NavbarIsland
+          scrolled={scrolled}
+          initial={{ y: -50, opacity: 0 }}
+          animate={{ y: 0, opacity: 1 }}
+          transition={{ duration: 0.6, ease: "easeOut" }}
         >
-          <span />
-          <span />
-          <span />
-        </MobileMenuButton>
-      </NavContent>
+          <Logo to="/" onClick={() => setMobileMenuOpen(false)}>
+            <span>RNR</span>
+          </Logo>
+
+          <NavLinks>
+            {navItems.map((item) => {
+              const isActive = location.pathname === item.path;
+              return (
+                <div key={item.path} style={{ position: 'relative' }}>
+                  {item.external ? (
+                    <NavItemExternal
+                      href={item.path}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                    >
+                      {item.label}  <span style={{ fontSize: '0.8em', opacity: 0.5 }}>↗</span>
+                    </NavItemExternal>
+                  ) : (
+                    <NavItem
+                      to={item.path}
+                      active={isActive}
+                    >
+                      {item.label}
+                      {isActive && (
+                        <ActivePill
+                          layoutId="nav-pill"
+                          transition={{ type: "spring", stiffness: 300, damping: 30 }}
+                          style={{ inset: 0 }} // Ensure pill covers the item area
+                        />
+                      )}
+                    </NavItem>
+                  )}
+                </div>
+              );
+            })}
+          </NavLinks>
+
+          <MobileToggle onClick={() => setMobileMenuOpen(!mobileMenuOpen)}>
+            {mobileMenuOpen ? '✕' : '☰'}
+          </MobileToggle>
+        </NavbarIsland>
+      </FixedContainer>
 
       <AnimatePresence>
         {mobileMenuOpen && (
           <MobileMenu
-            initial={{ opacity: 0, height: 0 }}
-            animate={{ opacity: 1, height: 'auto' }}
-            exit={{ opacity: 0, height: 0 }}
-            transition={{ duration: 0.3 }}
+            initial={{ opacity: 0, y: -20 }}
+            animate={{ opacity: 1, y: 0 }}
+            exit={{ opacity: 0, y: -20 }}
+            transition={{ type: "spring", damping: 25, stiffness: 200 }}
           >
-            {navItems.map(item => (
-              item.external ? (
-                <a
-                  key={item.path}
-                  href={item.path}
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  onClick={closeMobileMenu}
-                  style={{
-                    display: 'block',
-                    padding: 'var(--spacing-3) var(--spacing-6)',
-                    fontWeight: 'var(--font-medium)',
-                    fontSize: 'var(--text-sm)',
-                    color: 'var(--dark-400)',
-                    textDecoration: 'none',
-                    transition: 'var(--transition-fast)',
-                    borderLeft: '2px solid transparent'
-                  }}
-                >
-                  {item.label} ↗
-                </a>
-              ) : (
-                <MobileNavLink
-                  key={item.path}
-                  to={item.path}
-                  active={location.pathname === item.path}
-                  onClick={closeMobileMenu}
-                >
-                  {item.label}
-                </MobileNavLink>
-              )
+            {navItems.map((item, index) => (
+              <motion.div
+                key={item.path}
+                initial={{ opacity: 0, x: -20 }}
+                animate={{ opacity: 1, x: 0 }}
+                transition={{ delay: index * 0.05 }}
+              >
+                {item.external ? (
+                  <MobileLinkExternal
+                    href={item.path}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    onClick={() => setMobileMenuOpen(false)}
+                  >
+                    {item.label} ↗
+                  </MobileLinkExternal>
+                ) : (
+                  <MobileLink to={item.path} onClick={() => setMobileMenuOpen(false)}>
+                    {item.label}
+                    {location.pathname === item.path && (
+                      <motion.span layoutId="mobile-dot" style={{ width: 8, height: 8, borderRadius: '50%', background: 'var(--accent-primary)' }} />
+                    )}
+                  </MobileLink>
+                )}
+              </motion.div>
             ))}
+
+            <motion.div
+              style={{ marginTop: 'auto', textAlign: 'center', color: 'var(--dark-400)', fontSize: '0.9rem' }}
+              initial={{ opacity: 0 }}
+              animate={{ opacity: 1 }}
+              transition={{ delay: 0.4 }}
+            >
+              © {new Date().getFullYear()} Rolan Lobo
+            </motion.div>
           </MobileMenu>
         )}
       </AnimatePresence>
-
-      <ScrollProgress
-        style={{ scaleX: scrollProgress / 100 }}
-      />
-    </NavbarContainer>
+    </>
   );
 };
 
