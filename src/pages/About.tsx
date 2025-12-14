@@ -608,6 +608,17 @@ const servicesData = [
     ]
   },
   {
+    icon: '📱',
+    title: 'Mobile App Development',
+    description: 'Building native and cross-platform mobile applications for Android and iOS.',
+    features: [
+      'React Native / Flutter',
+      'Cross-platform compatibility',
+      'Native performance',
+      'App Store deployment'
+    ]
+  },
+  {
     icon: '🎨',
     title: 'UI/UX Design',
     description: 'Designing intuitive and visually appealing user interfaces for better user experience.',
@@ -723,7 +734,7 @@ const About: React.FC = () => {
               About Me
             </HeroTitle>
             <HeroSubtitle variants={itemVariants}>
-              I'm Rolan (Rolan RNR), an aspiring software engineer and freelancer from Karnataka, India.
+              I'm Rolan Lobo (RNR is my handle), an aspiring software engineer and freelancer from Karnataka, India.
               I'm passionate about creating innovative, functional, and visually appealing digital solutions
               that solve real-world problems.
             </HeroSubtitle>
