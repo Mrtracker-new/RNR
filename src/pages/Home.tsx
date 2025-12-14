@@ -294,8 +294,8 @@ const Home: React.FC = () => {
   return (
     <PageTransition>
       <SEO
-        title="Rolan Lobo - Full Stack Developer | Building Digital Experiences"
-        description="I'm Rolan Lobo, a Full Stack Developer specializing in building exceptional digital experiences. Explore my portfolio of projects, skills, and services."
+        title="Rolan Lobo (Rolan RNR) - Full Stack Developer | Building Digital Experiences"
+        description="I'm Rolan Lobo (Rolan RNR), a Full Stack Developer specializing in building exceptional digital experiences. Explore my portfolio of projects, skills, and services."
         url="https://rolan-rnr.netlify.app/"
       />
 
@@ -343,7 +343,7 @@ const Home: React.FC = () => {
 
           <ProfileImageContainer variants={itemVariants}>
             <StylizedImage>
-              <img src={profileImage} alt="Rolan Lobo" />
+              <img src={profileImage} alt="Rolan Lobo (Rolan RNR) - Full Stack Developer" />
             </StylizedImage>
           </ProfileImageContainer>
         </HeroContent>
