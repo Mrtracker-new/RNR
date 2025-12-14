@@ -295,7 +295,7 @@ const Home: React.FC = () => {
     <PageTransition>
       <SEO
         title="Rolan Lobo (Rolan RNR) - Full Stack Developer | Building Digital Experiences"
-        description="I'm Rolan Lobo (Rolan RNR), a Full Stack Developer specializing in building exceptional digital experiences. Explore my portfolio of projects, skills, and services."
+        description="I'm Rolan Lobo (Rolan RNR), a Full Stack Developer specializing in building exceptional digital experiences, software, and mobile apps. Explore my portfolio of projects, skills, and services."
         url="https://rolan-rnr.netlify.app/"
       />
 
@@ -318,7 +318,7 @@ const Home: React.FC = () => {
             </Headline>
 
             <Subheadline variants={itemVariants}>
-              I craft accessible, pixel-perfect, and performant web experiences using modern technologies. Let's turn your ideas into reality.
+              I craft accessible web experiences, software, and mobile apps using modern technologies. Let's turn your ideas into reality.
             </Subheadline>
 
             <CTAContainer variants={itemVariants}>
