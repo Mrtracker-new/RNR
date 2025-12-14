@@ -16,12 +16,12 @@ import linkNestImg from '../assets/images/LN.png';
 import contactManagerImg from '../assets/images/Contact_Manager.png';
 
 const ProjectsHero = styled(Section)`
-  padding-top: 100px;
+  padding-top: 140px;
   padding-bottom: 40px;
   text-align: center;
   
   @media (max-width: 768px) {
-    padding-top: 80px;
+    padding-top: 120px;
     padding-bottom: 20px;
   }
 `;
