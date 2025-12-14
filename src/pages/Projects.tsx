@@ -650,9 +650,9 @@ const Projects: React.FC = () => {
   return (
     <PageTransition>
       <SEO
-        title="Projects - Rolan Lobo Portfolio | Steganography, Security Tools & Web Apps"
+        title="Projects - Rolan Lobo (Rolan RNR) | Steganography, Security Tools & Web Apps"
         description="Explore my portfolio of innovative software projects: InvisioVault (steganography & polyglot files), YT-Downloader (free YouTube video & audio downloader), BAR (secure file management), Sortify, and more full-stack web/desktop applications."
-        keywords="Steganography, Polyglot Files, Hide Files in Images, YouTube Downloader, Video Downloader, YouTube to MP3, File Encryption, Security Tools, InvisioVault, BAR, Sortify, React Projects, Python Projects, Flask, Full Stack Developer, Rolan Lobo"
+        keywords="Steganography, Polyglot Files, Hide Files in Images, YouTube Downloader, Video Downloader, YouTube to MP3, File Encryption, Security Tools, InvisioVault, BAR, Sortify, React Projects, Python Projects, Flask, Full Stack Developer, Rolan Lobo, Rolan RNR"
         url="https://rolan-rnr.netlify.app/projects"
       />
       <ProjectsHero>
