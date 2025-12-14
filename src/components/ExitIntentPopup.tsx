@@ -1,41 +1,79 @@
 import React, { useState, useEffect, useCallback } from 'react';
 import styled from 'styled-components';
 import { motion, AnimatePresence } from 'framer-motion';
-import { Link } from 'react-router-dom';
+import { useNavigate } from 'react-router-dom';
 import { Button } from '../styles/GlobalStyle';
+
+// --- Types & Interfaces ---
+
+interface ExitIntentPopupProps {
+  /**
+   * Main headline text.
+   * @default "Wait, before you go..."
+   */
+  headline?: string;
+
+  /**
+   * Subtext or value proposition.
+   * @default "I'm currently open for new opportunities. Let's connect!"
+   */
+  description?: string;
+
+  /**
+   * Primary Action Label
+   * @default "View My Resume"
+   */
+  primaryActionLabel?: string;
+
+  /**
+   * Primary Action Handler
+   */
+  onPrimaryAction?: () => void;
+
+  /**
+   * Path to navigate to on primary action.
+   */
+  primaryActionPath?: string;
+
+  /**
+   * Delay in ms before the exit intent logic becomes active after mount.
+   * Prevents popup from appearing immediately if user moves mouse up.
+   * @default 2000
+   */
+  activationDelay?: number;
+}
+
+// --- Styled Components ---
 
 const Overlay = styled(motion.div)`
   position: fixed;
-  top: 0;
-  left: 0;
-  right: 0;
-  bottom: 0;
-  background: rgba(0, 0, 0, 0.85);
+  inset: 0;
+  z-index: 9999;
+  background: rgba(0, 0, 0, 0.6);
   backdrop-filter: blur(8px);
+  -webkit-backdrop-filter: blur(8px);
   display: flex;
   align-items: center;
   justify-content: center;
-  z-index: 10000;
   padding: var(--spacing-4);
 `;
 
-const PopupContainer = styled(motion.div)`
-  background: linear-gradient(135deg, rgba(15, 23, 42, 0.98) 0%, rgba(30, 41, 59, 0.98) 100%);
-  border: 2px solid var(--accent-primary);
-  border-radius: var(--radius-2xl);
-  padding: var(--spacing-10);
-  max-width: 600px;
+const Modal = styled(motion.div)`
   width: 100%;
+  max-width: 480px;
+  background: rgba(23, 23, 23, 0.95); /* dark-950 equivalent but slightly lighter/transparent */
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  border-radius: var(--radius-2xl);
+  padding: var(--spacing-8);
+  box-shadow: var(--shadow-2xl), 0 0 0 1px rgba(255, 255, 255, 0.05); /* Glowy effect */
   position: relative;
-  box-shadow: 0 25px 50px rgba(100, 255, 218, 0.2);
-  
-  @media (max-width: 768px) {
-    padding: var(--spacing-8);
-    max-width: 90vw;
-  }
-  
-  @media (max-width: 480px) {
-    padding: var(--spacing-6);
+  overflow: hidden;
+  text-align: center;
+
+  /* Premium Glass Effect override if needed */
+  @supports (backdrop-filter: blur(20px)) {
+     background: rgba(9, 9, 11, 0.85); /* var(--dark-950) */
+     backdrop-filter: blur(24px);
   }
 `;
 
@@ -43,190 +81,150 @@ const CloseButton = styled.button`
   position: absolute;
   top: var(--spacing-4);
   right: var(--spacing-4);
-  width: 36px;
-  height: 36px;
-  border-radius: 50%;
-  background: rgba(255, 255, 255, 0.1);
-  border: 1px solid rgba(255, 255, 255, 0.2);
-  color: var(--dark-300);
+  background: transparent;
+  border: none;
+  color: var(--dark-400);
+  cursor: pointer;
+  padding: var(--spacing-2);
+  border-radius: var(--radius-full);
   display: flex;
   align-items: center;
   justify-content: center;
-  cursor: pointer;
-  transition: var(--transition-normal);
-  font-size: 20px;
-  
+  transition: all 0.2s ease;
+
   &:hover {
-    background: rgba(255, 255, 255, 0.15);
-    color: var(--accent-primary);
-    border-color: var(--accent-primary);
-    transform: rotate(90deg);
+    background: rgba(255, 255, 255, 0.1);
+    color: var(--dark-100);
+  }
+
+  svg {
+    width: 20px;
+    height: 20px;
   }
 `;
 
-const IconContainer = styled.div`
-  text-align: center;
-  font-size: 4rem;
-  margin-bottom: var(--spacing-4);
-  animation: wave 2s ease-in-out infinite;
-  
-  @keyframes wave {
-    0%, 100% { transform: translateY(0); }
-    50% { transform: translateY(-10px); }
-  }
+const IconWrapper = styled.div`
+  width: 64px;
+  height: 64px;
+  background: linear-gradient(135deg, rgba(100, 255, 218, 0.1) 0%, rgba(139, 92, 246, 0.1) 100%);
+  border-radius: var(--radius-full);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin: 0 auto var(--spacing-6);
+  color: var(--accent-primary);
+  font-size: 28px;
+  border: 1px solid rgba(255, 255, 255, 0.05);
 `;
 
 const Title = styled.h2`
-  font-size: var(--text-3xl);
+  font-size: var(--text-2xl);
   font-weight: var(--font-bold);
   color: var(--dark-50);
-  text-align: center;
   margin-bottom: var(--spacing-3);
-  background: linear-gradient(135deg, var(--accent-primary) 0%, var(--accent-secondary) 100%);
-  -webkit-background-clip: text;
-  -webkit-text-fill-color: transparent;
-  background-clip: text;
-  
-  @media (max-width: 480px) {
-    font-size: var(--text-2xl);
-  }
+  letter-spacing: -0.02em;
 `;
 
-const Subtitle = styled.p`
-  font-size: var(--text-lg);
+const Description = styled.p`
+  font-size: var(--text-base);
   color: var(--dark-300);
-  text-align: center;
   margin-bottom: var(--spacing-8);
   line-height: 1.6;
-  
-  @media (max-width: 480px) {
-    font-size: var(--text-base);
-    margin-bottom: var(--spacing-6);
-  }
-`;
-
-const OfferList = styled.ul`
-  list-style: none;
-  padding: 0;
-  margin-bottom: var(--spacing-8);
-  
-  li {
-    color: var(--dark-300);
-    margin-bottom: var(--spacing-3);
-    padding-left: var(--spacing-8);
-    position: relative;
-    font-size: var(--text-base);
-    
-    &::before {
-      content: '✓';
-      position: absolute;
-      left: 0;
-      color: var(--accent-primary);
-      font-weight: bold;
-      font-size: var(--text-xl);
-    }
-  }
 `;
 
 const ButtonGroup = styled.div`
   display: flex;
-  gap: var(--spacing-4);
-  flex-wrap: wrap;
-  justify-content: center;
-  
-  @media (max-width: 480px) {
-    flex-direction: column;
-    gap: var(--spacing-3);
+  flex-direction: column;
+  gap: var(--spacing-3);
+  width: 100%;
+
+  @media (min-width: 640px) {
+    flex-direction: row;
+    gap: var(--spacing-4);
   }
 `;
 
-const StyledButton = styled(Button)`
-  flex: 1;
-  min-width: 150px;
-  
-  @media (max-width: 480px) {
-    width: 100%;
-  }
-`;
+// --- Logic & Component ---
 
-const TimerBadge = styled.div`
-  display: inline-block;
-  background: rgba(100, 255, 218, 0.1);
-  border: 1px solid var(--accent-primary);
-  color: var(--accent-primary);
-  padding: var(--spacing-2) var(--spacing-4);
-  border-radius: var(--radius-lg);
-  font-size: var(--text-sm);
-  font-weight: var(--font-semibold);
-  margin-bottom: var(--spacing-6);
-  text-align: center;
-  animation: pulse 2s ease-in-out infinite;
-  
-  @keyframes pulse {
-    0%, 100% { transform: scale(1); }
-    50% { transform: scale(1.05); }
-  }
-`;
-
-interface ExitIntentPopupProps {
-  onClose?: () => void;
-}
-
-const ExitIntentPopup: React.FC<ExitIntentPopupProps> = ({ onClose }) => {
+const ExitIntentPopup: React.FC<ExitIntentPopupProps> = ({
+  headline = "Wait, before you go...",
+  description = "I'm currently available for new projects. Check out my latest work or grab a copy of my resume!",
+  primaryActionLabel = "View Projects",
+  onPrimaryAction,
+  activationDelay = 2000,
+  primaryActionPath
+}) => {
   const [isVisible, setIsVisible] = useState(false);
-  const [hasShown, setHasShown] = useState(false);
+  const [isActive, setIsActive] = useState(false);
+  const navigate = useNavigate();
 
-  const handleClose = useCallback(() => {
-    setIsVisible(false);
-    if (onClose) onClose();
-    
-    // Store that popup was shown (expires in 24 hours)
-    const expiryTime = Date.now() + 24 * 60 * 60 * 1000;
-    localStorage.setItem('exitIntentShown', expiryTime.toString());
-    setHasShown(true);
-  }, [onClose]);
-
-  const handleMouseLeave = useCallback((e: MouseEvent) => {
-    // Only trigger if mouse leaves from top of screen
-    if (e.clientY <= 0 && !hasShown) {
-      // Check if popup was already shown today
-      const lastShown = localStorage.getItem('exitIntentShown');
-      
-      if (lastShown) {
-        const expiryTime = parseInt(lastShown, 10);
-        if (Date.now() < expiryTime) {
-          return; // Don't show if within 24 hours
-        }
-      }
-      
-      setIsVisible(true);
-    }
-  }, [hasShown]);
-
+  // Activate the listener after a delay to prevent immediate triggers
   useEffect(() => {
-    // Check if user has seen popup recently
-    const lastShown = localStorage.getItem('exitIntentShown');
-    if (lastShown) {
-      const expiryTime = parseInt(lastShown, 10);
-      if (Date.now() < expiryTime) {
-        setHasShown(true);
-        return;
-      }
-    }
+    const timer = setTimeout(() => setIsActive(true), activationDelay);
+    return () => clearTimeout(timer);
+  }, [activationDelay]);
 
-    // Add event listener with delay to avoid false positives on page load
-    const timer = setTimeout(() => {
+  const handleOpen = useCallback(() => {
+    // Check if we've already shown it this session
+    const hasSeen = sessionStorage.getItem('hasSeenExitPopup');
+    if (!hasSeen && isActive) {
+      setIsVisible(true);
+      sessionStorage.setItem('hasSeenExitPopup', 'true');
+    }
+  }, [isActive]);
+
+  const handleClose = () => {
+    setIsVisible(false);
+  };
+
+  const handlePrimaryClick = () => {
+    if (onPrimaryAction) {
+      onPrimaryAction();
+    } else if (primaryActionPath) {
+      navigate(primaryActionPath);
+    } else {
+      // Default fallback if nothing provided: Go to projects
+      navigate('/projects');
+    }
+    handleClose();
+  };
+
+  // 1. Desktop Mouse Exit Listener
+  useEffect(() => {
+    const handleMouseLeave = (e: MouseEvent) => {
+      // Trigger if mouse leaves the top of the viewport
+      if (e.clientY <= 0) {
+        handleOpen();
+      }
+    };
+
+    if (isActive) {
       document.addEventListener('mouseleave', handleMouseLeave);
-    }, 2000);
+    }
 
     return () => {
-      clearTimeout(timer);
       document.removeEventListener('mouseleave', handleMouseLeave);
     };
-  }, [handleMouseLeave]);
+  }, [isActive, handleOpen]);
 
-  // Don't render if already shown
-  if (hasShown) return null;
+  // 2. Mobile/Focus Listener (Simulated "Exit" via visibility change or blur often too aggressive, using specific logic if needed)
+  // For this "Premium" version, we keep it simple: Mouse leave on desktop is the gold standard for "Intent".
+  // Optionally add a "Scroll Up Fast" trigger for mobile here if requested, but avoiding spam is priority.
+
+  // 3. Escape key to close
+  useEffect(() => {
+    const handleKeyDown = (e: KeyboardEvent) => {
+      if (e.key === 'Escape' && isVisible) {
+        handleClose();
+      }
+    };
+
+    if (isVisible) {
+      window.addEventListener('keydown', handleKeyDown);
+    }
+    return () => window.removeEventListener('keydown', handleKeyDown);
+  }, [isVisible]);
+
 
   return (
     <AnimatePresence>
@@ -235,72 +233,50 @@ const ExitIntentPopup: React.FC<ExitIntentPopupProps> = ({ onClose }) => {
           initial={{ opacity: 0 }}
           animate={{ opacity: 1 }}
           exit={{ opacity: 0 }}
-          onClick={handleClose}
+          transition={{ duration: 0.3 }}
+          onClick={handleClose} // Click outside to close
         >
-          <PopupContainer
-            initial={{ opacity: 0, scale: 0.8, y: 50 }}
-            animate={{ opacity: 1, scale: 1, y: 0 }}
-            exit={{ opacity: 0, scale: 0.8, y: 50 }}
-            transition={{ type: 'spring', damping: 25 }}
-            onClick={(e) => e.stopPropagation()}
+          <Modal
+            initial={{ scale: 0.95, opacity: 0, y: 10 }}
+            animate={{ scale: 1, opacity: 1, y: 0 }}
+            exit={{ scale: 0.95, opacity: 0, y: 10 }}
+            transition={{ type: "spring", damping: 25, stiffness: 300 }}
+            onClick={(e) => e.stopPropagation()} // Prevent close on modal click
+            role="dialog"
+            aria-modal="true"
+            aria-labelledby="exit-popup-title"
           >
             <CloseButton onClick={handleClose} aria-label="Close popup">
-              ×
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                <line x1="18" y1="6" x2="6" y2="18"></line>
+                <line x1="6" y1="6" x2="18" y2="18"></line>
+              </svg>
             </CloseButton>
 
-            <IconContainer>👋</IconContainer>
+            <IconWrapper>
+              <span role="img" aria-label="wave">👋</span>
+            </IconWrapper>
 
-            <Title>Wait! Before You Go...</Title>
-
-            <Subtitle>
-              I'd love to help bring your next project to life!
-            </Subtitle>
-
-            <div style={{ textAlign: 'center' }}>
-              <TimerBadge>⚡ Let's Connect!</TimerBadge>
-            </div>
-
-            <OfferList>
-              <li>Free project consultation & estimate</li>
-              <li>Modern, responsive web applications</li>
-              <li>Security-focused desktop applications</li>
-              <li>Mobile app development</li>
-              <li>Fast turnaround & dedicated support</li>
-            </OfferList>
+            <Title id="exit-popup-title">{headline}</Title>
+            <Description>{description}</Description>
 
             <ButtonGroup>
-              <StyledButton
-                as={Link}
-                to="/contact"
+              <Button
+                variant="secondary"
+                onClick={handleClose}
+                style={{ width: '100%' }}
+              >
+                Maybe Later
+              </Button>
+              <Button
                 variant="primary"
-                size="lg"
-                onClick={handleClose}
+                onClick={handlePrimaryClick}
+                style={{ width: '100%' }}
               >
-                💬 Get In Touch
-              </StyledButton>
-              <StyledButton
-                as={Link}
-                to="/projects"
-                variant="outline"
-                size="lg"
-                onClick={handleClose}
-              >
-                👀 View Projects
-              </StyledButton>
+                {primaryActionLabel}
+              </Button>
             </ButtonGroup>
-
-            <div style={{ 
-              textAlign: 'center', 
-              marginTop: 'var(--spacing-6)', 
-              fontSize: 'var(--text-sm)', 
-              color: 'var(--dark-500)' 
-            }}>
-              <p>📧 rolanlobo901@gmail.com</p>
-              <p style={{ marginTop: 'var(--spacing-2)' }}>
-                Available for freelance projects
-              </p>
-            </div>
-          </PopupContainer>
+          </Modal>
         </Overlay>
       )}
     </AnimatePresence>
