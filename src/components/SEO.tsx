@@ -11,14 +11,14 @@ interface SEOProps {
 }
 
 const SEO: React.FC<SEOProps> = ({
-  title = 'Rolan Lobo - Full Stack Developer & Software Engineer',
-  description = 'Freelance Full Stack Developer & Software Engineer specializing in security applications, steganography, polyglot files, web development, and desktop software. Creator of InvisioVault (hide files in images & polyglot files), YouTube Downloader, file encryption tools, and more. Expert in React, Python, Flask, Node.js, TypeScript, and React Native. Available for freelance projects worldwide.',
-  keywords = 'Full Stack Developer, Software Engineer, Freelance Developer, Freelancer India, Web Developer, Python Developer, Flask Developer, React Developer, Steganography, Polyglot Files, Hide Files in Images, File Hiding, Cryptography, AES Encryption, YouTube Downloader, Video Downloader, YouTube to MP3, File Encryption Software, Security Applications, Desktop Applications, File Manager, Contact Manager, React Native Apps, Android Apps, InvisioVault, BAR, Sortify, Hire Freelance Developer, Rolan Lobo, RNR',
+  title = 'Rolan Lobo (Rolan RNR) - Full Stack Developer & Software Engineer',
+  description = 'Rolan Lobo (also known as Rolan RNR) is a Freelance Full Stack Developer & Software Engineer specializing in security applications, steganography, polyglot files, and modern web development. Creator of InvisioVault, YouTube Downloader, and Sortify.',
+  keywords = 'Rolan Lobo, Rolan RNR, Rolan rnr, rolan lobo, Full Stack Developer, Software Engineer, Freelance Developer, Freelancer India, Web Developer, Python Developer, Flask Developer, React Developer, Steganography, Polyglot Files, InvisioVault, RNR',
   image = 'https://rolan-rnr.netlify.app/logo512.png',
   url = 'https://rolan-rnr.netlify.app/',
   type = 'website'
 }) => {
-  const siteName = 'Rolan Lobo Portfolio';
+  const siteName = 'Rolan Lobo (Rolan RNR) Portfolio';
   const twitterHandle = '@RolanLobo4';
 
   return (
@@ -28,7 +28,7 @@ const SEO: React.FC<SEOProps> = ({
       <meta name="title" content={title} />
       <meta name="description" content={description} />
       <meta name="keywords" content={keywords} />
-      <meta name="author" content="Rolan Lobo" />
+      <meta name="author" content="Rolan Lobo (Rolan RNR)" />
       <link rel="canonical" href={url} />
 
       {/* Open Graph / Facebook */}
@@ -49,7 +49,7 @@ const SEO: React.FC<SEOProps> = ({
       <meta property="twitter:creator" content={twitterHandle} />
 
       {/* Additional Meta Tags */}
-      <meta name="robots" content="index, follow" />
+      <meta name="robots" content="index, follow, max-image-preview:large, max-snippet:-1, max-video-preview:-1" />
       <meta name="language" content="English" />
       <meta name="revisit-after" content="7 days" />
       <meta name="theme-color" content="#64ffda" />
@@ -60,7 +60,7 @@ const SEO: React.FC<SEOProps> = ({
           '@context': 'https://schema.org',
           '@type': 'Person',
           name: 'Rolan Lobo',
-          alternateName: 'RNR',
+          alternateName: ['Rolan RNR', 'RNR', 'Rolan rnr'],
           url: 'https://rolan-rnr.netlify.app/',
           image: 'https://rolan-rnr.netlify.app/logo512.png',
           sameAs: [
@@ -71,7 +71,7 @@ const SEO: React.FC<SEOProps> = ({
           jobTitle: 'Full Stack Developer',
           worksFor: {
             '@type': 'Organization',
-            name: 'Freelancer'
+            name: 'Freelance'
           },
           address: {
             '@type': 'PostalAddress',
@@ -102,14 +102,35 @@ const SEO: React.FC<SEOProps> = ({
         })}
       </script>
 
-      {/* Structured Data (JSON-LD) - Organization Schema */}
+      {/* Structured Data (JSON-LD) - Website Schema */}
+      <script type="application/ld+json">
+        {JSON.stringify({
+          '@context': 'https://schema.org',
+          '@type': 'WebSite',
+          name: 'Rolan Lobo (Rolan RNR) Portfolio',
+          alternateName: ['Rolan RNR Portfolio', 'Rolan Lobo Portfolio'],
+          url: 'https://rolan-rnr.netlify.app/',
+          author: {
+            '@type': 'Person',
+            name: 'Rolan Lobo',
+            alternateName: 'Rolan RNR'
+          },
+          potentialAction: {
+            '@type': 'SearchAction',
+            target: 'https://rolan-rnr.netlify.app/?q={search_term_string}',
+            'query-input': 'required name=search_term_string'
+          }
+        })}
+      </script>
+
+      {/* Structured Data (JSON-LD) - Organization Schema (Self-Branded) */}
       <script type="application/ld+json">
         {JSON.stringify({
           '@context': 'https://schema.org',
           '@type': 'Organization',
           '@id': 'https://rolan-rnr.netlify.app/#organization',
           name: 'RNR - Rolan Lobo Portfolio',
-          alternateName: 'RNR',
+          alternateName: ['RNR', 'Rolan RNR'],
           url: 'https://rolan-rnr.netlify.app/',
           logo: {
             '@type': 'ImageObject',
@@ -118,10 +139,15 @@ const SEO: React.FC<SEOProps> = ({
             height: 512
           },
           description: 'Full Stack Developer & Software Engineer specializing in modern web applications, desktop software, and security-focused solutions.',
+          brand: {
+            '@type': 'Brand',
+            name: 'Rolan RNR'
+          },
           foundingDate: '2023',
           founder: {
             '@type': 'Person',
-            name: 'Rolan Lobo'
+            name: 'Rolan Lobo',
+            alternateName: 'Rolan RNR'
           },
           address: {
             '@type': 'PostalAddress',
@@ -138,36 +164,6 @@ const SEO: React.FC<SEOProps> = ({
             'https://github.com/Mrtracker-new',
             'https://www.linkedin.com/in/rolan-lobo-93368a239/',
             'https://rnr-still-figuring-things-out.hashnode.dev/'
-          ],
-          areaServed: {
-            '@type': 'Place',
-            name: 'Worldwide'
-          },
-          serviceType: [
-            'Web Development',
-            'Desktop Application Development',
-            'UI/UX Design',
-            'Software Engineering',
-            'Cybersecurity Solutions'
-          ],
-          knowsAbout: [
-            'React',
-            'Python',
-            'Node.js',
-            'TypeScript',
-            'Flask',
-            'MongoDB',
-            'Full Stack Development',
-            'Desktop Applications',
-            'Data Security',
-            'AES Encryption',
-            'Steganography',
-            'Polyglot Files',
-            'File Hiding in Images',
-            'Cryptography',
-            'Security Applications',
-            'File Encryption',
-            'Freelance Development'
           ]
         })}
       </script>
