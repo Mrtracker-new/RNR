@@ -40,6 +40,11 @@ const HeroSection = styled.section`
     padding-bottom: 0;
     justify-content: flex-start;
     overflow-x: hidden; /* Prevent horizontal scroll from background elements */
+    
+    &::before {
+      filter: blur(30px); /* Reduced from 60px */
+      opacity: 0.5;
+    }
   }
 `;
 

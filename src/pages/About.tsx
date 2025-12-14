@@ -321,6 +321,10 @@ const SkillsSection = styled(Section)`
     padding-left: var(--spacing-3);
     padding-right: var(--spacing-3);
   }
+
+  /* Optimize for mobile scroll */
+  transform: translateZ(0);
+  will-change: transform;
 `;
 
 const SkillsGrid = styled(Grid)`
@@ -331,9 +335,12 @@ const SkillsGrid = styled(Grid)`
 const SkillCard = styled(Card)`
   text-align: center;
   background: rgba(30, 41, 59, 0.4);
-  backdrop-filter: blur(12px);
+  /* backdrop-filter: blur(12px); <-- Expensive! Removed for stability, relying on opacity */
   border: 1px solid rgba(255, 255, 255, 0.05);
-  transition: all 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275); 
+  transition: transform 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275), background 0.3s ease; 
+  will-change: transform;
+  backface-visibility: hidden;
+  transform: translateZ(0);
 
   &:hover {
     transform: translateY(-8px);

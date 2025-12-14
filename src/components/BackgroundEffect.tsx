@@ -1,5 +1,6 @@
-import React, { memo } from 'react';
+import React, { memo, useMemo } from 'react';
 import styled, { keyframes } from 'styled-components';
+import { getDeviceInfo } from '../utils/performance';
 
 const moveInCircle = keyframes`
   0% { transform: rotate(0deg); }
@@ -33,14 +34,15 @@ const GradientBg = styled.div`
 
 
 
-const GradientsContainer = styled.div`
-  filter: blur(80px); /* Hardware accelerated blur */
+const GradientsContainer = styled.div<{ isMobile: boolean }>`
+  filter: blur(${props => props.isMobile ? '40px' : '80px'}); /* Reduced blur for mobile performance */
   width: 100%;
   height: 100%;
   position: absolute;
   top: 0;
   left: 0;
   opacity: 0.6; /* Subtle visibility */
+  transform: translateZ(0); /* Force hardware acceleration */
 `;
 
 const Orb1 = styled.div`
@@ -53,6 +55,7 @@ const Orb1 = styled.div`
   transform-origin: center center;
   animation: ${moveVertical} 30s ease infinite;
   opacity: 0.4;
+  will-change: transform;
 `;
 
 const Orb2 = styled.div`
@@ -65,6 +68,7 @@ const Orb2 = styled.div`
   transform-origin: calc(50% - 400px);
   animation: ${moveInCircle} 20s reverse infinite;
   opacity: 0.4;
+  will-change: transform;
 `;
 
 const Orb3 = styled.div`
@@ -77,6 +81,7 @@ const Orb3 = styled.div`
   transform-origin: calc(50% + 400px);
   animation: ${moveHorizontal} 40s linear infinite;
   opacity: 0.4;
+  will-change: transform;
 `;
 
 /* 
@@ -86,11 +91,16 @@ const Orb3 = styled.div`
  * 3. No heavy SVG noise filters causing lag
  */
 const BackgroundEffect: React.FC = () => {
+  const isMobile = useMemo(() => {
+    const device = getDeviceInfo();
+    return device.isMobile || device.isLowEnd;
+  }, []);
+
   return (
     <GradientBg>
-      <GradientsContainer>
+      <GradientsContainer isMobile={isMobile}>
         <Orb1 />
-        <Orb2 />
+        {!isMobile && <Orb2 />} {/* Reduce orb count on mobile */}
         <Orb3 />
       </GradientsContainer>
     </GradientBg>

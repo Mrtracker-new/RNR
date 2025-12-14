@@ -52,8 +52,10 @@ const NavbarIsland = styled(motion.nav) <{ scrolled: boolean }>`
     border-top: none;
     border-left: none;
     border-right: none;
-    background: rgba(9, 9, 11, 0.9);
-    padding: var(--spacing-4);
+    background: rgba(9, 9, 11, 0.95); /* Higher opacity for mobile */
+    backdrop-filter: blur(10px); /* Reduced blur for performance */
+    -webkit-backdrop-filter: blur(10px);
+    padding: var(--spacing-3) var(--spacing-4);
   }
 `;
 
@@ -144,6 +146,7 @@ const MobileToggle = styled.button`
   padding: var(--spacing-2);
   cursor: pointer;
   z-index: 20;
+  font-size: 1.5rem; // Adjusted size
 
   @media (max-width: 768px) {
     display: block;
