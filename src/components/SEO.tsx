@@ -12,8 +12,8 @@ interface SEOProps {
 
 const SEO: React.FC<SEOProps> = ({
   title = 'Rolan Lobo (Rolan RNR) - Full Stack Developer & Software Engineer',
-  description = 'Rolan Lobo (also known as Rolan RNR) is a Freelance Full Stack Developer & Software Engineer specializing in security applications, steganography, polyglot files, and modern web development. Creator of InvisioVault, YouTube Downloader, and Sortify.',
-  keywords = 'Rolan Lobo, Rolan RNR, Rolan rnr, rolan lobo, Full Stack Developer, Software Engineer, Freelance Developer, Freelancer India, Web Developer, Python Developer, Flask Developer, React Developer, Steganography, Polyglot Files, InvisioVault, RNR',
+  description = 'Rolan Lobo (also known as Rolan RNR) is a Freelance Full Stack Developer & Software Engineer specializing in security applications, mobile app development, steganography, polyglot files, and modern web development. Creator of InvisioVault, YouTube Downloader, and Sortify.',
+  keywords = 'Rolan Lobo, Rolan RNR, Rolan rnr, rolan lobo, Full Stack Developer, Software Engineer, Freelance Developer, Mobile App Developer, React Native, Flutter, Freelancer India, Web Developer, Python Developer, Flask Developer, React Developer, Steganography, Polyglot Files, InvisioVault, RNR',
   image = 'https://rolan-rnr.netlify.app/logo512.png',
   url = 'https://rolan-rnr.netlify.app/',
   type = 'website'
@@ -97,6 +97,9 @@ const SEO: React.FC<SEOProps> = ({
             'File Hiding',
             'Cryptography',
             'Security Applications',
+            'Mobile App Development',
+            'React Native',
+            'Flutter',
             'Freelance Development'
           ]
         })}
