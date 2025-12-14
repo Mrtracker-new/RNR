@@ -443,9 +443,9 @@ const Contact: React.FC = () => {
   return (
     <PageTransition>
       <SEO
-        title="Contact Rolan Lobo - Hire Freelance Full Stack Developer"
-        description="Get in touch with Rolan Lobo for web development, security tools, or custom software projects."
-        keywords="Contact Rolan Lobo, Hire Developer, Freelance Web Developer"
+        title="Contact Rolan Lobo (Rolan RNR) - Hire Freelance Full Stack Developer"
+        description="Get in touch with Rolan Lobo (Rolan RNR) for web development, security tools, or custom software projects."
+        keywords="Contact Rolan Lobo, Rolan RNR, Hire Developer, Freelance Web Developer"
         url="https://rolan-rnr.netlify.app/contact"
       />
       <FAQSchema />
