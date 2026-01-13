@@ -140,9 +140,10 @@ export const GlobalStyle = createGlobalStyle`
     -webkit-overflow-scrolling: touch;
     overscroll-behavior: none;
   }
-  /* Custom Scrollbar - Minimal */
+  /* Custom Scrollbar - Modern & Rectangular */
   ::-webkit-scrollbar {
-    width: 6px;
+    width: 8px;
+    height: 8px;
   }
 
   ::-webkit-scrollbar-track {
@@ -151,12 +152,12 @@ export const GlobalStyle = createGlobalStyle`
 
   ::-webkit-scrollbar-thumb {
     background: var(--dark-600);
-    border-radius: var(--radius-full);
+    border-radius: 4px; /* Rectangular with slight rounding */
     transition: var(--transition-fast);
   }
 
   ::-webkit-scrollbar-thumb:hover {
-    background: var(--dark-500);
+    background: var(--accent-primary);
   }
 
   /* Selection - Clean */
