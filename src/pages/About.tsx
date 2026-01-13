@@ -4,7 +4,7 @@ import { motion, useScroll, useSpring, useInView, Variants } from 'framer-motion
 import { Container, Section, Grid, Card } from '../styles/GlobalStyle';
 import SEO from '../components/SEO';
 import PageTransition from '../components/PageTransition';
-import aboutImage from '../assets/images/Aboutme.jpg';
+import aboutImage from '../assets/images/Aboutme.webp';
 import { StaggerContainer, StaggerItem } from '../components/ScrollReveal';
 
 const AboutHero = styled(Section)`
@@ -719,7 +719,7 @@ const About: React.FC = () => {
         title="About Rolan Lobo (Rolan RNR) - Full Stack Developer & Software Engineer"
         description="Learn about Rolan Lobo (Rolan RNR), a passionate freelance software engineer from Karnataka, India. Specializing in security applications (steganography, file encryption, polyglot files), web development (React, Flask), and desktop applications. Journey through education, work experience, skills, and professional freelance services."
         keywords="About Rolan Lobo, Rolan RNR, Rolan rnr, Software Engineer India, Full Stack Developer India, Freelance Developer India, Karnataka Developer, Freelance Web Developer, Security Software Developer, Steganography Developer, Polyglot Files Developer, React Developer India, Python Developer India"
-        image="https://rolan-rnr.netlify.app/about-rolan-lobo.jpg"
+        image="https://rolan-rnr.netlify.app/about-rolan-lobo.webp"
         url="https://rolan-rnr.netlify.app/about"
       />
       {/* Hero Section */}

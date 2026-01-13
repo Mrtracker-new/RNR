@@ -5,7 +5,7 @@ import { Link } from 'react-router-dom';
 import { Container, Button } from '../styles/GlobalStyle';
 import SEO from '../components/SEO';
 import PageTransition from '../components/PageTransition';
-import profileImage from '../assets/images/Home_dp.jpg';
+import profileImage from '../assets/images/Home_dp.webp';
 
 // --- Styled Components ---
 
@@ -296,6 +296,7 @@ const Home: React.FC = () => {
       <SEO
         title="Rolan Lobo (Rolan RNR) - Full Stack Developer | Building Digital Experiences"
         description="I'm Rolan Lobo (Rolan RNR), a Full Stack Developer specializing in building exceptional digital experiences, software, and mobile apps. Explore my portfolio of projects, skills, and services."
+        image="https://rolan-rnr.netlify.app/rolan-lobo-home.webp"
         url="https://rolan-rnr.netlify.app/"
       />
 

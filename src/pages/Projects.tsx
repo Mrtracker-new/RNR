@@ -7,13 +7,13 @@ import OptimizedImage from '../components/OptimizedImage';
 import PageTransition from '../components/PageTransition';
 
 // Import project images
-import invisioVaultDesktopImg from '../assets/images/InvisioVault_Suit.png';
-import invisioVaultWebImg from '../assets/images/InvisioVault.png';
-import barLogoImg from '../assets/images/BAR_logo.png';
-import sortifyImg from '../assets/images/Sortify.jpg';
-import ytDownloaderImg from '../assets/images/YT.png';
-import linkNestImg from '../assets/images/LN.png';
-import contactManagerImg from '../assets/images/Contact_Manager.png';
+import invisioVaultDesktopImg from '../assets/images/InvisioVault_Suit.webp';
+import invisioVaultWebImg from '../assets/images/InvisioVault.webp';
+import barLogoImg from '../assets/images/BAR_logo.webp';
+import sortifyImg from '../assets/images/Sortify.webp';
+import ytDownloaderImg from '../assets/images/YT.webp';
+import linkNestImg from '../assets/images/LN.webp';
+import contactManagerImg from '../assets/images/Contact_Manager.webp';
 
 const ProjectsHero = styled(Section)`
   padding-top: 140px;
