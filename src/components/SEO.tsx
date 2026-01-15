@@ -18,6 +18,12 @@ const SEO: React.FC<SEOProps> = ({
   url = 'https://rolan-rnr.netlify.app/',
   type = 'website'
 }) => {
+  // Email obfuscation - constructs email at runtime to prevent bot scraping
+  const getObfuscatedEmail = () => {
+    const parts = ['rolanlobo901', 'gmail', 'com'];
+    return `${parts[0]}@${parts[1]}.${parts[2]}`;
+  };
+
   const siteName = 'Rolan Lobo (Rolan RNR) Portfolio';
   const twitterHandle = '@RolanLobo4';
 
@@ -78,7 +84,7 @@ const SEO: React.FC<SEOProps> = ({
             addressRegion: 'Karnataka',
             addressCountry: 'India'
           },
-          email: 'rolanlobo901@gmail.com',
+          email: getObfuscatedEmail(),
           knowsAbout: [
             'JavaScript',
             'TypeScript',
@@ -159,7 +165,7 @@ const SEO: React.FC<SEOProps> = ({
           },
           contactPoint: {
             '@type': 'ContactPoint',
-            email: 'rolanlobo901@gmail.com',
+            email: getObfuscatedEmail(),
             contactType: 'Customer Service',
             availableLanguage: ['English', 'Hindi', 'Kannada']
           },
