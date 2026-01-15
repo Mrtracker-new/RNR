@@ -51,7 +51,6 @@ logs/
 netlify.toml
 netlify.toml.backup
 netlify.toml
-_headers
 
 # IDE & Editor Files
 .vscode/
