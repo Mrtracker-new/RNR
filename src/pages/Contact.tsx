@@ -347,6 +347,12 @@ interface FormErrors {
 }
 
 const Contact: React.FC = () => {
+  // Email obfuscation - constructs email at runtime to prevent bot scraping
+  const getObfuscatedEmail = () => {
+    const parts = ['rolanlobo901', 'gmail', 'com'];
+    return `${parts[0]}@${parts[1]}.${parts[2]}`;
+  };
+
   const [formData, setFormData] = useState<FormData>({
     name: '',
     email: '',
@@ -481,8 +487,8 @@ const Contact: React.FC = () => {
             <InfoTitle><span>📧</span> Email Me</InfoTitle>
             <InfoText>
               <p>For project inquiries, collaborations, or just to say hi:</p>
-              <a href="mailto:rolanlobo901@gmail.com" style={{ fontSize: '1.1rem', fontWeight: 600 }}>
-                rolanlobo901@gmail.com
+              <a href={`mailto:${getObfuscatedEmail()}`} style={{ fontSize: '1.1rem', fontWeight: 600 }}>
+                {getObfuscatedEmail()}
               </a>
               <p style={{ marginTop: 'var(--spacing-2)', fontSize: '0.9em', opacity: 0.7 }}>
                 I usually respond within 24 hours.
