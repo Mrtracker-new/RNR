@@ -15,6 +15,7 @@ const Home = lazy(() => import('./pages/Home'));
 const About = lazy(() => import('./pages/About'));
 const Projects = lazy(() => import('./pages/Projects'));
 const Contact = lazy(() => import('./pages/Contact'));
+const Blog = lazy(() => import('./pages/Blog'));
 
 function App() {
   const [isLoading, setIsLoading] = useState(true);
@@ -41,7 +42,7 @@ function App() {
     return (
       <>
         <GlobalStyle />
-        <FullScreenLoading 
+        <FullScreenLoading
           text="Loading Portfolio..."
         />
       </>
@@ -58,7 +59,7 @@ function App() {
       <Breadcrumb />
       <Navbar />
       <Suspense fallback={
-        <FullScreenLoading 
+        <FullScreenLoading
           text="Loading Page..."
         />
       }>
@@ -67,6 +68,7 @@ function App() {
             <Route path="/" element={<Home />} />
             <Route path="/about" element={<About />} />
             <Route path="/projects" element={<Projects />} />
+            <Route path="/blog" element={<Blog />} />
             <Route path="/contact" element={<Contact />} />
           </Routes>
         </AnimatePresence>
