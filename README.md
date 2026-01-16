@@ -62,6 +62,16 @@ npm start
 
 Then open [http://localhost:3000](http://localhost:3000) and boom! 🎉
 
+**Environment Setup:**
+
+Create a `.env` file in the root directory:
+
+```env
+REACT_APP_HASHNODE_PUBLICATION_HOST=your-blog.hashnode.dev
+```
+
+Replace `your-blog.hashnode.dev` with your Hashnode publication URL (without `https://`).
+
 **Other commands:**
 - `npm run build` - Make it ready for production
 - `npm test` - Run tests (if I wrote any lol)
