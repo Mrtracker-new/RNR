@@ -111,25 +111,6 @@ const NavItem = styled(Link) <{ active: boolean }>`
   }
 `;
 
-const NavItemExternal = styled.a`
-  position: relative;
-  padding: 8px 16px;
-  font-size: var(--text-sm);
-  font-weight: var(--font-medium);
-  color: var(--dark-400);
-  text-decoration: none;
-  transition: color 0.3s ease;
-  z-index: 1;
-  border-radius: var(--radius-md);
-  display: flex; // Ensure block model
-  align-items: center;
-  justify-content: center;
-
-  &:hover {
-    color: var(--dark-100);
-  }
-`;
-
 const ActivePill = styled(motion.div)`
   position: absolute;
   inset: 0;
@@ -184,23 +165,11 @@ const MobileLink = styled(Link)`
   }
 `;
 
-const MobileLinkExternal = styled.a`
-  font-size: var(--text-2xl);
-  font-weight: var(--font-bold);
-  color: var(--dark-200);
-  text-decoration: none;
-  padding: var(--spacing-4);
-  border-bottom: 1px solid rgba(255, 255, 255, 0.05);
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-`;
-
 const navItems = [
   { path: '/', label: 'Home' },
   { path: '/about', label: 'About' },
   { path: '/projects', label: 'Projects' },
-  { path: 'https://rnr-still-figuring-things-out.hashnode.dev/', label: 'Blog', external: true },
+  { path: '/blog', label: 'Blog' },
   { path: '/contact', label: 'Contact' }
 ];
 
@@ -246,29 +215,19 @@ const Navbar: React.FC = () => {
               const isActive = location.pathname === item.path;
               return (
                 <div key={item.path} style={{ position: 'relative' }}>
-                  {item.external ? (
-                    <NavItemExternal
-                      href={item.path}
-                      target="_blank"
-                      rel="noopener noreferrer"
-                    >
-                      {item.label}  <span style={{ fontSize: '0.8em', opacity: 0.5 }}>↗</span>
-                    </NavItemExternal>
-                  ) : (
-                    <NavItem
-                      to={item.path}
-                      active={isActive}
-                    >
-                      {item.label}
-                      {isActive && (
-                        <ActivePill
-                          layoutId="nav-pill"
-                          transition={{ type: "spring", stiffness: 300, damping: 30 }}
-                          style={{ inset: 0 }} // Ensure pill covers the item area
-                        />
-                      )}
-                    </NavItem>
-                  )}
+                  <NavItem
+                    to={item.path}
+                    active={isActive}
+                  >
+                    {item.label}
+                    {isActive && (
+                      <ActivePill
+                        layoutId="nav-pill"
+                        transition={{ type: "spring", stiffness: 300, damping: 30 }}
+                        style={{ inset: 0 }} // Ensure pill covers the item area
+                      />
+                    )}
+                  </NavItem>
                 </div>
               );
             })}
@@ -295,23 +254,12 @@ const Navbar: React.FC = () => {
                 animate={{ opacity: 1, x: 0 }}
                 transition={{ delay: index * 0.05 }}
               >
-                {item.external ? (
-                  <MobileLinkExternal
-                    href={item.path}
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    onClick={() => setMobileMenuOpen(false)}
-                  >
-                    {item.label} ↗
-                  </MobileLinkExternal>
-                ) : (
-                  <MobileLink to={item.path} onClick={() => setMobileMenuOpen(false)}>
-                    {item.label}
-                    {location.pathname === item.path && (
-                      <motion.span layoutId="mobile-dot" style={{ width: 8, height: 8, borderRadius: '50%', background: 'var(--accent-primary)' }} />
-                    )}
-                  </MobileLink>
-                )}
+                <MobileLink to={item.path} onClick={() => setMobileMenuOpen(false)}>
+                  {item.label}
+                  {location.pathname === item.path && (
+                    <motion.span layoutId="mobile-dot" style={{ width: 8, height: 8, borderRadius: '50%', background: 'var(--accent-primary)' }} />
+                  )}
+                </MobileLink>
               </motion.div>
             ))}
 
