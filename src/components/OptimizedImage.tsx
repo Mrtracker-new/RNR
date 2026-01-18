@@ -21,15 +21,15 @@ const ImageContainer = styled.div`
   overflow: hidden;
 `;
 
-const Image = styled.img<{ isLoaded: boolean }>`
+const Image = styled.img<{ $isLoaded: boolean }>`
   width: 100%;
   height: auto;
   display: block;
   transition: opacity 0.3s ease;
-  opacity: ${props => props.isLoaded ? 1 : 0};
+  opacity: ${props => props.$isLoaded ? 1 : 0};
 `;
 
-const Placeholder = styled.div<{ isVisible: boolean }>`
+const Placeholder = styled.div<{ $isVisible: boolean }>`
   position: absolute;
   top: 0;
   left: 0;
@@ -37,8 +37,8 @@ const Placeholder = styled.div<{ isVisible: boolean }>`
   bottom: 0;
   background: linear-gradient(90deg, #f0f0f0 25%, #e0e0e0 50%, #f0f0f0 75%);
   background-size: 200% 100%;
-  animation: ${props => props.isVisible ? 'loading' : 'none'} 1.5s infinite;
-  opacity: ${props => props.isVisible ? 1 : 0};
+  animation: ${props => props.$isVisible ? 'loading' : 'none'} 1.5s infinite;
+  opacity: ${props => props.$isVisible ? 1 : 0};
   transition: opacity 0.3s ease;
 
   @keyframes loading {
@@ -109,7 +109,7 @@ const OptimizedImage: React.FC<OptimizedImageProps> = ({
   const shouldLoadImage = loading === 'eager' || isIntersecting;
 
   return (
-    <ImageContainer 
+    <ImageContainer
       ref={containerRef}
       className={className}
       style={{ width, height }}
@@ -119,7 +119,7 @@ const OptimizedImage: React.FC<OptimizedImageProps> = ({
           ref={imgRef}
           src={src}
           alt={alt}
-          isLoaded={isLoaded && !hasError}
+          $isLoaded={isLoaded && !hasError}
           loading={loading}
           sizes={sizes}
           onLoad={handleLoad}
@@ -129,9 +129,9 @@ const OptimizedImage: React.FC<OptimizedImageProps> = ({
           style={style}
         />
       )}
-      <Placeholder isVisible={!isLoaded && !hasError} />
+      <Placeholder $isVisible={!isLoaded && !hasError} />
       {hasError && (
-        <div style={{ 
+        <div style={{
           position: 'absolute',
           top: '50%',
           left: '50%',
