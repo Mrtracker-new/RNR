@@ -214,11 +214,11 @@ const Label = styled.label`
   margin-left: 4px;
 `;
 
-const Input = styled.input<{ hasError?: boolean }>`
+const Input = styled.input<{ $hasError?: boolean }>`
   width: 100%;
   padding: 14px 16px;
   background: rgba(15, 23, 42, 0.6);
-  border: 1px solid ${props => props.hasError ? 'var(--error)' : 'rgba(255, 255, 255, 0.1)'};
+  border: 1px solid ${props => props.$hasError ? 'var(--error)' : 'rgba(255, 255, 255, 0.1)'};
   border-radius: var(--radius-lg);
   color: var(--dark-100);
   font-size: var(--text-base);
@@ -226,9 +226,9 @@ const Input = styled.input<{ hasError?: boolean }>`
 
   &:focus {
     outline: none;
-    border-color: ${props => props.hasError ? 'var(--error)' : 'var(--accent-primary)'};
+    border-color: ${props => props.$hasError ? 'var(--error)' : 'var(--accent-primary)'};
     background: rgba(15, 23, 42, 0.8);
-    box-shadow: 0 0 0 4px ${props => props.hasError ? 'rgba(239, 68, 68, 0.1)' : 'rgba(100, 255, 218, 0.1)'};
+    box-shadow: 0 0 0 4px ${props => props.$hasError ? 'rgba(239, 68, 68, 0.1)' : 'rgba(100, 255, 218, 0.1)'};
   }
 
   &::placeholder {
@@ -236,11 +236,11 @@ const Input = styled.input<{ hasError?: boolean }>`
   }
 `;
 
-const Textarea = styled.textarea<{ hasError?: boolean }>`
+const Textarea = styled.textarea<{ $hasError?: boolean }>`
   width: 100%;
   padding: 14px 16px;
   background: rgba(15, 23, 42, 0.6);
-  border: 1px solid ${props => props.hasError ? 'var(--error)' : 'rgba(255, 255, 255, 0.1)'};
+  border: 1px solid ${props => props.$hasError ? 'var(--error)' : 'rgba(255, 255, 255, 0.1)'};
   border-radius: var(--radius-lg);
   color: var(--dark-100);
   font-size: var(--text-base);
@@ -251,9 +251,9 @@ const Textarea = styled.textarea<{ hasError?: boolean }>`
 
   &:focus {
     outline: none;
-    border-color: ${props => props.hasError ? 'var(--error)' : 'var(--accent-primary)'};
+    border-color: ${props => props.$hasError ? 'var(--error)' : 'var(--accent-primary)'};
     background: rgba(15, 23, 42, 0.8);
-    box-shadow: 0 0 0 4px ${props => props.hasError ? 'rgba(239, 68, 68, 0.1)' : 'rgba(100, 255, 218, 0.1)'};
+    box-shadow: 0 0 0 4px ${props => props.$hasError ? 'rgba(239, 68, 68, 0.1)' : 'rgba(100, 255, 218, 0.1)'};
   }
 
   &::placeholder {
@@ -563,7 +563,7 @@ const Contact: React.FC = () => {
                 placeholder="John Doe"
                 value={formData.name}
                 onChange={handleInputChange}
-                hasError={!!errors.name}
+                $hasError={!!errors.name}
               />
               {errors.name && <ErrorText initial={{ opacity: 0 }} animate={{ opacity: 1 }}>{errors.name}</ErrorText>}
             </FormGroup>
@@ -577,7 +577,7 @@ const Contact: React.FC = () => {
                 placeholder="john@example.com"
                 value={formData.email}
                 onChange={handleInputChange}
-                hasError={!!errors.email}
+                $hasError={!!errors.email}
               />
               {errors.email && <ErrorText initial={{ opacity: 0 }} animate={{ opacity: 1 }}>{errors.email}</ErrorText>}
             </FormGroup>
@@ -591,7 +591,7 @@ const Contact: React.FC = () => {
                 placeholder="Project Inquiry"
                 value={formData.subject}
                 onChange={handleInputChange}
-                hasError={!!errors.subject}
+                $hasError={!!errors.subject}
               />
               {errors.subject && <ErrorText initial={{ opacity: 0 }} animate={{ opacity: 1 }}>{errors.subject}</ErrorText>}
             </FormGroup>
@@ -604,7 +604,7 @@ const Contact: React.FC = () => {
                 placeholder="Tell me about your project..."
                 value={formData.message}
                 onChange={handleInputChange}
-                hasError={!!errors.message}
+                $hasError={!!errors.message}
               />
               {errors.message && <ErrorText initial={{ opacity: 0 }} animate={{ opacity: 1 }}>{errors.message}</ErrorText>}
             </FormGroup>
