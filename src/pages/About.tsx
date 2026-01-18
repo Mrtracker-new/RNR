@@ -5,6 +5,7 @@ import { Container, Section, Grid, Card } from '../styles/GlobalStyle';
 import SEO from '../components/SEO';
 import PageTransition from '../components/PageTransition';
 import aboutImage from '../assets/images/Aboutme.webp';
+import ResumeDownload from '../components/ResumeDownload';
 import { StaggerContainer, StaggerItem } from '../components/ScrollReveal';
 
 const AboutHero = styled(Section)`
@@ -41,6 +42,12 @@ const HeroSubtitle = styled(motion.p)`
   max-width: 600px;
   margin: 0 auto var(--spacing-8);
   line-height: 1.7;
+`;
+
+const ResumeButtonWrapper = styled(motion.div)`
+  display: flex;
+  justify-content: center;
+  margin-bottom: var(--spacing-8);
 `;
 
 const AboutImageSection = styled(motion.div)`
@@ -738,6 +745,10 @@ const About: React.FC = () => {
               I'm passionate about creating innovative, functional, and visually appealing digital solutions
               that solve real-world problems.
             </HeroSubtitle>
+
+            <ResumeButtonWrapper variants={itemVariants}>
+              <ResumeDownload variant="primary" size="lg" />
+            </ResumeButtonWrapper>
 
             <AboutImageSection variants={itemVariants}>
               <AboutImageContainer>
