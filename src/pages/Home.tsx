@@ -6,6 +6,7 @@ import { Container, Button } from '../styles/GlobalStyle';
 import SEO from '../components/SEO';
 import PageTransition from '../components/PageTransition';
 import BlogCard from '../components/BlogCard';
+import ResumeDownload from '../components/ResumeDownload';
 import { getLatestPosts, BlogPost } from '../utils/hashnode';
 import profileImage from '../assets/images/Home_dp.webp';
 
@@ -460,6 +461,7 @@ const Home: React.FC = () => {
               >
                 Contact Me
               </Button>
+              <ResumeDownload variant="outline" size="lg" />
             </CTAContainer>
           </TextContent>
 
