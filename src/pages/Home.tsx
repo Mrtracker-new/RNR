@@ -9,12 +9,6 @@ import BlogCard from '../components/BlogCard';
 import ResumeDownload from '../components/ResumeDownload';
 import { getLatestPosts, BlogPost } from '../utils/hashnode';
 import profileImage from '../assets/images/Home_dp.webp';
-import { Document, Page, pdfjs } from 'react-pdf';
-import 'react-pdf/dist/Page/AnnotationLayer.css';
-import 'react-pdf/dist/Page/TextLayer.css';
-
-// Configure PDF.js worker
-pdfjs.GlobalWorkerOptions.workerSrc = '/pdf.worker.min.js';
 
 // --- Styled Components ---
 
@@ -142,8 +136,8 @@ const StylizedImage = styled.div`
   }
 `;
 
-// PDF Preview Container
-const PDFPreviewContainer = styled.div`
+// Resume Preview Container
+const ResumePreviewContainer = styled.div`
   width: 100%;
   height: 100%;
   display: flex;
@@ -153,30 +147,17 @@ const PDFPreviewContainer = styled.div`
   overflow: hidden;
   background: rgba(30, 41, 59, 0.98);
   backdrop-filter: blur(10px);
+  padding: 20px;
   
-  .react-pdf__Document {
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    width: 100%;
-    height: 100%;
-  }
-  
-  .react-pdf__Page {
-    display: flex !important;
-    align-items: center;
-    justify-content: center;
-  }
-  
-  .react-pdf__Page__canvas {
+  img {
     max-width: 100%;
     max-height: 100%;
-    height: auto !important;
-    width: auto !important;
+    object-fit: contain;
+    border-radius: var(--radius-md);
   }
 `;
 
-const PDFHintText = styled.div`
+const ResumeHintText = styled.div`
   position: absolute;
   bottom: 20px;
   left: 50%;
@@ -494,18 +475,7 @@ const Home: React.FC = () => {
   const [loadingBlog, setLoadingBlog] = useState(true);
   const [showResumePreview, setShowResumePreview] = useState(false);
 
-  // Pre-load PDF on mount for instant preview
-  useEffect(() => {
-    const preloadPDF = async () => {
-      try {
-        const response = await fetch('/resume_rolan_lobo.pdf');
-        await response.blob(); // Cache the PDF in browser
-      } catch (error) {
-        console.error('Error preloading PDF:', error);
-      }
-    };
-    preloadPDF();
-  }, []);
+
 
   useEffect(() => {
     const fetchBlogPosts = async () => {
@@ -609,26 +579,12 @@ const Home: React.FC = () => {
                   exit={{ opacity: 0 }}
                   transition={{ duration: 0.3 }}
                 >
-                  <PDFPreviewContainer>
-                    <Document
-                      file="/resume_rolan_lobo.pdf"
-                      loading={
-                        <div style={{ color: 'var(--accent-primary)', fontSize: '14px', fontWeight: 500 }}>
-                          Loading preview...
-                        </div>
-                      }
-                    >
-                      <Page
-                        pageNumber={1}
-                        scale={0.52}
-                        renderTextLayer={false}
-                        renderAnnotationLayer={false}
-                      />
-                    </Document>
-                  </PDFPreviewContainer>
-                  <PDFHintText>
+                  <ResumePreviewContainer>
+                    <img src="/Resume_preview.webp" alt="Resume Preview" />
+                  </ResumePreviewContainer>
+                  <ResumeHintText>
                     Click button to download full resume
-                  </PDFHintText>
+                  </ResumeHintText>
                 </StylizedImage>
               )}
             </AnimatePresence>
