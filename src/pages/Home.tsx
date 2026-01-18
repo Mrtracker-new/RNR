@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import styled from 'styled-components';
-import { motion, Variants } from 'framer-motion';
+import { motion, Variants, AnimatePresence } from 'framer-motion';
 import { Link } from 'react-router-dom';
 import { Container, Button } from '../styles/GlobalStyle';
 import SEO from '../components/SEO';
@@ -9,6 +9,12 @@ import BlogCard from '../components/BlogCard';
 import ResumeDownload from '../components/ResumeDownload';
 import { getLatestPosts, BlogPost } from '../utils/hashnode';
 import profileImage from '../assets/images/Home_dp.webp';
+import { Document, Page, pdfjs } from 'react-pdf';
+import 'react-pdf/dist/Page/AnnotationLayer.css';
+import 'react-pdf/dist/Page/TextLayer.css';
+
+// Configure PDF.js worker
+pdfjs.GlobalWorkerOptions.workerSrc = '/pdf.worker.min.js';
 
 // --- Styled Components ---
 
@@ -133,6 +139,59 @@ const StylizedImage = styled.div`
   }
 `;
 
+// PDF Preview Container
+const PDFPreviewContainer = styled.div`
+  width: 100%;
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  overflow: hidden;
+  background: rgba(30, 41, 59, 0.98);
+  backdrop-filter: blur(10px);
+  
+  .react-pdf__Document {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 100%;
+    height: 100%;
+  }
+  
+  .react-pdf__Page {
+    display: flex !important;
+    align-items: center;
+    justify-content: center;
+  }
+  
+  .react-pdf__Page__canvas {
+    max-width: 100%;
+    max-height: 100%;
+    height: auto !important;
+    width: auto !important;
+  }
+`;
+
+const PDFHintText = styled.div`
+  position: absolute;
+  bottom: 20px;
+  left: 50%;
+  transform: translateX(-50%);
+  color: var(--accent-primary);
+  font-size: 12px;
+  text-align: center;
+  background: rgba(0, 0, 0, 0.8);
+  padding: 10px 18px;
+  border-radius: var(--radius-lg);
+  z-index: 10;
+  border: 1px solid rgba(100, 255, 218, 0.2);
+  font-weight: 500;
+  letter-spacing: 0.5px;
+  pointer-events: none;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.4);
+`;
+
 const GreetingPill = styled(motion.div)`
   display: inline-flex;
   align-items: center;
@@ -194,9 +253,27 @@ const CTAContainer = styled(motion.div)`
     flex-direction: column;
     width: 100%;
     
-    a, button {
+    /* Direct children buttons/links */
+    > a, > button {
       width: 100%;
       text-align: center;
+    }
+
+    /* Wrapper div for ResumeDownload hover effect */
+    > div {
+      width: 100%;
+      
+      /* ResumeDownload internal wrapper (ResumeButtonWrapper) */
+      > div {
+        width: 100%;
+        display: block;
+        
+        /* The actual download button inside ResumeDownload */
+        a {
+          width: 100%;
+          justify-content: center;
+        }
+      }
     }
   }
 `;
@@ -397,6 +474,20 @@ const itemVariants: Variants = {
 const Home: React.FC = () => {
   const [blogPosts, setBlogPosts] = useState<BlogPost[]>([]);
   const [loadingBlog, setLoadingBlog] = useState(true);
+  const [showResumePreview, setShowResumePreview] = useState(false);
+
+  // Pre-load PDF on mount for instant preview
+  useEffect(() => {
+    const preloadPDF = async () => {
+      try {
+        const response = await fetch('/resume_rolan_lobo.pdf');
+        await response.blob(); // Cache the PDF in browser
+      } catch (error) {
+        console.error('Error preloading PDF:', error);
+      }
+    };
+    preloadPDF();
+  }, []);
 
   useEffect(() => {
     const fetchBlogPosts = async () => {
@@ -461,14 +552,59 @@ const Home: React.FC = () => {
               >
                 Contact Me
               </Button>
-              <ResumeDownload variant="outline" size="lg" />
+              <div
+                onMouseEnter={() => setShowResumePreview(true)}
+                onMouseLeave={() => setShowResumePreview(false)}
+              >
+                <ResumeDownload variant="outline" size="lg" showTooltip={false} />
+              </div>
             </CTAContainer>
           </TextContent>
 
           <ProfileImageContainer variants={itemVariants}>
-            <StylizedImage>
-              <img src={profileImage} alt="Rolan Lobo (Rolan RNR) - Full Stack Developer" />
-            </StylizedImage>
+            <AnimatePresence mode="wait">
+              {!showResumePreview ? (
+                <StylizedImage
+                  as={motion.div}
+                  key="profile"
+                  initial={{ opacity: 1 }}
+                  exit={{ opacity: 0 }}
+                  transition={{ duration: 0.3 }}
+                >
+                  <img src={profileImage} alt="Rolan Lobo (Rolan RNR) - Full Stack Developer" />
+                </StylizedImage>
+              ) : (
+                <StylizedImage
+                  as={motion.div}
+                  key="resume"
+                  initial={{ opacity: 0 }}
+                  animate={{ opacity: 1 }}
+                  exit={{ opacity: 0 }}
+                  transition={{ duration: 0.3 }}
+                >
+                  <PDFPreviewContainer>
+                    <Document
+                      file="/resume_rolan_lobo.pdf"
+                      loading={
+                        <div style={{ color: 'var(--accent-primary)', fontSize: '14px', fontWeight: 500 }}>
+                          Loading preview...
+                        </div>
+                      }
+                    >
+                      <Page
+                        pageNumber={1}
+                        scale={0.52}
+                        renderTextLayer={false}
+                        renderAnnotationLayer={false}
+                      />
+                    </Document>
+                  </PDFPreviewContainer>
+                  <PDFHintText>
+                    Click button to download full resume
+                  </PDFHintText>
+                </StylizedImage>
+              )}
+            </AnimatePresence>
           </ProfileImageContainer>
         </HeroContent>
 
