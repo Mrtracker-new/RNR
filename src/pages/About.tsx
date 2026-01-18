@@ -54,6 +54,14 @@ const AboutImageSection = styled(motion.div)`
   display: flex;
   justify-content: center;
   margin-bottom: var(--spacing-16);
+  
+  @media (max-width: 968px) {
+    margin-bottom: var(--spacing-8); /* Reduced gap on mobile */
+  }
+  
+  @media (max-width: 640px) {
+    margin-bottom: var(--spacing-6); /* Even tighter on small screens */
+  }
 `;
 
 const AboutImageContainer = styled.div`
