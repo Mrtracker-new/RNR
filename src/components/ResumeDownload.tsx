@@ -17,14 +17,14 @@ const ResumeButtonWrapper = styled.div`
 `;
 
 // Tooltip container that appears on hover
-const PreviewTooltip = styled(motion.div) <{ position: 'top' | 'right' | 'bottom' | 'left' }>`
+const PreviewTooltip = styled(motion.div) <{ $position: 'top' | 'right' | 'bottom' | 'left' }>`
   position: absolute;
   z-index: 1000;
   pointer-events: none;
   
   /* Position variants */
   ${props => {
-    switch (props.position) {
+    switch (props.$position) {
       case 'top':
         return `
           bottom: calc(100% + 16px);
@@ -58,7 +58,7 @@ const PreviewTooltip = styled(motion.div) <{ position: 'top' | 'right' | 'bottom
 `;
 
 // Card container for the preview
-const PreviewCard = styled.div<{ position: 'top' | 'right' | 'bottom' | 'left' }>`
+const PreviewCard = styled.div<{ $position: 'top' | 'right' | 'bottom' | 'left' }>`
   background: rgba(30, 41, 59, 0.95);
   backdrop-filter: blur(20px);
   -webkit-backdrop-filter: blur(20px);
@@ -77,7 +77,7 @@ const PreviewCard = styled.div<{ position: 'top' | 'right' | 'bottom' | 'left' }
     height: 0;
     
     ${props => {
-    switch (props.position) {
+    switch (props.$position) {
       case 'top':
         return `
             bottom: -8px;
@@ -176,13 +176,13 @@ const ResumeDownload: React.FC<ResumeDownloadProps> = ({
       <AnimatePresence>
         {showTooltip && isHovering && (
           <PreviewTooltip
-            position={tooltipPosition}
+            $position={tooltipPosition}
             initial={{ opacity: 0, y: 10 }}
             animate={{ opacity: 1, y: 0 }}
             exit={{ opacity: 0, y: 10 }}
             transition={{ duration: 0.2 }}
           >
-            <PreviewCard position={tooltipPosition}>
+            <PreviewCard $position={tooltipPosition}>
               <PreviewImageContainer>
                 <img src="/Resume_preview.webp" alt="Resume Preview" />
               </PreviewImageContainer>
