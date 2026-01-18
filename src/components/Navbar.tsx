@@ -22,7 +22,7 @@ const FixedContainer = styled.div`
 `;
 
 // The actual "Island" navbar
-const NavbarIsland = styled(motion.nav) <{ scrolled: boolean }>`
+const NavbarIsland = styled(motion.nav) <{ $scrolled: boolean }>`
   pointer-events: auto; /* Re-enable clicks */
   width: 100%;
   max-width: var(--breakpoint-lg);
@@ -40,9 +40,9 @@ const NavbarIsland = styled(motion.nav) <{ scrolled: boolean }>`
 
   /* Desktop: Floating Island */
   @media (min-width: 769px) {
-    margin-top: ${props => props.scrolled ? 'var(--spacing-2)' : 'var(--spacing-4)'};
-    background: ${props => props.scrolled ? 'rgba(9, 9, 11, 0.8)' : 'rgba(9, 9, 11, 0.5)'};
-    width: ${props => props.scrolled ? 'auto' : '100%'}; /* Shrink on scroll? maybe just stay wide */
+    margin-top: ${props => props.$scrolled ? 'var(--spacing-2)' : 'var(--spacing-4)'};
+    background: ${props => props.$scrolled ? 'rgba(9, 9, 11, 0.8)' : 'rgba(9, 9, 11, 0.5)'};
+    width: ${props => props.$scrolled ? 'auto' : '100%'}; /* Shrink on scroll? maybe just stay wide */
     min-width: 600px;
   }
 
@@ -92,12 +92,12 @@ const NavLinks = styled.div`
   }
 `;
 
-const NavItem = styled(Link) <{ active: boolean }>`
+const NavItem = styled(Link) <{ $active: boolean }>`
   position: relative;
   padding: 8px 16px;
   font-size: var(--text-sm);
   font-weight: var(--font-medium);
-  color: ${props => props.active ? 'var(--accent-primary)' : 'var(--dark-400)'};
+  color: ${props => props.$active ? 'var(--accent-primary)' : 'var(--dark-400)'};
   text-decoration: none;
   transition: color 0.3s ease;
   z-index: 1;
@@ -201,7 +201,7 @@ const Navbar: React.FC = () => {
     <>
       <FixedContainer>
         <NavbarIsland
-          scrolled={scrolled}
+          $scrolled={scrolled}
           initial={{ y: -50, opacity: 0 }}
           animate={{ y: 0, opacity: 1 }}
           transition={{ duration: 0.6, ease: "easeOut" }}
@@ -217,7 +217,7 @@ const Navbar: React.FC = () => {
                 <div key={item.path} style={{ position: 'relative' }}>
                   <NavItem
                     to={item.path}
-                    active={isActive}
+                    $active={isActive}
                   >
                     {item.label}
                     {isActive && (
