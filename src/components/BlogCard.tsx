@@ -21,11 +21,11 @@ const Card = styled(motion.article)`
   }
 `;
 
-const CoverImage = styled.div<{ imageUrl?: string }>`
+const CoverImage = styled.div<{ $imageUrl?: string }>`
   width: 100%;
   aspect-ratio: 16 / 9;
-  background: ${props => props.imageUrl
-    ? `url(${props.imageUrl})`
+  background: ${props => props.$imageUrl
+    ? `url(${props.$imageUrl})`
     : 'linear-gradient(135deg, rgba(100, 255, 218, 0.1) 0%, rgba(139, 92, 246, 0.1) 100%)'
   };
   background-size: cover;
@@ -189,7 +189,7 @@ const BlogCard: React.FC<BlogCardProps> = ({ post }) => {
       animate={{ opacity: 1, y: 0 }}
       transition={{ duration: 0.4 }}
     >
-      <CoverImage imageUrl={post.coverImage?.url} />
+      <CoverImage $imageUrl={post.coverImage?.url} />
 
       <Content>
         <Title>{post.title}</Title>
