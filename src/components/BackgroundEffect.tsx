@@ -34,8 +34,8 @@ const GradientBg = styled.div`
 
 
 
-const GradientsContainer = styled.div<{ isMobile: boolean }>`
-  filter: blur(${props => props.isMobile ? '40px' : '80px'}); /* Reduced blur for mobile performance */
+const GradientsContainer = styled.div<{ $isMobile: boolean }>`
+  filter: blur(${props => props.$isMobile ? '40px' : '80px'}); /* Reduced blur for mobile performance */
   width: 100%;
   height: 100%;
   position: absolute;
@@ -98,7 +98,7 @@ const BackgroundEffect: React.FC = () => {
 
   return (
     <GradientBg>
-      <GradientsContainer isMobile={isMobile}>
+      <GradientsContainer $isMobile={isMobile}>
         <Orb1 />
         {!isMobile && <Orb2 />} {/* Reduce orb count on mobile */}
         <Orb3 />
