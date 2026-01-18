@@ -747,7 +747,7 @@ const About: React.FC = () => {
             </HeroSubtitle>
 
             <ResumeButtonWrapper variants={itemVariants}>
-              <ResumeDownload variant="primary" size="lg" />
+              <ResumeDownload variant="primary" size="lg" tooltipPosition="right" />
             </ResumeButtonWrapper>
 
             <AboutImageSection variants={itemVariants}>
