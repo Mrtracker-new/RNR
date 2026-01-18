@@ -183,13 +183,13 @@ const ProgressLine = styled(motion.div)`
   height: 100%;
 `;
 
-const JourneyItemWrapper = styled.div<{ align: 'left' | 'right' }>`
+const JourneyItemWrapper = styled.div<{ $align: 'left' | 'right' }>`
   display: flex;
-  justify-content: ${props => props.align === 'left' ? 'flex-end' : 'flex-start'};
+  justify-content: ${props => props.$align === 'left' ? 'flex-end' : 'flex-start'};
   padding-bottom: var(--spacing-16);
   position: relative;
   width: 50%;
-  ${props => props.align === 'left' ? 'margin-right: auto; padding-right: 40px;' : 'margin-left: auto; padding-left: 40px;'}
+  ${props => props.$align === 'left' ? 'margin-right: auto; padding-right: 40px;' : 'margin-left: auto; padding-left: 40px;'}
 
   @media (max-width: 768px) {
     width: 100%;
@@ -201,7 +201,7 @@ const JourneyItemWrapper = styled.div<{ align: 'left' | 'right' }>`
   }
 `;
 
-const Marker = styled(motion.div) <{ align: 'left' | 'right' }>`
+const Marker = styled(motion.div) <{ $align: 'left' | 'right' }>`
     position: absolute;
     top: 24px;
     width: 16px;
@@ -213,7 +213,7 @@ const Marker = styled(motion.div) <{ align: 'left' | 'right' }>`
     box-shadow: 0 0 0 4px rgba(30, 41, 59, 0.5), 0 0 15px var(--accent-primary);
     
     /* Desktop Positioning */
-    ${props => props.align === 'left' ? 'right: -10px;' : 'left: -10px;'} /* -8px for perfect center + border adj */
+    ${props => props.$align === 'left' ? 'right: -10px;' : 'left: -10px;'} /* -8px for perfect center + border adj */
 
     @media (max-width: 768px) {
         /* Mobile Positioning - Independent of align prop */
@@ -798,8 +798,8 @@ const About: React.FC = () => {
           </ProgressLineContainer>
 
           {timelineData.map((item, index) => (
-            <JourneyItemWrapper key={index} align={index % 2 === 0 ? 'left' : 'right'}>
-              <Marker align={index % 2 === 0 ? 'left' : 'right'} />
+            <JourneyItemWrapper key={index} $align={index % 2 === 0 ? 'left' : 'right'}>
+              <Marker $align={index % 2 === 0 ? 'left' : 'right'} />
               <JourneyCard
                 initial="offscreen"
                 whileInView="onscreen"
