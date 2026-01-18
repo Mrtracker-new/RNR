@@ -43,13 +43,13 @@ const DotsSpinner = styled.div`
   gap: var(--spacing-2);
 `;
 
-const Dot = styled.div<{ delay: number }>`
+const Dot = styled.div<{ $delay: number }>`
   width: 6px;
   height: 6px;
   background: var(--accent-primary);
   border-radius: 50%;
   animation: ${pulse} 1.2s ease-in-out infinite;
-  animation-delay: ${props => props.delay}s;
+  animation-delay: ${props => props.$delay}s;
   opacity: 0.8;
 `;
 
@@ -83,18 +83,18 @@ const ripple = keyframes`
   }
 `;
 
-const RippleElement = styled.div<{ delay: number }>`
+const RippleElement = styled.div<{ $delay: number }>`
   position: absolute;
   border: 2px solid var(--accent-primary);
   border-radius: 50%;
   animation: ${ripple} 1s cubic-bezier(0, 0.2, 0.8, 1) infinite;
-  animation-delay: ${props => props.delay}s;
+  animation-delay: ${props => props.$delay}s;
 `;
 
-const LoadingText = styled.p<{ variant?: 'default' | 'gradient' }>`
+const LoadingText = styled.p<{ $variant?: 'default' | 'gradient' }>`
   font-size: var(--text-sm);
   font-weight: var(--font-normal);
-  color: ${props => props.variant === 'gradient' ? 'var(--accent-primary)' : 'var(--dark-400)'};
+  color: ${props => props.$variant === 'gradient' ? 'var(--accent-primary)' : 'var(--dark-400)'};
   opacity: 0.9;
 `;
 
@@ -119,7 +119,7 @@ const LoadingSpinner: React.FC<LoadingSpinnerProps> = ({
         return (
           <DotsSpinner>
             {[0, 0.2, 0.4].map((delay, index) => (
-              <Dot key={index} delay={delay} />
+              <Dot key={index} $delay={delay} />
             ))}
           </DotsSpinner>
         );
@@ -127,7 +127,7 @@ const LoadingSpinner: React.FC<LoadingSpinnerProps> = ({
         return (
           <RippleSpinner size={size}>
             {[0, 0.5].map((delay, index) => (
-              <RippleElement key={index} delay={delay} />
+              <RippleElement key={index} $delay={delay} />
             ))}
           </RippleSpinner>
         );
@@ -144,7 +144,7 @@ const LoadingSpinner: React.FC<LoadingSpinnerProps> = ({
       transition={{ duration: 0.3 }}
     >
       {renderSpinner()}
-      {text && <LoadingText variant={textVariant}>{text}</LoadingText>}
+      {text && <LoadingText $variant={textVariant}>{text}</LoadingText>}
     </LoadingContainer>
   );
 };
