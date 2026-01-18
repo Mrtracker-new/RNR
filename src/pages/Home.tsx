@@ -25,9 +25,8 @@ const HeroSection = styled.section`
   justify-content: center;
   align-items: center;
   position: relative;
-  /* Removed overflow: hidden to prevent cropping */
-  padding-top: 100px; /* Increased top padding to clear fixed navbar safely */
-  padding-bottom: var(--spacing-20); /* Space for StatsBar on desktop */
+  padding-top: 100px;
+  padding-bottom: var(--spacing-20);
   
   /* Background Elements */
   &::before {
@@ -44,14 +43,17 @@ const HeroSection = styled.section`
   }
 
   @media (max-width: 968px) {
-    min-height: auto;
-    padding-top: 120px; /* More space on mobile */
-    padding-bottom: 0;
-    justify-content: flex-start;
-    overflow-x: hidden; /* Prevent horizontal scroll from background elements */
+    /* Mobile: block display for natural page flow, overflow-x to clip background */
+    display: block;
+    min-height: 0;
+    max-height: none;
+    height: auto;
+    padding-top: 120px;
+    padding-bottom: var(--spacing-4);
+    overflow-x: clip; /* Clip background gradient, but don't create scroll container */
     
     &::before {
-      filter: blur(30px); /* Reduced from 60px */
+      filter: blur(30px);
       opacity: 0.5;
     }
   }
@@ -65,14 +67,15 @@ const HeroContent = styled(Container)`
   z-index: 2;
   position: relative;
   width: 100%;
-  flex: 1; /* Allow content to take available space */
+  flex: 1; /* Allow content to take available space on desktop */
   
   @media (max-width: 968px) {
-    display: flex; /* Switch to flex column for better stacking control */
-    flex-direction: column-reverse; /* Image on top */
+    display: flex;
+    flex-direction: column-reverse;
     text-align: center;
     gap: var(--spacing-8);
-    padding-bottom: var(--spacing-12); /* Reduced space for bottom stats */
+    padding-bottom: var(--spacing-12);
+    flex: none; /* Remove flex:1 on mobile to prevent scroll issues */
   }
 `;
 
@@ -321,18 +324,25 @@ const StatsBar = styled(motion.div)`
   }
   
   @media (max-width: 968px) {
+    /* Mobile: Keep visuals but reduce spacing for unity */
     position: relative;
     bottom: auto;
     left: auto;
     right: auto;
     max-width: 100%;
-    margin: var(--spacing-8) auto 0;
+    margin: var(--spacing-6) auto 0; /* Tighter spacing for unified feel */
     padding: var(--spacing-5) var(--spacing-4);
+    background: rgba(30, 41, 59, 0.4); /* Match About page glassmorphic style */
+    backdrop-filter: blur(12px);
+    -webkit-backdrop-filter: blur(12px);
+    border: 1px solid rgba(255, 255, 255, 0.05);
+    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.2);
   }
   
   @media (max-width: 640px) {
     left: auto;
     right: auto;
+    margin-top: var(--spacing-5); /* Even tighter on small screens */
     margin-left: var(--spacing-2);
     margin-right: var(--spacing-2);
     padding: var(--spacing-4) var(--spacing-3);
@@ -406,6 +416,14 @@ const StatItem = styled.div`
 const BlogSection = styled.section`
   padding: var(--spacing-20) 0;
   position: relative;
+  
+  @media (max-width: 968px) {
+    padding: var(--spacing-10) 0 var(--spacing-4) 0; /* Balanced spacing on mobile */
+  }
+  
+  @media (max-width: 640px) {
+    padding: var(--spacing-8) 0 var(--spacing-3) 0; /* Moderate spacing on small screens */
+  }
 `;
 
 const BlogHeader = styled.div`
@@ -553,8 +571,17 @@ const Home: React.FC = () => {
                 Contact Me
               </Button>
               <div
-                onMouseEnter={() => setShowResumePreview(true)}
-                onMouseLeave={() => setShowResumePreview(false)}
+                onMouseEnter={() => {
+                  // Only show preview on desktop (screen width > 968px)
+                  if (window.innerWidth > 968) {
+                    setShowResumePreview(true);
+                  }
+                }}
+                onMouseLeave={() => {
+                  if (window.innerWidth > 968) {
+                    setShowResumePreview(false);
+                  }
+                }}
               >
                 <ResumeDownload variant="outline" size="lg" showTooltip={false} />
               </div>
