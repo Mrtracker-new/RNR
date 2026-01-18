@@ -53,7 +53,7 @@ const FilterSection = styled(motion.div)`
   flex-wrap: wrap;
 `;
 
-const FilterButton = styled(motion.button) <{ active: boolean }>`
+const FilterButton = styled(motion.button) <{ $active: boolean }>`
   padding: var(--spacing-3) var(--spacing-6);
   border-radius: var(--radius-lg);
   font-weight: var(--font-semibold);
@@ -64,7 +64,7 @@ const FilterButton = styled(motion.button) <{ active: boolean }>`
   overflow: hidden;
   letter-spacing: 0.02em;
   
-  ${props => props.active ? `
+  ${props => props.$active ? `
     background: var(--accent-gradient);
     color: var(--dark-950);
     border: 1px solid transparent;
@@ -121,12 +121,12 @@ const ProjectCard = styled(motion.div)`
   }
 `;
 
-const ProjectImageContainer = styled.div<{ bgColor: string }>`
+const ProjectImageContainer = styled.div<{ $bgColor: string }>`
   width: 100%;
   height: 240px;
   position: relative;
   overflow: hidden;
-  background: ${props => props.bgColor};
+  background: ${props => props.$bgColor};
   display: flex;
   align-items: center;
   justify-content: center;
@@ -682,7 +682,7 @@ const Projects: React.FC = () => {
             {categories.map((category) => (
               <FilterButton
                 key={category}
-                active={selectedCategory === category}
+                $active={selectedCategory === category}
                 onClick={() => setSelectedCategory(category)}
                 whileHover={{ scale: 1.05 }}
                 whileTap={{ scale: 0.95 }}
@@ -717,7 +717,7 @@ const Projects: React.FC = () => {
                       setIsModalOpen(true);
                     }}
                   >
-                    <ProjectImageContainer bgColor={project.bgColor} className="project-image">
+                    <ProjectImageContainer $bgColor={project.bgColor} className="project-image">
                       {project.image ? (
                         <OptimizedImage
                           src={project.image}
