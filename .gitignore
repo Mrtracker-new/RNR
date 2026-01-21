@@ -12,7 +12,7 @@ pnpm-lock.yaml
 /coverage
 .nyc_output
 .jest-cache/
-
+docs_ignore/
 # Production
 /build
 /dist
