@@ -51,6 +51,7 @@
     ]
   },
   "devDependencies": {
+    "sharp": "^0.34.5",
     "source-map-explorer": "^2.5.3"
   }
 }
