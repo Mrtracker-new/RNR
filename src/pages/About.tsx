@@ -1,12 +1,11 @@
 import React, { useRef } from 'react';
 import styled from 'styled-components';
-import { motion, useScroll, useSpring, useInView, Variants } from 'framer-motion';
-import { Container, Section, Grid, Card } from '../styles/GlobalStyle';
+import { motion, useScroll, useSpring, Variants } from 'framer-motion';
+import { Container, Section } from '../styles/GlobalStyle';
 import SEO from '../components/SEO';
 import PageTransition from '../components/PageTransition';
 import aboutImage from '../assets/images/Aboutme.webp';
 import ResumeDownload from '../components/ResumeDownload';
-import { StaggerContainer, StaggerItem } from '../components/ScrollReveal';
 
 const AboutHero = styled(Section)`
   padding-top: 140px;
@@ -137,7 +136,7 @@ const JourneyTitle = styled(motion.h2)`
       width: 60px;
       height: 4px;
       background: var(--accent-gradient);
-      border-radius: var(--radius-full);
+      border-radius: var(--radius-sm);
   }
 `;
 
@@ -322,126 +321,201 @@ const TechTag = styled.span`
   }
 `;
 
-/* --- SKILLS & SERVICES STYLES (Keep existing or slightly refined) --- */
+/* --- SKILLS SECTION STYLES --- */
 
 const SkillsSection = styled(Section)`
-  background: rgba(30, 41, 59, 0.3);
-  
-  @media (max-width: 768px) {
-    padding-left: var(--spacing-4);
-    padding-right: var(--spacing-4);
-  }
-  
-  @media (max-width: 480px) {
-    padding-left: var(--spacing-3);
-    padding-right: var(--spacing-3);
-  }
-
-  /* Optimize for mobile scroll */
-  transform: translateZ(0);
-  will-change: transform;
+  position: relative;
 `;
 
-const SkillsGrid = styled(Grid)`
-  grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
-  gap: var(--spacing-8);
-`;
-
-const SkillCard = styled(Card)`
+const SkillsHeader = styled.div`
   text-align: center;
-  background: rgba(30, 41, 59, 0.4);
-  /* backdrop-filter: blur(12px); <-- Expensive! Removed for stability, relying on opacity */
-  border: 1px solid rgba(255, 255, 255, 0.05);
-  transition: transform 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275), background 0.3s ease; 
-  will-change: transform;
-  backface-visibility: hidden;
-  transform: translateZ(0);
+  margin-bottom: var(--spacing-16);
+`;
+
+const SkillsTitle = styled(motion.h2)`
+  font-size: var(--text-4xl);
+  color: var(--dark-100);
+  margin-bottom: var(--spacing-4);
+  display: inline-block;
+  position: relative;
+  
+  &::after {
+    content: '';
+    position: absolute;
+    bottom: -10px;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 60px;
+    height: 4px;
+    background: var(--accent-gradient);
+    border-radius: var(--radius-sm);
+  }
+`;
+
+const SkillsSubtitle = styled(motion.p)`
+  color: var(--dark-400);
+  font-size: var(--text-lg);
+  max-width: 500px;
+  margin: 0 auto;
+`;
+
+const SkillsGrid = styled.div`
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: var(--spacing-8);
+  max-width: 1400px;
+  margin: 0 auto;
+
+  @media (max-width: 1024px) {
+    grid-template-columns: repeat(2, 1fr);
+  }
+
+  @media (max-width: 768px) {
+    grid-template-columns: 1fr;
+    gap: var(--spacing-6);
+  }
+`;
+
+const SkillCard = styled(motion.div)`
+  background: linear-gradient(135deg, rgba(30, 41, 59, 0.5) 0%, rgba(30, 41, 59, 0.3) 100%);
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  padding: var(--spacing-8);
+  border-radius: var(--radius-xl);
+  position: relative;
+  overflow: hidden;
+  transition: background 0.3s ease, border-color 0.3s ease, box-shadow 0.3s ease;
+  will-change: auto;
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.2);
 
   &:hover {
-    transform: translateY(-8px);
-    background: rgba(30, 41, 59, 0.6);
-    border-color: var(--accent-primary);
-    box-shadow: 0 10px 30px -10px rgba(100, 255, 218, 0.15);
+    background: linear-gradient(135deg, rgba(30, 41, 59, 0.7) 0%, rgba(30, 41, 59, 0.5) 100%);
+    border-color: rgba(100, 255, 218, 0.3);
+    transform: translateY(-4px);
+    box-shadow: 0 8px 30px rgba(100, 255, 218, 0.15);
   }
-`;
 
-const SkillName = styled.h3`
-  font-size: var(--text-lg);
-  color: var(--dark-50);
-  margin-bottom: var(--spacing-2);
-  font-weight: 700;
-`;
+  &::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 4px;
+    background: var(--accent-gradient);
+    opacity: 0.8;
+  }
 
-const SkillDescription = styled.p`
-  color: var(--dark-300);
-  font-size: 0.85rem;
-  margin-bottom: var(--spacing-5);
-  min-height: 40px; /* Alignment fix */
-`;
-
-const SkillProgressContainer = styled.div`
-  position: relative;
-  background: rgba(0, 0, 0, 0.3);
-  border-radius: 3px;
-  height: 8px;
-  margin-bottom: var(--spacing-3);
-  overflow: hidden;
-`;
-
-const SkillProgressBar = styled(motion.div) <{ percentage: number }>`
-  height: 100%;
-  background: var(--accent-gradient);
-  border-radius: 3px;
-  position: relative;
-  box-shadow: 0 0 10px rgba(100, 255, 218, 0.3);
-  
   &::after {
     content: '';
     position: absolute;
     top: 0;
     right: 0;
     bottom: 0;
-    width: 20px;
-    background: linear-gradient(90deg, transparent 0%, rgba(255, 255, 255, 0.5) 50%, transparent 100%);
-    animation: shimmer 2s linear infinite;
-  }
-
-  @keyframes shimmer {
-    0% { transform: translateX(-150%); }
-    100% { transform: translateX(250%); }
-  }
-`;
-
-const SkillPercentage = styled.div`
-  text-align: right;
-  color: var(--accent-primary);
-  font-weight: var(--font-bold);
-  font-size: var(--text-xs);
-  font-family: var(--font-mono);
-`;
-
-const ServicesSection = styled(Section)`
-  position: relative;
-  overflow: hidden;
-
-  /* Ambient Background Effect */
-  &::before {
-    content: '';
-    position: absolute;
-    top: 20%;
-    right: 0;
-    width: 600px;
-    height: 600px;
-    background: radial-gradient(circle, rgba(139, 92, 246, 0.05) 0%, transparent 70%);
-    z-index: -1;
+    left: 0;
+    background: radial-gradient(circle at top right, rgba(100, 255, 218, 0.05) 0%, transparent 50%);
     pointer-events: none;
   }
 `;
 
-const ServicesGrid = styled(Grid)`
+const SkillCategory = styled.h3`
+  font-size: var(--text-xl);
+  color: var(--dark-50);
+  margin-bottom: var(--spacing-6);
+  font-weight: var(--font-bold);
+  display: flex;
+  align-items: center;
+  gap: var(--spacing-3);
+  letter-spacing: -0.02em;
+
+  &::before {
+    content: '';
+    display: inline-block;
+    width: 10px;
+    height: 10px;
+    background: var(--accent-gradient);
+    border-radius: 50%;
+    box-shadow: 0 0 15px rgba(100, 255, 218, 0.6);
+  }
+`;
+
+const SkillsList = styled.ul`
+  list-style: none;
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--spacing-3);
+`;
+
+const SkillItem = styled.li`
+  color: var(--dark-200);
+  font-size: var(--text-sm);
+  font-weight: var(--font-medium);
+  display: inline-flex;
+  align-items: center;
+  gap: var(--spacing-2);
+  transition: var(--transition-fast);
+  padding: var(--spacing-2) var(--spacing-4);
+  border-radius: var(--radius-md);
+  background: rgba(100, 255, 218, 0.08);
+  border: 1px solid rgba(100, 255, 218, 0.15);
+  cursor: default;
+
+  &:hover {
+    color: var(--accent-primary);
+    background: rgba(100, 255, 218, 0.15);
+    border-color: rgba(100, 255, 218, 0.3);
+    transform: translateY(-2px);
+    box-shadow: 0 4px 12px rgba(100, 255, 218, 0.2);
+  }
+`;
+
+/* --- SERVICES SECTION STYLES --- */
+
+const ServicesSection = styled(Section)`
+  position: relative;
+  background: rgba(15, 23, 42, 0.3);
+`;
+
+const ServicesHeader = styled.div`
+  text-align: center;
+  margin-bottom: var(--spacing-16);
+`;
+
+const ServicesTitle = styled(motion.h2)`
+  font-size: var(--text-4xl);
+  color: var(--dark-100);
+  margin-bottom: var(--spacing-4);
+  display: inline-block;
+  position: relative;
+  
+  &::after {
+    content: '';
+    position: absolute;
+    bottom: -10px;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 60px;
+    height: 4px;
+    background: var(--accent-gradient);
+    border-radius: var(--radius-sm);
+  }
+`;
+
+const ServicesSubtitle = styled(motion.p)`
+  color: var(--dark-400);
+  font-size: var(--text-lg);
+  max-width: 500px;
+  margin: 0 auto;
+`;
+
+const ServicesGrid = styled.div`
+  display: grid;
   grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
   gap: var(--spacing-8);
-  
+  max-width: 1100px;
+  margin: 0 auto;
+
   @media (max-width: 768px) {
     grid-template-columns: 1fr;
     gap: var(--spacing-6);
@@ -449,118 +523,96 @@ const ServicesGrid = styled(Grid)`
 `;
 
 const ServiceCard = styled(motion.div)`
-  background: rgba(30, 41, 59, 0.3);
-  backdrop-filter: blur(16px);
-  -webkit-backdrop-filter: blur(16px);
+  background: rgba(30, 41, 59, 0.5);
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
   border: 1px solid rgba(255, 255, 255, 0.05);
-  border-radius: var(--radius-2xl);
   padding: var(--spacing-8);
-  display: flex;
-  flex-direction: column;
-  height: 100%;
-  transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+  border-radius: var(--radius-xl);
   position: relative;
   overflow: hidden;
+  transition: background 0.3s ease, border-color 0.3s ease, box-shadow 0.3s ease;
+  cursor: default;
+  will-change: auto;
 
-  /* Subtle gradient overlay on hover */
+  &:hover {
+    background: rgba(30, 41, 59, 0.7);
+    border-color: rgba(100, 255, 218, 0.3);
+    transform: translateY(-6px);
+    box-shadow: 0 10px 40px -10px rgba(100, 255, 218, 0.2);
+  }
+
   &::after {
     content: '';
     position: absolute;
-    inset: 0;
-    background: linear-gradient(180deg, rgba(255,255,255,0) 0%, rgba(100, 255, 218, 0.03) 100%);
+    bottom: 0;
+    left: 0;
+    right: 0;
+    height: 2px;
+    background: var(--accent-gradient);
     opacity: 0;
     transition: opacity 0.3s ease;
   }
 
-  &:hover {
-    transform: translateY(-8px);
-    background: rgba(30, 41, 59, 0.5);
-    border-color: rgba(100, 255, 218, 0.4);
-    box-shadow: 0 20px 40px -10px rgba(0,0,0,0.3), 0 0 20px rgba(100, 255, 218, 0.1);
-
-    &::after {
-      opacity: 1;
-    }
-
-    /* Icon Animation Target */
-    .service-icon {
-      transform: scale(1.1) rotate(5deg);
-      color: var(--accent-secondary);
-      background: rgba(139, 92, 246, 0.2);
-    }
+  &:hover::after {
+    opacity: 1;
   }
 `;
 
-const ServiceIconContainer = styled.div`
-  width: 64px;
-  height: 64px;
+const ServiceIcon = styled.div`
+  width: 56px;
+  height: 56px;
   background: rgba(100, 255, 218, 0.1);
-  border-radius: var(--radius-xl);
+  border: 1px solid rgba(100, 255, 218, 0.2);
+  border-radius: var(--radius-lg);
   display: flex;
   align-items: center;
   justify-content: center;
-  margin-bottom: var(--spacing-6);
-  color: var(--accent-primary);
+  margin-bottom: var(--spacing-5);
   font-size: 1.75rem;
-  transition: all 0.3s ease;
-  border: 1px solid rgba(100, 255, 218, 0.2);
-`;
+  transition: var(--transition-normal);
 
-const ServiceContent = styled.div`
-  flex: 1;
-  display: flex;
-  flex-direction: column;
+  ${ServiceCard}:hover & {
+    background: rgba(100, 255, 218, 0.15);
+    border-color: rgba(100, 255, 218, 0.4);
+    transform: scale(1.05);
+  }
 `;
 
 const ServiceTitle = styled.h3`
-  font-size: 1.5rem;
-  font-weight: 700;
+  font-size: var(--text-2xl);
   color: var(--dark-50);
   margin-bottom: var(--spacing-3);
-  letter-spacing: -0.01em;
+  font-weight: var(--font-semibold);
 `;
 
 const ServiceDescription = styled.p`
-  color: var(--dark-300);
-  line-height: 1.6;
-  font-size: 1rem;
-  margin-bottom: var(--spacing-6);
-`;
-
-const Divider = styled.div`
-  height: 1px;
-  background: linear-gradient(90deg, rgba(255,255,255,0.1) 0%, rgba(255,255,255,0.05) 100%);
-  margin-bottom: var(--spacing-6);
+  color: var(--dark-400);
+  font-size: var(--text-base);
+  line-height: 1.7;
+  margin-bottom: var(--spacing-4);
 `;
 
 const ServiceFeatures = styled.ul`
   list-style: none;
-  padding: 0;
-  margin: 0;
-  
-  li {
-    color: var(--dark-400);
-    margin-bottom: var(--spacing-3);
-    padding-left: 24px;
-    position: relative;
-    font-size: 0.9rem;
-    
-    &::before {
-      content: '▹';
-      position: absolute;
-      left: 0;
-      top: 1px;
-      color: var(--accent-primary);
-      font-size: 12px;
-    }
-  }
+  display: flex;
+  flex-direction: column;
+  gap: var(--spacing-2);
 `;
 
-const SectionTitle = styled(motion.h2)`
-  font-size: var(--text-4xl);
-  text-align: center;
-  margin-bottom: var(--spacing-16);
-  color: var(--dark-100);
+const ServiceFeature = styled.li`
+  color: var(--dark-300);
+  font-size: var(--text-sm);
+  display: flex;
+  align-items: flex-start;
+  gap: var(--spacing-2);
+
+  &::before {
+    content: '✓';
+    color: var(--accent-primary);
+    font-weight: var(--font-bold);
+    margin-top: 2px;
+  }
 `;
 
 // Data
@@ -595,93 +647,69 @@ const timelineData = [
   }
 ];
 
+// Skills Data
 const skillsData = [
-  { name: 'HTML/CSS', percentage: 90, description: 'Semantic markup and responsive styling' },
-  { name: 'JavaScript', percentage: 85, description: 'Modern ES6+ features and DOM manipulation' },
-  { name: 'React', percentage: 80, description: 'Component-based UI development' },
-  { name: 'Python', percentage: 90, description: 'Backend development and automation' },
-  { name: 'Flask', percentage: 75, description: 'Lightweight web framework for APIs' },
-  { name: 'Node.js', percentage: 75, description: 'Server-side JavaScript runtime' },
-  { name: 'TypeScript', percentage: 65, description: 'Type-safe JavaScript development' },
-  { name: 'Bootstrap', percentage: 80, description: 'Responsive CSS framework' },
-  { name: 'UI/UX Design', percentage: 70, description: 'User-centered design principles' },
-  { name: 'Git & Version Control', percentage: 85, description: 'Code versioning and collaboration' },
-  { name: 'MongoDB', percentage: 70, description: 'NoSQL database management' },
-  { name: 'Problem Solving', percentage: 88, description: 'Analytical thinking and debugging' }
-];
-
-const servicesData = [
   {
-    icon: '💻',
-    title: 'Web Development',
-    description: 'Creating responsive and interactive web applications using modern technologies.',
-    features: [
-      'React-based applications',
-      'Responsive design',
-      'Modern JavaScript frameworks',
-      'API integration'
-    ]
+    category: 'Frontend',
+    skills: ['React', 'TypeScript', 'JavaScript', 'HTML/CSS', 'Tailwind CSS', 'Styled Components', 'Framer Motion', 'Responsive Design']
   },
   {
-    icon: '📱',
-    title: 'Mobile App Development',
-    description: 'Building native and cross-platform mobile applications for Android and iOS.',
-    features: [
-      'React Native / Flutter',
-      'Cross-platform compatibility',
-      'Native performance',
-      'App Store deployment'
-    ]
+    category: 'Backend',
+    skills: ['Python', 'Flask', 'Node.js', 'REST APIs', 'Database Design', 'Authentication']
+  },
+  {
+    category: 'Tools & Workflow',
+    skills: ['Git & GitHub', 'VS Code', 'Postman', 'npm/pip', 'Chrome DevTools', 'Figma']
+  },
+  {
+    category: 'Other Skills',
+    skills: ['Problem Solving', 'Clean Code', 'Debugging', 'System Design', 'UI/UX Design', 'Performance Optimization']
+  }
+];
+
+// Services Data
+const servicesData = [
+  {
+    icon: '🌐',
+    title: 'Web Development',
+    description: 'Modern, responsive websites and web applications built with the latest technologies.',
+    features: ['Custom web applications', 'E-commerce platforms', 'Landing pages', 'Performance optimization']
+  },
+  {
+    icon: '💻',
+    title: 'Full-Stack Applications',
+    description: 'End-to-end solutions from database design to polished user interfaces.',
+    features: ['RESTful API development', 'Database architecture', 'User authentication', 'Real-time features']
   },
   {
     icon: '🎨',
     title: 'UI/UX Design',
-    description: 'Designing intuitive and visually appealing user interfaces for better user experience.',
-    features: [
-      'User-centered design',
-      'Prototyping and wireframing',
-      'Design system creation',
-      'Accessibility considerations'
-    ]
+    description: 'Beautiful, intuitive interfaces that prioritize user experience and accessibility.',
+    features: ['Responsive design', 'Wireframing & prototyping', 'Design systems', 'Brand consistency']
   },
   {
-    icon: '🖥️',
-    title: 'Desktop Applications',
-    description: 'Building efficient and secure desktop applications for various platforms.',
-    features: [
-      'Cross-platform compatibility',
-      'Security-focused applications',
-      'File management systems',
-      'Encryption and data protection'
-    ]
+    icon: '🔒',
+    title: 'Security Applications',
+    description: 'Specialized tools for data security, encryption, and secure file handling.',
+    features: ['Steganography tools', 'File encryption', 'Polyglot file creation', 'Secure data transmission']
   },
   {
-    icon: '🛡️',
-    title: 'Data Security',
-    description: 'Implementing encryption and security measures to protect sensitive data.',
-    features: [
-      'AES encryption implementation',
-      'Secure file management',
-      'Data privacy solutions',
-      'Steganography applications'
-    ]
+    icon: '⚡',
+    title: 'Performance Optimization',
+    description: 'Speed up your application and improve user experience through strategic optimizations.',
+    features: ['Code optimization', 'Bundle size reduction', 'Caching strategies', 'Load time improvements']
   },
   {
-    icon: '📝',
-    title: 'Tech Writing & Blogging',
-    description: 'Sharing insights, experiences, and learnings from my journey in tech.',
-    features: [
-      'Development tutorials',
-      'Personal tech journey',
-      'Problem-solving insights',
-      'Beginner-friendly content'
-    ]
+    icon: '🛠️',
+    title: 'Consultation & Support',
+    description: 'Technical guidance and ongoing support for your development projects.',
+    features: ['Code review', 'Architecture planning', 'Technical mentoring', 'Troubleshooting']
   }
 ];
 
+
+
 const About: React.FC = () => {
-  const skillsRef = useRef(null);
-  const skillsInView = useInView(skillsRef, { once: true, margin: '-100px' });
   const journeyRef = useRef(null);
 
   // Scroll Progress Animation for Journey
@@ -822,38 +850,47 @@ const About: React.FC = () => {
       </JourneySection>
 
       {/* Skills Section */}
-      <SkillsSection ref={skillsRef}>
+      <SkillsSection>
         <Container>
-          <SectionTitle
-            initial={{ opacity: 0, y: 30 }}
-            whileInView={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.6 }}
-            viewport={{ once: true }}
-          >
-            Skills & Expertise
-          </SectionTitle>
+          <SkillsHeader>
+            <SkillsTitle
+              initial={{ opacity: 0, y: 20 }}
+              whileInView={{ opacity: 1, y: 0 }}
+              transition={{ duration: 0.5 }}
+              viewport={{ once: true }}
+            >
+              Skills & Technologies
+            </SkillsTitle>
+            <br />
+            <SkillsSubtitle
+              initial={{ opacity: 0 }}
+              whileInView={{ opacity: 1 }}
+              transition={{ delay: 0.2, duration: 0.5 }}
+              viewport={{ once: true }}
+            >
+              Tools and technologies I use to bring ideas to life
+            </SkillsSubtitle>
+          </SkillsHeader>
 
           <SkillsGrid>
-            {skillsData.map((skill, index) => (
+            {skillsData.map((skillGroup, index) => (
               <SkillCard
-                key={skill.name}
-                as={motion.div}
+                key={skillGroup.category}
                 initial={{ opacity: 0, y: 30 }}
                 whileInView={{ opacity: 1, y: 0 }}
-                transition={{ duration: 0.6, delay: index * 0.1 }}
-                viewport={{ once: true }}
+                transition={{
+                  duration: 0.5,
+                  delay: index * 0.1,
+                  ease: 'easeOut'
+                }}
+                viewport={{ once: true, amount: 0.2 }}
               >
-                <SkillName>{skill.name}</SkillName>
-                <SkillDescription>{skill.description}</SkillDescription>
-                <SkillProgressContainer>
-                  <SkillProgressBar
-                    percentage={skill.percentage}
-                    initial={{ width: 0 }}
-                    animate={skillsInView ? { width: `${skill.percentage}%` } : { width: 0 }}
-                    transition={{ duration: 1.5, delay: index * 0.1, ease: "easeOut" }}
-                  />
-                </SkillProgressContainer>
-                <SkillPercentage>{skill.percentage}%</SkillPercentage>
+                <SkillCategory>{skillGroup.category}</SkillCategory>
+                <SkillsList>
+                  {skillGroup.skills.map((skill) => (
+                    <SkillItem key={skill}>{skill}</SkillItem>
+                  ))}
+                </SkillsList>
               </SkillCard>
             ))}
           </SkillsGrid>
@@ -863,40 +900,53 @@ const About: React.FC = () => {
       {/* Services Section */}
       <ServicesSection>
         <Container>
-          <SectionTitle
-            initial={{ opacity: 0, y: 30 }}
-            whileInView={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.6 }}
-            viewport={{ once: true }}
-          >
-            Services Offered
-          </SectionTitle>
+          <ServicesHeader>
+            <ServicesTitle
+              initial={{ opacity: 0, y: 20 }}
+              whileInView={{ opacity: 1, y: 0 }}
+              transition={{ duration: 0.5 }}
+              viewport={{ once: true }}
+            >
+              Services Offered
+            </ServicesTitle>
+            <br />
+            <ServicesSubtitle
+              initial={{ opacity: 0 }}
+              whileInView={{ opacity: 1 }}
+              transition={{ delay: 0.2, duration: 0.5 }}
+              viewport={{ once: true }}
+            >
+              Professional services tailored to your needs
+            </ServicesSubtitle>
+          </ServicesHeader>
 
-          <StaggerContainer staggerDelay={0.1}>
-            <ServicesGrid>
-              {servicesData.map((service, index) => (
-                <StaggerItem key={service.title} variant="fadeInUp">
-                  <ServiceCard>
-                    <ServiceIconContainer className="service-icon">
-                      {service.icon}
-                    </ServiceIconContainer>
-                    <ServiceContent>
-                      <ServiceTitle>{service.title}</ServiceTitle>
-                      <ServiceDescription>{service.description}</ServiceDescription>
-                      <Divider />
-                      <ServiceFeatures>
-                        {service.features.map((feature, featureIndex) => (
-                          <li key={featureIndex}>{feature}</li>
-                        ))}
-                      </ServiceFeatures>
-                    </ServiceContent>
-                  </ServiceCard>
-                </StaggerItem>
-              ))}
-            </ServicesGrid>
-          </StaggerContainer>
+          <ServicesGrid>
+            {servicesData.map((service, index) => (
+              <ServiceCard
+                key={service.title}
+                initial={{ opacity: 0, y: 30 }}
+                whileInView={{ opacity: 1, y: 0 }}
+                transition={{
+                  duration: 0.5,
+                  delay: index * 0.1,
+                  ease: 'easeOut'
+                }}
+                viewport={{ once: true, amount: 0.2 }}
+              >
+                <ServiceIcon>{service.icon}</ServiceIcon>
+                <ServiceTitle>{service.title}</ServiceTitle>
+                <ServiceDescription>{service.description}</ServiceDescription>
+                <ServiceFeatures>
+                  {service.features.map((feature) => (
+                    <ServiceFeature key={feature}>{feature}</ServiceFeature>
+                  ))}
+                </ServiceFeatures>
+              </ServiceCard>
+            ))}
+          </ServicesGrid>
         </Container>
       </ServicesSection>
+
     </PageTransition>
   );
 };
