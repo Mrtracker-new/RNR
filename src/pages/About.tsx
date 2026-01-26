@@ -1,11 +1,13 @@
-import React, { useRef } from 'react';
+import React, { useRef, lazy, Suspense } from 'react';
 import styled from 'styled-components';
 import { motion, useScroll, useSpring, Variants } from 'framer-motion';
 import { Container, Section } from '../styles/GlobalStyle';
 import SEO from '../components/SEO';
 import PageTransition from '../components/PageTransition';
 import aboutImage from '../assets/images/Aboutme.webp';
-import ResumeDownload from '../components/ResumeDownload';
+
+// Lazy load ResumeDownload to reduce initial bundle size
+const ResumeDownload = lazy(() => import('../components/ResumeDownload'));
 
 const AboutHero = styled(Section)`
   padding-top: 140px;
@@ -783,7 +785,9 @@ const About: React.FC = () => {
             </HeroSubtitle>
 
             <ResumeButtonWrapper variants={itemVariants}>
-              <ResumeDownload variant="primary" size="lg" tooltipPosition="right" />
+              <Suspense fallback={null}>
+                <ResumeDownload variant="primary" size="lg" tooltipPosition="right" />
+              </Suspense>
             </ResumeButtonWrapper>
 
             <AboutImageSection variants={itemVariants}>
