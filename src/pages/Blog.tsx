@@ -1,12 +1,14 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, lazy, Suspense } from 'react';
 import styled from 'styled-components';
 import { motion } from 'framer-motion';
 import { Container } from '../styles/GlobalStyle';
 import SEO from '../components/SEO';
 import PageTransition from '../components/PageTransition';
-import BlogCard from '../components/BlogCard';
 import { getAllPosts, BlogPost } from '../utils/hashnode';
 import { FullScreenLoading } from '../components/LoadingSpinner';
+
+// Lazy load BlogCard to reduce initial bundle size
+const BlogCard = lazy(() => import('../components/BlogCard'));
 
 // Styled Components
 const BlogSection = styled.section`
@@ -195,7 +197,9 @@ const Blog: React.FC = () => {
                                     animate={{ opacity: 1, y: 0 }}
                                     transition={{ duration: 0.4, delay: index * 0.1 }}
                                 >
-                                    <BlogCard post={post} />
+                                    <Suspense fallback={<div style={{ height: '400px' }} />}>
+                                        <BlogCard post={post} />
+                                    </Suspense>
                                 </motion.div>
                             ))}
                         </BlogGrid>
