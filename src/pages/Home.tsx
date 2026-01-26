@@ -9,6 +9,11 @@ import BlogCard from '../components/BlogCard';
 import ResumeDownload from '../components/ResumeDownload';
 import { getLatestPosts, BlogPost } from '../utils/hashnode';
 import profileImage from '../assets/images/Home_dp.webp';
+import profileImage900 from '../assets/images/Home_dp_900.webp';
+import profileImage600 from '../assets/images/Home_dp_600.webp';
+import profileImage450 from '../assets/images/Home_dp_450.webp';
+import profileImage300 from '../assets/images/Home_dp_300.webp';
+import profileImage150 from '../assets/images/Home_dp_150.webp';
 
 // --- Styled Components ---
 
@@ -568,7 +573,12 @@ const Home: React.FC = () => {
                   exit={{ opacity: 0 }}
                   transition={{ duration: 0.3 }}
                 >
-                  <img src={profileImage} alt="Rolan Lobo (Rolan RNR) - Full Stack Developer" />
+                  <img
+                    src={profileImage450}
+                    srcSet={`${profileImage150} 150w, ${profileImage300} 300w, ${profileImage450} 450w, ${profileImage600} 600w, ${profileImage900} 900w, ${profileImage} 1673w`}
+                    sizes="(max-width: 968px) 280px, 450px"
+                    alt="Rolan Lobo (Rolan RNR) - Full Stack Developer"
+                  />
                 </StylizedImage>
               ) : (
                 <StylizedImage
