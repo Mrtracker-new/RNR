@@ -1,19 +1,23 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, lazy, Suspense } from 'react';
 import styled from 'styled-components';
 import { motion, Variants, AnimatePresence } from 'framer-motion';
 import { Link } from 'react-router-dom';
 import { Container, Button } from '../styles/GlobalStyle';
 import SEO from '../components/SEO';
 import PageTransition from '../components/PageTransition';
-import BlogCard from '../components/BlogCard';
-import ResumeDownload from '../components/ResumeDownload';
 import { getLatestPosts, BlogPost } from '../utils/hashnode';
+
+// Lazy load components to reduce initial bundle size
 import profileImage from '../assets/images/Home_dp.webp';
 import profileImage900 from '../assets/images/Home_dp_900.webp';
 import profileImage600 from '../assets/images/Home_dp_600.webp';
 import profileImage450 from '../assets/images/Home_dp_450.webp';
 import profileImage300 from '../assets/images/Home_dp_300.webp';
 import profileImage150 from '../assets/images/Home_dp_150.webp';
+
+// Lazy load components to reduce initial bundle size
+const BlogCard = lazy(() => import('../components/BlogCard'));
+const ResumeDownload = lazy(() => import('../components/ResumeDownload'));
 
 // --- Styled Components ---
 
@@ -558,7 +562,9 @@ const Home: React.FC = () => {
                   }
                 }}
               >
-                <ResumeDownload variant="outline" size="lg" showTooltip={false} />
+                <Suspense fallback={null}>
+                  <ResumeDownload variant="outline" size="lg" showTooltip={false} />
+                </Suspense>
               </div>
             </CTAContainer>
           </TextContent>
@@ -652,7 +658,9 @@ const Home: React.FC = () => {
                   animate={{ opacity: 1, y: 0 }}
                   transition={{ duration: 0.4, delay: index * 0.1 }}
                 >
-                  <BlogCard post={post} />
+                  <Suspense fallback={<div style={{ height: '400px' }} />}>
+                    <BlogCard post={post} />
+                  </Suspense>
                 </motion.div>
               ))}
             </BlogGrid>
