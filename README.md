@@ -9,7 +9,7 @@
 
 ## ⚡ Why it's fast
 
-- 🚀 **90+ Lighthouse score** - Because nobody likes slow websites
+- 🚀 **94+ Lighthouse score** - Because nobody likes slow websites
 - 📦 **143KB bundle** - Small and speedy
 - 🎯 **Lazy loading** - Loads stuff only when you need it
 - ✨ **Smooth animations** - Runs at buttery 60fps
@@ -43,6 +43,7 @@
 - Styled Components (CSS-in-JS ftw)
 - Framer Motion (makes things go whoosh)
 - React Router (page switching magic)
+- React Helmet Async (for that sweet SEO)
 
 ## 🚀 Want to run it locally?
 
