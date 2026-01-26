@@ -62,21 +62,23 @@ function App() {
       </Suspense>
       <Breadcrumb />
       <Navbar />
-      <Suspense fallback={
-        <FullScreenLoading
-          text="Loading Page..."
-        />
-      }>
-        <AnimatePresence mode="wait">
-          <Routes>
-            <Route path="/" element={<Home />} />
-            <Route path="/about" element={<About />} />
-            <Route path="/projects" element={<Projects />} />
-            <Route path="/blog" element={<Blog />} />
-            <Route path="/contact" element={<Contact />} />
-          </Routes>
-        </AnimatePresence>
-      </Suspense>
+      <main role="main">
+        <Suspense fallback={
+          <FullScreenLoading
+            text="Loading Page..."
+          />
+        }>
+          <AnimatePresence mode="wait">
+            <Routes>
+              <Route path="/" element={<Home />} />
+              <Route path="/about" element={<About />} />
+              <Route path="/projects" element={<Projects />} />
+              <Route path="/blog" element={<Blog />} />
+              <Route path="/contact" element={<Contact />} />
+            </Routes>
+          </AnimatePresence>
+        </Suspense>
+      </main>
     </Router>
   );
 }
