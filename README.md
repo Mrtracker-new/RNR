@@ -91,7 +91,7 @@ REACT_APP_HASHNODE_PUBLICATION_HOST=your-blog.hashnode.dev
 - � **GitHub**: [@Mrtracker-new](https://github.com/Mrtracker-new)
 - 📧 **Email**: [rolanlobo901@gmail.com](mailto:rolanlobo901@gmail.com)
 - 📝 **Blog**: [Hashnode](https://rnr-still-figuring-things-out.hashnode.dev/)
-- � **Location**: Karnataka, India 🇮🇳
+- � **Location**: India 🇮🇳
 
 ---
 
