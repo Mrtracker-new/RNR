@@ -555,58 +555,70 @@ const Contact: React.FC = () => {
             </p>
 
             <FormGroup>
-              <Label htmlFor="name">your_name</Label>
+              <Label htmlFor="name">Your Name <span aria-hidden="true">*</span></Label>
               <Input
                 type="text"
                 id="name"
                 name="name"
+                required
+                aria-required="true"
+                aria-describedby={errors.name ? 'name-error' : undefined}
                 placeholder="John Doe"
                 value={formData.name}
                 onChange={handleInputChange}
                 $hasError={!!errors.name}
               />
-              {errors.name && <ErrorText initial={{ opacity: 0 }} animate={{ opacity: 1 }}>{errors.name}</ErrorText>}
+              {errors.name && <ErrorText id="name-error" role="alert" initial={{ opacity: 0 }} animate={{ opacity: 1 }}>{errors.name}</ErrorText>}
             </FormGroup>
 
             <FormGroup>
-              <Label htmlFor="email">email_address</Label>
+              <Label htmlFor="email">Email Address <span aria-hidden="true">*</span></Label>
               <Input
                 type="email"
                 id="email"
                 name="email"
+                required
+                aria-required="true"
+                aria-describedby={errors.email ? 'email-error' : undefined}
                 placeholder="john@example.com"
                 value={formData.email}
                 onChange={handleInputChange}
                 $hasError={!!errors.email}
               />
-              {errors.email && <ErrorText initial={{ opacity: 0 }} animate={{ opacity: 1 }}>{errors.email}</ErrorText>}
+              {errors.email && <ErrorText id="email-error" role="alert" initial={{ opacity: 0 }} animate={{ opacity: 1 }}>{errors.email}</ErrorText>}
             </FormGroup>
 
             <FormGroup>
-              <Label htmlFor="subject">subject</Label>
+              <Label htmlFor="subject">Subject <span aria-hidden="true">*</span></Label>
               <Input
                 type="text"
                 id="subject"
                 name="subject"
+                required
+                aria-required="true"
+                aria-describedby={errors.subject ? 'subject-error' : undefined}
                 placeholder="Project Inquiry"
                 value={formData.subject}
                 onChange={handleInputChange}
                 $hasError={!!errors.subject}
               />
-              {errors.subject && <ErrorText initial={{ opacity: 0 }} animate={{ opacity: 1 }}>{errors.subject}</ErrorText>}
+              {errors.subject && <ErrorText id="subject-error" role="alert" initial={{ opacity: 0 }} animate={{ opacity: 1 }}>{errors.subject}</ErrorText>}
             </FormGroup>
 
             <FormGroup>
-              <Label htmlFor="message">message</Label>
+              <Label htmlFor="message">Message <span aria-hidden="true">*</span></Label>
               <Textarea
                 id="message"
                 name="message"
+                required
+                aria-required="true"
+                aria-describedby={errors.message ? 'message-error' : undefined}
                 placeholder="Tell me about your project..."
                 value={formData.message}
                 onChange={handleInputChange}
                 $hasError={!!errors.message}
               />
-              {errors.message && <ErrorText initial={{ opacity: 0 }} animate={{ opacity: 1 }}>{errors.message}</ErrorText>}
+              {errors.message && <ErrorText id="message-error" role="alert" initial={{ opacity: 0 }} animate={{ opacity: 1 }}>{errors.message}</ErrorText>}
             </FormGroup>
 
             <SubmitButton
