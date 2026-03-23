@@ -25,10 +25,7 @@ function App() {
   useEffect(() => {
     // Check if critical resources are loaded
     const handleLoad = () => {
-      // Small delay to ensure smooth transition
-      setTimeout(() => {
-        setIsLoading(false);
-      }, 500);
+      setIsLoading(false);
     };
 
     // If already loaded, set loading to false immediately
