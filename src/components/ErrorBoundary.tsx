@@ -155,7 +155,7 @@ class ErrorBoundary extends Component<Props, State> {
                             Reload Page
                         </ReloadButton>
 
-                        {process.env.NODE_ENV === 'development' && this.state.error && (
+                        {import.meta.env.DEV && this.state.error && (
                             <ErrorDetails>
                                 <summary>Error Details (Development Only)</summary>
                                 <pre>

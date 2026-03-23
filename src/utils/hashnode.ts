@@ -38,7 +38,7 @@ interface HashnodeResponse {
 
 // Configuration
 const HASHNODE_API_ENDPOINT = 'https://gql.hashnode.com';
-const PUBLICATION_HOST = process.env.REACT_APP_HASHNODE_PUBLICATION_HOST || 'rnr-still-figuring-things-out.hashnode.dev';
+const PUBLICATION_HOST = import.meta.env.VITE_HASHNODE_PUBLICATION_HOST || 'rnr-still-figuring-things-out.hashnode.dev';
 
 /**
  * Fetch latest blog posts

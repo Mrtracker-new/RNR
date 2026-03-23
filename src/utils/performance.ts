@@ -94,7 +94,7 @@ export const debounce = <T extends (...args: any[]) => any>(
   func: T,
   delay: number
 ): ((...args: Parameters<T>) => void) => {
-  let timeoutId: NodeJS.Timeout;
+  let timeoutId: ReturnType<typeof setTimeout>;
   
   return (...args: Parameters<T>) => {
     clearTimeout(timeoutId);
@@ -125,8 +125,8 @@ export const raf = (callback: () => void): number => {
 
 // Memory cleanup utilities
 export const cleanup = {
-  timers: new Set<NodeJS.Timeout>(),
-  intervals: new Set<NodeJS.Timer>(),
+  timers: new Set<ReturnType<typeof setTimeout>>(),
+  intervals: new Set<ReturnType<typeof setInterval>>(),
   observers: new Set<IntersectionObserver | MutationObserver>(),
   listeners: new Map<EventTarget, { event: string; handler: EventListener }[]>(),
   
@@ -291,7 +291,7 @@ export const getOptimalImageSettings = (originalWidth: number, originalHeight: n
 // Scroll performance utilities
 export class ScrollOptimizer {
   private isScrolling = false;
-  private scrollTimeout: NodeJS.Timeout | null = null;
+  private scrollTimeout: ReturnType<typeof setTimeout> | null = null;
   private observers = new Set<Function>();
   private lastScrollY = 0;
   private scrollDirection: 'up' | 'down' = 'down';

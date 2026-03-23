@@ -105,7 +105,7 @@ export class ScrollPerformanceMonitor {
 
 // Debug panel component for development
 export const createPerformancePanel = () => {
-  if (typeof document === 'undefined' || process.env.NODE_ENV === 'production') return;
+  if (typeof document === 'undefined' || import.meta.env.PROD) return;
 
   const panel = document.createElement('div');
   panel.id = 'perf-panel';
@@ -192,7 +192,7 @@ export const detectScrollJank = () => {
 export const performanceMonitor = new ScrollPerformanceMonitor();
 
 // Initialize debug panel in development
-if (process.env.NODE_ENV === 'development') {
+if (import.meta.env.DEV) {
   window.addEventListener('load', () => {
     // Add toggle for performance panel with keyboard shortcut
     let debugPanel: ReturnType<typeof createPerformancePanel> | null = null;
