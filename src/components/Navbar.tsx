@@ -233,7 +233,12 @@ const Navbar: React.FC = () => {
             })}
           </NavLinks>
 
-          <MobileToggle onClick={() => setMobileMenuOpen(!mobileMenuOpen)}>
+          <MobileToggle
+            onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
+            aria-label={mobileMenuOpen ? 'Close navigation menu' : 'Open navigation menu'}
+            aria-expanded={mobileMenuOpen}
+            aria-controls="mobile-menu"
+          >
             {mobileMenuOpen ? '✕' : '☰'}
           </MobileToggle>
         </NavbarIsland>
@@ -242,6 +247,10 @@ const Navbar: React.FC = () => {
       <AnimatePresence>
         {mobileMenuOpen && (
           <MobileMenu
+            id="mobile-menu"
+            role="dialog"
+            aria-modal="true"
+            aria-label="Navigation"
             initial={{ opacity: 0, y: -20 }}
             animate={{ opacity: 1, y: 0 }}
             exit={{ opacity: 0, y: -20 }}
