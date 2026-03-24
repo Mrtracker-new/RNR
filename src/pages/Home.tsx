@@ -211,12 +211,17 @@ const Headline = styled(motion.h1)`
   line-height: 1.1;
   letter-spacing: -0.03em;
   margin-bottom: var(--spacing-6);
+  /* Solid fallback for browsers/contexts that don't support background-clip:text.
+     Both --dark-50 (#fafafa) and --dark-300 (#d4d4d8) pass WCAG AA against
+     the #09090b background at ~19.8:1 and ~13.8:1 respectively. */
+  color: var(--dark-50);
   background: linear-gradient(180deg, var(--dark-50) 0%, var(--dark-300) 100%);
   -webkit-background-clip: text;
   -webkit-text-fill-color: transparent;
   background-clip: text;
   
   span {
+    color: var(--accent-primary); /* fallback for span accent text */
     background: var(--accent-gradient);
     -webkit-background-clip: text;
     -webkit-text-fill-color: transparent;
@@ -424,6 +429,8 @@ const BlogHeader = styled.div`
 const BlogTitle = styled(motion.h2)`
   font-size: clamp(2rem, 4vw, 3rem);
   font-weight: var(--font-bold);
+  /* Solid fallback — see Headline comment above for contrast rationale */
+  color: var(--dark-50);
   background: linear-gradient(180deg, var(--dark-50) 0%, var(--dark-300) 100%);
   -webkit-background-clip: text;
   -webkit-text-fill-color: transparent;
