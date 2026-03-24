@@ -123,11 +123,6 @@ const SEO: React.FC<SEOProps> = ({
             '@type': 'Person',
             name: 'Rolan Lobo',
             alternateName: 'Rolan RNR'
-          },
-          potentialAction: {
-            '@type': 'SearchAction',
-            target: 'https://rolan-rnr.netlify.app/?q={search_term_string}',
-            'query-input': 'required name=search_term_string'
           }
         })}
       </script>
