@@ -5,6 +5,7 @@ import { Container, Section, Badge } from '../styles/GlobalStyle';
 import SEO from '../components/SEO';
 import PageTransition from '../components/PageTransition';
 import FAQSchema from '../components/FAQSchema';
+import { getContactEmail } from '../utils/contact';
 
 // --- Styled Components ---
 
@@ -347,11 +348,6 @@ interface FormErrors {
 }
 
 const Contact: React.FC = () => {
-  // Email obfuscation - constructs email at runtime to prevent bot scraping
-  const getObfuscatedEmail = () => {
-    const parts = ['rolanlobo901', 'gmail', 'com'];
-    return `${parts[0]}@${parts[1]}.${parts[2]}`;
-  };
 
   const [formData, setFormData] = useState<FormData>({
     name: '',
@@ -487,8 +483,8 @@ const Contact: React.FC = () => {
             <InfoTitle><span>📧</span> Email Me</InfoTitle>
             <InfoText>
               <p>For project inquiries, collaborations, or just to say hi:</p>
-              <a href={`mailto:${getObfuscatedEmail()}`} style={{ fontSize: '1.1rem', fontWeight: 600 }}>
-                {getObfuscatedEmail()}
+              <a href={`mailto:${getContactEmail()}`} style={{ fontSize: '1.1rem', fontWeight: 600 }}>
+                {getContactEmail()}
               </a>
               <p style={{ marginTop: 'var(--spacing-2)', fontSize: '0.9em', opacity: 0.7 }}>
                 I usually respond within 24 hours.
