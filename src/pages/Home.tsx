@@ -87,6 +87,7 @@ const TextContent = styled(motion.div)`
   flex-direction: column;
   align-items: flex-start;
   width: 100%;
+  overflow: hidden;
   
   @media (max-width: 968px) {
     align-items: center;
@@ -235,6 +236,11 @@ const Subheadline = styled(motion.p)`
   line-height: 1.6;
   max-width: 540px;
   margin-bottom: var(--spacing-10);
+
+  @media (max-width: 968px) {
+    max-width: 100%;
+    padding: 0 var(--spacing-2);
+  }
 `;
 
 const CTAContainer = styled(motion.div)`
@@ -373,6 +379,11 @@ const StatItem = styled.div`
   gap: var(--spacing-1);
   min-width: 100px;
 
+  @media (max-width: 640px) {
+    min-width: 0;
+    width: 100%;
+  }
+
   h3 {
     font-size: var(--text-4xl);
     font-weight: var(--font-bold);
@@ -404,6 +415,7 @@ const StatItem = styled.div`
     @media (max-width: 640px) {
       font-size: 0.7rem;
       letter-spacing: 0.03em;
+      white-space: normal;
     }
   }
 `;

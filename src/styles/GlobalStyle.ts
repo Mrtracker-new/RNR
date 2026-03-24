@@ -140,6 +140,11 @@ export const GlobalStyle = createGlobalStyle`
     -webkit-overflow-scrolling: touch;
     overscroll-behavior: none;
   }
+
+  #root {
+    overflow-x: hidden;
+    max-width: 100vw;
+  }
   /* Custom Scrollbar - Modern & Rectangular */
   ::-webkit-scrollbar {
     width: 8px;
