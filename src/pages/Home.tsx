@@ -7,13 +7,15 @@ import SEO from '../components/SEO';
 import PageTransition from '../components/PageTransition';
 import { getLatestPosts, BlogPost } from '../utils/hashnode';
 
-// Lazy load components to reduce initial bundle size
-import profileImage from '../assets/images/Home_dp.webp';
-import profileImage900 from '../assets/images/Home_dp_900.webp';
-import profileImage600 from '../assets/images/Home_dp_600.webp';
-import profileImage450 from '../assets/images/Home_dp_450.webp';
-import profileImage300 from '../assets/images/Home_dp_300.webp';
-import profileImage150 from '../assets/images/Home_dp_150.webp';
+// Profile images served from /public — not imported via webpack so they are
+// never bundled into the JS chunk. The browser fetches only the size it needs
+// via the srcSet attribute at render time.
+const profileImage    = '/images/Home_dp.webp';
+const profileImage900 = '/images/Home_dp_900.webp';
+const profileImage600 = '/images/Home_dp_600.webp';
+const profileImage450 = '/images/Home_dp_450.webp';
+const profileImage300 = '/images/Home_dp_300.webp';
+const profileImage150 = '/images/Home_dp_150.webp';
 
 // Lazy load components to reduce initial bundle size
 const BlogCard = lazy(() => import('../components/BlogCard'));
