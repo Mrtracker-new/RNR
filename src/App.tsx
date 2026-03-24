@@ -4,6 +4,7 @@ import { AnimatePresence } from 'framer-motion';
 import styled from 'styled-components';
 import { GlobalStyle } from './styles/GlobalStyle';
 import Navbar from './components/Navbar';
+import Footer from './components/Footer';
 import { FullScreenLoading } from './components/LoadingSpinner';
 import ScrollToTop from './components/ScrollToTop';
 import Breadcrumb from './components/Breadcrumb';
@@ -35,6 +36,7 @@ const About = lazy(() => import('./pages/About'));
 const Projects = lazy(() => import('./pages/Projects'));
 const Contact = lazy(() => import('./pages/Contact'));
 const Blog = lazy(() => import('./pages/Blog'));
+const NotFound = lazy(() => import('./pages/NotFound'));
 
 function App() {
   const [isLoading, setIsLoading] = useState(true);
@@ -77,7 +79,7 @@ function App() {
       <Breadcrumb />
       <SkipLink href="#main-content">Skip to main content</SkipLink>
       <Navbar />
-      <main id="main-content" role="main" tabIndex={-1}>
+      <main id="main-content" role="main" tabIndex={-1} style={{ minHeight: 'calc(100vh - 80px)' }}>
         <Suspense fallback={
           <FullScreenLoading
             text="Loading Page..."
@@ -90,10 +92,12 @@ function App() {
               <Route path="/projects" element={<Projects />} />
               <Route path="/blog" element={<Blog />} />
               <Route path="/contact" element={<Contact />} />
+              <Route path="*" element={<NotFound />} />
             </Routes>
           </AnimatePresence>
         </Suspense>
       </main>
+      <Footer />
     </Router>
   );
 }
