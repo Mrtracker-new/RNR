@@ -261,7 +261,7 @@ export const vitalsMonitor = {
 };
 
 // Optimize images based on device capabilities
-export const getOptimalImageSettings = (originalWidth: number, originalHeight: number) => {
+export const getOptimalImageSettings = (originalWidth: number, _originalHeight: number) => {
   const device = getDeviceInfo();
   
   let quality = 85;

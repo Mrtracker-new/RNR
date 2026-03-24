@@ -58,7 +58,7 @@ const OptimizedImage: React.FC<OptimizedImageProps> = ({
   height,
   className,
   loading = 'lazy',
-  placeholder,
+  placeholder: _placeholder,
   sizes,
   style,
   onLoad,
