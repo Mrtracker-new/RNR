@@ -1,11 +1,28 @@
 import React, { useState, useEffect, lazy, Suspense } from 'react';
 import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
 import { AnimatePresence } from 'framer-motion';
+import styled from 'styled-components';
 import { GlobalStyle } from './styles/GlobalStyle';
 import Navbar from './components/Navbar';
 import { FullScreenLoading } from './components/LoadingSpinner';
 import ScrollToTop from './components/ScrollToTop';
 import Breadcrumb from './components/Breadcrumb';
+
+const SkipLink = styled.a`
+  position: absolute;
+  left: -9999px;
+  z-index: 9999;
+  padding: 1em;
+  background: var(--accent-primary);
+  color: black;
+  font-weight: bold;
+
+  &:focus {
+    left: 50%;
+    transform: translateX(-50%);
+    top: 1em;
+  }
+`;
 
 // Lazy load visual enhancement components to reduce initial bundle size
 const BackgroundEffect = lazy(() => import('./components/BackgroundEffect'));
@@ -58,8 +75,9 @@ function App() {
         <ExitIntentPopup />
       </Suspense>
       <Breadcrumb />
+      <SkipLink href="#main-content">Skip to main content</SkipLink>
       <Navbar />
-      <main role="main">
+      <main id="main-content" role="main" tabIndex={-1}>
         <Suspense fallback={
           <FullScreenLoading
             text="Loading Page..."
