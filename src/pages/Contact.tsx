@@ -642,19 +642,21 @@ const Contact: React.FC = () => {
               )}
             </SubmitButton>
 
-            <AnimatePresence>
-              {status && (
-                <StatusMessage
-                  type={status.type}
-                  initial={{ opacity: 0, y: 10 }}
-                  animate={{ opacity: 1, y: 0 }}
-                  exit={{ opacity: 0 }}
-                >
-                  <span>{status.type === 'success' ? '✅' : '❌'}</span>
-                  {status.message}
-                </StatusMessage>
-              )}
-            </AnimatePresence>
+            <div aria-live="polite" aria-atomic="true">
+              <AnimatePresence>
+                {status && (
+                  <StatusMessage
+                    type={status.type}
+                    initial={{ opacity: 0, y: 10 }}
+                    animate={{ opacity: 1, y: 0 }}
+                    exit={{ opacity: 0 }}
+                  >
+                    <span>{status.type === 'success' ? '✅' : '❌'}</span>
+                    {status.message}
+                  </StatusMessage>
+                )}
+              </AnimatePresence>
+            </div>
           </StyledForm>
         </FormColumn>
       </ContactContent>
