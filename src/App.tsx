@@ -9,6 +9,7 @@ import { FullScreenLoading } from './components/LoadingSpinner';
 import ScrollToTop from './components/ScrollToTop';
 import Breadcrumb from './components/Breadcrumb';
 import { useViewTransition } from './hooks/useViewTransition';
+import ErrorBoundary from './components/ErrorBoundary';
 
 const SkipLink = styled.a`
   position: absolute;
@@ -25,6 +26,50 @@ const SkipLink = styled.a`
     top: 1em;
   }
 `;
+
+const PageErrorWrapper = styled.div`
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  min-height: 60vh;
+  padding: 2rem;
+  text-align: center;
+  color: var(--text-secondary, #aaa);
+
+  h2 {
+    font-size: 1.5rem;
+    margin-bottom: 0.75rem;
+    color: var(--text-primary, #fff);
+  }
+
+  button {
+    margin-top: 1.25rem;
+    padding: 0.6rem 1.5rem;
+    border: 1px solid var(--accent-primary, #667eea);
+    border-radius: 999px;
+    background: transparent;
+    color: var(--accent-primary, #667eea);
+    cursor: pointer;
+    font-size: 0.95rem;
+    transition: background 0.2s;
+
+    &:hover {
+      background: var(--accent-primary, #667eea);
+      color: #fff;
+    }
+  }
+`;
+
+function PageError({ message }: { message: string }) {
+  return (
+    <PageErrorWrapper>
+      <h2>⚠️ {message}</h2>
+      <p>Please try refreshing the page.</p>
+      <button onClick={() => window.location.reload()}>Reload</button>
+    </PageErrorWrapper>
+  );
+}
 
 // Lazy load visual enhancement components to reduce initial bundle size
 const BackgroundEffect = lazy(() => import('./components/BackgroundEffect'));
@@ -48,11 +93,31 @@ function AppRoutes() {
 
   const routes = (
     <Routes>
-      <Route path="/" element={<Home />} />
-      <Route path="/about" element={<About />} />
-      <Route path="/projects" element={<Projects />} />
-      <Route path="/blog" element={<Blog />} />
-      <Route path="/contact" element={<Contact />} />
+      <Route path="/" element={
+        <ErrorBoundary fallback={<PageError message="Home page failed to load" />}>
+          <Home />
+        </ErrorBoundary>
+      } />
+      <Route path="/about" element={
+        <ErrorBoundary fallback={<PageError message="About page failed to load" />}>
+          <About />
+        </ErrorBoundary>
+      } />
+      <Route path="/projects" element={
+        <ErrorBoundary fallback={<PageError message="Projects page failed to load" />}>
+          <Projects />
+        </ErrorBoundary>
+      } />
+      <Route path="/blog" element={
+        <ErrorBoundary fallback={<PageError message="Blog page failed to load" />}>
+          <Blog />
+        </ErrorBoundary>
+      } />
+      <Route path="/contact" element={
+        <ErrorBoundary fallback={<PageError message="Contact page failed to load" />}>
+          <Contact />
+        </ErrorBoundary>
+      } />
       <Route path="*" element={<NotFound />} />
     </Routes>
   );
