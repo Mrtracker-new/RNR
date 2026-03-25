@@ -364,26 +364,18 @@ const ModalOverlay = styled(motion.div)`
   bottom: 0;
   background: rgba(0, 0, 0, 0.85);
   /*
-   * No backdrop-filter here on desktop — a blurred full-screen fixed layer
-   * causes a full-screen repaint on every scroll frame inside the modal.
-   * ModalContent carries its own backdrop-filter: blur(24px) for the
-   * frosted-glass look, scoped only to the card area.
-   *
-   * will-change: transform promotes this overlay to its own GPU compositor
-   * layer, so scroll events inside ModalScroller never trigger a page repaint.
-   *
-   * overflow is intentionally NOT set to auto/scroll here.
-   * Keeping a single scroll context (ModalScroller) eliminates the dual
-   * scroll hit-testing overhead that occurred when the browser had to
-   * evaluate two nested overflow containers on every wheel/touch event.
+   * No backdrop-filter and no will-change here.
+   * will-change: transform on a full-screen fixed layer forces the browser
+   * to composite a 100vw×100vh GPU surface that must be repainted on every
+   * scroll frame — the exact cause of the scroll jank.
+   * The compositing boundary lives on ModalContent (translateZ(0)) instead,
+   * so only the card area is promoted, not the entire viewport.
    */
-  will-change: transform;
   display: flex;
   align-items: center;
   justify-content: center;
   z-index: 1000;
   padding: var(--spacing-4);
-  /* overflow: hidden keeps the overlay as a pure positioning context */
   overflow: hidden;
 
   @media (max-width: 768px) {
@@ -405,11 +397,6 @@ const ModalContent = styled(motion.div)`
   background: linear-gradient(135deg,
     rgba(30, 41, 59, 0.98) 0%,
     rgba(15, 23, 42, 0.98) 100%);
-  /*
-   * No backdrop-filter here — the background is already 0.98 opacity so
-   * blur adds near-zero visual difference, but would create a second
-   * compositor layer inside the overlay's existing GPU layer (2× cost).
-   */
   border: 1px solid rgba(100, 255, 218, 0.2);
   border-radius: var(--radius-2xl);
   padding: 0;
@@ -417,6 +404,15 @@ const ModalContent = styled(motion.div)`
   width: 100%;
   position: relative;
   overflow: hidden;
+  /*
+   * backface-visibility: hidden + will-change: transform create a GPU
+   * compositing boundary scoped to just this card. Framer Motion safely
+   * overrides the transform property with its animated value, so there
+   * is no conflict. DO NOT set transform here — Framer Motion owns it.
+   */
+  backface-visibility: hidden;
+  -webkit-backface-visibility: hidden;
+  will-change: transform;
   box-shadow:
     0 25px 50px rgba(0, 0, 0, 0.5),
     0 0 0 1px rgba(100, 255, 218, 0.1),
@@ -475,6 +471,14 @@ const ModalScroller = styled.div`
   overscroll-behavior: contain;
   /* Allow vertical touch scrolling inside; block horizontal to avoid page swipe */
   touch-action: pan-y;
+  /*
+   * will-change: scroll-position tells the compositor this element scrolls,
+   * letting it pre-promote the scroll layer and skip main-thread work.
+   * contain: layout style isolates layout recalculation to this subtree only,
+   * preventing scroll from triggering reflows in the rest of the document.
+   */
+  will-change: scroll-position;
+  contain: layout style;
 
   /* Custom slim scrollbar */
   scrollbar-width: thin;
@@ -859,15 +863,14 @@ const ProjectModal: React.FC<ProjectModalProps> = ({ project, isOpen, onClose })
         onClick={onClose}
       >
         <ModalContent
-          initial={{ opacity: 0, scale: 0.97, y: 24 }}
+          initial={{ opacity: 0, scale: 0.95, y: 20 }}
           animate={{ opacity: 1, scale: 1, y: 0 }}
-          exit={{ opacity: 0, scale: 0.97, y: 16 }}
-          transition={{ duration: 0.26, ease: [0.16, 1, 0.3, 1] }}
+          exit={{ opacity: 0, scale: 0.96, y: 12 }}
+          transition={{ duration: 0.22, ease: [0.22, 1, 0.36, 1] }}
           onClick={(e) => e.stopPropagation()}
           role="dialog"
           aria-modal="true"
           aria-label={project.title}
-          style={{ WebkitBackfaceVisibility: 'hidden' }}
         >
           <CloseButton onClick={onClose} aria-label="Close">×</CloseButton>
 
