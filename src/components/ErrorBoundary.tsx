@@ -3,6 +3,8 @@ import styled from 'styled-components';
 
 interface Props {
     children: ReactNode;
+    /** Optional custom fallback UI rendered instead of the full-screen overlay. */
+    fallback?: ReactNode;
 }
 
 interface State {
@@ -142,6 +144,10 @@ class ErrorBoundary extends Component<Props, State> {
 
     render(): ReactNode {
         if (this.state.hasError) {
+            // Use caller-supplied fallback when provided
+            if (this.props.fallback) {
+                return this.props.fallback;
+            }
             return (
                 <ErrorFallback>
                     <ErrorContainer>
