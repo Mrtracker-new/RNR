@@ -8,6 +8,7 @@ import Footer from './components/Footer';
 import { FullScreenLoading } from './components/LoadingSpinner';
 import ScrollToTop from './components/ScrollToTop';
 import Breadcrumb from './components/Breadcrumb';
+import { useViewTransition } from './hooks/useViewTransition';
 
 const SkipLink = styled.a`
   position: absolute;
@@ -38,16 +39,45 @@ const Contact = lazy(() => import('./pages/Contact'));
 const Blog = lazy(() => import('./pages/Blog'));
 const NotFound = lazy(() => import('./pages/NotFound'));
 
+/**
+ * Inner component that must live *inside* <Router> so it can call
+ * useViewTransition() (which needs useLocation() from React Router).
+ */
+function AppRoutes() {
+  const { supported } = useViewTransition();
+
+  const routes = (
+    <Routes>
+      <Route path="/" element={<Home />} />
+      <Route path="/about" element={<About />} />
+      <Route path="/projects" element={<Projects />} />
+      <Route path="/blog" element={<Blog />} />
+      <Route path="/contact" element={<Contact />} />
+      <Route path="*" element={<NotFound />} />
+    </Routes>
+  );
+
+  return (
+    <Suspense fallback={<FullScreenLoading text="Loading Page..." />}>
+      {supported ? (
+        // View Transitions API handles the cross-fade natively — no wrapper needed.
+        routes
+      ) : (
+        // Framer Motion AnimatePresence as fallback (Firefox, older Safari, etc.).
+        <AnimatePresence mode="wait">
+          {routes}
+        </AnimatePresence>
+      )}
+    </Suspense>
+  );
+}
+
 function App() {
   const [isLoading, setIsLoading] = useState(true);
 
   useEffect(() => {
-    // Check if critical resources are loaded
-    const handleLoad = () => {
-      setIsLoading(false);
-    };
+    const handleLoad = () => setIsLoading(false);
 
-    // If already loaded, set loading to false immediately
     if (document.readyState === 'complete') {
       handleLoad();
     } else {
@@ -60,9 +90,7 @@ function App() {
     return (
       <>
         <GlobalStyle />
-        <FullScreenLoading
-          text="Loading Portfolio..."
-        />
+        <FullScreenLoading text="Loading Portfolio..." />
       </>
     );
   }
@@ -80,22 +108,7 @@ function App() {
       <SkipLink href="#main-content">Skip to main content</SkipLink>
       <Navbar />
       <main id="main-content" role="main" tabIndex={-1} style={{ minHeight: 'calc(100vh - 80px)' }}>
-        <Suspense fallback={
-          <FullScreenLoading
-            text="Loading Page..."
-          />
-        }>
-          <AnimatePresence mode="wait">
-            <Routes>
-              <Route path="/" element={<Home />} />
-              <Route path="/about" element={<About />} />
-              <Route path="/projects" element={<Projects />} />
-              <Route path="/blog" element={<Blog />} />
-              <Route path="/contact" element={<Contact />} />
-              <Route path="*" element={<NotFound />} />
-            </Routes>
-          </AnimatePresence>
-        </Suspense>
+        <AppRoutes />
       </main>
       <Footer />
     </Router>
