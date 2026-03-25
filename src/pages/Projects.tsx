@@ -90,12 +90,15 @@ const ModalImageBanner = styled.div`
   position: relative;
   border-radius: var(--radius-2xl) var(--radius-2xl) 0 0;
   flex-shrink: 0;
+  /* Dark placeholder prevents the white flash while the image decodes */
+  background: #0a0f1e;
 
   img {
     width: 100%;
     height: 100%;
     object-fit: cover;
     object-position: center;
+    display: block; /* kills inline baseline gap */
   }
 
   /* Fade bottom into modal background */
@@ -360,20 +363,30 @@ const ModalOverlay = styled(motion.div)`
   right: 0;
   bottom: 0;
   background: rgba(0, 0, 0, 0.85);
-  /* Desktop: blurred backdrop; dropped on mobile — blur is GPU-heavy on low-end devices */
-  backdrop-filter: blur(16px);
-  -webkit-backdrop-filter: blur(16px);
+  /*
+   * No backdrop-filter here on desktop — a blurred full-screen fixed layer
+   * causes a full-screen repaint on every scroll frame inside the modal.
+   * ModalContent carries its own backdrop-filter: blur(24px) for the
+   * frosted-glass look, scoped only to the card area.
+   *
+   * will-change: transform promotes this overlay to its own GPU compositor
+   * layer, so scroll events inside ModalScroller never trigger a page repaint.
+   *
+   * overflow is intentionally NOT set to auto/scroll here.
+   * Keeping a single scroll context (ModalScroller) eliminates the dual
+   * scroll hit-testing overhead that occurred when the browser had to
+   * evaluate two nested overflow containers on every wheel/touch event.
+   */
+  will-change: transform;
   display: flex;
   align-items: center;
   justify-content: center;
   z-index: 1000;
   padding: var(--spacing-4);
-  overflow-y: auto;
+  /* overflow: hidden keeps the overlay as a pure positioning context */
+  overflow: hidden;
 
   @media (max-width: 768px) {
-    /* Remove blur on mobile to avoid compositing cost */
-    backdrop-filter: none;
-    -webkit-backdrop-filter: none;
     background: rgba(0, 0, 0, 0.92);
   }
 
@@ -392,9 +405,11 @@ const ModalContent = styled(motion.div)`
   background: linear-gradient(135deg,
     rgba(30, 41, 59, 0.98) 0%,
     rgba(15, 23, 42, 0.98) 100%);
-  /* Desktop: extra frosted glass depth */
-  backdrop-filter: blur(24px);
-  -webkit-backdrop-filter: blur(24px);
+  /*
+   * No backdrop-filter here — the background is already 0.98 opacity so
+   * blur adds near-zero visual difference, but would create a second
+   * compositor layer inside the overlay's existing GPU layer (2× cost).
+   */
   border: 1px solid rgba(100, 255, 218, 0.2);
   border-radius: var(--radius-2xl);
   padding: 0;
@@ -402,9 +417,6 @@ const ModalContent = styled(motion.div)`
   width: 100%;
   position: relative;
   overflow: hidden;
-  /* Force GPU compositing layer — prevents layout-triggered repaint during animation */
-  transform: translateZ(0);
-  will-change: transform, opacity;
   box-shadow:
     0 25px 50px rgba(0, 0, 0, 0.5),
     0 0 0 1px rgba(100, 255, 218, 0.1),
@@ -434,9 +446,6 @@ const ModalContent = styled(motion.div)`
   @media (max-width: 768px) {
     max-width: 90vw;
     border-radius: var(--radius-xl);
-    /* Drop blur on mobile — background opacity is high enough without it */
-    backdrop-filter: none;
-    -webkit-backdrop-filter: none;
     /* Lighter shadow stack on mobile */
     box-shadow:
       0 16px 40px rgba(0, 0, 0, 0.6),
@@ -533,7 +542,7 @@ const CloseButton = styled.button`
   font-size: 20px;
   font-weight: normal;
   z-index: 10;
-  backdrop-filter: blur(10px);
+  /* No backdrop-filter — would be a third composited layer inside the modal */
   
   /* Refined mobile design */
   @media (max-width: 768px) {
@@ -596,8 +605,6 @@ const ModalActions = styled.div`
   gap: var(--spacing-4);
   flex-wrap: wrap;
 `;
-
-/* ... existing code ... */
 
 // ── Project Data ────────────────────────────────────────────────────────────
 interface Project {
@@ -840,11 +847,11 @@ const ProjectModal: React.FC<ProjectModalProps> = ({ project, isOpen, onClose })
     };
   }, [isOpen]);
 
-  if (!isOpen || !project) return null;
-
   return (
     <AnimatePresence>
+      {isOpen && project && (
       <ModalOverlay
+        key="modal-overlay"
         initial={{ opacity: 0 }}
         animate={{ opacity: 1 }}
         exit={{ opacity: 0 }}
@@ -867,7 +874,19 @@ const ProjectModal: React.FC<ProjectModalProps> = ({ project, isOpen, onClose })
           <ModalScroller>
           {project.image && (
             <ModalImageBanner>
-              <img src={project.image} alt={project.title} loading="lazy" />
+              {/*
+               * loading="eager" — the image is fetched immediately when the
+               * modal opens; lazy loading would defer the network request until
+               * the element enters the viewport, which is what caused the flash.
+               * decoding="async" lets the browser decode off the main thread so
+               * the modal animation stays smooth.
+               */}
+              <img
+                src={project.image}
+                alt={project.title}
+                loading="eager"
+                decoding="async"
+              />
             </ModalImageBanner>
           )}
 
@@ -943,8 +962,8 @@ const ProjectModal: React.FC<ProjectModalProps> = ({ project, isOpen, onClose })
                 opacity: 0.6
               }}>Tech Stack</h4>
               <ModalTech>
-                {project.technologies.map((tech: string, index: number) => (
-                  <TechTag key={index}>{tech}</TechTag>
+                {project.technologies.map((tech: string) => (
+                  <TechTag key={tech}>{tech}</TechTag>
                 ))}
               </ModalTech>
             </div>
@@ -988,24 +1007,16 @@ const ProjectModal: React.FC<ProjectModalProps> = ({ project, isOpen, onClose })
           </ModalScroller>
         </ModalContent>
       </ModalOverlay>
+      )}
     </AnimatePresence>
   );
 };
 
 const Projects: React.FC = () => {
   const [selectedCategory, setSelectedCategory] = useState('All');
-  const [selectedProject, setSelectedProject] = useState<any>(null);
+  const [selectedProject, setSelectedProject] = useState<Project | null>(null);
   const [isModalOpen, setIsModalOpen] = useState(false);
-  const [isLoading, setIsLoading] = useState(true);
 
-  // Simulate initial loading
-  useEffect(() => {
-    const timer = setTimeout(() => {
-      setIsLoading(false);
-    }, 800); // Simulate loading time
-
-    return () => clearTimeout(timer);
-  }, []);
 
   const filteredProjects = useMemo(() => {
     return projectsData.filter(project => {
@@ -1063,7 +1074,7 @@ const Projects: React.FC = () => {
       <Section style={{ paddingTop: 0 }}>
         <Container>
           <AnimatePresence mode="wait">
-            {!isLoading && (
+            {(
               <ProjectsGrid
                 as={motion.div}
                 initial={{ opacity: 0 }}
@@ -1102,8 +1113,8 @@ const Projects: React.FC = () => {
                       <ProjectDescription>{project.description}</ProjectDescription>
 
                       <ProjectTech>
-                        {project.technologies.slice(0, 4).map((tech: string, i: number) => (
-                          <TechTag key={i}>{tech}</TechTag>
+                        {project.technologies.slice(0, 4).map((tech: string) => (
+                          <TechTag key={tech}>{tech}</TechTag>
                         ))}
                         {project.technologies.length > 4 && (
                           <TechTag>+{project.technologies.length - 4}</TechTag>
