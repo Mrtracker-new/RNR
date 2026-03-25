@@ -324,6 +324,27 @@ export const GlobalStyle = createGlobalStyle`
     animation: spin 1s linear infinite;
   }
   
+  /* ─── View Transitions API ─── */
+  /* Defines the cross-fade animation for browser-native page transitions.    */
+  /* Chrome 111+ / Safari 18+ use these; other browsers simply ignore them.   */
+  @keyframes vt-fade-out {
+    from { opacity: 1; }
+    to   { opacity: 0; }
+  }
+
+  @keyframes vt-fade-in {
+    from { opacity: 0; }
+    to   { opacity: 1; }
+  }
+
+  ::view-transition-old(root) {
+    animation: vt-fade-out 200ms ease-out both;
+  }
+
+  ::view-transition-new(root) {
+    animation: vt-fade-in 200ms ease-in both;
+  }
+
   /* Accessibility: respect OS-level "Reduce Motion" preference */
   @media (prefers-reduced-motion: reduce) {
     *, *::before, *::after {
@@ -334,6 +355,12 @@ export const GlobalStyle = createGlobalStyle`
 
     html {
       scroll-behavior: auto;
+    }
+
+    /* Suppress native View Transition cross-fade when motion is reduced */
+    ::view-transition-old(root),
+    ::view-transition-new(root) {
+      animation: none !important;
     }
   }
 `;
