@@ -324,12 +324,16 @@ export const GlobalStyle = createGlobalStyle`
     animation: spin 1s linear infinite;
   }
   
-  /* Performance optimizations */
+  /* Accessibility: respect OS-level "Reduce Motion" preference */
   @media (prefers-reduced-motion: reduce) {
     *, *::before, *::after {
-      animation-duration: 0.01ms !important;
+      animation-duration: 0.001s !important;
       animation-iteration-count: 1 !important;
-      transition-duration: 0.01ms !important;
+      transition-duration: 0.001s !important;
+    }
+
+    html {
+      scroll-behavior: auto;
     }
   }
 `;
