@@ -1,16 +1,17 @@
 <div align="center">
 
-# 🚀 Welcome to My Digital Playground! 🌟
+# 🚀 RNR — My Digital Playground
 
-**Where code meets creativity (and a lot of caffeine) ☕**
+**Where code meets creativity (and way too much caffeine) ☕**
 
 [![Live Demo](https://img.shields.io/badge/🚀_Launch-Live_Site-FF2D20?style=for-the-badge&logo=rocket&logoColor=white)](https://rolan-rnr.netlify.app/)
-[![GitHub Repo](https://img.shields.io/badge/�_Source-GitHub-181717?style=for-the-badge&logo=github&logoColor=white)](https://github.com/Mrtracker-new/RNR)
+[![GitHub Repo](https://img.shields.io/badge/📦_Source-GitHub-181717?style=for-the-badge&logo=github&logoColor=white)](https://github.com/Mrtracker-new/RNR)
 
 <br />
 
 [![React](https://img.shields.io/badge/React_19-20232A?style=for-the-badge&logo=react&logoColor=61DAFB)](https://reactjs.org/)
 [![TypeScript](https://img.shields.io/badge/TypeScript-007ACC?style=for-the-badge&logo=typescript&logoColor=white)](https://www.typescriptlang.org/)
+[![Vite](https://img.shields.io/badge/Vite-646CFF?style=for-the-badge&logo=vite&logoColor=white)](https://vitejs.dev/)
 [![Styled Components](https://img.shields.io/badge/styled--components-DB7093?style=for-the-badge&logo=styled-components&logoColor=white)](https://styled-components.com/)
 [![Netlify](https://img.shields.io/badge/Netlify-00C7B7?style=for-the-badge&logo=netlify&logoColor=white)](https://www.netlify.com/)
 
@@ -18,87 +19,143 @@
 
 ---
 
-## 🧐 What is this?
+## 🧐 Wait, what is this?
 
-Yo! 👋 This is my personal corner of the internet. It's not just a portfolio; it's a collection of the cool stuff I've built, stripped of corporate jargon and packed with personality. I built this to show off my skills without putting you to sleep. 😴
+Hey! 👋 This is my personal portfolio — not the boring kind with a stock photo and a generic "I'm passionate about technology" tagline. This is the real me: a dev who likes building things that look good, feel smooth, and don't make people want to close the tab.
 
-## ⚡ Why it's Awesome (Speed & Stats)
+Built it to show off projects, say a bit about who I am, and maybe score some cool opportunities. No corporate fluff. Just vibes and working code. ✌️
 
-We don't do slow websites here. 🙅‍♂️
+---
 
-- 🏎️ **Zoom Zoom**: 94+ Lighthouse score (Google loves me).
-- 📦 **Tiny Footprint**: ~143KB bundle size.
-- 🎯 **Lazy As Heck**: Lazy loading everything so your data plan thanks you.
-- 🧈 **Smooth as Butter**: 60fps animations because jank is for amateurs.
+## ⚡ Performance? Oh we don't play around.
 
-## ✨ usage == fun?
+- 🏎️ **94+ Lighthouse Score** — Google approves.
+- 📦 **~143KB bundle** — Lightweight like a ninja.
+- 🎯 **Lazy loading everything** — Your data plan is safe with me.
+- 🧈 **60fps animations** — Jank is a crime here.
 
-### 🎨 The Vibe
-- **Dark Mode Only**: Because light attracts bugs. 🦟 (Just kidding, but seriously, my dark mode is sleek).
-- **Glassmorphism**: It's like looking through a frosted window at future technology.
-- **Responsive**: Looks good on your phone, your laptop, and your smart fridge (probably).
+---
 
-### � The Goods (Pages)
-- **🏠 Home**: The grand entrance.
-- **👨‍💻 About**: The lore, the backstory, the "who is this guy?".
-- **🛠️ Projects**: The trophy room. Filter, search, and marvel at the code.
-- **📞 Contact**: Slide into my DMs (professionally, please).
-- **📝 Blog**: My brain dumps on [Hashnode](https://rnr-still-figuring-things-out.hashnode.dev/).
+## 🗂️ Project Structure
 
-## 🛠️ Under the Hood
+```
+src/
+├── pages/              # The main "rooms" of the site
+│   ├── Home.tsx        # Grand entrance, hero vibes
+│   ├── About.tsx       # The lore, the backstory
+│   ├── Projects.tsx    # Trophy room (biggest file, most love)
+│   ├── Blog.tsx        # Brain dumps via Hashnode API
+│   ├── Contact.tsx     # Slide into my DMs (professionally)
+│   └── NotFound.tsx    # 404 — you got lost, buddy
+│
+├── components/         # Reusable building blocks
+│   ├── Navbar.tsx          # Navigation (responsive, animated)
+│   ├── Footer.tsx          # The bottom (still important)
+│   ├── SEO.tsx             # Meta tags so Google loves me
+│   ├── LoadingSpinner.tsx  # Pretty spinner while things load
+│   ├── ScrollReveal.tsx    # Elements that slide in on scroll
+│   ├── CursorEffect.tsx    # Custom cursor magic ✨
+│   ├── BackgroundEffect.tsx # That cool animated background
+│   ├── OptimizedImage.tsx  # Images, but smarter
+│   ├── Skeleton.tsx        # Skeleton screens while loading
+│   ├── ErrorBoundary.tsx   # Catches crashes gracefully
+│   ├── ExitIntentPopup.tsx # Tries to keep you here 😂
+│   ├── ResumeDownload.tsx  # One-click CV grab
+│   ├── PageTransition.tsx  # Smooth page switches
+│   ├── BlogCard.tsx        # Blog post cards
+│   ├── Breadcrumb.tsx      # So you know where you are
+│   ├── FAQSchema.tsx       # Structured data for SEO nerds
+│   └── ScrollToTop.tsx     # Elevator button for the page
+│
+├── hooks/              # Custom React hooks
+│   └── useViewTransition.ts  # View Transition API wrapper
+│
+├── utils/              # Utility functions & helpers
+│   ├── animations.ts       # Shared animation configs
+│   ├── contact.ts          # Contact form logic
+│   ├── hashnode.ts         # Hashnode GraphQL API calls
+│   ├── performance.ts      # Performance tricks & optimizations
+│   └── scrollPerformance.ts # Scroll-specific perf helpers
+│
+├── styles/             # Global styles & tokens
+├── assets/             # Static assets (images, icons etc.)
+├── App.tsx             # Root component, routing lives here
+└── index.tsx           # Entry point, where it all begins
+```
 
-I used the good stuff:
+---
 
-| Tech | Why? |
-|------|------|
-| **React 19** | Because living on the bleeding edge is fun. |
-| **TypeScript** | Because `undefined` is not a function. |
-| **Styled Components** | CSS in JS? Yes please. |
-| **Framer Motion** | Makes things go *whoosh* and *spin*. |
-| **React Helmet Async** | SEO magic so people can actually find me. |
+## 🛠️ Tech Stack — The Good Stuff
 
-## 🚀 Let's Get This Party Started (Local Setup)
+| Tech | What it does |
+|------|-------------|
+| **React 19** | Bleeding edge. Living dangerously. |
+| **TypeScript** | Because `undefined is not a function` is not a vibe. |
+| **Vite 6** | Build tool so fast it's almost cheating. |
+| **Styled Components v6** | CSS-in-JS. Judge me. I love it. |
+| **Framer Motion 12** | Makes everything go *whoosh* and *spin*. |
+| **React Router v7** | Handles all the URL magic. |
+| **React Helmet Async** | SEO meta tags on every page. |
+| **Hashnode API** | Pulls blog posts from my Hashnode blog. |
 
-Want to break things locally? Be my guest!
+---
 
-**Prerequisites**: Node.js (v16+) and a sense of adventure.
+## 🚀 Run It Locally
+
+Want to poke around? Let's go.
+
+**Prerequisites:** Node.js v18+ and a mild sense of adventure.
 
 ```bash
-# 1. Kidnap the code
+# 1. Steal the code (legally)
 git clone https://github.com/Mrtracker-new/RNR.git
 
-# 2. Enter the matrix
-cd portfolio
+# 2. Step inside
+cd RNR
 
-# 3. Feed the beast (install dependencies)
+# 3. Feed the node_modules monster
 npm install
 
-# 4. IGNITE! 🔥
-npm start
+# 4. Light it up 🔥
+npm run dev
 ```
 
-Visit `http://localhost:3000` and witness the greatness. 🥂
+Hit `http://localhost:5173` and witness it yourself.
 
-### 🔧 Environment Secrets
-Create a `.env` file if you want the blog to work properly:
-```env
-REACT_APP_HASHNODE_PUBLICATION_HOST=your-blog.hashnode.dev
+### Other Commands
+
+```bash
+npm run build      # Production build (TypeScript check + Vite)
+npm run preview    # Preview the production build locally
+npm run analyze    # Bundle size analysis (find the fat)
 ```
 
-## 📬 Holla at me!
+### 🔐 Environment Setup
+
+Copy `.env.example` to `.env` and fill in your values:
+
+```bash
+cp .env.example .env
+```
+
+The blog page needs a Hashnode publication host to fetch posts. Check `.env.example` for all available variables.
+
+---
+
+## 📬 Find Me
 
 - 🌍 **Portfolio**: [rolan-rnr.netlify.app](https://rolan-rnr.netlify.app/)
-- � **GitHub**: [@Mrtracker-new](https://github.com/Mrtracker-new)
+- 📦 **GitHub**: [@Mrtracker-new](https://github.com/Mrtracker-new)
 - 📧 **Email**: [rolanlobo901@gmail.com](mailto:rolanlobo901@gmail.com)
 - 📝 **Blog**: [Hashnode](https://rnr-still-figuring-things-out.hashnode.dev/)
-- � **Location**: India 🇮🇳
+- 📍 **Location**: India 🇮🇳
 
 ---
 
 <div align="center">
 
-**Thanks for stopping by! ⭐ Star this repo if you think it's cool!**
+**If you made it this far, you're awesome. ⭐ Star the repo if you liked it!**
 
-*Made with ❤️, ☕, and too many console.log()s by Rolan*
+*Made with ❤️, ☕, and an unhealthy number of `console.log`s — by Rolan*
 
 </div>
