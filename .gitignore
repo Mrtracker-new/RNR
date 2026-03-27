@@ -18,6 +18,9 @@ docs_ignore/
 /dist
 *.tgz
 
+# TypeScript build info
+*.tsbuildinfo
+
 # Environment Variables & Secrets
 .env
 .env.local
