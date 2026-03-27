@@ -3,7 +3,7 @@ import styled from 'styled-components';
 import { motion, useScroll, useSpring, Variants } from 'framer-motion';
 import { Container, Section } from '../styles/GlobalStyle';
 import SEO from '../components/SEO';
-import PageTransition from '../components/PageTransition';
+
 import aboutImage from '../assets/images/Aboutme.webp';
 
 // Lazy load ResumeDownload to reduce initial bundle size
@@ -759,7 +759,7 @@ const About: React.FC = () => {
   };
 
   return (
-    <PageTransition>
+    <>
       <SEO
         title="About Rolan Lobo (Rolan RNR) - Full Stack Developer & Software Engineer"
         description="Learn about Rolan Lobo (Rolan RNR), a passionate freelance software engineer from Karnataka, India. Specializing in security applications (steganography, file encryption, polyglot files), web development (React, Flask), and desktop applications. Journey through education, work experience, skills, and professional freelance services."
@@ -951,7 +951,7 @@ const About: React.FC = () => {
         </Container>
       </ServicesSection>
 
-    </PageTransition>
+    </>
   );
 };
 
