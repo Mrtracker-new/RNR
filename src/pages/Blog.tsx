@@ -3,7 +3,7 @@ import styled from 'styled-components';
 import { motion } from 'framer-motion';
 import { Container } from '../styles/GlobalStyle';
 import SEO from '../components/SEO';
-import PageTransition from '../components/PageTransition';
+
 import { getAllPosts, BlogPost } from '../utils/hashnode';
 import { FullScreenLoading } from '../components/LoadingSpinner';
 
@@ -130,7 +130,7 @@ const Blog: React.FC = () => {
     }
 
     return (
-        <PageTransition>
+        <>
             <SEO
                 title="Blog - Rolan Lobo | Thoughts on Development & Technology"
                 description="Read my latest articles on web development, programming, and technology. Learn from my experiences and insights in software engineering."
@@ -206,7 +206,7 @@ const Blog: React.FC = () => {
                     )}
                 </Container>
             </BlogSection>
-        </PageTransition>
+        </>
     );
 };
 
