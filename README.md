@@ -53,15 +53,12 @@ src/
 │   ├── Footer.tsx          # The bottom (still important)
 │   ├── SEO.tsx             # Meta tags so Google loves me
 │   ├── LoadingSpinner.tsx  # Pretty spinner while things load
-│   ├── ScrollReveal.tsx    # Elements that slide in on scroll
 │   ├── CursorEffect.tsx    # Custom cursor magic ✨
 │   ├── BackgroundEffect.tsx # That cool animated background
-│   ├── OptimizedImage.tsx  # Images, but smarter
 │   ├── Skeleton.tsx        # Skeleton screens while loading
 │   ├── ErrorBoundary.tsx   # Catches crashes gracefully
 │   ├── ExitIntentPopup.tsx # Tries to keep you here 😂
 │   ├── ResumeDownload.tsx  # One-click CV grab
-│   ├── PageTransition.tsx  # Smooth page switches
 │   ├── BlogCard.tsx        # Blog post cards
 │   ├── Breadcrumb.tsx      # So you know where you are
 │   ├── FAQSchema.tsx       # Structured data for SEO nerds
@@ -71,15 +68,12 @@ src/
 │   └── useViewTransition.ts  # View Transition API wrapper
 │
 ├── utils/              # Utility functions & helpers
-│   ├── animations.ts       # Shared animation configs
-│   ├── contact.ts          # Contact form logic
 │   ├── hashnode.ts         # Hashnode GraphQL API calls
-│   ├── performance.ts      # Performance tricks & optimizations
-│   └── scrollPerformance.ts # Scroll-specific perf helpers
+│   └── performance.ts      # ScrollOptimizer & performance utils
 │
 ├── styles/             # Global styles & tokens
 ├── assets/             # Static assets (images, icons etc.)
-├── App.tsx             # Root component, routing lives here
+├── App.tsx             # Root component, routing + page transitions
 └── index.tsx           # Entry point, where it all begins
 ```
 
@@ -127,7 +121,6 @@ Hit `http://localhost:5173` and witness it yourself.
 ```bash
 npm run build      # Production build (TypeScript check + Vite)
 npm run preview    # Preview the production build locally
-npm run analyze    # Bundle size analysis (find the fat)
 ```
 
 ### 🔐 Environment Setup
