@@ -3,7 +3,7 @@ import styled from 'styled-components';
 import { motion, AnimatePresence } from 'framer-motion';
 import { Container, Section, Badge } from '../styles/GlobalStyle';
 import SEO from '../components/SEO';
-import PageTransition from '../components/PageTransition';
+
 import FAQSchema from '../components/FAQSchema';
 import { getContactEmail } from '../utils/contact';
 
@@ -443,7 +443,7 @@ const Contact: React.FC = () => {
   };
 
   return (
-    <PageTransition>
+    <>
       <SEO
         title="Contact Rolan Lobo (Rolan RNR) - Hire Freelance Full Stack Developer"
         description="Get in touch with Rolan Lobo (Rolan RNR) for web development, security tools, or custom software projects."
@@ -656,7 +656,7 @@ const Contact: React.FC = () => {
           </StyledForm>
         </FormColumn>
       </ContactContent>
-    </PageTransition>
+    </>
   );
 };
 
