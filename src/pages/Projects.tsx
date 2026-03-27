@@ -4,7 +4,7 @@ import { motion, AnimatePresence } from 'framer-motion';
 import { Container, Section, Grid, Badge } from '../styles/GlobalStyle';
 import SEO from '../components/SEO';
 import OptimizedImage from '../components/OptimizedImage';
-import PageTransition from '../components/PageTransition';
+
 
 // Import project images
 import invisioVaultDesktopImg from '../assets/images/InvisioVault_Suit.webp';
@@ -1028,7 +1028,7 @@ const Projects: React.FC = () => {
   }, [selectedCategory]);
 
   return (
-    <PageTransition>
+    <>
       <SEO
         title="Projects - Rolan Lobo (Rolan RNR) | Steganography, Security Tools & Web Apps"
         description="Explore my portfolio of innovative software projects: InvisioVault (steganography & polyglot files), YT-Downloader (free YouTube video & audio downloader), BAR (secure file management), Sortify, and more full-stack web/desktop applications."
@@ -1171,7 +1171,7 @@ const Projects: React.FC = () => {
         isOpen={isModalOpen}
         onClose={() => setIsModalOpen(false)}
       />
-    </PageTransition>
+    </>
   );
 };
 
