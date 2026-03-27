@@ -1,6 +1,6 @@
 import React from 'react';
 import { Helmet } from 'react-helmet-async';
-import { getContactEmail } from '../utils/contact';
+
 
 const FAQSchema: React.FC = () => {
 
@@ -29,7 +29,7 @@ const FAQSchema: React.FC = () => {
         name: 'Is Rolan available for freelance projects?',
         acceptedAnswer: {
           '@type': 'Answer',
-          text: `Yes, I am currently available for freelance projects. You can contact me through the contact form on my portfolio website or email me at ${getContactEmail()}.`
+          text: 'Yes, I am currently available for freelance projects. You can contact me through the contact form on my portfolio website or email me at rolanlobo901@gmail.com.'
         }
       },
       {

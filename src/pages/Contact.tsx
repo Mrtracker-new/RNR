@@ -5,7 +5,6 @@ import { Container, Section, Badge } from '../styles/GlobalStyle';
 import SEO from '../components/SEO';
 
 import FAQSchema from '../components/FAQSchema';
-import { getContactEmail } from '../utils/contact';
 
 // --- Styled Components ---
 
@@ -483,8 +482,8 @@ const Contact: React.FC = () => {
             <InfoTitle><span>📧</span> Email Me</InfoTitle>
             <InfoText>
               <p>For project inquiries, collaborations, or just to say hi:</p>
-              <a href={`mailto:${getContactEmail()}`} style={{ fontSize: '1.1rem', fontWeight: 600 }}>
-                {getContactEmail()}
+              <a href="mailto:rolanlobo901@gmail.com" style={{ fontSize: '1.1rem', fontWeight: 600 }}>
+                rolanlobo901@gmail.com
               </a>
               <p style={{ marginTop: 'var(--spacing-2)', fontSize: '0.9em', opacity: 0.7 }}>
                 I usually respond within 24 hours.

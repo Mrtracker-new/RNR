@@ -1,6 +1,6 @@
 import React from 'react';
 import { Helmet } from 'react-helmet-async';
-import { getContactEmail } from '../utils/contact';
+
 
 interface SEOProps {
   title?: string;
@@ -80,7 +80,7 @@ const SEO: React.FC<SEOProps> = ({
             addressRegion: 'Karnataka',
             addressCountry: 'India'
           },
-          email: getContactEmail(),
+          email: 'rolanlobo901@gmail.com',
           knowsAbout: [
             'JavaScript',
             'TypeScript',
@@ -156,7 +156,7 @@ const SEO: React.FC<SEOProps> = ({
           },
           contactPoint: {
             '@type': 'ContactPoint',
-            email: getContactEmail(),
+            email: 'rolanlobo901@gmail.com',
             contactType: 'Customer Service',
             availableLanguage: ['English', 'Hindi', 'Kannada']
           },
