@@ -3,7 +3,7 @@ import styled from 'styled-components';
 import { motion, AnimatePresence } from 'framer-motion';
 import { Container, Section, Grid, Badge } from '../styles/GlobalStyle';
 import SEO from '../components/SEO';
-import OptimizedImage from '../components/OptimizedImage';
+
 
 
 // Import project images
@@ -1099,12 +1099,12 @@ const Projects: React.FC = () => {
                   >
                     <ProjectImageContainer $bgColor={project.bgColor} className="project-image">
                       {project.image ? (
-                        <OptimizedImage
+                        <img
                           src={project.image}
                           alt={project.title}
-                          width="100%"
-                          height="100%"
-                          style={{ objectFit: 'cover' }}
+                          loading="lazy"
+                          decoding="async"
+                          style={{ width: '100%', height: '100%', objectFit: 'cover', display: 'block' }}
                         />
                       ) : (
                         <div style={{ fontSize: '4rem' }}>{project.icon}</div>
