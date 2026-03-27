@@ -1,6 +1,6 @@
 import React, { memo, useMemo } from 'react';
 import styled, { keyframes } from 'styled-components';
-import { getDeviceInfo } from '../utils/performance';
+
 
 const moveInCircle = keyframes`
   0% { transform: rotate(0deg); }
@@ -92,8 +92,11 @@ const Orb3 = styled.div`
  */
 const BackgroundEffect: React.FC = () => {
   const isMobile = useMemo(() => {
-    const device = getDeviceInfo();
-    return device.isMobile || device.isLowEnd;
+    const ua = navigator.userAgent;
+    const w = window.innerWidth;
+    const isMobileDevice = /android|webos|iphone|ipad|ipod|blackberry|iemobile|opera mini/i.test(ua) || w <= 768;
+    const isLowEnd = 'hardwareConcurrency' in navigator && navigator.hardwareConcurrency <= 2;
+    return isMobileDevice || isLowEnd;
   }, []);
 
   return (
