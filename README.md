@@ -30,7 +30,7 @@ Built it to show off projects, say a bit about who I am, and maybe score some co
 ## ⚡ Performance? Oh we don't play around.
 
 - 🏎️ **94+ Lighthouse Score** — Google approves.
-- 📦 **~143KB bundle** — Lightweight like a ninja.
+- 📦 **~123KB bundle (gzipped)** — Lightweight like a ninja.
 - 🎯 **Lazy loading everything** — Your data plan is safe with me.
 - 🧈 **60fps animations** — Jank is a crime here.
 
