@@ -3,7 +3,7 @@ import { Link } from 'react-router-dom';
 import styled from 'styled-components';
 import { motion } from 'framer-motion';
 import SEO from '../components/SEO';
-import PageTransition from '../components/PageTransition';
+
 
 const Wrapper = styled.div`
   display: flex;
@@ -58,7 +58,7 @@ const HomeLink = styled(motion(Link))`
 `;
 
 const NotFound: React.FC = () => (
-  <PageTransition>
+  <>
     <SEO
       title="404 — Page Not Found | Rolan Lobo"
       description="The page you're looking for doesn't exist."
@@ -94,7 +94,7 @@ const NotFound: React.FC = () => (
         ← Go Home
       </HomeLink>
     </Wrapper>
-  </PageTransition>
+  </>
 );
 
 export default NotFound;
