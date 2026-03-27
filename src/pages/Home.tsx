@@ -4,7 +4,7 @@ import { motion, Variants, AnimatePresence } from 'framer-motion';
 import { Link } from 'react-router-dom';
 import { Container, Button } from '../styles/GlobalStyle';
 import SEO from '../components/SEO';
-import PageTransition from '../components/PageTransition';
+
 import { getLatestPosts, BlogPost } from '../utils/hashnode';
 
 // Profile images served from /public — not imported via webpack so they are
@@ -523,7 +523,7 @@ const Home: React.FC = () => {
   }, []);
 
   return (
-    <PageTransition>
+    <>
       <SEO
         title="Rolan Lobo (Rolan RNR) - Full Stack Developer | Building Digital Experiences"
         description="I'm Rolan Lobo (Rolan RNR), a Full Stack Developer specializing in building exceptional digital experiences, software, and mobile apps. Explore my portfolio of projects, skills, and services."
@@ -697,7 +697,7 @@ const Home: React.FC = () => {
           </Container>
         </BlogSection>
       )}
-    </PageTransition>
+    </>
   );
 };
 
