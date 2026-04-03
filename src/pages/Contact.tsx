@@ -515,7 +515,7 @@ const Contact: React.FC = () => {
                 <span>GitHub</span>
               </SocialCardButton>
               <SocialCardButton
-                href="https://www.linkedin.com/in/rolan-lobo-93368a239/"
+                href="https://www.linkedin.com/in/rolan-lobo/"
                 target="_blank" rel="noopener noreferrer"
                 whileHover={{ scale: 1.02 }}
                 whileTap={{ scale: 0.98 }}

@@ -67,7 +67,7 @@ const SEO: React.FC<SEOProps> = ({
           image: 'https://rolan-rnr.netlify.app/logo512.png',
           sameAs: [
             'https://github.com/Mrtracker-new',
-            'https://www.linkedin.com/in/rolan-lobo-93368a239/',
+            'https://www.linkedin.com/in/rolan-lobo/',
             'https://rnr-still-figuring-things-out.hashnode.dev/'
           ],
           jobTitle: 'Full Stack Developer',
@@ -162,7 +162,7 @@ const SEO: React.FC<SEOProps> = ({
           },
           sameAs: [
             'https://github.com/Mrtracker-new',
-            'https://www.linkedin.com/in/rolan-lobo-93368a239/',
+            'https://www.linkedin.com/in/rolan-lobo/',
             'https://rnr-still-figuring-things-out.hashnode.dev/'
           ]
         })}
