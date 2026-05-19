@@ -44,7 +44,7 @@ src/
 │   ├── Home.tsx        # Grand entrance, hero vibes
 │   ├── About.tsx       # The lore, the backstory
 │   ├── Projects.tsx    # Trophy room (biggest file, most love)
-│   ├── Blog.tsx        # Brain dumps via Hashnode API
+│   ├── Blog.tsx        # Brain dumps via Dev.to API
 │   ├── Contact.tsx     # Slide into my DMs (professionally)
 │   └── NotFound.tsx    # 404 — you got lost, buddy
 │
@@ -68,7 +68,7 @@ src/
 │   └── useViewTransition.ts  # View Transition API wrapper
 │
 ├── utils/              # Utility functions & helpers
-│   ├── hashnode.ts         # Hashnode GraphQL API calls
+│   ├── devto.ts            # Dev.to REST API integration
 │   └── performance.ts      # ScrollOptimizer & performance utils
 │
 ├── styles/             # Global styles & tokens
@@ -90,7 +90,7 @@ src/
 | **Framer Motion 12** | Makes everything go *whoosh* and *spin*. |
 | **React Router v7** | Handles all the URL magic. |
 | **React Helmet Async** | SEO meta tags on every page. |
-| **Hashnode API** | Pulls blog posts from my Hashnode blog. |
+| **Dev.to API** | Fetches blog posts live from Dev.to (free, no key needed). |
 
 ---
 
@@ -131,7 +131,7 @@ Copy `.env.example` to `.env` and fill in your values:
 cp .env.example .env
 ```
 
-The blog page needs a Hashnode publication host to fetch posts. Check `.env.example` for all available variables.
+The blog page reads your Dev.to username from `VITE_DEVTO_USERNAME`. No API key is required for public article reads.
 
 ---
 
@@ -140,7 +140,7 @@ The blog page needs a Hashnode publication host to fetch posts. Check `.env.exam
 - 🌍 **Portfolio**: [rolan-rnr.netlify.app](https://rolan-rnr.netlify.app/)
 - 📦 **GitHub**: [@Mrtracker-new](https://github.com/Mrtracker-new)
 - 📧 **Email**: [rolanlobo901@gmail.com](mailto:rolanlobo901@gmail.com)
-- 📝 **Blog**: [Hashnode](https://rnr-still-figuring-things-out.hashnode.dev/)
+- 📝 **Blog**: [Dev.to](https://dev.to/rolan_r_n_r)
 - 📍 **Location**: India 🇮🇳
 
 ---
