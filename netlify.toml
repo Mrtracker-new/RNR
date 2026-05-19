@@ -1,0 +1,28 @@
+[build]
+  command = "npm run build"
+  publish = "build"
+
+# SPA fallback — all client-side routes serve index.html
+[[redirects]]
+  from = "/*"
+  to = "/index.html"
+  status = 200
+
+# Security headers — sent as real HTTP headers (stronger than meta tags)
+[[headers]]
+  for = "/*"
+  [headers.values]
+    X-DNS-Prefetch-Control = "on"
+    X-Content-Type-Options = "nosniff"
+    X-Frame-Options = "SAMEORIGIN"
+    Referrer-Policy = "strict-origin-when-cross-origin"
+
+# Optional: trigger a daily Netlify rebuild so blog posts stay fresh.
+# To enable, go to Netlify → Site → Build & deploy → Build hooks,
+# create a hook URL, then set it as the NETLIFY_BUILD_HOOK env var,
+# and uncomment the scheduled plugin below.
+#
+# [[plugins]]
+#   package = "@netlify/plugin-cron"
+#   [plugins.inputs]
+#     schedule = "0 3 * * *"   # 03:00 UTC every day
