@@ -1,7 +1,7 @@
 import React from 'react';
 import styled from 'styled-components';
 import { motion } from 'framer-motion';
-import { BlogPost, formatPostDate } from '../utils/hashnode';
+import { BlogPost, formatPostDate } from '../utils/devto';
 
 // Styled Components
 const Card = styled(motion.article)`
@@ -211,7 +211,7 @@ const BlogCard: React.FC<BlogCardProps> = ({ post }) => {
             target="_blank"
             rel="noopener noreferrer"
           >
-            Read on Hashnode
+            Read on Dev.to
             <svg
               xmlns="http://www.w3.org/2000/svg"
               fill="none"

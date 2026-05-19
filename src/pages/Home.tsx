@@ -5,7 +5,7 @@ import { Link } from 'react-router-dom';
 import { Container, Button } from '../styles/GlobalStyle';
 import SEO from '../components/SEO';
 
-import { getLatestPosts, BlogPost } from '../utils/hashnode';
+import { getLatestPosts, BlogPost } from '../utils/devto';
 
 // Profile images served from /public — not imported via webpack so they are
 // never bundled into the JS chunk. The browser fetches only the size it needs
