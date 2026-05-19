@@ -1,10 +1,11 @@
 import React, { useState, useEffect, lazy, Suspense } from 'react';
 import styled from 'styled-components';
 import { motion } from 'framer-motion';
+import { Helmet } from 'react-helmet-async';
 import { Container } from '../styles/GlobalStyle';
 import SEO from '../components/SEO';
 
-import { getAllPosts, BlogPost } from '../utils/hashnode';
+import { getAllPosts, BlogPost } from '../utils/devto';
 import { FullScreenLoading } from '../components/LoadingSpinner';
 
 // Lazy load BlogCard to reduce initial bundle size
@@ -132,10 +133,58 @@ const Blog: React.FC = () => {
     return (
         <>
             <SEO
-                title="Blog - Rolan Lobo | Thoughts on Development & Technology"
-                description="Read my latest articles on web development, programming, and technology. Learn from my experiences and insights in software engineering."
+                title="Blog — Rolan Lobo | Dev.to Articles on Web Dev & Security"
+                description="Technical articles by Rolan Lobo published on Dev.to. Topics include full-stack web development, Python, React, TypeScript, security tools, steganography, and software engineering."
+                keywords="Rolan Lobo blog, Dev.to articles, web development tutorials, React tutorials, Python programming, security tools, software engineering blog"
                 url="https://rolan-rnr.netlify.app/blog"
+                type="website"
             />
+
+            {/* CollectionPage JSON-LD — tells Google this page aggregates Dev.to articles */}
+            <Helmet>
+                <script type="application/ld+json">
+                    {JSON.stringify({
+                        '@context': 'https://schema.org',
+                        '@type': 'CollectionPage',
+                        name: 'Blog — Rolan Lobo | Dev.to Articles on Web Dev & Security',
+                        description:
+                            'Technical articles by Rolan Lobo published on Dev.to. Topics include full-stack web development, Python, React, TypeScript, security tools, steganography, and software engineering.',
+                        url: 'https://rolan-rnr.netlify.app/blog',
+                        inLanguage: 'en-US',
+                        author: {
+                            '@type': 'Person',
+                            name: 'Rolan Lobo',
+                            alternateName: 'Rolan RNR',
+                            url: 'https://rolan-rnr.netlify.app/',
+                            sameAs: [
+                                'https://dev.to/rolan_r_n_r',
+                                'https://github.com/Mrtracker-new',
+                                'https://www.linkedin.com/in/rolan-lobo/'
+                            ]
+                        },
+                        publisher: {
+                            '@type': 'Person',
+                            name: 'Rolan Lobo',
+                            alternateName: 'Rolan RNR',
+                            url: 'https://rolan-rnr.netlify.app/'
+                        },
+                        about: [
+                            { '@type': 'Thing', name: 'Web Development' },
+                            { '@type': 'Thing', name: 'React' },
+                            { '@type': 'Thing', name: 'Python' },
+                            { '@type': 'Thing', name: 'TypeScript' },
+                            { '@type': 'Thing', name: 'Security Tools' },
+                            { '@type': 'Thing', name: 'Steganography' },
+                            { '@type': 'Thing', name: 'Software Engineering' }
+                        ],
+                        isPartOf: {
+                            '@type': 'WebSite',
+                            name: 'Rolan Lobo (Rolan RNR) Portfolio',
+                            url: 'https://rolan-rnr.netlify.app/'
+                        }
+                    })}
+                </script>
+            </Helmet>
 
             <BlogSection>
                 <Container>
@@ -165,11 +214,11 @@ const Blog: React.FC = () => {
                             <h2>⚠️ Oops! Something went wrong</h2>
                             <p>We couldn't load the blog posts. Please try again later.</p>
                             <a
-                                href="https://rnr-still-figuring-things-out.hashnode.dev/"
+                                href="https://dev.to/rolan_r_n_r"
                                 target="_blank"
                                 rel="noopener noreferrer"
                             >
-                                Visit my blog directly on Hashnode →
+                                Visit Dev.to →
                             </a>
                         </ErrorState>
                     ) : posts.length === 0 ? (
@@ -181,11 +230,11 @@ const Blog: React.FC = () => {
                             <h2>📝 No posts yet</h2>
                             <p>I haven't published any blog posts yet. Check back soon!</p>
                             <a
-                                href="https://rnr-still-figuring-things-out.hashnode.dev/"
+                                href="https://dev.to/rolan_r_n_r"
                                 target="_blank"
                                 rel="noopener noreferrer"
                             >
-                                Follow me on Hashnode →
+                                Follow me on Dev.to →
                             </a>
                         </EmptyState>
                     ) : (
