@@ -17,6 +17,8 @@ docs_ignore/
 /build
 /dist
 *.tgz
+# Generated at build time — do not commit, Netlify regenerates on every deploy
+/public/blog-posts.json
 
 # TypeScript build info
 *.tsbuildinfo
@@ -51,9 +53,7 @@ logs/
 .netlify/
 .netlify
 /functions/
-netlify.toml
-netlify.toml.backup
-netlify.toml
+
 
 # IDE & Editor Files
 .vscode/
