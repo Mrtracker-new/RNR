@@ -8,7 +8,11 @@ interface SEOProps {
   keywords?: string;
   image?: string;
   url?: string;
-  type?: string;
+  type?: 'website' | 'article' | 'profile';
+  publishedAt?: string;
+  modifiedAt?: string;
+  tags?: string[];
+  noIndex?: boolean;
 }
 
 const SEO: React.FC<SEOProps> = ({
@@ -17,7 +21,11 @@ const SEO: React.FC<SEOProps> = ({
   keywords = 'Rolan Lobo, Rolan RNR, Rolan rnr, rolan lobo, Full Stack Developer, Software Engineer, Freelance Developer, Mobile App Developer, React Native, Flutter, Freelancer India, Web Developer, Python Developer, Flask Developer, React Developer, Steganography, Polyglot Files, InvisioVault, RNR',
   image = 'https://rolan-rnr.netlify.app/logo512.png',
   url = 'https://rolan-rnr.netlify.app/',
-  type = 'website'
+  type = 'website',
+  publishedAt,
+  modifiedAt,
+  tags,
+  noIndex = false
 }) => {
 
   const siteName = 'Rolan Lobo (Rolan RNR) Portfolio';
@@ -50,8 +58,33 @@ const SEO: React.FC<SEOProps> = ({
       <meta property="twitter:image" content={image} />
       <meta property="twitter:creator" content={twitterHandle} />
 
+      {/* Article Open Graph Tags */}
+      {type === 'article' && publishedAt && (
+        <meta property="article:published_time" content={publishedAt} />
+      )}
+      {type === 'article' && modifiedAt && (
+        <meta property="article:modified_time" content={modifiedAt} />
+      )}
+      {type === 'article' && (
+        <meta property="article:author" content="https://dev.to/rolan_r_n_r" />
+      )}
+      {tags?.map(tag => (
+        <meta key={tag} property="article:tag" content={tag} />
+      ))}
+
+      {/* Dev.to RSS Alternate Feed */}
+      <link
+        rel="alternate"
+        type="application/rss+xml"
+        title="Rolan Lobo's Blog on Dev.to"
+        href="https://dev.to/feed/rolan_r_n_r"
+      />
+
       {/* Additional Meta Tags */}
-      <meta name="robots" content="index, follow, max-image-preview:large, max-snippet:-1, max-video-preview:-1" />
+      {noIndex
+        ? <meta name="robots" content="noindex, nofollow" />
+        : <meta name="robots" content="index, follow, max-image-preview:large, max-snippet:-1, max-video-preview:-1" />
+      }
       <meta name="language" content="English" />
       <meta name="revisit-after" content="7 days" />
       <meta name="theme-color" content="#64ffda" />
@@ -68,7 +101,7 @@ const SEO: React.FC<SEOProps> = ({
           sameAs: [
             'https://github.com/Mrtracker-new',
             'https://www.linkedin.com/in/rolan-lobo/',
-            'https://rnr-still-figuring-things-out.hashnode.dev/'
+            'https://dev.to/rolan_r_n_r'
           ],
           jobTitle: 'Full Stack Developer',
           worksFor: {
@@ -163,7 +196,7 @@ const SEO: React.FC<SEOProps> = ({
           sameAs: [
             'https://github.com/Mrtracker-new',
             'https://www.linkedin.com/in/rolan-lobo/',
-            'https://rnr-still-figuring-things-out.hashnode.dev/'
+            'https://dev.to/rolan_r_n_r'
           ]
         })}
       </script>
