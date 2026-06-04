@@ -10,6 +10,7 @@ import SEO from '../components/SEO';
 import invisioVaultDesktopImg from '../assets/images/InvisioVault_Suit.webp';
 import invisioVaultWebImg from '../assets/images/InvisioVault.webp';
 import barLogoImg from '../assets/images/BAR_logo.webp';
+import barWebImg from '../assets/images/BAR_web.webp';
 import sortifyImg from '../assets/images/Sortify.webp';
 import ytDownloaderImg from '../assets/images/YT.webp';
 import linkNestImg from '../assets/images/LN.webp';
@@ -617,6 +618,7 @@ interface Project {
   category: string;
   description: string;
   longDescription: string;
+  achievementStatement?: string;
   caseStudy: {
     problem: string;
     solution: string;
@@ -810,6 +812,27 @@ const projectsData: Project[] = [
     icon: '🔗',
     bgColor: '#000000',
     image: linkNestImg
+  },
+  {
+    id: 10,
+    title: 'BAR — Burn After Reading (Web)',
+    category: 'Web Application',
+    description: 'A privacy-first web platform for encrypted self-destructing file sharing and end-to-end encrypted ephemeral chat. Files self-destruct on a timer or after a set number of views. What you share stays yours — until it\'s gone.',
+    longDescription: 'Most platforms treat your data like a permanent record. BAR treats it like a secret.\n\nBurn After Reading is a full-stack web application I built to solve a real gap: people needed a way to share sensitive files and have real-time private conversations without leaving a permanent digital footprint.\n\nFiles are encrypted before they hit the server. Each file can be configured to self-destruct after a time limit or a set number of views. The Burn Chat feature provides end-to-end encrypted real-time messaging that automatically disappears — powered by ECDH key exchange and AES-GCM, so the server never holds readable content.\n\nThe architecture is built on zero-knowledge principles: even I can\'t read what users share. OTP verification, webhook support, brute-force protection, and secure session handling are all baked in from day one — not bolted on as an afterthought.',
+    achievementStatement: 'Developed BAR (Burn After Reading), a privacy-focused web application for encrypted self-destructing file sharing and end-to-end encrypted ephemeral messaging — implementing AES-256 encryption, ECDH key exchange, zero-knowledge architecture, OTP verification, WebSocket real-time communication, webhooks, and brute-force protection.',
+    caseStudy: {
+      problem: 'Traditional file-sharing and messaging platforms keep your data long after you\'re done with it. Passwords, contracts, and sensitive conversations sit on servers with no expiry. Users have no real control over who accesses their content or for how long — creating serious privacy and compliance risks.',
+      solution: 'Built a zero-knowledge web platform where files are encrypted client-side before upload. Each share is given a configurable TTL (time-to-live) or view count limit, after which the content is permanently destroyed. Burn Chat adds real-time E2E encrypted messaging via WebSockets using ECDH key exchange, so the server acts as a relay — never as a reader.',
+      impact: 'Demonstrates practical application of modern cryptography in a user-facing product. Implements AES-256 encryption, ECDH key exchange, OTP verification, secure session handling, webhook support, and automated content destruction — while keeping the UI approachable for non-technical users.',
+      learnings: 'Zero-knowledge architecture forces you to think differently about state. The server can\'t help you debug what it can\'t read. Learned to design thorough client-side logging and error boundaries early. ECDH key exchange for browser-based E2E encryption was the most technically demanding piece — the Web Crypto API is powerful but unforgiving. Would add per-file key rotation in the next iteration.'
+    },
+    technologies: ['React', 'Python', 'WebSockets', 'AES-256', 'ECDH', 'Zero-Knowledge', 'OTP', 'Webhooks'],
+    github: 'https://github.com/Mrtracker-new/BAR-Web',
+    liveDemo: 'https://bar-rnr.vercel.app/',
+    featured: true,
+    icon: '🔥',
+    bgColor: '#000000',
+    image: barWebImg
   }
 ];
 
@@ -1030,8 +1053,8 @@ const Projects: React.FC = () => {
   return (
     <>
       <SEO
-        title="Projects - Rolan Lobo (Rolan RNR) | Steganography, Security Tools & Web Apps"
-        description="Explore my portfolio of innovative software projects: InvisioVault (steganography & polyglot files), YT-Downloader (free YouTube video & audio downloader), BAR (secure file management), Sortify, and more full-stack web/desktop applications."
+        title="My Work — Rolan Lobo"
+        description="Real problems, real solutions. Here's the software I've built — security tools, web apps, and desktop applications that solve problems people actually have."
         keywords="Steganography, Polyglot Files, Hide Files in Images, YouTube Downloader, Video Downloader, YouTube to MP3, File Encryption, Security Tools, InvisioVault, BAR, Sortify, React Projects, Python Projects, Flask, Full Stack Developer, Rolan Lobo, Rolan RNR"
         url="https://rolan-rnr.netlify.app/projects"
       />
@@ -1042,16 +1065,16 @@ const Projects: React.FC = () => {
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.6 }}
           >
-            My Projects
+            My Work
           </HeroTitle>
           <HeroSubtitle
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.6, delay: 0.2 }}
           >
-            A curated showcase of applications, tools, and experiments.
+            Every project started with a real problem.
             <br />
-            Built with a focus on performance, security, and user experience.
+            Here's how I solved them.
           </HeroSubtitle>
 
           <FilterSection
