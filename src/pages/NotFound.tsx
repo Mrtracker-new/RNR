@@ -61,7 +61,7 @@ const NotFound: React.FC = () => (
   <>
     <SEO
       title="404 — Page Not Found | Rolan Lobo"
-      description="The page you're looking for doesn't exist."
+      description="The page you're looking for doesn't exist. But hey — my homepage does."
     />
     <Wrapper>
       <Code
@@ -76,14 +76,14 @@ const NotFound: React.FC = () => (
         animate={{ opacity: 1, y: 0 }}
         transition={{ duration: 0.5, delay: 0.1 }}
       >
-        Page not found
+        Looks like you took a wrong turn
       </Title>
       <Sub
         initial={{ opacity: 0, y: 20 }}
         animate={{ opacity: 1, y: 0 }}
         transition={{ duration: 0.5, delay: 0.2 }}
       >
-        This page doesn't exist or was moved.
+        Even the best explorers get lost. Let me help you find your way back.
       </Sub>
       <HomeLink
         to="/"
@@ -91,7 +91,7 @@ const NotFound: React.FC = () => (
         animate={{ opacity: 1, y: 0 }}
         transition={{ duration: 0.5, delay: 0.3 }}
       >
-        ← Go Home
+        ← Back to Rolan's World
       </HomeLink>
     </Wrapper>
   </>
