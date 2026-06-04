@@ -170,7 +170,7 @@ interface FullScreenLoadingProps {
 }
 
 export const FullScreenLoading: React.FC<FullScreenLoadingProps> = ({
-  text = 'Loading Portfolio...',
+  text = 'Hang tight…',
   onComplete
 }) => {
   return (

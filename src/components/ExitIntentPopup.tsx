@@ -147,9 +147,9 @@ const ButtonGroup = styled.div`
 // --- Logic & Component ---
 
 const ExitIntentPopup: React.FC<ExitIntentPopupProps> = ({
-  headline = "Wait, before you go...",
-  description = "I'm currently available for new projects. Check out my latest work or grab a copy of my resume!",
-  primaryActionLabel = "View Projects",
+  headline = "One sec before you leave ✋",
+  description = "I'm actively open to new projects and collaborations. If anything caught your eye, let's make something happen — I'd love to hear from you.",
+  primaryActionLabel = "See My Work",
   onPrimaryAction,
   activationDelay = 2000,
   primaryActionPath

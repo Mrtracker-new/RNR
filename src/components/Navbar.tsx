@@ -168,9 +168,9 @@ const MobileLink = styled(Link)`
 const navItems = [
   { path: '/', label: 'Home' },
   { path: '/about', label: 'About' },
-  { path: '/projects', label: 'Projects' },
+  { path: '/projects', label: 'Work' },
   { path: '/blog', label: 'Blog' },
-  { path: '/contact', label: 'Contact' }
+  { path: '/contact', label: "Let's Talk" }
 ];
 
 const Navbar: React.FC = () => {
@@ -278,7 +278,7 @@ const Navbar: React.FC = () => {
               animate={{ opacity: 1 }}
               transition={{ delay: 0.4 }}
             >
-              © {new Date().getFullYear()} Rolan Lobo
+              &copy; {new Date().getFullYear()} Rolan Lobo &mdash; Developer &amp; Builder
             </motion.div>
           </MobileMenu>
         )}
