@@ -1,5 +1,5 @@
 import React, { useState, useEffect, lazy, Suspense } from 'react';
-import styled from 'styled-components';
+import styled, { keyframes } from 'styled-components';
 import { motion, Variants, AnimatePresence } from 'framer-motion';
 import { Link } from 'react-router-dom';
 import { Container, Button } from '../styles/GlobalStyle';
@@ -24,14 +24,23 @@ const ResumeDownload = lazy(() => import('../components/ResumeDownload'));
 // --- Styled Components ---
 
 const HeroSection = styled.section`
-  min-height: 100vh;
+  /*
+   * Desktop: ensure the section is always tall enough to contain both
+   * the centered HeroContent AND the absolutely-positioned StatsBar.
+   * StatsBar is ~80px tall, sitting at bottom: 24px → needs 104px clearance.
+   * We add 20px buffer → 124px minimum bottom pad.
+   * min-height uses svh (small viewport height) where supported so mobile
+   * browser chrome doesn't swallow content; falls back to 100vh.
+   */
+  min-height: 100svh;
+  min-height: 100vh; /* fallback for browsers without svh */
   display: flex;
   flex-direction: column;
   justify-content: center;
   align-items: center;
   position: relative;
   padding-top: 100px;
-  padding-bottom: var(--spacing-20);
+  padding-bottom: 130px; /* explicit px: room for absolute StatsBar (104px) + comfortable buffer */
   
   /* Background Elements */
   &::before {
@@ -47,13 +56,20 @@ const HeroSection = styled.section`
     filter: blur(60px);
   }
 
+  /* Intermediate squeeze: 968px–1280px, 2-col grid still active but tighter */
+  @media (min-width: 968px) and (max-width: 1280px) {
+    padding-top: 90px;
+    padding-bottom: 120px;
+  }
+
   @media (max-width: 968px) {
     /* Mobile: block display for natural page flow, overflow-x to clip background */
     display: block;
     min-height: 0;
+    min-height: unset;
     max-height: none;
     height: auto;
-    padding-top: 120px;
+    padding-top: 100px;
     padding-bottom: var(--spacing-4);
     overflow-x: clip; /* Clip background gradient, but don't create scroll container */
     
@@ -61,6 +77,10 @@ const HeroSection = styled.section`
       filter: blur(30px);
       opacity: 0.5;
     }
+  }
+
+  @media (max-width: 640px) {
+    padding-top: 80px;
   }
 `;
 
@@ -72,15 +92,30 @@ const HeroContent = styled(Container)`
   z-index: 2;
   position: relative;
   width: 100%;
-  flex: 1; /* Allow content to take available space on desktop */
+  /*
+   * Do NOT use flex:1 here — it stretches HeroContent to fill the entire
+   * HeroSection height, which breaks vertical centering at intermediate
+   * viewport widths (968–1280px) and causes the AvailabilityBadge to
+   * be clipped behind the absolutely-positioned StatsBar.
+   */
+
+  /* Intermediate squeeze zone: still 2-col but reduce column gap */
+  @media (min-width: 968px) and (max-width: 1280px) {
+    gap: var(--spacing-8);
+    grid-template-columns: 1.3fr 0.7fr;
+  }
   
   @media (max-width: 968px) {
     display: flex;
     flex-direction: column-reverse;
     text-align: center;
-    gap: var(--spacing-8);
-    padding-bottom: var(--spacing-12);
-    flex: none; /* Remove flex:1 on mobile to prevent scroll issues */
+    gap: var(--spacing-6);
+    padding-bottom: var(--spacing-8);
+  }
+
+  @media (max-width: 640px) {
+    gap: var(--spacing-4);
+    padding-bottom: var(--spacing-6);
   }
 `;
 
@@ -98,14 +133,22 @@ const TextContent = styled(motion.div)`
 
 const ProfileImageContainer = styled(motion.div)`
   width: 100%;
-  max-width: 450px;
+  max-width: 420px;
   aspect-ratio: 1;
   position: relative;
   margin: 0 auto;
   
+  @media (min-width: 968px) and (max-width: 1280px) {
+    max-width: 320px;
+  }
+
   @media (max-width: 968px) {
-    width: 280px;
-    margin-bottom: var(--spacing-4);
+    width: 240px;
+    margin-bottom: var(--spacing-2);
+  }
+
+  @media (max-width: 480px) {
+    width: 200px;
   }
 
   &::before {
@@ -192,28 +235,47 @@ const GreetingPill = styled(motion.div)`
   display: inline-flex;
   align-items: center;
   gap: var(--spacing-2);
-  padding: var(--spacing-2) var(--spacing-4);
-  background: rgba(255, 255, 255, 0.03);
-  border: 1px solid rgba(255, 255, 255, 0.08);
+  padding: var(--spacing-2) var(--spacing-5);
+  /* Accent-tinted background makes the pill read as a role label, not a greeting */
+  background: rgba(100, 255, 218, 0.04);
+  border: 1px solid rgba(100, 255, 218, 0.18);
   border-radius: var(--radius-lg);
-  margin-bottom: var(--spacing-6);
+  margin-bottom: var(--spacing-4);
   backdrop-filter: blur(10px);
+
+  @media (min-width: 968px) and (max-width: 1280px) {
+    margin-bottom: var(--spacing-3);
+  }
 `;
 
 const GreetingText = styled.span`
   font-size: var(--text-sm);
-  font-weight: var(--font-medium);
+  font-weight: var(--font-semibold);
   color: var(--accent-primary);
-  letter-spacing: 0.05em;
-  text-transform: uppercase;
+  /* Sentence-case tracking suits a role label; uppercase would feel like a shout */
+  letter-spacing: 0.03em;
 `;
 
 const Headline = styled(motion.h1)`
-  font-size: clamp(2.5rem, 6vw, 5rem); /* Slightly smaller min */
+  /*
+   * Clamp strategy:
+   *   min (2rem / 32px)  → phones
+   *   preferred (4.5vw)  → scales with viewport width
+   *   max (4.5rem / 72px) → capped on ultra-wide
+   *
+   * At 1024px: 4.5vw ≈ 46px (2.875rem) — both headline lines fit on one
+   * visual line in the left column without wrapping.
+   * At 1440px: 4.5vw ≈ 65px (4.0rem) — large and impactful.
+   * At 1920px: capped at 4.5rem (72px).
+   *
+   * Intermediate 968–1280px squeeze zone gets a slightly tighter clamp
+   * to ensure neither headline line wraps unexpectedly.
+   */
+  font-size: clamp(2rem, 4.5vw, 4.5rem);
   font-weight: var(--font-extrabold);
   line-height: 1.1;
   letter-spacing: -0.03em;
-  margin-bottom: var(--spacing-6);
+  margin-bottom: var(--spacing-5);
   /* Solid fallback for browsers/contexts that don't support background-clip:text.
      Both --dark-50 (#fafafa) and --dark-300 (#d4d4d8) pass WCAG AA against
      the #09090b background at ~19.8:1 and ~13.8:1 respectively. */
@@ -222,6 +284,11 @@ const Headline = styled(motion.h1)`
   -webkit-background-clip: text;
   -webkit-text-fill-color: transparent;
   background-clip: text;
+
+  @media (min-width: 968px) and (max-width: 1280px) {
+    font-size: clamp(2rem, 3.8vw, 3.5rem);
+    margin-bottom: var(--spacing-4);
+  }
   
   span {
     color: var(--accent-primary); /* fallback for span accent text */
@@ -233,15 +300,30 @@ const Headline = styled(motion.h1)`
 `;
 
 const Subheadline = styled(motion.p)`
-  font-size: clamp(1.1rem, 3vw, 1.25rem);
+  font-size: clamp(0.95rem, 1.5vw, 1.15rem);
   color: var(--dark-400);
-  line-height: 1.6;
-  max-width: 540px;
-  margin-bottom: var(--spacing-10);
+  line-height: 1.7;
+  max-width: 520px;
+  margin-bottom: var(--spacing-8);
+
+  @media (min-width: 968px) and (max-width: 1280px) {
+    font-size: 0.95rem;
+    line-height: 1.65;
+    margin-bottom: var(--spacing-5);
+    max-width: 460px;
+  }
 
   @media (max-width: 968px) {
+    font-size: clamp(0.95rem, 2.5vw, 1.1rem);
     max-width: 100%;
+    margin-bottom: var(--spacing-6);
     padding: 0 var(--spacing-2);
+  }
+
+  @media (max-width: 480px) {
+    font-size: 0.95rem;
+    margin-bottom: var(--spacing-5);
+    padding: 0;
   }
 `;
 
@@ -281,6 +363,76 @@ const CTAContainer = styled(motion.div)`
         }
       }
     }
+  }
+`;
+
+/* ── Availability signal ───────────────────────────────────────────────────
+ * A pulsing green dot + one-liner below the CTAs.
+ * Communicates open-to-work status without a modal or banner.
+ * The dot uses two pseudo-elements: ::before = solid core, ::after = expanding ring.
+ */
+const dotPulse = keyframes`
+  0%, 100% {
+    transform: scale(1);
+    opacity: 0.6;
+  }
+  50% {
+    transform: scale(2.2);
+    opacity: 0;
+  }
+`;
+
+const StatusDot = styled.span`
+  position: relative;
+  display: inline-block;
+  width: 8px;
+  height: 8px;
+  flex-shrink: 0;
+
+  &::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background: var(--success);
+    border-radius: 50%;
+  }
+
+  &::after {
+    content: '';
+    position: absolute;
+    inset: -2px;
+    background: rgba(34, 197, 94, 0.4);
+    border-radius: 50%;
+    animation: ${dotPulse} 2.4s ease-in-out infinite;
+  }
+`;
+
+const AvailabilityBadge = styled(motion.div)`
+  display: inline-flex;
+  align-items: center;
+  gap: var(--spacing-2);
+  font-size: var(--text-sm);
+  color: var(--dark-400);
+  font-weight: var(--font-medium);
+  margin-top: var(--spacing-4);
+  /* overflow:hidden clips the expanding ::after ring on StatusDot so it
+     never bleeds visually outside the badge bounds */
+  overflow: hidden;
+  /* Give the badge its own padding so the clip doesn't cut the dot itself */
+  padding: 2px 0;
+
+  @media (min-width: 968px) and (max-width: 1280px) {
+    margin-top: var(--spacing-3);
+    font-size: var(--text-xs);
+  }
+
+  @media (max-width: 968px) {
+    justify-content: center;
+    margin-top: var(--spacing-3);
+  }
+
+  @media (max-width: 480px) {
+    font-size: var(--text-xs);
   }
 `;
 
@@ -525,9 +677,9 @@ const Home: React.FC = () => {
   return (
     <>
       <SEO
-        title="Rolan Lobo (Rolan RNR) - Full Stack Developer | Building Digital Experiences"
-        description="I'm Rolan Lobo (Rolan RNR), a Full Stack Developer specializing in building exceptional digital experiences, software, and mobile apps. Explore my portfolio of projects, skills, and services."
-        image="https://rolan-rnr.netlify.app/rolan-lobo-home.webp"
+        title="Rolan Lobo — Full-Stack Engineer & Security Developer"
+        description="Rolan Lobo is a full-stack engineer from Karnataka, India, specializing in AES-256 encryption tools, zero-knowledge applications, and production web software. Available for freelance and full-time remote roles."
+        image="https://rolan-rnr.netlify.app/og-social-card.png"
         url="https://rolan-rnr.netlify.app/"
       />
 
@@ -539,18 +691,24 @@ const Home: React.FC = () => {
           animate="visible"
         >
           <TextContent>
+            {/* Role label — reads as a professional identity signal, not a greeting */}
             <GreetingPill variants={itemVariants}>
-              <span style={{ fontSize: '1.2em' }}>👋</span>
-              <GreetingText>Hi, I am Rolan Lobo</GreetingText>
+              <GreetingText>Full-Stack Engineer · Security &amp; Systems</GreetingText>
             </GreetingPill>
 
             <Headline variants={itemVariants}>
-              Building digital experiences<br />
-              <span>that matter.</span>
+              I ship secure software.<br />
+              {/*
+               * Line 2 is intentionally short (< 22 chars with dots)
+               * so it never wraps even at clamp minimum font sizes
+               * across the 968–1280px squeeze zone.
+               */}
+              <span>Web · Desktop · Mobile.</span>
             </Headline>
 
             <Subheadline variants={itemVariants}>
-              I craft accessible web experiences, software, and mobile apps using modern technologies. Let's turn your ideas into reality.
+              AES-256 file encryption. Zero-knowledge self-destructing files. Hands-free mouse via facial recognition.
+              I build full-stack software across web, desktop, Android, and iOS — with security and craft at every layer.
             </Subheadline>
 
             <CTAContainer variants={itemVariants}>
@@ -560,7 +718,7 @@ const Home: React.FC = () => {
                 variant="primary"
                 size="lg"
               >
-                View My Work
+                Explore My Work
               </Button>
               <Button
                 as={Link}
@@ -568,7 +726,7 @@ const Home: React.FC = () => {
                 variant="outline"
                 size="lg"
               >
-                Contact Me
+                Get In Touch
               </Button>
               <div
                 onMouseEnter={() => {
@@ -588,6 +746,12 @@ const Home: React.FC = () => {
                 </Suspense>
               </div>
             </CTAContainer>
+
+            {/* Availability signal — first thing a recruiter wants to know */}
+            <AvailabilityBadge variants={itemVariants}>
+              <StatusDot aria-hidden="true" />
+              <span>Open to new projects · Remote-friendly · Replies within 24h</span>
+            </AvailabilityBadge>
           </TextContent>
 
           <ProfileImageContainer variants={itemVariants}>
@@ -635,16 +799,17 @@ const Home: React.FC = () => {
         >
           <StatsContent>
             <StatItem>
-              <h3>3+</h3>
-              <p>Years Experience</p>
-            </StatItem>
-            <StatItem>
               <h3>10+</h3>
-              <p>Projects Built</p>
+              <p>Products Shipped</p>
             </StatItem>
             <StatItem>
-              <h3>100%</h3>
-              <p>Commitment</p>
+              <h3>3+</h3>
+              <p>Years Building</p>
+            </StatItem>
+            {/* 4 = Web · Windows Desktop · Android · iOS — factual platform breadth */}
+            <StatItem>
+              <h3>4</h3>
+              <p>Platforms</p>
             </StatItem>
           </StatsContent>
         </StatsBar>
@@ -660,14 +825,23 @@ const Home: React.FC = () => {
                 animate={{ opacity: 1, y: 0 }}
                 transition={{ duration: 0.6 }}
               >
-                Latest from my blog
+              {/*
+               * Audit note: 'My Thoughts on Tech' reads as a personal diary.
+               * 'Technical Writing' positions the blog as authored work — a professional signal.
+               */}
+              Technical Writing
               </BlogTitle>
               <BlogSubtitle
                 initial={{ opacity: 0, y: 20 }}
                 animate={{ opacity: 1, y: 0 }}
                 transition={{ duration: 0.6, delay: 0.1 }}
               >
-                Thoughts, tutorials, and insights on development and technology
+                {/*
+                 * Audit note: 'figured out the hard way' is self-deprecating and vague.
+                 * The new subtitle is a specific topical promise — tells a recruiter
+                 * exactly what they'll read about (encryption architecture, accessibility).
+                 */}
+                From encryption architecture to accessibility trade-offs — things I've shipped, broken, and rebuilt.
               </BlogSubtitle>
             </BlogHeader>
 
@@ -692,7 +866,8 @@ const Home: React.FC = () => {
               variant="outline"
               size="md"
             >
-              View All Posts →
+              {/* Audit note: 'Read My Technical Writing' positions writing as a skill, not a hobby */}
+              Read My Technical Writing →
             </ViewAllButton>
           </Container>
         </BlogSection>
