@@ -29,7 +29,7 @@ const FAQSchema: React.FC = () => {
         name: 'Is Rolan available for freelance projects?',
         acceptedAnswer: {
           '@type': 'Answer',
-          text: 'Yes, I am currently available for freelance projects. You can contact me through the contact form on my portfolio website or email me at rolanlobo901@gmail.com.'
+          text: 'Yes, I am currently available for freelance projects. You can reach me through the contact form on my site or email me directly at rolanlobo901@gmail.com.'
         }
       },
       {
@@ -42,10 +42,10 @@ const FAQSchema: React.FC = () => {
       },
       {
         '@type': 'Question',
-        name: 'What makes Rolan\'s portfolio unique?',
+        name: "What sets Rolan's work apart?",
         acceptedAnswer: {
           '@type': 'Answer',
-          text: 'My portfolio showcases unique projects in security applications like InvisioVault_R (steganography with AES-256 encryption), BAR (secure file management), and various web applications. I focus on creating functional, innovative, and security-focused solutions.'
+          text: 'I build things that solve real problems — from security applications like InvisioVault_R (steganography with AES-256 encryption) and BAR (secure file management), to web apps and desktop tools. I focus on craft, performance, and genuine usefulness.'
         }
       }
     ]

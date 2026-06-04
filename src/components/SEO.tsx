@@ -16,8 +16,8 @@ interface SEOProps {
 }
 
 const SEO: React.FC<SEOProps> = ({
-  title = 'Rolan Lobo (Rolan RNR) - Full Stack Developer & Software Engineer',
-  description = 'Rolan Lobo (also known as Rolan RNR) is a Freelance Full Stack Developer & Software Engineer specializing in security applications, mobile app development, steganography, polyglot files, and modern web development. Creator of InvisioVault, YouTube Downloader, and Sortify.',
+  title = 'Rolan Lobo — Full Stack Developer & Builder',
+  description = "I'm Rolan Lobo (RNR) — a full-stack developer and builder from Karnataka, India. I craft fast, accessible digital products: from security tools and desktop apps to web applications people actually enjoy using. Let's build something great together.",
   keywords = 'Rolan Lobo, Rolan RNR, Rolan rnr, rolan lobo, Full Stack Developer, Software Engineer, Freelance Developer, Mobile App Developer, React Native, Flutter, Freelancer India, Web Developer, Python Developer, Flask Developer, React Developer, Steganography, Polyglot Files, InvisioVault, RNR',
   image = 'https://rolan-rnr.netlify.app/logo512.png',
   url = 'https://rolan-rnr.netlify.app/',
@@ -28,7 +28,7 @@ const SEO: React.FC<SEOProps> = ({
   noIndex = false
 }) => {
 
-  const siteName = 'Rolan Lobo (Rolan RNR) Portfolio';
+  const siteName = 'Rolan Lobo — Developer & Builder';
   const twitterHandle = '@RolanLobo4';
 
   return (
@@ -145,8 +145,8 @@ const SEO: React.FC<SEOProps> = ({
         {JSON.stringify({
           '@context': 'https://schema.org',
           '@type': 'WebSite',
-          name: 'Rolan Lobo (Rolan RNR) Portfolio',
-          alternateName: ['Rolan RNR Portfolio', 'Rolan Lobo Portfolio'],
+          name: 'Rolan Lobo — Developer & Builder',
+          alternateName: ['Rolan RNR', 'Rolan Lobo', 'RNR'],
           url: 'https://rolan-rnr.netlify.app/',
           author: {
             '@type': 'Person',
@@ -162,8 +162,8 @@ const SEO: React.FC<SEOProps> = ({
           '@context': 'https://schema.org',
           '@type': 'Organization',
           '@id': 'https://rolan-rnr.netlify.app/#organization',
-          name: 'RNR - Rolan Lobo Portfolio',
-          alternateName: ['RNR', 'Rolan RNR'],
+          name: 'Rolan Lobo — Developer & Builder',
+          alternateName: ['RNR', 'Rolan RNR', 'Rolan Lobo'],
           url: 'https://rolan-rnr.netlify.app/',
           logo: {
             '@type': 'ImageObject',
@@ -171,10 +171,10 @@ const SEO: React.FC<SEOProps> = ({
             width: 512,
             height: 512
           },
-          description: 'Full Stack Developer & Software Engineer specializing in modern web applications, desktop software, and security-focused solutions.',
+          description: 'Full-stack developer and builder specializing in security applications, modern web products, and desktop software that solves real problems.',
           brand: {
             '@type': 'Brand',
-            name: 'Rolan RNR'
+            name: 'Rolan Lobo'
           },
           foundingDate: '2023',
           founder: {
