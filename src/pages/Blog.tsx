@@ -179,7 +179,7 @@ const Blog: React.FC = () => {
                         ],
                         isPartOf: {
                             '@type': 'WebSite',
-                            name: 'Rolan Lobo (Rolan RNR) Portfolio',
+                            name: 'Rolan Lobo — Developer & Builder',
                             url: 'https://rolan-rnr.netlify.app/'
                         }
                     })}
@@ -194,14 +194,14 @@ const Blog: React.FC = () => {
                             animate={{ opacity: 1, y: 0 }}
                             transition={{ duration: 0.6 }}
                         >
-                            Blog
+                            My Writing
                         </Title>
                         <Subtitle
                             initial={{ opacity: 0, y: 20 }}
                             animate={{ opacity: 1, y: 0 }}
                             transition={{ duration: 0.6, delay: 0.1 }}
                         >
-                            Thoughts, tutorials, and insights on development, programming, and technology.
+                            Things I've learned, figured out, and wanted to share.
                         </Subtitle>
                     </Header>
 
