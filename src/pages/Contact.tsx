@@ -397,8 +397,8 @@ const Contact: React.FC = () => {
 
       // Simulate success on localhost to verify UI
       if (window.location.hostname === 'localhost' || window.location.hostname === '127.0.0.1') {
-        await new Promise(resolve => setTimeout(resolve, 1000)); // Fake network delay
-        setStatus({ type: 'success', message: 'Message sent! (Localhost simulation)' });
+        await new Promise(resolve => setTimeout(resolve, 1000));
+        setStatus({ type: 'success', message: "Got it! Rolan will be in touch within 24 hours." });
         setFormData({ name: '', email: '', subject: '', message: '' });
         return;
       }
@@ -410,7 +410,7 @@ const Contact: React.FC = () => {
       });
 
       if (response.ok) {
-        setStatus({ type: 'success', message: 'Message sent! I\'ll get back to you soon.' });
+        setStatus({ type: 'success', message: "Got it! Rolan will be in touch within 24 hours." });
         setFormData({ name: '', email: '', subject: '', message: '' });
       } else {
         throw new Error('Network response was not ok');
@@ -444,8 +444,8 @@ const Contact: React.FC = () => {
   return (
     <>
       <SEO
-        title="Contact Rolan Lobo (Rolan RNR) - Hire Freelance Full Stack Developer"
-        description="Get in touch with Rolan Lobo (Rolan RNR) for web development, security tools, or custom software projects."
+        title="Work With Me — Rolan Lobo"
+        description="Have a project in mind or just want to chat? I'm always open to interesting conversations and new collaborations. Let's build something great together."
         keywords="Contact Rolan Lobo, Rolan RNR, Hire Developer, Freelance Web Developer"
         url="https://rolan-rnr.netlify.app/contact"
       />
@@ -458,15 +458,15 @@ const Contact: React.FC = () => {
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.6 }}
           >
-            Let's create something<br />extraordinary.
+            Let's build something<br />great together.
           </HeroTitle>
           <HeroSubtitle
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.6, delay: 0.2 }}
           >
-            Have a project in mind? Looking for a developer who cares about details?
-            <br />Drop me a line and let's start a conversation.
+            Got an idea? A project? Or just want to say hi?
+            <br />I read every message and reply within 24 hours.
           </HeroSubtitle>
         </Container>
       </ContactHero>
@@ -479,14 +479,14 @@ const Contact: React.FC = () => {
       >
         <InfoColumn variants={itemSlideLeft}>
           <InfoCard>
-            <InfoTitle><span>📧</span> Email Me</InfoTitle>
+            <InfoTitle><span>📧</span> Drop Me a Line</InfoTitle>
             <InfoText>
-              <p>For project inquiries, collaborations, or just to say hi:</p>
+              <p>Best for project inquiries, collabs, or just saying hi:</p>
               <a href="mailto:rolanlobo901@gmail.com" style={{ fontSize: '1.1rem', fontWeight: 600 }}>
                 rolanlobo901@gmail.com
               </a>
               <p style={{ marginTop: 'var(--spacing-2)', fontSize: '0.9em', opacity: 0.7 }}>
-                I usually respond within 24 hours.
+                I reply within 24 hours — usually faster.
               </p>
             </InfoText>
           </InfoCard>
@@ -558,7 +558,7 @@ const Contact: React.FC = () => {
                 required
                 aria-required="true"
                 aria-describedby={errors.name ? 'name-error' : undefined}
-                placeholder="John Doe"
+                placeholder="What should I call you?"
                 value={formData.name}
                 onChange={handleInputChange}
                 $hasError={!!errors.name}
@@ -575,7 +575,7 @@ const Contact: React.FC = () => {
                 required
                 aria-required="true"
                 aria-describedby={errors.email ? 'email-error' : undefined}
-                placeholder="john@example.com"
+                placeholder="you@example.com"
                 value={formData.email}
                 onChange={handleInputChange}
                 $hasError={!!errors.email}
@@ -592,7 +592,7 @@ const Contact: React.FC = () => {
                 required
                 aria-required="true"
                 aria-describedby={errors.subject ? 'subject-error' : undefined}
-                placeholder="Project Inquiry"
+                placeholder="What's on your mind?"
                 value={formData.subject}
                 onChange={handleInputChange}
                 $hasError={!!errors.subject}
@@ -608,7 +608,7 @@ const Contact: React.FC = () => {
                 required
                 aria-required="true"
                 aria-describedby={errors.message ? 'message-error' : undefined}
-                placeholder="Tell me about your project..."
+                placeholder="Tell me what you're working on, what you need, or just say hello..."
                 value={formData.message}
                 onChange={handleInputChange}
                 $hasError={!!errors.message}
