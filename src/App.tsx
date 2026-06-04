@@ -155,7 +155,7 @@ function App() {
     return (
       <>
         <GlobalStyle />
-        <FullScreenLoading text="Loading Portfolio..." />
+        <FullScreenLoading text="Just a moment…" />
       </>
     );
   }
