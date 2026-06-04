@@ -629,9 +629,9 @@ const timelineData = [
   {
     year: '2022 - 2023',
     title: 'Industry Experience',
-    role: 'Tool & Die Making Intern/Designer',
-    description: 'I worked in the industry, where I developed problem-solving skills and gained a solid understanding of both machines and software.',
-    tags: ['Team Collaboration', 'Agile', 'Clean Code', 'Debugging']
+    role: 'Tool & Die Designer',
+    description: 'Worked as a Tool & Die designer in precision manufacturing. Tolerances are measured in microns and errors are physically costly. This built an engineering mindset that carries directly into software: design for edge cases first, validate assumptions constantly, and never ship code you have not tested under real load.',
+    tags: ['Precision Engineering', 'CAD/CAM', 'Manufacturing Tolerances', 'Quality Control']
   },
   {
     year: '2019 - 2022',
@@ -664,8 +664,8 @@ const skillsData = [
     skills: ['Git & GitHub', 'VS Code', 'Postman', 'npm/pip', 'Chrome DevTools', 'Figma']
   },
   {
-    category: 'Other Skills',
-    skills: ['Problem Solving', 'Clean Code', 'Debugging', 'System Design', 'UI/UX Design', 'Performance Optimization']
+    category: 'Security & Systems',
+    skills: ['AES-256 Encryption', 'ECDH Key Exchange', 'Zero-Knowledge Design', 'Steganography', 'File System APIs', 'Cross-Platform Architecture']
   }
 ];
 
@@ -761,10 +761,10 @@ const About: React.FC = () => {
   return (
     <>
       <SEO
-        title="About Rolan Lobo (Rolan RNR) - Full Stack Developer & Software Engineer"
-        description="Learn about Rolan Lobo (Rolan RNR), a passionate freelance software engineer from Karnataka, India. Specializing in security applications (steganography, file encryption, polyglot files), web development (React, Flask), and desktop applications. Journey through education, work experience, skills, and professional freelance services."
+        title="About Rolan Lobo - Full-Stack Engineer & Security Developer"
+        description="Rolan Lobo is a full-stack engineer from Karnataka, India, who crossed from precision manufacturing into software engineering. He specialises in AES-256 encryption tools, zero-knowledge applications, and production web software."
         keywords="About Rolan Lobo, Rolan RNR, Rolan rnr, Software Engineer India, Full Stack Developer India, Freelance Developer India, Karnataka Developer, Freelance Web Developer, Security Software Developer, Steganography Developer, Polyglot Files Developer, React Developer India, Python Developer India"
-        image="https://rolan-rnr.netlify.app/about-rolan-lobo.webp"
+        image="https://rolan-rnr.netlify.app/og-social-card.png"
         url="https://rolan-rnr.netlify.app/about"
       />
       {/* Hero Section */}
@@ -779,9 +779,11 @@ const About: React.FC = () => {
               About Me
             </HeroTitle>
             <HeroSubtitle variants={itemVariants}>
-              I'm Rolan Lobo (RNR is my handle), an aspiring software engineer and freelancer from Karnataka, India.
-              I'm passionate about creating innovative, functional, and visually appealing digital solutions
-              that solve real-world problems.
+              I'm Rolan Lobo — a software engineer who crossed industries.
+              I spent three years engineering precision tools in manufacturing,
+              then rebuilt my career in code with the same obsession for accuracy.
+              I now build software that handles encryption, privacy, and real user problems —
+              shipped to real people, without apology for the complexity underneath.
             </HeroSubtitle>
 
             <ResumeButtonWrapper variants={itemVariants}>
@@ -811,7 +813,7 @@ const About: React.FC = () => {
             transition={{ duration: 0.5 }}
             viewport={{ once: true }}
           >
-            My Story
+            The Road Here
           </JourneyTitle>
           <br />
           <JourneySubtitle
@@ -820,7 +822,7 @@ const About: React.FC = () => {
             transition={{ delay: 0.2, duration: 0.5 }}
             viewport={{ once: true }}
           >
-            A timeline of my professional growth and milestones.
+            From precision manufacturing to production-grade software — every step sharpened the craft.
           </JourneySubtitle>
         </JourneyHeader>
 
