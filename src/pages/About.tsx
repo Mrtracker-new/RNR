@@ -617,21 +617,14 @@ const ServiceFeature = styled.li`
   }
 `;
 
-// Data
+// Data — chronological order: scroll down = move forward in time
 const timelineData = [
   {
-    year: '2024 - Present',
-    title: 'Computer Science Degree',
-    role: 'Student & Freelancer',
-    description: 'Pursuing advanced studies in Computer Science while actively freelancing. Deepening knowledge in algorithms, system design, and AI/ML foundations while building real-world projects for clients.',
-    tags: ['Algorithms', 'System Design', 'AI Foundations', 'Freelancing']
-  },
-  {
-    year: '2022 - 2023',
-    title: 'Industry Experience',
-    role: 'Tool & Die Designer',
-    description: 'Worked as a Tool & Die designer in precision manufacturing. Tolerances are measured in microns and errors are physically costly. This built an engineering mindset that carries directly into software: design for edge cases first, validate assumptions constantly, and never ship code you have not tested under real load.',
-    tags: ['Precision Engineering', 'CAD/CAM', 'Manufacturing Tolerances', 'Quality Control']
+    year: '2019',
+    title: 'The Spark',
+    role: 'Aspiring Developer',
+    description: 'The beginning of my journey into technology. Started self-learning programming basics, exploring Python and web technologies, and writing my first lines of code.',
+    tags: ['Python Base', 'Web Basics', 'Self-Learning', 'Curiosity']
   },
   {
     year: '2019 - 2022',
@@ -641,11 +634,18 @@ const timelineData = [
     tags: ['Engineering Fundamentals', 'Precision', 'Problem Solving', 'Logic']
   },
   {
-    year: '2019',
-    title: 'The Spark',
-    role: 'Aspiring Developer',
-    description: 'The beginning of my journey into technology. Started self-learning programming basics, exploring Python and web technologies, and writing my first lines of code.',
-    tags: ['Python Base', 'Web Basics', 'Self-Learning', 'Curiosity']
+    year: '2022 - 2023',
+    title: 'Industry Experience',
+    role: 'Tool & Die Designer',
+    description: 'Worked as a Tool & Die designer in precision manufacturing. Tolerances are measured in microns and errors are physically costly. This built an engineering mindset that carries directly into software: design for edge cases first, validate assumptions constantly, and never ship code you have not tested under real load.',
+    tags: ['Precision Engineering', 'CAD/CAM', 'Manufacturing Tolerances', 'Quality Control']
+  },
+  {
+    year: '2024 - Present',
+    title: 'Computer Science Degree',
+    role: 'Student & Freelancer',
+    description: 'Pursuing advanced studies in Computer Science while actively freelancing. Deepening knowledge in algorithms, system design, and AI/ML foundations while building real-world projects for clients.',
+    tags: ['Algorithms', 'System Design', 'AI Foundations', 'Freelancing']
   }
 ];
 
@@ -776,14 +776,13 @@ const About: React.FC = () => {
             animate="visible"
           >
             <HeroTitle variants={itemVariants}>
-              About Me
+              Engineered, Then Coded.
             </HeroTitle>
             <HeroSubtitle variants={itemVariants}>
-              I'm Rolan Lobo — a software engineer who crossed industries.
-              I spent three years engineering precision tools in manufacturing,
-              then rebuilt my career in code with the same obsession for accuracy.
-              I now build software that handles encryption, privacy, and real user problems —
-              shipped to real people, without apology for the complexity underneath.
+              From tool and die manufacturing to full-stack software development —
+              I bring an engineer's precision to every system I build.
+              Today that means web applications, privacy-focused security tools,
+              and cross-platform desktop software.
             </HeroSubtitle>
 
             <ResumeButtonWrapper variants={itemVariants}>
