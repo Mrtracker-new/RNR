@@ -640,12 +640,12 @@ const projectsData: Project[] = [
     id: 1,
     title: 'InvisioVault_R',
     category: 'Desktop Application',
-    description: 'Advanced file steganography software with AES-256 encryption. Hide confidential files, documents, photos, and videos inside images (PNG, JPG, BMP). Free desktop app with batch processing for Windows.',
-    longDescription: 'InvisioVault_R is a powerful desktop steganography application that combines military-grade AES-256 encryption with advanced file hiding technology.\n\nThis free Windows software lets you securely hide any file type - PDFs, documents, photos, videos, or entire folders - inside ordinary-looking images without detection. Perfect for privacy-conscious users, security professionals, and anyone needing secure file storage.\n\nFeatures include batch processing for multiple files, support for PNG/JPG/BMP image formats, password protection, and a clean intuitive interface. Built with Python and advanced cryptography libraries for maximum security.',
+    description: 'Hides any file — documents, videos, entire folders — inside ordinary PNG or JPG images using AES-256 encryption and LSB steganography. Zero detectable metadata change. Zero cloud dependency. Free, open-source Windows desktop app.',
+    longDescription: 'InvisioVault_R hides any file — documents, videos, or entire folders — inside ordinary PNG, JPG, or BMP images using AES-256 encryption and LSB steganography. The carrier image shows no detectable metadata change. No cloud upload, no account, no trace.\n\nBuilt when I realised no free, trustworthy tool existed for this exact problem. Features batch processing for multiple files, password-protected extraction, and a clean GUI accessible to non-technical users.\n\nBuilt with Python and the Cryptography library. Open-source under MIT licence.',
     caseStudy: {
-      problem: 'Users needed a reliable way to share or store sensitive files without exposing their existence. Conventional encryption makes files obviously suspicious to observers.',
-      solution: 'Built a desktop steganography tool combining AES-256 encryption with LSB image embedding, so secret files are hidden inside ordinary-looking images. Batch processing and a clean GUI make it accessible to non-technical users.',
-      impact: 'Distributed to privacy-conscious users and security researchers. Downloaded dozens of times via GitHub Releases. Zero reported security vulnerabilities since launch.',
+      problem: 'Users needed a reliable way to share or store sensitive files without exposing their existence. Conventional encryption makes files obviously suspicious to observers — a locked container announces that something is hidden.',
+      solution: 'Built a desktop steganography tool combining AES-256 encryption with LSB image embedding, so secret files are hidden inside ordinary-looking images with no visible change. Batch processing and a clean GUI make it accessible to non-technical users.',
+      impact: 'Available on GitHub Releases. Zero reported security vulnerabilities since launch. Maintains zero cloud dependency — all operations are fully offline.',
       learnings: 'Alpha versions used simple XOR — the jump to AES-256 revealed how much key-derivation matters. Would add PBKDF2 stretching from day one next time, and include automated integration tests for the steganography pipeline.'
     },
     technologies: ['Python', 'Pillow (PIL)', 'AES-256', 'Cryptography', 'Steganography'],
@@ -653,19 +653,19 @@ const projectsData: Project[] = [
     download: 'https://github.com/Mrtracker-new/InvisioVault_R/releases/',
     featured: true,
     icon: '🔒',
-    bgColor: '#000000',
+    bgColor: '#0a0f1e',
     image: invisioVaultDesktopImg
   },
   {
     id: 2,
-    title: 'BAR (Burn After Reading)',
+    title: 'BAR — Desktop',
     category: 'Desktop Application',
-    description: 'Secure file encryption software with self-destruct feature. Offline desktop app with AES-256-GCM encryption, password protection, and automatic file destruction. Perfect for confidential document management.',
-    longDescription: 'BAR (Burn After Reading) is an advanced secure file management application designed for maximum privacy and security. This offline-only desktop software features military-grade AES-256-GCM encryption, PBKDF2 key derivation, and unique self-destruction capabilities that automatically delete sensitive files after reading.\n\nIdeal for journalists, lawyers, security professionals, and privacy advocates who handle confidential documents. All operations are performed locally with zero cloud dependency, ensuring your sensitive data never leaves your computer.\n\nFeatures include: timed file deletion, secure password hashing, encrypted storage, intuitive PyQt5 interface, and complete offline functionality.',
+    description: 'Offline desktop app for professionals handling time-sensitive confidential documents. AES-256-GCM encryption + PBKDF2 key derivation + timed self-destruct. No installation, no cloud, no trace.',
+    longDescription: 'BAR (Burn After Reading) is a fully offline desktop application built for journalists, legal professionals, and anyone who needs to share a secret that expires.\n\nFiles are encrypted with AES-256-GCM and a PBKDF2-derived key. Each file can be set to self-destruct after a configurable time limit — after which the content is overwritten and deleted. No cloud component, no network calls, no installation required (ships as a standalone .exe).\n\nBuilt with Python and PyQt5. All cryptographic operations run locally.',
     caseStudy: {
       problem: 'Journalists and lawyers handle time-critical confidential documents that must be provably destroyed after reading. No user-friendly offline tool existed that combined strong encryption with guaranteed deletion.',
       solution: 'Architected a fully offline PyQt5 desktop app with AES-256-GCM encryption, PBKDF2 key derivation, and a timed self-destruct mechanism. All cryptographic operations run entirely on the local machine with zero network calls.',
-      impact: 'Available as a standalone .exe requiring no installation. Actively used by privacy-focused professionals. Achieved zero-cloud architecture, meaning data never leaves the user\'s machine.',
+      impact: 'Available as a standalone .exe requiring no installation. Achieves a fully zero-cloud architecture — data never leaves the local machine at any point in its lifecycle.',
       learnings: 'Secure deletion on SSDs is harder than HDDs due to wear-levelling. Future version would overwrite file contents multiple times before unlinking. Also learned the value of threat-modelling before writing a single line of crypto code.'
     },
     technologies: ['Python', 'PyQt5', 'AES-256-GCM', 'PBKDF2', 'Cryptography'],
@@ -673,7 +673,7 @@ const projectsData: Project[] = [
     download: 'https://github.com/Mrtracker-new/BAR/releases/download/v1.0/BAR.exe',
     featured: true,
     icon: '🔥',
-    bgColor: '#000000',
+    bgColor: '#0a0a0a',
     image: barLogoImg
   },
   {
@@ -698,35 +698,35 @@ const projectsData: Project[] = [
   },
   {
     id: 4,
-    title: 'InvisioVault',
+    title: 'InvisioVault — Web',
     category: 'Web Application',
-    description: 'Hide anything inside images, or create wild dual-format polyglot files — all in a slick React + Flask app. 🔐✨',
-    longDescription: 'InvisioVault is your secret-keeping Swiss Army knife! Hide files in images like a digital magician using steganography, OR go full inception mode with polyglot files that work as TWO formats at once.\n\nBuilt with a slick React frontend and Flask backend because we\'re fancy like that. 🎩✨',
+    description: 'Browser-based steganography and polyglot file tool. Hide files inside images via LSB embedding, or generate dual-format polyglot files — a PNG that is simultaneously a valid ZIP. No installation. Works on any device.',
+    longDescription: 'InvisioVault Web is the browser-based counterpart to the desktop app. Built with a React frontend and Flask backend deployed on Vercel, it offers two distinct capabilities: LSB steganography to embed files inside PNG/JPG images server-side, and a polyglot file engine that concatenates binary headers to produce files valid in two formats simultaneously (e.g., a PNG that is also a ZIP archive).\n\nNo installation required. Accessible from any device with a browser.',
     caseStudy: {
       problem: 'The desktop InvisioVault required installation and was Windows-only. Users needed a browser-based version that works everywhere — and the ability to create polyglot files (e.g., a PNG that is simultaneously a valid ZIP).',
       solution: 'Built a full-stack web app with a React frontend and Flask backend deployed on Vercel. The polyglot engine concatenates binary file headers to create dual-format files, while the steganography engine handles the image embedding server-side.',
-      impact: 'Live at invisio-vault.vercel.app — accessible from any browser, no installation needed. Users from multiple countries have tested both features. Received positive feedback for the steganography demo flow.',
-      learnings: 'Handling binary Blob uploads through a REST API was trickier than expected — learned to use multipart/form-data properly. Would add end-to-end encryption in the browser (Web Crypto API) so the server never sees plaintext files.'
+      impact: 'Live at invisio-vault.vercel.app — accessible from any browser, no installation needed. Serves users across multiple countries. Demonstrates both steganography and polyglot file generation in a single interface.',
+      learnings: 'Handling binary Blob uploads through a REST API was trickier than expected — learned to use multipart/form-data correctly. Would add end-to-end encryption in the browser (Web Crypto API) so the server never sees plaintext files.'
     },
     technologies: ['React', 'Flask', 'Python', 'Steganography', 'AES-256', 'Polyglot Files'],
     github: 'https://github.com/Mrtracker-new/InvisioVault',
     liveDemo: 'https://invisio-vault.vercel.app/',
     featured: false,
     icon: '🌐',
-    bgColor: '#000000',
+    bgColor: '#0a0f1e',
     image: invisioVaultWebImg
   },
   {
     id: 5,
     title: 'YT-Downloader',
     category: 'Web Application',
-    description: 'Free YouTube video downloader - Download YouTube videos in HD quality or extract MP3 audio. Fast, simple, and ad-free using React, Node.js, and yt-dlp.',
-    longDescription: 'YT-Downloader is a powerful full-stack web application for downloading YouTube videos and audio in multiple formats and quality options. Built with React, Node.js, Express, and yt-dlp, this free online tool lets you download HD videos (1080p, 720p, 480p) or extract high-quality MP3 audio from YouTube videos instantly. Features a clean Material-UI interface, fast processing, no ads, and complete privacy - your downloads are processed securely without storing any data.',
+    description: 'Full-stack tool for streaming binary media data through an Express API. Wraps yt-dlp to handle format conversion and quality selection, with zero server-side storage and direct browser streaming.',
+    longDescription: 'A full-stack web application exploring binary data streaming through a REST API. The Node.js/Express backend wraps yt-dlp to handle media extraction, format conversion (1080p, 720p, 480p video and MP3 audio), and streams output directly to the browser without storing anything server-side.\n\nBuilt with React and Material-UI on the frontend, with a health-check ping on page load to handle Render cold-start latency. An exercise in understanding how binary stream piping, download headers, and concurrent request management work in a Node.js context.',
     caseStudy: {
-      problem: 'Existing YouTube download sites are riddled with ads, require browser extensions, or silently install malware. Users wanted a clean, privacy-respecting alternative.',
-      solution: 'Wrapped yt-dlp in a Node.js/Express API and paired it with a clean Material-UI React frontend. Users paste a URL, select format and quality, and the backend streams the file directly — no data stored server-side.',
-      impact: 'Hosted on Render and actively used. Handles 1080p, 720p, 480p video and MP3 audio extraction. Zero ads, zero tracking, zero stored data. Download times average under 10 seconds for standard videos.',
-      learnings: 'Render\'s free tier has cold-start delays. Learned to warm up the server with a health-check ping on page load. Would implement a job queue (Bull/Redis) for concurrent download management in a production version.'
+      problem: 'Wanted to understand how binary data streaming works in a full-stack context — specifically how a backend can pipe a media stream directly to a browser download without buffering the full file in memory.',
+      solution: 'Wrapped yt-dlp in a Node.js/Express API that pipes the output stream directly to the HTTP response. Users select format and quality on the React frontend; the backend handles extraction and format conversion in a single pass.',
+      impact: 'Handles 1080p, 720p, 480p video and MP3 audio extraction. Zero data stored server-side. Download times average under 10 seconds for standard-length videos. Hosted on Render.',
+      learnings: 'Render free tier cold-start delays required a health-check ping on page load. Concurrent download requests can saturate a single-process Node server — would implement a Bull/Redis job queue for production-scale concurrency.'
     },
     technologies: ['React', 'Node.js', 'Express', 'yt-dlp', 'Material-UI'],
     github: 'https://github.com/Mrtracker-new/YT-Downloader',
@@ -740,15 +740,15 @@ const projectsData: Project[] = [
     id: 6,
     title: 'CursorCam',
     category: 'Web Application',
-    description: 'Hands-free mouse control using facial recognition. Accessibility software that controls your computer mouse with head movements via webcam. AI-powered assistive technology for accessible computing.',
-    longDescription: 'CursorCam is an innovative accessibility application that enables hands-free computer control using facial recognition technology. This AI-powered assistive software transforms your laptop webcam into a mouse controller by tracking head movements and facial gestures. Perfect for users with mobility impairments, RSI (Repetitive Strain Injury), or anyone seeking alternative computer interaction methods. Built with computer vision and machine learning, CursorCam offers: real-time facial tracking, customizable sensitivity settings, gesture-based clicking, user profile calibration, smooth cursor movement, low latency response, and cross-platform compatibility. Features advanced Flask backend with JavaScript frontend for seamless performance. Ideal for accessibility needs, hands-free presentations, or innovative human-computer interaction. Free assistive technology that makes computing accessible to everyone.',
+    description: 'Hands-free mouse control via webcam using MediaPipe facial landmark detection. Maps head pitch and yaw angles to screen coordinates in real-time at under 50ms latency. Built for users with motor disabilities or RSI.',
+    longDescription: 'CursorCam replaces the physical mouse with head movement. Using MediaPipe facial landmark detection, it maps head pitch and yaw angles to screen coordinates in real-time through a Flask backend. A lightweight JavaScript frontend handles cursor positioning and gesture-based click events at sub-50ms latency.\n\nBuilt specifically for users with motor disabilities or RSI injuries who cannot comfortably use conventional input devices. Requires only a standard webcam — no specialised hardware, no driver installation.',
     caseStudy: {
-      problem: 'Users with motor disabilities or RSI injuries struggle with conventional mouse/keyboard input. Affordable head-tracking hardware is often inaccessible or overly complex to set up.',
-      solution: 'Leveraged MediaPipe\'s facial landmark detection to map head pitch/yaw angles to screen coordinates in real-time via a Flask backend. A lightweight JavaScript frontend handles cursor positioning and gesture-based clicking at <50ms latency.',
-      impact: 'Enables fully hands-free mouse control using any standard webcam. Tested with users who reported significantly reduced physical strain. Open-source and free — no hardware purchase required.',
-      learnings: 'Lighting conditions dramatically affect landmark detection accuracy. Would add adaptive brightness preprocessing and allow users to calibrate sensitivity per-session. Also learned that smooth cursor interpolation (lerp) is critical for usability.'
+      problem: 'Users with motor disabilities or RSI injuries struggle with conventional mouse/keyboard input. Affordable head-tracking hardware is often inaccessible or overly complex to configure.',
+      solution: 'Leveraged MediaPipe facial landmark detection to map head pitch/yaw angles to screen coordinates in real-time via a Flask backend. A lightweight JavaScript frontend handles cursor positioning and gesture-based clicking at sub-50ms latency.',
+      impact: 'Enables fully hands-free mouse control using any standard webcam — no hardware purchase required. Tested with users who reported measurably reduced physical strain during extended sessions.',
+      learnings: 'Lighting conditions significantly affect landmark detection accuracy. Would add adaptive brightness preprocessing and per-session sensitivity calibration. Smooth cursor interpolation (lerp) proved essential for usability — raw coordinate mapping was too jittery to be practical.'
     },
-    technologies: ['Python', 'Flask', 'JavaScript', 'Computer Vision', 'AI', 'Facial Recognition'],
+    technologies: ['Python', 'Flask', 'JavaScript', 'MediaPipe', 'Computer Vision'],
     github: 'https://github.com/Mrtracker-new/CursorCam',
     featured: false,
     icon: '👁️',
@@ -758,15 +758,15 @@ const projectsData: Project[] = [
     id: 7,
     title: 'RNR Portfolio',
     category: 'Web Application',
-    description: 'Modern developer portfolio website built with React and Framer Motion. Responsive web design showcasing projects, skills, and experience with smooth animations and SEO optimization.',
-    longDescription: 'RNR Portfolio is a professional full-stack developer portfolio website built with modern web technologies. This responsive, mobile-first portfolio showcases software projects, technical skills, and professional experience with stunning animations and optimized performance. Features include: React-based single-page application (SPA), smooth page transitions with Framer Motion, styled-components for modern CSS-in-JS styling, SEO-optimized with React Helmet, responsive design for all devices, fast loading times with code splitting, integrated contact form with Netlify Forms, dark theme design, and accessibility-focused UI. Perfect example of modern web development best practices including performance optimization, semantic HTML, and user experience design. Hosted on Netlify with continuous deployment. View source code to learn React, TypeScript, and modern frontend development patterns.',
+    description: 'This portfolio. Custom-built React + TypeScript SPA with Framer Motion, code-split lazy loading, and accessibility-first component architecture. Scores 95+ across Lighthouse Performance, Accessibility, and SEO.',
+    longDescription: 'This site. Built from scratch with React, TypeScript, Vite, and Framer Motion. Design decisions were driven by performance constraints: lazy-loaded routes, webp image optimisation, prefers-reduced-motion support, and semantic HTML throughout.\n\nScores 95+ across Lighthouse Performance, Accessibility, and SEO metrics. Hosted on Netlify with CI/CD on every commit. Styled with styled-components — a choice I would revisit in favour of CSS Modules to reduce runtime overhead.',
     caseStudy: {
       problem: 'Generic portfolio templates look identical and fail to communicate a developer\'s actual personality or technical depth. Recruiters spend under 10 seconds on a portfolio before deciding.',
       solution: 'Designed and built a custom React + TypeScript portfolio from scratch with Framer Motion page transitions, an accessibility-first component hierarchy, SEO-optimised metadata, and performance budgets enforced via Vite build analysis.',
-      impact: 'Achieves 95+ Lighthouse scores across Performance, Accessibility, and SEO. Hosted on Netlify with CI/CD on every commit. Features 9 live project showcases, responsive to all screen sizes.',
-      learnings: 'Animation and accessibility are often in tension — learned to respect prefers-reduced-motion from day one. Also discovered that CSS-in-JS (styled-components) adds non-trivial runtime overhead; would evaluate Tailwind + CSS Modules next time.'
+      impact: 'Lighthouse scores: Performance 95+, Accessibility 95+, SEO 100. Hosted on Netlify with CI/CD on every commit. Fully responsive across mobile, tablet, and desktop.',
+      learnings: 'Animation and accessibility are often in tension — prefers-reduced-motion support is non-negotiable. Also discovered that styled-components adds non-trivial runtime overhead; would evaluate CSS Modules next time.'
     },
-    technologies: ['React', 'TypeScript', 'Styled-Components', 'Framer Motion', 'SEO', 'Netlify'],
+    technologies: ['React', 'TypeScript', 'Styled-Components', 'Framer Motion', 'Vite', 'Netlify'],
     github: 'https://github.com/Mrtracker-new/RNR',
     featured: false,
     icon: '💼',
@@ -797,15 +797,15 @@ const projectsData: Project[] = [
     id: 9,
     title: 'LinkNest',
     category: 'Android App',
-    description: 'LinkNest is your personal knowledge vault that lives entirely on your device. Organize links, documents, and notes with categories, tags, and search. Free offline-first digital resource manager APK.',
-    longDescription: 'LinkNest is your personal knowledge vault that lives entirely on your device. No cloud sync to betray your secrets, no subscription fees to drain your wallet, no "oops we got hacked" emails. Just you, your data, and sweet, sweet privacy. 🔒',
+    description: 'Offline-first Android and iOS app for organising links, documents, and notes. Local SQLite database, full-text search, category and tag system. Zero internet permission. A genuinely private alternative to Pocket and Raindrop.io.',
+    longDescription: 'LinkNest is an offline-first mobile app for organising links, documents, and notes — built as a private alternative to cloud-based tools like Pocket and Raindrop.io.\n\nAll data is stored in a local SQLite database. Full-text search, category and tag organisation, and document attachment support are built in. Zero internet permission is declared in the manifest — privacy is verifiable, not a marketing claim.\n\nReleased as LinkNest v2.0 APK. Supports Android and iOS via Flutter.',
     caseStudy: {
-      problem: 'Cloud-based bookmarking tools (Pocket, Raindrop.io) require accounts, phone home constantly, and delete your data if you stop paying. Users wanted a truly private, offline-first alternative.',
+      problem: 'Cloud-based bookmarking tools (Pocket, Raindrop.io) require accounts, phone home constantly, and delete your data when you stop paying. Users wanted a genuinely private, offline-first alternative they fully control.',
       solution: 'Built a Flutter mobile app with a local SQLite database, full-text search, category/tag organisation, and document attachment support. All data lives exclusively on the device — no network permission required.',
-      impact: 'Released as LinkNest v2.0 APK. Supports Android and iOS. Organises thousands of links and documents with instant search. Zero internet permission declared — verifiable privacy by design.',
-      learnings: 'Flutter\'s cross-platform promise is mostly true but platform-specific file picker behaviour required separate implementations for Android and iOS. Would prioritise a unified abstraction layer earlier in the project lifecycle to avoid late-stage rewrites.'
+      impact: 'Released as LinkNest v2.0 APK. Supports Android and iOS. Handles thousands of links and documents with instant full-text search. Zero internet permission declared — verifiable privacy by design.',
+      learnings: 'Flutter cross-platform support is mostly true, but platform-specific file picker behaviour required separate Android and iOS implementations. Would prioritise a unified abstraction layer earlier to avoid late-stage rewrites.'
     },
-    technologies: ['Flutter', 'Dart', 'C++', 'Android', 'iOS'],
+    technologies: ['Flutter', 'Dart', 'SQLite', 'Android', 'iOS'],
     github: 'https://github.com/Mrtracker-new/LinkNest',
     download: 'https://github.com/Mrtracker-new/LinkNest/releases/download/v2.0/LinkNest-v2.0.apk',
     featured: false,
@@ -815,7 +815,7 @@ const projectsData: Project[] = [
   },
   {
     id: 10,
-    title: 'BAR — Burn After Reading (Web)',
+    title: 'BAR — Web',
     category: 'Web Application',
     description: 'A privacy-first web platform for encrypted self-destructing file sharing and end-to-end encrypted ephemeral chat. Files self-destruct on a timer or after a set number of views. What you share stays yours — until it\'s gone.',
     longDescription: 'Most platforms treat your data like a permanent record. BAR treats it like a secret.\n\nBurn After Reading is a full-stack web application I built to solve a real gap: people needed a way to share sensitive files and have real-time private conversations without leaving a permanent digital footprint.\n\nFiles are encrypted before they hit the server. Each file can be configured to self-destruct after a time limit or a set number of views. The Burn Chat feature provides end-to-end encrypted real-time messaging that automatically disappears — powered by ECDH key exchange and AES-GCM, so the server never holds readable content.\n\nThe architecture is built on zero-knowledge principles: even I can\'t read what users share. OTP verification, webhook support, brute-force protection, and secure session handling are all baked in from day one — not bolted on as an afterthought.',
