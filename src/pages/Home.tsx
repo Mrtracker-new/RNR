@@ -4,12 +4,11 @@ import { motion, Variants, AnimatePresence } from 'framer-motion';
 import { Link } from 'react-router-dom';
 import { Container, Button } from '../styles/GlobalStyle';
 import SEO from '../components/SEO';
+import { projectsData } from '../data/projects';
+import type { Project } from '../data/projects';
 
 import { getLatestPosts, BlogPost } from '../utils/devto';
 
-// Profile images served from /public — not imported via webpack so they are
-// never bundled into the JS chunk. The browser fetches only the size it needs
-// via the srcSet attribute at render time.
 const profileImage    = '/images/Home_dp.webp';
 const profileImage900 = '/images/Home_dp_900.webp';
 const profileImage600 = '/images/Home_dp_600.webp';
@@ -17,20 +16,12 @@ const profileImage450 = '/images/Home_dp_450.webp';
 const profileImage300 = '/images/Home_dp_300.webp';
 const profileImage150 = '/images/Home_dp_150.webp';
 
-// Lazy load components to reduce initial bundle size
-const BlogCard = lazy(() => import('../components/BlogCard'));
+const BlogCard     = lazy(() => import('../components/BlogCard'));
 const ResumeDownload = lazy(() => import('../components/ResumeDownload'));
 
-// --- Styled Components ---
+/* ─── Hero ────────────────────────────────────────────────────────────────── */
 
 const HeroSection = styled.section`
-  /*
-   * Desktop: ensure the section is always tall enough to contain both
-   * the centered HeroContent AND the absolutely-positioned StatsBar.
-   * Navbar total height ≈ 76px (FixedContainer 16px + island margin 16px +
-   * island padding 12px + logo ~20px + island padding 12px).
-   * padding-top: 130px → 54px of guaranteed clearance above the pill.
-   */
   min-height: 100svh;
   min-height: 100vh;
   display: flex;
@@ -40,8 +31,7 @@ const HeroSection = styled.section`
   position: relative;
   padding-top: 130px;
   padding-bottom: 130px;
-  
-  /* Background Elements */
+
   &::before {
     content: '';
     position: absolute;
@@ -49,13 +39,12 @@ const HeroSection = styled.section`
     right: -10%;
     width: 50vw;
     height: 50vw;
-    background: radial-gradient(circle, rgba(100, 255, 218, 0.05) 0%, transparent 70%);
+    background: radial-gradient(circle, rgba(100, 255, 218, 0.04) 0%, transparent 70%);
     z-index: -1;
     pointer-events: none;
     filter: blur(60px);
   }
 
-  /* Squeeze zone 968–1280px: StatsBar flows in-document, no bottom padding needed */
   @media (min-width: 968px) and (max-width: 1280px) {
     padding-top: 130px;
     padding-bottom: 40px;
@@ -70,7 +59,7 @@ const HeroSection = styled.section`
     padding-top: 120px;
     padding-bottom: var(--spacing-4);
     overflow-x: clip;
-    
+
     &::before {
       filter: blur(30px);
       opacity: 0.5;
@@ -90,19 +79,12 @@ const HeroContent = styled(Container)`
   z-index: 2;
   position: relative;
   width: 100%;
-  /*
-   * Do NOT use flex:1 here — it stretches HeroContent to fill the entire
-   * HeroSection height, which breaks vertical centering at intermediate
-   * viewport widths (968–1280px) and causes the AvailabilityBadge to
-   * be clipped behind the absolutely-positioned StatsBar.
-   */
 
-  /* Intermediate squeeze zone: still 2-col but reduce column gap */
   @media (min-width: 968px) and (max-width: 1280px) {
     gap: var(--spacing-8);
     grid-template-columns: 1.3fr 0.7fr;
   }
-  
+
   @media (max-width: 968px) {
     display: flex;
     flex-direction: column-reverse;
@@ -123,7 +105,7 @@ const TextContent = styled(motion.div)`
   align-items: flex-start;
   width: 100%;
   overflow: hidden;
-  
+
   @media (max-width: 968px) {
     align-items: center;
   }
@@ -135,25 +117,21 @@ const ProfileImageContainer = styled(motion.div)`
   aspect-ratio: 1;
   position: relative;
   margin: 0 auto;
-  
-  @media (min-width: 968px) and (max-width: 1280px) {
-    max-width: 320px;
-  }
+
+  @media (min-width: 968px) and (max-width: 1280px) { max-width: 320px; }
 
   @media (max-width: 968px) {
     width: 240px;
     margin-bottom: var(--spacing-2);
   }
 
-  @media (max-width: 480px) {
-    width: 200px;
-  }
+  @media (max-width: 480px) { width: 200px; }
 
   &::before {
     content: '';
     position: absolute;
     inset: -20px;
-    background: radial-gradient(circle, rgba(100, 255, 218, 0.1) 0%, transparent 70%);
+    background: radial-gradient(circle, rgba(100, 255, 218, 0.08) 0%, transparent 70%);
     z-index: -1;
     filter: blur(20px);
   }
@@ -164,19 +142,18 @@ const StylizedImage = styled.div`
   height: 100%;
   border-radius: var(--radius-2xl);
   overflow: hidden;
-  border: 1px solid rgba(255, 255, 255, 0.05);
+  border: 1px solid rgba(255, 255, 255, 0.06);
   box-shadow: 0 20px 40px rgba(0, 0, 0, 0.3);
   position: relative;
-  
-  /* Glass overlay effect */
+
   &::after {
     content: '';
     position: absolute;
     inset: 0;
-    box-shadow: inset 0 0 20px rgba(0,0,0,0.5);
+    box-shadow: inset 0 0 20px rgba(0, 0, 0, 0.4);
     pointer-events: none;
   }
-  
+
   img {
     width: 100%;
     height: 100%;
@@ -184,12 +161,9 @@ const StylizedImage = styled.div`
     transition: transform 0.5s ease;
   }
 
-  &:hover img {
-    transform: scale(1.05);
-  }
+  &:hover img { transform: scale(1.04); }
 `;
 
-// Resume Preview Container
 const ResumePreviewContainer = styled.div`
   width: 100%;
   height: 100%;
@@ -199,9 +173,8 @@ const ResumePreviewContainer = styled.div`
   justify-content: center;
   overflow: hidden;
   background: rgba(30, 41, 59, 0.98);
-  backdrop-filter: blur(10px);
   padding: 20px;
-  
+
   img {
     max-width: 100%;
     max-height: 100%;
@@ -226,57 +199,36 @@ const ResumeHintText = styled.div`
   font-weight: 500;
   letter-spacing: 0.5px;
   pointer-events: none;
-  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.4);
 `;
 
-const GreetingPill = styled(motion.div)`
+const RolePill = styled(motion.div)`
   display: inline-flex;
   align-items: center;
   gap: var(--spacing-2);
   padding: var(--spacing-2) var(--spacing-5);
-  /* Accent-tinted background makes the pill read as a role label, not a greeting */
   background: rgba(100, 255, 218, 0.04);
   border: 1px solid rgba(100, 255, 218, 0.18);
   border-radius: var(--radius-lg);
   margin-bottom: var(--spacing-4);
-  backdrop-filter: blur(10px);
 
   @media (min-width: 968px) and (max-width: 1280px) {
     margin-bottom: var(--spacing-3);
   }
 `;
 
-const GreetingText = styled.span`
+const RoleText = styled.span`
   font-size: var(--text-sm);
   font-weight: var(--font-semibold);
   color: var(--accent-primary);
-  /* Sentence-case tracking suits a role label; uppercase would feel like a shout */
   letter-spacing: 0.03em;
 `;
 
 const Headline = styled(motion.h1)`
-  /*
-   * Clamp strategy:
-   *   min (2rem / 32px)  → phones
-   *   preferred (4.5vw)  → scales with viewport width
-   *   max (4.5rem / 72px) → capped on ultra-wide
-   *
-   * At 1024px: 4.5vw ≈ 46px (2.875rem) — both headline lines fit on one
-   * visual line in the left column without wrapping.
-   * At 1440px: 4.5vw ≈ 65px (4.0rem) — large and impactful.
-   * At 1920px: capped at 4.5rem (72px).
-   *
-   * Intermediate 968–1280px squeeze zone gets a slightly tighter clamp
-   * to ensure neither headline line wraps unexpectedly.
-   */
   font-size: clamp(2rem, 4.5vw, 4.5rem);
   font-weight: var(--font-extrabold);
   line-height: 1.1;
   letter-spacing: -0.03em;
   margin-bottom: var(--spacing-5);
-  /* Solid fallback for browsers/contexts that don't support background-clip:text.
-     Both --dark-50 (#fafafa) and --dark-300 (#d4d4d8) pass WCAG AA against
-     the #09090b background at ~19.8:1 and ~13.8:1 respectively. */
   color: var(--dark-50);
   background: linear-gradient(180deg, var(--dark-50) 0%, var(--dark-300) 100%);
   -webkit-background-clip: text;
@@ -287,9 +239,9 @@ const Headline = styled(motion.h1)`
     font-size: clamp(2rem, 3.8vw, 3.5rem);
     margin-bottom: var(--spacing-4);
   }
-  
+
   span {
-    color: var(--accent-primary); /* fallback for span accent text */
+    color: var(--accent-primary);
     background: var(--accent-gradient);
     -webkit-background-clip: text;
     -webkit-text-fill-color: transparent;
@@ -330,54 +282,30 @@ const CTAContainer = styled(motion.div)`
   gap: var(--spacing-3) var(--spacing-4);
   align-items: center;
   flex-wrap: wrap;
-  /* Ensure wrapped items (Download Resume) align left matching the primary CTAs */
   align-content: flex-start;
 
   @media (max-width: 968px) {
     justify-content: center;
     align-content: center;
   }
-  
+
   @media (max-width: 480px) {
     flex-direction: column;
     width: 100%;
     gap: var(--spacing-3);
-    
-    > a, > button {
-      width: 100%;
-      text-align: center;
-    }
+
+    > a, > button { width: 100%; text-align: center; }
 
     > div {
       width: 100%;
-      
-      > div {
-        width: 100%;
-        display: block;
-        
-        a {
-          width: 100%;
-          justify-content: center;
-        }
-      }
+      > div { width: 100%; display: block; a { width: 100%; justify-content: center; } }
     }
   }
 `;
 
-/* ── Availability signal ───────────────────────────────────────────────────
- * A pulsing green dot + one-liner below the CTAs.
- * Communicates open-to-work status without a modal or banner.
- * The dot uses two pseudo-elements: ::before = solid core, ::after = expanding ring.
- */
 const dotPulse = keyframes`
-  0%, 100% {
-    transform: scale(1);
-    opacity: 0.6;
-  }
-  50% {
-    transform: scale(2.2);
-    opacity: 0;
-  }
+  0%, 100% { transform: scale(1); opacity: 0.6; }
+  50%       { transform: scale(2.2); opacity: 0; }
 `;
 
 const StatusDot = styled.span`
@@ -426,13 +354,12 @@ const AvailabilityBadge = styled(motion.div)`
     margin-top: var(--spacing-6);
   }
 
-  @media (max-width: 480px) {
-    font-size: var(--text-xs);
-  }
+  @media (max-width: 480px) { font-size: var(--text-xs); }
 `;
 
+/* ─── Stats bar ───────────────────────────────────────────────────────────── */
+
 const StatsBar = styled(motion.div)`
-  /* Default: in-flow, used at all widths < 1280px */
   position: relative;
   bottom: auto;
   left: auto;
@@ -440,34 +367,12 @@ const StatsBar = styled(motion.div)`
   max-width: 100%;
   margin: var(--spacing-12) auto 0;
   padding: var(--spacing-5) var(--spacing-6);
-  background: rgba(30, 41, 59, 0.4);
-  backdrop-filter: blur(12px);
-  -webkit-backdrop-filter: blur(12px);
+  background: rgba(30, 41, 59, 0.35);
   border: 1px solid rgba(255, 255, 255, 0.08);
   border-radius: var(--radius-2xl);
-  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.3),
-              inset 0 1px 0 rgba(255, 255, 255, 0.1);
+  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.25);
   z-index: 10;
 
-  &::before {
-    content: '';
-    position: absolute;
-    inset: 0;
-    border-radius: var(--radius-2xl);
-    padding: 1px;
-    background: linear-gradient(135deg,
-      rgba(100, 255, 218, 0.3) 0%,
-      rgba(139, 92, 246, 0.3) 50%,
-      rgba(100, 255, 218, 0.3) 100%
-    );
-    -webkit-mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);
-    -webkit-mask-composite: xor;
-    mask-composite: exclude;
-    pointer-events: none;
-    opacity: 0.5;
-  }
-
-  /* Only float at the bottom when the viewport is large enough */
   @media (min-width: 1280px) {
     position: absolute;
     bottom: var(--spacing-6);
@@ -475,12 +380,9 @@ const StatsBar = styled(motion.div)`
     right: var(--spacing-4);
     max-width: calc(var(--breakpoint-lg) - var(--spacing-8));
     margin: 0 auto;
-    background: rgba(255, 255, 255, 0.03);
-    backdrop-filter: blur(20px);
-    -webkit-backdrop-filter: blur(20px);
-    border: 1px solid rgba(255, 255, 255, 0.1);
-    box-shadow: 0 8px 32px rgba(0, 0, 0, 0.3),
-                inset 0 1px 0 rgba(255, 255, 255, 0.1);
+    background: rgba(255, 255, 255, 0.02);
+    border: 1px solid rgba(255, 255, 255, 0.08);
+    box-shadow: 0 8px 32px rgba(0, 0, 0, 0.25);
   }
 
   @media (max-width: 640px) {
@@ -496,21 +398,17 @@ const StatsContent = styled(Container)`
   justify-content: space-evenly;
   align-items: center;
   gap: var(--spacing-8);
-  
-  @media (max-width: 768px) {
-    gap: var(--spacing-6);
-  }
-  
+
+  @media (max-width: 768px) { gap: var(--spacing-6); }
+
   @media (max-width: 640px) {
     display: grid;
     grid-template-columns: repeat(3, 1fr);
     gap: var(--spacing-4);
     text-align: center;
   }
-  
-  @media (max-width: 480px) {
-    gap: var(--spacing-3);
-  }
+
+  @media (max-width: 480px) { gap: var(--spacing-3); }
 `;
 
 const StatItem = styled.div`
@@ -531,14 +429,9 @@ const StatItem = styled.div`
     color: var(--dark-100);
     line-height: 1;
     white-space: nowrap;
-    
-    @media (max-width: 768px) {
-      font-size: var(--text-3xl);
-    }
-    
-    @media (max-width: 640px) {
-      font-size: var(--text-2xl);
-    }
+
+    @media (max-width: 768px) { font-size: var(--text-3xl); }
+    @media (max-width: 640px) { font-size: var(--text-2xl); }
   }
 
   p {
@@ -547,31 +440,159 @@ const StatItem = styled.div`
     text-transform: uppercase;
     letter-spacing: 0.1em;
     white-space: nowrap;
-    
-    @media (max-width: 768px) {
-      font-size: var(--text-xs);
-      letter-spacing: 0.05em;
-    }
-    
-    @media (max-width: 640px) {
-      font-size: 0.7rem;
-      letter-spacing: 0.03em;
-      white-space: normal;
-    }
+
+    @media (max-width: 768px) { font-size: var(--text-xs); letter-spacing: 0.05em; }
+    @media (max-width: 640px) { font-size: 0.7rem; letter-spacing: 0.03em; white-space: normal; }
   }
 `;
+
+/* ─── Featured projects strip ─────────────────────────────────────────────── */
+
+const FeaturedSection = styled.section`
+  padding: var(--spacing-20) 0;
+
+  @media (max-width: 768px) { padding: var(--spacing-16) 0; }
+`;
+
+const SectionHeader = styled.div`
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  margin-bottom: var(--spacing-10);
+  gap: var(--spacing-4);
+
+  @media (max-width: 640px) {
+    flex-direction: column;
+    gap: var(--spacing-3);
+    margin-bottom: var(--spacing-8);
+  }
+`;
+
+const SectionLabel = styled.h2`
+  font-size: var(--text-xs);
+  font-weight: var(--font-bold);
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: var(--dark-500);
+`;
+
+const SectionLink = styled(Link)`
+  font-size: var(--text-sm);
+  color: var(--dark-400);
+  text-decoration: none;
+  transition: color var(--transition-fast);
+
+  &:hover { color: var(--accent-primary); }
+`;
+
+const FeaturedGrid = styled.div`
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: var(--spacing-4);
+
+  @media (max-width: 768px) {
+    grid-template-columns: 1fr;
+    gap: var(--spacing-3);
+  }
+`;
+
+const FeaturedCard = styled(motion.article)`
+  background: rgba(30, 41, 59, 0.35);
+  border: 1px solid rgba(255, 255, 255, 0.06);
+  border-radius: var(--radius-xl);
+  padding: var(--spacing-6);
+  display: flex;
+  flex-direction: column;
+  gap: var(--spacing-3);
+  transition: border-color 0.25s ease, background 0.25s ease;
+  text-decoration: none;
+
+  &:hover {
+    border-color: rgba(100, 255, 218, 0.25);
+    background: rgba(30, 41, 59, 0.55);
+  }
+`;
+
+const FeaturedCardHeader = styled.div`
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--spacing-3);
+`;
+
+const FeaturedCardMeta = styled.div`
+  display: flex;
+  align-items: center;
+  gap: var(--spacing-2);
+`;
+
+const FeaturedCardCategory = styled.span`
+  font-size: 0.7rem;
+  font-weight: var(--font-medium);
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--dark-500);
+`;
+
+const FeaturedCardIcon = styled.span`
+  font-size: 1.1rem;
+  line-height: 1;
+`;
+
+const FeaturedCardTitle = styled.h3`
+  font-size: var(--text-lg);
+  font-weight: var(--font-semibold);
+  color: var(--dark-100);
+  line-height: 1.3;
+  letter-spacing: -0.01em;
+`;
+
+const FeaturedCardDescription = styled.p`
+  font-size: var(--text-sm);
+  color: var(--dark-400);
+  line-height: 1.65;
+  display: -webkit-box;
+  -webkit-line-clamp: 2;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+`;
+
+const FeaturedCardTech = styled.div`
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--spacing-2);
+  margin-top: auto;
+`;
+
+const TechPill = styled.span`
+  font-size: 0.7rem;
+  color: var(--dark-400);
+  background: rgba(255, 255, 255, 0.04);
+  border: 1px solid rgba(255, 255, 255, 0.06);
+  padding: 2px 8px;
+  border-radius: var(--radius-sm);
+`;
+
+const ArrowIcon = styled.span`
+  font-size: var(--text-lg);
+  color: var(--dark-600);
+  transition: color 0.2s ease, transform 0.2s ease;
+  flex-shrink: 0;
+
+  ${FeaturedCard}:hover & {
+    color: var(--accent-primary);
+    transform: translate(2px, -2px);
+  }
+`;
+
+/* ─── Blog section ────────────────────────────────────────────────────────── */
 
 const BlogSection = styled.section`
   padding: var(--spacing-20) 0;
   position: relative;
-  
-  @media (max-width: 968px) {
-    padding: var(--spacing-10) 0 var(--spacing-4) 0; /* Balanced spacing on mobile */
-  }
-  
-  @media (max-width: 640px) {
-    padding: var(--spacing-8) 0 var(--spacing-3) 0; /* Moderate spacing on small screens */
-  }
+
+  @media (max-width: 968px) { padding: var(--spacing-10) 0 var(--spacing-4) 0; }
+  @media (max-width: 640px)  { padding: var(--spacing-8) 0 var(--spacing-3) 0; }
 `;
 
 const BlogHeader = styled.div`
@@ -582,12 +603,7 @@ const BlogHeader = styled.div`
 const BlogTitle = styled(motion.h2)`
   font-size: clamp(2rem, 4vw, 3rem);
   font-weight: var(--font-bold);
-  /* Solid fallback — see Headline comment above for contrast rationale */
   color: var(--dark-50);
-  background: linear-gradient(180deg, var(--dark-50) 0%, var(--dark-300) 100%);
-  -webkit-background-clip: text;
-  -webkit-text-fill-color: transparent;
-  background-clip: text;
   margin-bottom: var(--spacing-3);
 `;
 
@@ -615,16 +631,13 @@ const ViewAllButton = styled(Button)`
   display: block;
 `;
 
-// --- Variant Definitions ---
+/* ─── Animation variants ──────────────────────────────────────────────────── */
 
 const containerVariants: Variants = {
   hidden: { opacity: 0 },
   visible: {
     opacity: 1,
-    transition: {
-      staggerChildren: 0.15,
-      delayChildren: 0.2
-    }
+    transition: { staggerChildren: 0.15, delayChildren: 0.2 }
   }
 };
 
@@ -633,18 +646,18 @@ const itemVariants: Variants = {
   visible: {
     opacity: 1,
     y: 0,
-    transition: { type: "spring", stiffness: 50, damping: 20 }
+    transition: { type: 'spring', stiffness: 50, damping: 20 }
   }
 };
 
-// --- Component ---
+/* ─── Component ───────────────────────────────────────────────────────────── */
 
 const Home: React.FC = () => {
   const [blogPosts, setBlogPosts] = useState<BlogPost[]>([]);
   const [loadingBlog, setLoadingBlog] = useState(true);
   const [showResumePreview, setShowResumePreview] = useState(false);
 
-
+  const featuredProjects = projectsData.filter((p: Project) => p.featured);
 
   useEffect(() => {
     const fetchBlogPosts = async () => {
@@ -664,8 +677,8 @@ const Home: React.FC = () => {
   return (
     <>
       <SEO
-        title="Rolan Lobo — Full-Stack Engineer & Security Developer"
-        description="Rolan Lobo is a full-stack engineer from Karnataka, India, specializing in AES-256 encryption tools, zero-knowledge applications, and production web software. Available for freelance and full-time remote roles."
+        title="Rolan Lobo — Software Developer"
+        description="Rolan Lobo builds privacy-focused software — AES-256 encryption tools, zero-knowledge file sharing platforms, and offline-first applications. Open source. Karnataka, India."
         image="https://rolan-rnr.netlify.app/og-social-card.png"
         url="https://rolan-rnr.netlify.app/"
       />
@@ -678,60 +691,38 @@ const Home: React.FC = () => {
           animate="visible"
         >
           <TextContent>
-            {/* Role label — reads as a professional identity signal, not a greeting */}
-            <GreetingPill variants={itemVariants}>
-              <GreetingText>Full-Stack Engineer · Security &amp; Systems</GreetingText>
-            </GreetingPill>
+            <RolePill variants={itemVariants}>
+              <RoleText>Software Developer · Privacy &amp; Security Tools</RoleText>
+            </RolePill>
 
             <Headline variants={itemVariants}>
               I ship secure software.<br />
-              {/*
-               * Line 2 is intentionally short (< 22 chars with dots)
-               * so it never wraps even at clamp minimum font sizes
-               * across the 968–1280px squeeze zone.
-               */}
               <span>Web · Desktop · Mobile.</span>
             </Headline>
 
             <Subheadline variants={itemVariants}>
-              AES-256 file encryption. Zero-knowledge self-destructing files. Hands-free mouse via facial recognition.
-              I build full-stack software across web, desktop, Android, and iOS — with security and craft at every layer.
+              I build software that doesn't overshare — file encryption tools, zero-knowledge sharing
+              platforms, and privacy-first desktop apps. From web to Windows to Android, with security
+              at every layer.
             </Subheadline>
 
             <CTAContainer variants={itemVariants}>
-              <Button
-                as={Link}
-                to="/projects"
-                variant="primary"
-                size="lg"
-              >
+              <Button as={Link} to="/projects" variant="primary" size="lg">
                 Explore My Work
               </Button>
-              <Button
-                as={Link}
-                to="/contact"
-                variant="outline"
-                size="lg"
-              >
+              <Button as={Link} to="/contact" variant="outline" size="lg">
                 Start a Conversation
               </Button>
               <div
-                onMouseEnter={() => {
-                  if (window.innerWidth > 968) setShowResumePreview(true);
-                }}
-                onMouseLeave={() => {
-                  if (window.innerWidth > 968) setShowResumePreview(false);
-                }}
+                onMouseEnter={() => { if (window.innerWidth > 968) setShowResumePreview(true); }}
+                onMouseLeave={() => { if (window.innerWidth > 968) setShowResumePreview(false); }}
                 onKeyDown={(e) => {
                   if (e.key === 'Enter' || e.key === ' ') {
                     e.preventDefault();
-                    setShowResumePreview((prev) => !prev);
+                    setShowResumePreview(prev => !prev);
                   }
                 }}
                 onBlur={() => setShowResumePreview(false)}
-                role="button"
-                tabIndex={0}
-                aria-label="Preview resume — hover or press Enter to toggle"
               >
                 <Suspense fallback={null}>
                   <ResumeDownload variant="outline" size="lg" showTooltip={false} />
@@ -739,7 +730,6 @@ const Home: React.FC = () => {
               </div>
             </CTAContainer>
 
-            {/* Availability signal — first thing a recruiter wants to know */}
             <AvailabilityBadge variants={itemVariants}>
               <StatusDot aria-hidden="true" />
               <span>Open to new projects · Remote-friendly · Replies within 24h</span>
@@ -760,7 +750,7 @@ const Home: React.FC = () => {
                     src={profileImage450}
                     srcSet={`${profileImage150} 150w, ${profileImage300} 300w, ${profileImage450} 450w, ${profileImage600} 600w, ${profileImage900} 900w, ${profileImage} 1673w`}
                     sizes="(max-width: 968px) 280px, 450px"
-                    alt="Rolan Lobo (Rolan RNR) - Full Stack Developer"
+                    alt="Rolan Lobo — Software Developer"
                   />
                 </StylizedImage>
               ) : (
@@ -775,9 +765,7 @@ const Home: React.FC = () => {
                   <ResumePreviewContainer>
                     <img src="/Resume_preview.webp" alt="Resume Preview" />
                   </ResumePreviewContainer>
-                  <ResumeHintText>
-                    Click button to download full resume
-                  </ResumeHintText>
+                  <ResumeHintText>Click button to download full resume</ResumeHintText>
                 </StylizedImage>
               )}
             </AnimatePresence>
@@ -798,7 +786,6 @@ const Home: React.FC = () => {
               <h3>3+</h3>
               <p>Years Building</p>
             </StatItem>
-            {/* 4 = Web · Windows Desktop · Android · iOS — factual platform breadth */}
             <StatItem>
               <h3>4</h3>
               <p>Platforms</p>
@@ -807,7 +794,50 @@ const Home: React.FC = () => {
         </StatsBar>
       </HeroSection>
 
-      {/* Blog Section */}
+      {/* Featured Projects */}
+      {featuredProjects.length > 0 && (
+        <FeaturedSection>
+          <Container>
+            <SectionHeader>
+              <SectionLabel>Featured Work</SectionLabel>
+              <SectionLink to="/projects">View all projects →</SectionLink>
+            </SectionHeader>
+
+            <FeaturedGrid>
+              {featuredProjects.map((project: Project, index: number) => (
+                <FeaturedCard
+                  key={project.id}
+                  as={Link}
+                  to="/projects"
+                  initial={{ opacity: 0, y: 20 }}
+                  whileInView={{ opacity: 1, y: 0 }}
+                  viewport={{ once: true }}
+                  transition={{ duration: 0.4, delay: index * 0.08 }}
+                >
+                  <FeaturedCardHeader>
+                    <FeaturedCardMeta>
+                      <FeaturedCardIcon aria-hidden="true">{project.icon}</FeaturedCardIcon>
+                      <FeaturedCardCategory>{project.category}</FeaturedCardCategory>
+                    </FeaturedCardMeta>
+                    <ArrowIcon aria-hidden="true">↗</ArrowIcon>
+                  </FeaturedCardHeader>
+
+                  <FeaturedCardTitle>{project.title}</FeaturedCardTitle>
+                  <FeaturedCardDescription>{project.description}</FeaturedCardDescription>
+
+                  <FeaturedCardTech>
+                    {project.technologies.slice(0, 4).map((tech: string) => (
+                      <TechPill key={tech}>{tech}</TechPill>
+                    ))}
+                  </FeaturedCardTech>
+                </FeaturedCard>
+              ))}
+            </FeaturedGrid>
+          </Container>
+        </FeaturedSection>
+      )}
+
+      {/* Blog */}
       {!loadingBlog && blogPosts.length > 0 && (
         <BlogSection>
           <Container>
@@ -817,22 +847,13 @@ const Home: React.FC = () => {
                 animate={{ opacity: 1, y: 0 }}
                 transition={{ duration: 0.6 }}
               >
-              {/*
-               * Audit note: 'My Thoughts on Tech' reads as a personal diary.
-               * 'Technical Writing' positions the blog as authored work — a professional signal.
-               */}
-              Technical Writing
+                Technical Writing
               </BlogTitle>
               <BlogSubtitle
                 initial={{ opacity: 0, y: 20 }}
                 animate={{ opacity: 1, y: 0 }}
                 transition={{ duration: 0.6, delay: 0.1 }}
               >
-                {/*
-                 * Audit note: 'figured out the hard way' is self-deprecating and vague.
-                 * The new subtitle is a specific topical promise — tells a recruiter
-                 * exactly what they'll read about (encryption architecture, accessibility).
-                 */}
                 From encryption architecture to accessibility trade-offs — things I've shipped, broken, and rebuilt.
               </BlogSubtitle>
             </BlogHeader>
@@ -852,13 +873,7 @@ const Home: React.FC = () => {
               ))}
             </BlogGrid>
 
-            <ViewAllButton
-              as={Link}
-              to="/blog"
-              variant="outline"
-              size="md"
-            >
-              {/* Audit note: 'Read My Technical Writing' positions writing as a skill, not a hobby */}
+            <ViewAllButton as={Link} to="/blog" variant="outline" size="md">
               Read My Technical Writing →
             </ViewAllButton>
           </Container>
