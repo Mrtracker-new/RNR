@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import styled from 'styled-components';
 import { motion, AnimatePresence } from 'framer-motion';
-import { Container, Section, Badge } from '../styles/GlobalStyle';
+import { Container, Section } from '../styles/GlobalStyle';
 import SEO from '../components/SEO';
 
 import FAQSchema from '../components/FAQSchema';
@@ -15,7 +15,6 @@ const ContactHero = styled(Section)`
   position: relative;
   overflow: hidden;
 
-  /* Ambient background glow */
   &::before {
     content: '';
     position: absolute;
@@ -49,16 +48,57 @@ const HeroSubtitle = styled(motion.p)`
   line-height: 1.6;
 `;
 
+const AvailabilityBanner = styled(motion.div)`
+  display: inline-flex;
+  align-items: center;
+  gap: var(--spacing-3);
+  margin: var(--spacing-6) auto 0;
+  padding: 10px 20px;
+  background: rgba(34, 197, 94, 0.06);
+  border: 1px solid rgba(34, 197, 94, 0.2);
+  border-radius: 999px;
+  font-size: var(--text-sm);
+  color: var(--success);
+  font-weight: var(--font-medium);
+  letter-spacing: 0.01em;
+`;
+
+const StatusDot = styled.span`
+  width: 8px;
+  height: 8px;
+  background: var(--success);
+  border-radius: 50%;
+  flex-shrink: 0;
+  position: relative;
+
+  &::after {
+    content: '';
+    position: absolute;
+    inset: -4px;
+    border-radius: 50%;
+    background: rgba(34, 197, 94, 0.25);
+    animation: pulse-ring 2s ease-out infinite;
+  }
+
+  @keyframes pulse-ring {
+    0% { transform: scale(0.8); opacity: 1; }
+    100% { transform: scale(1.8); opacity: 0; }
+  }
+`;
+
 const ContactContent = styled(Container)`
   display: grid;
   grid-template-columns: 1fr 1fr;
-  gap: var(--spacing-12);
+  gap: var(--spacing-16);
   align-items: start;
-  padding-bottom: 100px;
+  padding-top: var(--spacing-4);
+  padding-bottom: 120px;
 
   @media (max-width: 968px) {
     grid-template-columns: 1fr;
-    gap: var(--spacing-12);
+    gap: var(--spacing-10);
+    padding-top: 0;
+    padding-bottom: 80px;
   }
 `;
 
@@ -66,7 +106,7 @@ const ContactContent = styled(Container)`
 const InfoColumn = styled(motion.div)`
   display: flex;
   flex-direction: column;
-  gap: var(--spacing-8);
+  gap: var(--spacing-10);
 `;
 
 const InfoCard = styled(motion.div)`
@@ -74,12 +114,16 @@ const InfoCard = styled(motion.div)`
   backdrop-filter: blur(12px);
   border: 1px solid rgba(255, 255, 255, 0.05);
   border-radius: var(--radius-2xl);
-  padding: var(--spacing-8);
+  padding: var(--spacing-10);
   transition: transform 0.3s ease, border-color 0.3s ease;
 
   &:hover {
     transform: translateY(-4px);
     border-color: rgba(100, 255, 218, 0.2);
+  }
+
+  @media (max-width: 640px) {
+    padding: var(--spacing-8);
   }
 `;
 
@@ -93,29 +137,6 @@ const InfoTitle = styled.h3`
   gap: var(--spacing-3);
 `;
 
-const InfoText = styled.div`
-  color: var(--dark-400);
-  line-height: 1.6;
-  font-size: var(--text-base);
-
-  p {
-    margin-bottom: var(--spacing-3);
-    &:last-child {
-      margin-bottom: 0;
-    }
-  }
-
-  a {
-    color: var(--accent-primary);
-    text-decoration: none;
-    transition: opacity 0.2s ease;
-    &:hover {
-      opacity: 0.8;
-    }
-  }
-`;
-
-// ... (keeping previous code flow)
 
 const SocialGrid = styled.div`
   display: grid;
@@ -179,7 +200,177 @@ const SocialCardButton = styled(motion.a)`
   }
 `;
 
+// "What I Build" section — service deliverables
+const ServicesCard = styled(motion.div)`
+  background: rgba(30, 41, 59, 0.3);
+  backdrop-filter: blur(12px);
+  border: 1px solid rgba(139, 92, 246, 0.15);
+  border-radius: var(--radius-2xl);
+  padding: var(--spacing-10);
+  transition: transform 0.3s ease, border-color 0.3s ease;
 
+  &:hover {
+    transform: translateY(-4px);
+    border-color: rgba(139, 92, 246, 0.3);
+  }
+
+  @media (max-width: 640px) {
+    padding: var(--spacing-8);
+  }
+`;
+
+const ServicesTitle = styled.h3`
+  font-size: var(--text-xl);
+  color: var(--dark-100);
+  margin-bottom: var(--spacing-5);
+  font-weight: var(--font-bold);
+  display: flex;
+  align-items: center;
+  gap: var(--spacing-3);
+`;
+
+const ServicesList = styled.ul`
+  list-style: none;
+  padding: 0;
+  margin: 0;
+  display: flex;
+  flex-direction: column;
+  gap: var(--spacing-5);
+`;
+
+const ServiceItem = styled.li`
+  display: flex;
+  align-items: flex-start;
+  gap: var(--spacing-4);
+  color: var(--dark-300);
+  font-size: var(--text-sm);
+  line-height: 1.6;
+  padding-bottom: var(--spacing-5);
+  border-bottom: 1px solid rgba(255, 255, 255, 0.04);
+
+  &:last-child {
+    padding-bottom: 0;
+    border-bottom: none;
+  }
+`;
+
+const ServiceIcon = styled.span`
+  font-size: 1rem;
+  flex-shrink: 0;
+  margin-top: 1px;
+`;
+
+const ServiceText = styled.div`
+  flex: 1;
+
+  strong {
+    display: block;
+    color: var(--dark-100);
+    font-weight: var(--font-semibold);
+    font-size: var(--text-base);
+    margin-bottom: 4px;
+  }
+`;
+
+// Availability + pricing card
+const AvailabilityCard = styled(motion.div)`
+  background: linear-gradient(135deg, rgba(100, 255, 218, 0.04) 0%, rgba(139, 92, 246, 0.04) 100%);
+  border: 1px solid rgba(100, 255, 218, 0.1);
+  border-radius: var(--radius-2xl);
+  padding: var(--spacing-10);
+  transition: border-color 0.3s ease;
+
+  &:hover {
+    border-color: rgba(100, 255, 218, 0.2);
+  }
+
+  @media (max-width: 640px) {
+    padding: var(--spacing-8);
+  }
+`;
+
+const AvailabilityTitle = styled.h3`
+  font-size: var(--text-xl);
+  color: var(--dark-100);
+  margin-bottom: var(--spacing-5);
+  font-weight: var(--font-bold);
+  display: flex;
+  align-items: center;
+  gap: var(--spacing-3);
+`;
+
+const AvailabilityGrid = styled.div`
+  display: flex;
+  flex-direction: column;
+  gap: var(--spacing-5);
+`;
+
+const AvailabilityRow = styled.div`
+  display: flex;
+  align-items: flex-start;
+  gap: var(--spacing-4);
+  padding-bottom: var(--spacing-5);
+  border-bottom: 1px solid rgba(255, 255, 255, 0.04);
+
+  &:last-child {
+    padding-bottom: 0;
+    border-bottom: none;
+  }
+`;
+
+const AvailabilityRowIcon = styled.span`
+  font-size: 1rem;
+  flex-shrink: 0;
+  margin-top: 2px;
+`;
+
+const AvailabilityRowText = styled.div`
+  flex: 1;
+
+  strong {
+    display: block;
+    color: var(--dark-100);
+    font-size: var(--text-sm);
+    font-weight: var(--font-semibold);
+    margin-bottom: 1px;
+  }
+
+  span {
+    color: var(--dark-400);
+    font-size: var(--text-sm);
+  }
+`;
+
+const EmailQuickTap = styled.a`
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: var(--spacing-2);
+  padding: 14px 20px;
+  background: rgba(100, 255, 218, 0.06);
+  border: 1px solid rgba(100, 255, 218, 0.15);
+  border-radius: var(--radius-xl);
+  color: var(--accent-primary);
+  text-decoration: none;
+  font-size: var(--text-base);
+  font-weight: var(--font-semibold);
+  transition: all 0.3s ease;
+  margin-top: var(--spacing-8);
+  letter-spacing: 0.01em;
+
+  &:hover {
+    background: rgba(100, 255, 218, 0.12);
+    border-color: rgba(100, 255, 218, 0.3);
+    transform: translateY(-2px);
+    box-shadow: 0 8px 24px rgba(100, 255, 218, 0.12);
+    color: var(--accent-primary);
+  }
+
+  svg {
+    width: 18px;
+    height: 18px;
+  }
+`;
 
 // Right Column: Contact Form
 const FormColumn = styled(motion.div)`
@@ -192,16 +383,16 @@ const StyledForm = styled.form`
   -webkit-backdrop-filter: blur(20px);
   border: 1px solid rgba(100, 255, 218, 0.1);
   border-radius: var(--radius-2xl);
-  padding: var(--spacing-8);
+  padding: var(--spacing-10);
   box-shadow: 0 20px 40px rgba(0, 0, 0, 0.2);
   
   @media (max-width: 640px) {
-    padding: var(--spacing-6);
+    padding: var(--spacing-7);
   }
 `;
 
 const FormGroup = styled.div`
-  margin-bottom: var(--spacing-6);
+  margin-bottom: var(--spacing-7);
   position: relative;
 `;
 
@@ -311,6 +502,21 @@ const StatusMessage = styled(motion.div) <{ type: 'success' | 'error' }>`
   font-size: var(--text-sm);
 `;
 
+const FormTitle = styled.h2`
+  font-size: var(--text-2xl);
+  color: var(--dark-50);
+  font-weight: var(--font-bold);
+  margin-bottom: var(--spacing-2);
+  letter-spacing: -0.025em;
+`;
+
+const FormSubtitle = styled.p`
+  color: var(--dark-400);
+  font-size: var(--text-sm);
+  margin-bottom: var(--spacing-8);
+  line-height: 1.5;
+`;
+
 // Icons
 const GitHubIcon = () => (
   <svg viewBox="0 0 24 24">
@@ -336,6 +542,13 @@ const DevToIcon = () => (
   </svg>
 );
 
+const MailIcon = () => (
+  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
+    <rect x="2" y="4" width="20" height="16" rx="2" />
+    <path d="m22 7-8.97 5.7a1.94 1.94 0 0 1-2.06 0L2 7" />
+  </svg>
+);
+
 // --- Component ---
 
 interface FormData {
@@ -351,6 +564,24 @@ interface FormErrors {
   subject?: string;
   message?: string;
 }
+
+const containerVariants = {
+  hidden: { opacity: 0 },
+  visible: {
+    opacity: 1,
+    transition: { staggerChildren: 0.1, delayChildren: 0.1 }
+  }
+};
+
+const itemSlideLeft = {
+  hidden: { opacity: 0, x: -30 },
+  visible: { opacity: 1, x: 0, transition: { duration: 0.6 } }
+};
+
+const itemSlideRight = {
+  hidden: { opacity: 0, x: 30 },
+  visible: { opacity: 1, x: 0, transition: { duration: 0.6 } }
+};
 
 const Contact: React.FC = () => {
 
@@ -393,7 +624,6 @@ const Contact: React.FC = () => {
     setStatus(null);
 
     try {
-      // Create form data in the format Netlify expects
       const formDataToSubmit = new URLSearchParams();
       formDataToSubmit.append('form-name', 'contact');
       formDataToSubmit.append('name', formData.name);
@@ -401,7 +631,6 @@ const Contact: React.FC = () => {
       formDataToSubmit.append('subject', formData.subject);
       formDataToSubmit.append('message', formData.message);
 
-      // Simulate success on localhost to verify UI
       if (window.location.hostname === 'localhost' || window.location.hostname === '127.0.0.1') {
         await new Promise(resolve => setTimeout(resolve, 1000));
         setStatus({ type: 'success', message: "Got it! Rolan will be in touch within 24 hours." });
@@ -427,24 +656,6 @@ const Contact: React.FC = () => {
     } finally {
       setIsSubmitting(false);
     }
-  };
-
-  const containerVariants = {
-    hidden: { opacity: 0 },
-    visible: {
-      opacity: 1,
-      transition: { staggerChildren: 0.1, delayChildren: 0.1 }
-    }
-  };
-
-  const itemSlideLeft = {
-    hidden: { opacity: 0, x: -30 },
-    visible: { opacity: 1, x: 0, transition: { duration: 0.6 } }
-  };
-
-  const itemSlideRight = {
-    hidden: { opacity: 0, x: 30 },
-    visible: { opacity: 1, x: 0, transition: { duration: 0.6 } }
   };
 
   return (
@@ -474,6 +685,14 @@ const Contact: React.FC = () => {
             Got an idea? A project? Or just want to say hi?
             <br />I read every message and reply within 24 hours.
           </HeroSubtitle>
+          <AvailabilityBanner
+            initial={{ opacity: 0, y: 16 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.5, delay: 0.35 }}
+          >
+            <StatusDot aria-hidden="true" />
+            Currently accepting projects for Q3 2026
+          </AvailabilityBanner>
         </Container>
       </ContactHero>
 
@@ -484,30 +703,77 @@ const Contact: React.FC = () => {
         animate="visible"
       >
         <InfoColumn variants={itemSlideLeft}>
-          <InfoCard>
-            <InfoTitle><span>📧</span> Drop Me a Line</InfoTitle>
-            <InfoText>
-              <p>Best for project inquiries, collabs, or just saying hi:</p>
-              <a href="mailto:rolanlobo901@gmail.com" style={{ fontSize: '1.1rem', fontWeight: 600 }}>
-                rolanlobo901@gmail.com
-              </a>
-              <p style={{ marginTop: 'var(--spacing-2)', fontSize: '0.9em', opacity: 0.7 }}>
-                I reply within 24 hours — usually faster.
-              </p>
-            </InfoText>
-          </InfoCard>
+          {/* What I Can Build */}
+          <ServicesCard>
+            <ServicesTitle><span>🛠️</span> What I Can Build For You</ServicesTitle>
+            <ServicesList>
+              <ServiceItem>
+                <ServiceIcon>🌐</ServiceIcon>
+                <ServiceText>
+                  <strong>Full-Stack Web Apps</strong>
+                  React, TypeScript, Node.js/Flask — from prototype to production deployment on Netlify, Vercel, or your infrastructure.
+                </ServiceText>
+              </ServiceItem>
+              <ServiceItem>
+                <ServiceIcon>🖥️</ServiceIcon>
+                <ServiceText>
+                  <strong>Desktop Applications</strong>
+                  Offline-first Windows tools with PyQt5 or Electron — installable .exe, no cloud dependency, full local control.
+                </ServiceText>
+              </ServiceItem>
+              <ServiceItem>
+                <ServiceIcon>📱</ServiceIcon>
+                <ServiceText>
+                  <strong>Android & iOS Apps</strong>
+                  Flutter or React Native PWAs — cross-platform, offline-capable, APK-ready for distribution.
+                </ServiceText>
+              </ServiceItem>
+              <ServiceItem>
+                <ServiceIcon>🔒</ServiceIcon>
+                <ServiceText>
+                  <strong>Security Integrations</strong>
+                  AES-256 encryption, zero-knowledge architectures, steganography, self-destructing file systems, and E2E messaging.
+                </ServiceText>
+              </ServiceItem>
+            </ServicesList>
+          </ServicesCard>
 
-          <InfoCard>
-            <InfoTitle><span>📍</span> Location</InfoTitle>
-            <InfoText>
-              <p>Based in <strong>Karnataka, India</strong></p>
-              <p>Operating in <strong>IST (UTC +5:30)</strong></p>
-              <div style={{ marginTop: 'var(--spacing-3)' }}>
-                <Badge variant="success">Available for new projects</Badge>
-              </div>
-            </InfoText>
-          </InfoCard>
+          {/* Availability + Pricing */}
+          <AvailabilityCard>
+            <AvailabilityTitle><span>📅</span> Availability & Scope</AvailabilityTitle>
+            <AvailabilityGrid>
+              <AvailabilityRow>
+                <AvailabilityRowIcon>🟢</AvailabilityRowIcon>
+                <AvailabilityRowText>
+                  <strong>Open for Q3 2026</strong>
+                  <span>Accepting new projects now · Response within 24h</span>
+                </AvailabilityRowText>
+              </AvailabilityRow>
+              <AvailabilityRow>
+                <AvailabilityRowIcon>🌍</AvailabilityRowIcon>
+                <AvailabilityRowText>
+                  <strong>Remote-First, Worldwide</strong>
+                  <span>Karnataka, India (IST · UTC+5:30) · Async-friendly</span>
+                </AvailabilityRowText>
+              </AvailabilityRow>
+              <AvailabilityRow>
+                <AvailabilityRowIcon>💼</AvailabilityRowIcon>
+                <AvailabilityRowText>
+                  <strong>Project Types</strong>
+                  <span>Freelance · Contract · Full-time · Open-source collab</span>
+                </AvailabilityRowText>
+              </AvailabilityRow>
+            </AvailabilityGrid>
+            <EmailQuickTap
+              href="mailto:rolanlobo901@gmail.com?subject=Project Inquiry"
+              aria-label="Email Rolan Lobo directly"
+            >
+              <MailIcon />
+              rolanlobo901@gmail.com
+            </EmailQuickTap>
+          </AvailabilityCard>
 
+          {/* Connect */}
           <InfoCard>
             <InfoTitle><span>🌐</span> Connect</InfoTitle>
             <SocialGrid>
@@ -563,6 +829,11 @@ const Contact: React.FC = () => {
             <p hidden>
               <label>Don't fill this out: <input name="bot-field" /></label>
             </p>
+
+            <FormTitle>Send a Message</FormTitle>
+            <FormSubtitle>
+              Tell me what you're working on — I'll respond within 24 hours with honest thoughts on how I can help.
+            </FormSubtitle>
 
             <FormGroup>
               <Label htmlFor="name">Your Name <span aria-hidden="true">*</span></Label>

@@ -27,20 +27,19 @@ const HeroSection = styled.section`
   /*
    * Desktop: ensure the section is always tall enough to contain both
    * the centered HeroContent AND the absolutely-positioned StatsBar.
-   * StatsBar is ~80px tall, sitting at bottom: 24px → needs 104px clearance.
-   * We add 20px buffer → 124px minimum bottom pad.
-   * min-height uses svh (small viewport height) where supported so mobile
-   * browser chrome doesn't swallow content; falls back to 100vh.
+   * Navbar total height ≈ 76px (FixedContainer 16px + island margin 16px +
+   * island padding 12px + logo ~20px + island padding 12px).
+   * padding-top: 130px → 54px of guaranteed clearance above the pill.
    */
   min-height: 100svh;
-  min-height: 100vh; /* fallback for browsers without svh */
+  min-height: 100vh;
   display: flex;
   flex-direction: column;
   justify-content: center;
   align-items: center;
   position: relative;
-  padding-top: 100px;
-  padding-bottom: 130px; /* explicit px: room for absolute StatsBar (104px) + comfortable buffer */
+  padding-top: 130px;
+  padding-bottom: 130px;
   
   /* Background Elements */
   &::before {
@@ -56,22 +55,21 @@ const HeroSection = styled.section`
     filter: blur(60px);
   }
 
-  /* Intermediate squeeze: 968px–1280px, 2-col grid still active but tighter */
+  /* Squeeze zone 968–1280px: StatsBar flows in-document, no bottom padding needed */
   @media (min-width: 968px) and (max-width: 1280px) {
-    padding-top: 90px;
-    padding-bottom: 120px;
+    padding-top: 130px;
+    padding-bottom: 40px;
   }
 
   @media (max-width: 968px) {
-    /* Mobile: block display for natural page flow, overflow-x to clip background */
     display: block;
     min-height: 0;
     min-height: unset;
     max-height: none;
     height: auto;
-    padding-top: 100px;
+    padding-top: 120px;
     padding-bottom: var(--spacing-4);
-    overflow-x: clip; /* Clip background gradient, but don't create scroll container */
+    overflow-x: clip;
     
     &::before {
       filter: blur(30px);
@@ -80,7 +78,7 @@ const HeroSection = styled.section`
   }
 
   @media (max-width: 640px) {
-    padding-top: 80px;
+    padding-top: 100px;
   }
 `;
 
@@ -307,56 +305,56 @@ const Subheadline = styled(motion.p)`
   margin-bottom: var(--spacing-8);
 
   @media (min-width: 968px) and (max-width: 1280px) {
-    font-size: 0.95rem;
+    font-size: 1rem;
     line-height: 1.65;
-    margin-bottom: var(--spacing-5);
-    max-width: 460px;
+    margin-bottom: var(--spacing-8);
+    max-width: 480px;
   }
 
   @media (max-width: 968px) {
     font-size: clamp(0.95rem, 2.5vw, 1.1rem);
     max-width: 100%;
-    margin-bottom: var(--spacing-6);
+    margin-bottom: var(--spacing-8);
     padding: 0 var(--spacing-2);
   }
 
   @media (max-width: 480px) {
     font-size: 0.95rem;
-    margin-bottom: var(--spacing-5);
+    margin-bottom: var(--spacing-6);
     padding: 0;
   }
 `;
 
 const CTAContainer = styled(motion.div)`
   display: flex;
-  gap: var(--spacing-4);
+  gap: var(--spacing-3) var(--spacing-4);
   align-items: center;
   flex-wrap: wrap;
+  /* Ensure wrapped items (Download Resume) align left matching the primary CTAs */
+  align-content: flex-start;
 
   @media (max-width: 968px) {
     justify-content: center;
+    align-content: center;
   }
   
   @media (max-width: 480px) {
     flex-direction: column;
     width: 100%;
+    gap: var(--spacing-3);
     
-    /* Direct children buttons/links */
     > a, > button {
       width: 100%;
       text-align: center;
     }
 
-    /* Wrapper div for ResumeDownload hover effect */
     > div {
       width: 100%;
       
-      /* ResumeDownload internal wrapper (ResumeButtonWrapper) */
       > div {
         width: 100%;
         display: block;
         
-        /* The actual download button inside ResumeDownload */
         a {
           width: 100%;
           justify-content: center;
@@ -414,21 +412,18 @@ const AvailabilityBadge = styled(motion.div)`
   font-size: var(--text-sm);
   color: var(--dark-400);
   font-weight: var(--font-medium);
-  margin-top: var(--spacing-4);
-  /* overflow:hidden clips the expanding ::after ring on StatusDot so it
-     never bleeds visually outside the badge bounds */
+  margin-top: var(--spacing-6);
   overflow: hidden;
-  /* Give the badge its own padding so the clip doesn't cut the dot itself */
   padding: 2px 0;
 
   @media (min-width: 968px) and (max-width: 1280px) {
-    margin-top: var(--spacing-3);
+    margin-top: var(--spacing-6);
     font-size: var(--text-xs);
   }
 
   @media (max-width: 968px) {
     justify-content: center;
-    margin-top: var(--spacing-3);
+    margin-top: var(--spacing-6);
   }
 
   @media (max-width: 480px) {
@@ -437,31 +432,31 @@ const AvailabilityBadge = styled(motion.div)`
 `;
 
 const StatsBar = styled(motion.div)`
-  position: absolute;
-  bottom: var(--spacing-6);
-  left: var(--spacing-4);
-  right: var(--spacing-4);
-  max-width: calc(var(--breakpoint-lg) - var(--spacing-8));
-  margin: 0 auto;
+  /* Default: in-flow, used at all widths < 1280px */
+  position: relative;
+  bottom: auto;
+  left: auto;
+  right: auto;
+  max-width: 100%;
+  margin: var(--spacing-12) auto 0;
   padding: var(--spacing-5) var(--spacing-6);
-  background: rgba(255, 255, 255, 0.03);
-  backdrop-filter: blur(20px);
-  -webkit-backdrop-filter: blur(20px);
-  border: 1px solid rgba(255, 255, 255, 0.1);
+  background: rgba(30, 41, 59, 0.4);
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+  border: 1px solid rgba(255, 255, 255, 0.08);
   border-radius: var(--radius-2xl);
   box-shadow: 0 8px 32px rgba(0, 0, 0, 0.3),
               inset 0 1px 0 rgba(255, 255, 255, 0.1);
   z-index: 10;
-  
-  /* Gradient overlay for extra flair */
+
   &::before {
     content: '';
     position: absolute;
     inset: 0;
     border-radius: var(--radius-2xl);
     padding: 1px;
-    background: linear-gradient(135deg, 
-      rgba(100, 255, 218, 0.3) 0%, 
+    background: linear-gradient(135deg,
+      rgba(100, 255, 218, 0.3) 0%,
       rgba(139, 92, 246, 0.3) 50%,
       rgba(100, 255, 218, 0.3) 100%
     );
@@ -471,33 +466,25 @@ const StatsBar = styled(motion.div)`
     pointer-events: none;
     opacity: 0.5;
   }
-  
-  @media (max-width: 1200px) {
-    left: var(--spacing-3);
-    right: var(--spacing-3);
-    padding: var(--spacing-4) var(--spacing-5);
+
+  /* Only float at the bottom when the viewport is large enough */
+  @media (min-width: 1280px) {
+    position: absolute;
+    bottom: var(--spacing-6);
+    left: var(--spacing-4);
+    right: var(--spacing-4);
+    max-width: calc(var(--breakpoint-lg) - var(--spacing-8));
+    margin: 0 auto;
+    background: rgba(255, 255, 255, 0.03);
+    backdrop-filter: blur(20px);
+    -webkit-backdrop-filter: blur(20px);
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    box-shadow: 0 8px 32px rgba(0, 0, 0, 0.3),
+                inset 0 1px 0 rgba(255, 255, 255, 0.1);
   }
-  
-  @media (max-width: 968px) {
-    /* Mobile: Keep visuals but reduce spacing for unity */
-    position: relative;
-    bottom: auto;
-    left: auto;
-    right: auto;
-    max-width: 100%;
-    margin: var(--spacing-6) auto 0; /* Tighter spacing for unified feel */
-    padding: var(--spacing-5) var(--spacing-4);
-    background: rgba(30, 41, 59, 0.4); /* Match About page glassmorphic style */
-    backdrop-filter: blur(12px);
-    -webkit-backdrop-filter: blur(12px);
-    border: 1px solid rgba(255, 255, 255, 0.05);
-    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.2);
-  }
-  
+
   @media (max-width: 640px) {
-    left: auto;
-    right: auto;
-    margin-top: var(--spacing-5); /* Even tighter on small screens */
+    margin-top: var(--spacing-10);
     margin-left: var(--spacing-2);
     margin-right: var(--spacing-2);
     padding: var(--spacing-4) var(--spacing-3);
@@ -726,7 +713,7 @@ const Home: React.FC = () => {
                 variant="outline"
                 size="lg"
               >
-                Get In Touch
+                Start a Conversation
               </Button>
               <div
                 onMouseEnter={() => {

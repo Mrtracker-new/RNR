@@ -229,7 +229,7 @@ const ExitIntentPopup: React.FC<ExitIntentPopupProps> = ({
   primaryActionLabel = "Download Resume",
   onPrimaryAction,
   primaryActionPath,
-  secondaryActionLabel = "Let's Talk",
+  secondaryActionLabel = "Start a Conversation →",
   onSecondaryAction,
   secondaryActionPath = "/contact",
   activationDelay = 3000,
