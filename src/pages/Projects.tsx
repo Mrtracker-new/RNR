@@ -1,642 +1,364 @@
-import React, { useState, useMemo, useEffect } from 'react';
+import React, { useState, useMemo, useEffect, useCallback } from 'react';
 import styled from 'styled-components';
 import { motion, AnimatePresence } from 'framer-motion';
-import { Container, Section, Grid, Badge } from '../styles/GlobalStyle';
+import { Container, Badge } from '../styles/GlobalStyle';
 import SEO from '../components/SEO';
 import { projectsData, PROJECT_CATEGORIES } from '../data/projects';
 import type { Project } from '../data/projects';
 
-// ── Case study styled components ───────────────────────────────────────────
+/* ─── Design tokens used locally ─────────────────────────────────────────── */
 
-const CaseStudyGrid = styled.div`
-  display: grid;
-  grid-template-columns: 1fr 1fr;
-  gap: var(--spacing-4);
-  margin-bottom: var(--spacing-6);
+// Category → display metadata
+const CATEGORY_META: Record<string, { label: string; count: (p: Project[]) => number }> = {
+  'All':                 { label: 'All',       count: (p) => p.length },
+  'Desktop Application': { label: 'Desktop',   count: (p) => p.filter(x => x.category === 'Desktop Application').length },
+  'Web Application':     { label: 'Web',       count: (p) => p.filter(x => x.category === 'Web Application').length },
+  'Android App':         { label: 'Mobile',    count: (p) => p.filter(x => x.category === 'Android App').length },
+};
 
-  @media (max-width: 640px) {
-    grid-template-columns: 1fr;
-    gap: var(--spacing-3);
+/* ─── Page hero ───────────────────────────────────────────────────────────── */
+
+const PageWrapper = styled.div`
+  padding-top: 100px;
+  padding-bottom: var(--spacing-20);
+
+  @media (max-width: 768px) {
+    padding-top: 90px;
+    padding-bottom: var(--spacing-16);
   }
 `;
 
-const CaseStudyCard = styled.div<{ $accentColor: string }>`
-  background: rgba(255, 255, 255, 0.03);
-  border: 1px solid ${props => props.$accentColor}33;
-  border-radius: var(--radius-xl);
-  padding: var(--spacing-5);
-  position: relative;
-  overflow: hidden;
-
-  &::before {
-    content: '';
-    position: absolute;
-    top: 0;
-    left: 0;
-    right: 0;
-    height: 3px;
-    background: ${props => props.$accentColor};
-    border-radius: var(--radius-xl) var(--radius-xl) 0 0;
-  }
-
-  @media (max-width: 640px) {
-    padding: var(--spacing-4);
-  }
-`;
-
-const CaseStudyLabel = styled.div<{ $color: string }>`
+const HeroRow = styled.div`
   display: flex;
-  align-items: center;
-  gap: var(--spacing-2);
+  align-items: flex-end;
+  justify-content: space-between;
+  gap: var(--spacing-8);
+  padding: var(--spacing-12) 0 var(--spacing-10);
+  border-bottom: 1px solid rgba(255, 255, 255, 0.06);
+  margin-bottom: var(--spacing-10);
+
+  @media (max-width: 768px) {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: var(--spacing-5);
+    padding: var(--spacing-8) 0 var(--spacing-8);
+    margin-bottom: var(--spacing-8);
+  }
+`;
+
+const HeroLeft = styled(motion.div)``;
+
+const PageLabel = styled.p`
   font-size: 0.7rem;
   font-weight: var(--font-bold);
-  letter-spacing: 0.1em;
+  letter-spacing: 0.14em;
   text-transform: uppercase;
-  color: ${props => props.$color};
+  color: var(--dark-600);
   margin-bottom: var(--spacing-3);
-
-  span.icon {
-    font-size: 0.9rem;
-  }
 `;
 
-const CaseStudyText = styled.p`
-  color: var(--dark-300);
-  font-size: clamp(0.85rem, 1.3vw, 0.95rem);
-  line-height: 1.7;
-  margin: 0;
+const PageTitle = styled(motion.h1)`
+  font-size: clamp(2.2rem, 5vw, 3.5rem);
+  font-weight: var(--font-extrabold);
+  color: var(--dark-50);
+  letter-spacing: -0.03em;
+  line-height: 1.05;
+  margin-bottom: var(--spacing-4);
 `;
 
-const SectionDivider = styled.hr`
-  border: none;
-  border-top: 1px solid rgba(255, 255, 255, 0.07);
-  margin: var(--spacing-6) 0;
+const PageSubtitle = styled(motion.p)`
+  font-size: var(--text-base);
+  color: var(--dark-500);
+  max-width: 480px;
+  line-height: 1.65;
 `;
 
-const ModalImageBanner = styled.div`
-  /* Full-width, flush with the modal's rounded top edge */
-  width: 100%;
-  height: 220px;
-  overflow: hidden;
-  position: relative;
-  border-radius: var(--radius-2xl) var(--radius-2xl) 0 0;
+const HeroRight = styled(motion.div)`
+  display: flex;
+  flex-direction: column;
+  align-items: flex-end;
+  gap: var(--spacing-2);
   flex-shrink: 0;
-  /* Dark placeholder prevents the white flash while the image decodes */
-  background: #0a0f1e;
-
-  img {
-    width: 100%;
-    height: 100%;
-    object-fit: cover;
-    object-position: center;
-    display: block; /* kills inline baseline gap */
-  }
-
-  /* Fade bottom into modal background */
-  &::after {
-    content: '';
-    position: absolute;
-    inset: 0;
-    background: linear-gradient(to bottom, transparent 35%, rgba(15, 23, 42, 0.95) 100%);
-  }
 
   @media (max-width: 768px) {
-    height: 170px;
-    border-radius: var(--radius-xl) var(--radius-xl) 0 0;
+    align-items: flex-start;
+    flex-direction: row;
+    flex-wrap: wrap;
+    gap: var(--spacing-4);
   }
+`;
+
+const StatBlock = styled.div`
+  text-align: right;
+
+  @media (max-width: 768px) { text-align: left; }
+`;
+
+const StatNumber = styled.span`
+  display: block;
+  font-size: var(--text-3xl);
+  font-weight: var(--font-extrabold);
+  color: var(--dark-100);
+  letter-spacing: -0.03em;
+  line-height: 1;
+`;
+
+const StatLabel = styled.span`
+  display: block;
+  font-size: 0.7rem;
+  font-weight: var(--font-medium);
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--dark-600);
+  margin-top: 3px;
+`;
+
+const StatSeparator = styled.div`
+  width: 1px;
+  height: 32px;
+  background: rgba(255, 255, 255, 0.08);
+  margin: 0 var(--spacing-4);
+
+  @media (max-width: 768px) { display: none; }
+`;
+
+const HeroStatsRow = styled.div`
+  display: flex;
+  align-items: center;
+
+  @media (max-width: 768px) { gap: var(--spacing-6); }
+`;
+
+/* ─── Filter bar ──────────────────────────────────────────────────────────── */
+
+const FilterBar = styled(motion.div)`
+  display: flex;
+  align-items: center;
+  gap: 2px;
+  background: rgba(255, 255, 255, 0.03);
+  border: 1px solid rgba(255, 255, 255, 0.07);
+  border-radius: var(--radius-lg);
+  padding: 4px;
+  width: fit-content;
+  margin-bottom: var(--spacing-10);
 
   @media (max-width: 640px) {
-    height: 150px;
-    border-radius: 0;
+    width: 100%;
+    overflow-x: auto;
+    scrollbar-width: none;
+    &::-webkit-scrollbar { display: none; }
   }
 `;
 
-const ProjectsHero = styled(Section)`
-  padding-top: 140px;
-  padding-bottom: 40px;
-  text-align: center;
-  
-  @media (max-width: 768px) {
-    padding-top: 120px;
-    padding-bottom: 20px;
-  }
-`;
-
-const HeroTitle = styled(motion.h1)`
-  font-size: clamp(2.5rem, 6vw, 3.5rem);
-  margin-bottom: var(--spacing-6);
-  color: var(--dark-50);
-  font-weight: var(--font-extrabold);
-  letter-spacing: -0.025em;
-`;
-
-const HeroSubtitle = styled(motion.p)`
-  font-size: var(--text-xl);
-  color: var(--dark-400);
-  max-width: 600px;
-  margin: 0 auto var(--spacing-10);
-  line-height: 1.7;
-`;
-
-const FilterSection = styled(motion.div)`
+const FilterTab = styled.button<{ $active: boolean }>`
   display: flex;
-  justify-content: center;
-  gap: var(--spacing-4);
-  margin-bottom: var(--spacing-8);
-  flex-wrap: wrap;
-`;
-
-const FilterButton = styled(motion.button) <{ $active: boolean }>`
-  padding: var(--spacing-3) var(--spacing-6);
-  border-radius: var(--radius-lg);
-  font-weight: var(--font-semibold);
+  align-items: center;
+  gap: 6px;
+  padding: 7px 16px;
+  border-radius: var(--radius-md);
   font-size: var(--text-sm);
-  transition: var(--transition-normal);
+  font-weight: var(--font-medium);
   cursor: pointer;
+  white-space: nowrap;
+  transition: background 0.18s ease, color 0.18s ease;
+  border: none;
   position: relative;
-  overflow: hidden;
-  letter-spacing: 0.02em;
-  
+
   ${props => props.$active ? `
-    background: var(--accent-gradient);
-    color: var(--dark-950);
-    border: 1px solid transparent;
-    box-shadow: 0 4px 12px rgba(100, 255, 218, 0.3);
+    background: rgba(255, 255, 255, 0.09);
+    color: var(--dark-100);
   ` : `
-    background: rgba(30, 41, 59, 0.3);
-    color: var(--dark-300);
-    border: 1px solid rgba(255, 255, 255, 0.05);
-    backdrop-filter: blur(12px);
-    
-    &:hover {
-      border-color: var(--accent-primary);
-      color: var(--accent-primary);
-      background: rgba(30, 41, 59, 0.5);
-      transform: translateY(-2px);
-    }
+    background: transparent;
+    color: var(--dark-500);
+    &:hover { background: rgba(255, 255, 255, 0.04); color: var(--dark-300); }
   `}
 `;
 
-const ProjectsGrid = styled(Grid)`
-  grid-template-columns: repeat(auto-fill, minmax(360px, 1fr));
-  gap: var(--spacing-8);
-  
-  @media (max-width: 768px) {
-    grid-template-columns: 1fr;
-    gap: var(--spacing-8);
-  }
+const FilterCount = styled.span<{ $active: boolean }>`
+  font-size: 0.65rem;
+  font-family: var(--font-mono);
+  padding: 1px 6px;
+  border-radius: 99px;
+  background: ${props => props.$active ? 'rgba(100, 255, 218, 0.15)' : 'rgba(255,255,255,0.06)'};
+  color: ${props => props.$active ? 'var(--accent-primary)' : 'var(--dark-600)'};
+  font-weight: var(--font-semibold);
+  transition: background 0.18s ease, color 0.18s ease;
 `;
 
-const ProjectCard = styled(motion.div)`
-  position: relative;
+/* ─── Featured section ────────────────────────────────────────────────────── */
+
+const SectionLabel = styled.p`
+  font-size: 0.68rem;
+  font-weight: var(--font-bold);
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: var(--dark-600);
+  margin-bottom: var(--spacing-6);
+`;
+
+const FeaturedList = styled.div`
   display: flex;
   flex-direction: column;
-  height: 100%;
-  background: rgba(30, 41, 59, 0.3);
-  backdrop-filter: blur(16px);
-  -webkit-backdrop-filter: blur(16px);
-  border: 1px solid rgba(255, 255, 255, 0.05);
-  border-radius: var(--radius-2xl);
+  gap: 1px;
+  margin-bottom: var(--spacing-16);
+  background: rgba(255, 255, 255, 0.05);
+  border-radius: var(--radius-xl);
   overflow: hidden;
-  transition: border-color 0.3s ease;
-  
-  /* Hover State for Card */
-  &:hover {
-    border-color: rgba(100, 255, 218, 0.3);
-    
-    .project-image {
-      transform: scale(1.05);
-    }
-    
-    .project-overlay {
-      opacity: 1;
-    }
+
+  @media (max-width: 768px) { margin-bottom: var(--spacing-12); }
+`;
+
+const FeaturedItem = styled(motion.div)`
+  display: grid;
+  grid-template-columns: 1fr 360px;
+  background: var(--dark-950);
+  cursor: pointer;
+  transition: background 0.2s ease;
+
+  &:hover { background: rgba(20, 27, 45, 0.9); }
+
+  @media (max-width: 960px) {
+    grid-template-columns: 1fr;
   }
 `;
 
-const ProjectImageContainer = styled.div<{ $bgColor: string }>`
-  width: 100%;
-  height: 240px;
-  position: relative;
-  overflow: hidden;
-  background: ${props => props.$bgColor};
+const FeaturedContent = styled.div`
+  padding: var(--spacing-10) var(--spacing-10);
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  gap: var(--spacing-6);
+  border-right: 1px solid rgba(255, 255, 255, 0.05);
+
+  @media (max-width: 960px) {
+    border-right: none;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+    padding: var(--spacing-8) var(--spacing-6);
+  }
+
+  @media (max-width: 640px) { padding: var(--spacing-6); }
+`;
+
+const FeaturedMeta = styled.div`
   display: flex;
   align-items: center;
-  justify-content: center;
-  
-  img {
-    width: 100%;
-    height: 100%;
-    object-fit: cover;
-    transition: transform 0.6s cubic-bezier(0.4, 0, 0.2, 1);
-  }
-
-  &::after {
-    content: '';
-    position: absolute;
-    inset: 0;
-    background: linear-gradient(to top, rgba(15, 23, 42, 0.9) 0%, transparent 100%);
-    opacity: 0.6;
-  }
+  gap: var(--spacing-3);
 `;
 
-const ProjectContent = styled.div`
-  padding: var(--spacing-6);
-  flex: 1;
-  display: flex;
-  flex-direction: column;
+const FeaturedCategoryTag = styled.span`
+  font-size: 0.68rem;
+  font-weight: var(--font-medium);
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--dark-500);
 `;
 
-const ProjectTitle = styled.h3`
-  font-size: 1.5rem;
-  font-weight: 700;
+const FeaturedDot = styled.span`
+  width: 3px;
+  height: 3px;
+  border-radius: 50%;
+  background: var(--dark-700);
+  flex-shrink: 0;
+`;
+
+const FeaturedTitle = styled.h2`
+  font-size: clamp(1.4rem, 3vw, 2rem);
+  font-weight: var(--font-bold);
   color: var(--dark-50);
-  margin-bottom: var(--spacing-2);
+  letter-spacing: -0.025em;
+  line-height: 1.15;
+`;
+
+const FeaturedProblem = styled.p`
+  font-size: var(--text-sm);
+  color: var(--dark-500);
+  line-height: 1.7;
+  max-width: 520px;
+`;
+
+const FeaturedBottom = styled.div`
   display: flex;
   align-items: center;
   justify-content: space-between;
-  
-  a {
-    transition: color 0.3s ease;
-    &:hover {
-      color: var(--accent-primary);
-    }
-  }
-`;
-
-const ProjectDescription = styled.p`
-  color: var(--dark-300);
-  line-height: 1.6;
-  font-size: 0.95rem;
-  margin-bottom: var(--spacing-6);
-  display: -webkit-box;
-  -webkit-line-clamp: 3;
-  -webkit-box-orient: vertical;
-  overflow: hidden;
-`;
-
-const ProjectTech = styled.div`
-  display: flex;
-  flex-wrap: wrap;
-  gap: 8px;
-  margin-top: auto;
-  margin-bottom: var(--spacing-6);
-`;
-
-const TechTag = styled.span`
-  font-size: 0.75rem;
-  color: var(--dark-200);
-  background: rgba(255, 255, 255, 0.05);
-  padding: 4px 10px;
-  border-radius: var(--radius-md);
-  border: 1px solid rgba(255, 255, 255, 0.05);
-  transition: all 0.2s ease;
-
-  &:hover {
-    color: var(--accent-primary);
-    background: rgba(100, 255, 218, 0.1);
-    border-color: rgba(100, 255, 218, 0.2);
-  }
-`;
-
-const ProjectActions = styled.div`
-  display: flex;
   gap: var(--spacing-4);
-  margin-top: var(--spacing-2);
+  flex-wrap: wrap;
 `;
 
-const ActionButton = styled.a<{ variant?: 'primary' | 'secondary' | 'outline' }>`
-  flex: 1;
-  display: inline-flex;
-  align-items: center;
-  justify-content: center;
-  gap: var(--spacing-2);
-  padding: 10px 16px;
-  border-radius: var(--radius-lg);
-  font-size: 0.9rem;
-  font-weight: 600;
-  text-decoration: none;
-  transition: all 0.3s ease;
-  cursor: pointer;
-
-  ${props => props.variant === 'primary' && `
-    background: var(--accent-gradient);
-    color: var(--dark-950);
-    box-shadow: 0 4px 14px rgba(100, 255, 218, 0.2);
-    
-    &:hover {
-      transform: translateY(-2px);
-      box-shadow: 0 6px 20px rgba(100, 255, 218, 0.3);
-    }
-  `}
-
-  ${props => props.variant === 'secondary' && `
-    background: rgba(255, 255, 255, 0.05);
-    color: var(--dark-100);
-    border: 1px solid rgba(255, 255, 255, 0.1);
-    
-    &:hover {
-      background: rgba(255, 255, 255, 0.1);
-      border-color: var(--dark-100);
-      transform: translateY(-2px);
-    }
-  `}
-`;
-
-// Modal Styles
-const ModalOverlay = styled(motion.div)`
-  position: fixed;
-  top: 0;
-  left: 0;
-  right: 0;
-  bottom: 0;
-  background: rgba(0, 0, 0, 0.85);
-  /*
-   * No backdrop-filter and no will-change here.
-   * will-change: transform on a full-screen fixed layer forces the browser
-   * to composite a 100vw×100vh GPU surface that must be repainted on every
-   * scroll frame — the exact cause of the scroll jank.
-   * The compositing boundary lives on ModalContent (translateZ(0)) instead,
-   * so only the card area is promoted, not the entire viewport.
-   */
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  z-index: 1000;
-  padding: var(--spacing-4);
-  overflow: hidden;
-
-  @media (max-width: 768px) {
-    background: rgba(0, 0, 0, 0.92);
-  }
-
-  @media (max-width: 640px) {
-    align-items: flex-start;
-    padding: 0;
-  }
-
-  /* Respect OS reduced-motion preference */
-  @media (prefers-reduced-motion: reduce) {
-    transition: none !important;
-  }
-`;
-
-const ModalContent = styled(motion.div)`
-  background: linear-gradient(135deg,
-    rgba(30, 41, 59, 0.98) 0%,
-    rgba(15, 23, 42, 0.98) 100%);
-  border: 1px solid rgba(100, 255, 218, 0.2);
-  border-radius: var(--radius-2xl);
-  padding: 0;
-  max-width: 900px;
-  width: 100%;
-  position: relative;
-  overflow: hidden;
-  /*
-   * backface-visibility: hidden + will-change: transform create a GPU
-   * compositing boundary scoped to just this card. Framer Motion safely
-   * overrides the transform property with its animated value, so there
-   * is no conflict. DO NOT set transform here — Framer Motion owns it.
-   */
-  backface-visibility: hidden;
-  -webkit-backface-visibility: hidden;
-  will-change: transform;
-  box-shadow:
-    0 25px 50px rgba(0, 0, 0, 0.5),
-    0 0 0 1px rgba(100, 255, 218, 0.1),
-    inset 0  0  0   1px rgba(0, 0, 0, 0.6),
-    inset 0  0  30px 4px rgba(0, 0, 0, 0.45),
-    inset 0  1px 0   0   rgba(255, 255, 255, 0.08);
-
-  /* Corner-blur overlay — sits on top of everything, pointers pass through */
-  &::after {
-    content: '';
-    position: absolute;
-    inset: 0;
-    border-radius: inherit;
-    pointer-events: none;
-    z-index: 9998;
-    background:
-      radial-gradient(ellipse 60px 60px at top right,    rgba(9,9,11,0.55) 0%, transparent 100%),
-      radial-gradient(ellipse 60px 60px at top left,     rgba(9,9,11,0.35) 0%, transparent 100%),
-      radial-gradient(ellipse 60px 60px at bottom right, rgba(9,9,11,0.25) 0%, transparent 100%),
-      radial-gradient(ellipse 60px 60px at bottom left,  rgba(9,9,11,0.25) 0%, transparent 100%);
-  }
-
-  @media (max-width: 1024px) {
-    max-width: 95vw;
-  }
-
-  @media (max-width: 768px) {
-    max-width: 90vw;
-    border-radius: var(--radius-xl);
-    /* Lighter shadow stack on mobile */
-    box-shadow:
-      0 16px 40px rgba(0, 0, 0, 0.6),
-      0 0 0 1px rgba(100, 255, 218, 0.12),
-      inset 0 0 0 1px rgba(0, 0, 0, 0.5);
-  }
-
-  @media (max-width: 640px) {
-    max-width: 100vw;
-    border-radius: 0;
-    border: none;
-  }
-
-  /* Zero transforms for users who prefer reduced motion */
-  @media (prefers-reduced-motion: reduce) {
-    transition: none !important;
-    animation: none !important;
-  }
-`;
-
-/* Scroll container — nested inside ModalContent so border-radius isn't broken */
-const ModalScroller = styled.div`
-  overflow-y: auto;
-  max-height: 90vh;
-  border-radius: inherit;
-  /* Prevent scroll chaining to the page on ALL browsers incl. Chrome Android */
-  overscroll-behavior: contain;
-  /* Allow vertical touch scrolling inside; block horizontal to avoid page swipe */
-  touch-action: pan-y;
-  /*
-   * will-change: scroll-position tells the compositor this element scrolls,
-   * letting it pre-promote the scroll layer and skip main-thread work.
-   * contain: layout style isolates layout recalculation to this subtree only,
-   * preventing scroll from triggering reflows in the rest of the document.
-   */
-  will-change: scroll-position;
-  contain: layout style;
-
-  /* Custom slim scrollbar */
-  scrollbar-width: thin;
-  scrollbar-color: rgba(100, 255, 218, 0.3) transparent;
-
-  &::-webkit-scrollbar {
-    width: 5px;
-  }
-  &::-webkit-scrollbar-track {
-    background: transparent;
-  }
-  &::-webkit-scrollbar-thumb {
-    background: rgba(100, 255, 218, 0.25);
-    border-radius: 99px;
-  }
-  &::-webkit-scrollbar-thumb:hover {
-    background: rgba(100, 255, 218, 0.45);
-  }
-
-  @media (max-width: 768px) {
-    max-height: 85vh;
-  }
-
-  @media (max-width: 640px) {
-    max-height: 100vh;
-  }
-
-  @media (max-height: 600px) {
-    max-height: 95vh;
-  }
-`;
-
-/* Inner padded wrapper — sits below the image banner */
-const ModalBody = styled.div`
-  padding: var(--spacing-6) var(--spacing-8) var(--spacing-8);
-
-  @media (max-width: 1024px) {
-    padding: var(--spacing-5) var(--spacing-6) var(--spacing-6);
-  }
-
-  @media (max-width: 768px) {
-    padding: var(--spacing-4) var(--spacing-5) var(--spacing-5);
-  }
-
-  @media (max-width: 640px) {
-    padding: var(--spacing-4);
-  }
-`;
-
-const CloseButton = styled.button`
-  position: absolute;
-  top: var(--spacing-4);
-  right: var(--spacing-4);
-  width: 44px;
-  height: 44px;
-  border-radius: 50%;
-  background: rgba(255, 255, 255, 0.1);
-  border: 1px solid rgba(255, 255, 255, 0.2);
-  color: var(--dark-200);
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  cursor: pointer;
-  transition: var(--transition-normal);
-  font-size: 20px;
-  font-weight: normal;
-  z-index: 10;
-  /* No backdrop-filter — would be a third composited layer inside the modal */
-  
-  /* Refined mobile design */
-  @media (max-width: 768px) {
-    width: 40px;
-    height: 40px;
-    font-size: 18px;
-    top: var(--spacing-4);
-    right: var(--spacing-4);
-    background: rgba(0, 0, 0, 0.6);
-    border: 1px solid rgba(255, 255, 255, 0.15);
-  }
-
-  &:hover {
-    background: rgba(255, 255, 255, 0.15);
-    color: var(--accent-primary);
-    border-color: var(--accent-primary);
-    transform: scale(1.05);
-  }
-  
-  &:active {
-    transform: scale(0.95);
-    background: rgba(255, 255, 255, 0.2);
-  }
-  
-  /* Touch-friendly on mobile */
-  @media (hover: none) and (pointer: coarse) {
-    &:active {
-      background: rgba(255, 255, 255, 0.2);
-      color: var(--accent-primary);
-    }
-  }
-`;
-
-const ModalTitle = styled.h2`
-  font-size: clamp(1.5rem, 3vw, 1.875rem);
-  color: var(--dark-50);
-  margin-bottom: var(--spacing-2);
-  font-weight: var(--font-bold);
-  letter-spacing: -0.025em;
-  line-height: 1.2;
-`;
-
-const ModalDescription = styled.p`
-  color: var(--dark-300);
-  line-height: 1.8; /* Increased line-height for better readability */
-  margin-bottom: var(--spacing-6);
-  font-size: clamp(0.95rem, 1.5vw, 1.05rem);
-  white-space: pre-line; /* Allows newline characters to create paragraphs */
-`;
-
-const ModalTech = styled.div`
+const FeaturedTechRow = styled.div`
   display: flex;
   flex-wrap: wrap;
   gap: var(--spacing-2);
-  margin-bottom: var(--spacing-8);
 `;
 
-const ModalActions = styled.div`
-  display: flex;
-  gap: var(--spacing-4);
-  flex-wrap: wrap;
+const TechPill = styled.span`
+  font-size: 0.7rem;
+  font-family: var(--font-mono);
+  color: var(--dark-500);
+  background: rgba(255, 255, 255, 0.04);
+  border: 1px solid rgba(255, 255, 255, 0.06);
+  padding: 2px 8px;
+  border-radius: var(--radius-sm);
 `;
 
-
-
-// Named components replacing previous inline styles in the modal header
-const ModalHeader = styled.div`
+const FeaturedLinksRow = styled.div`
   display: flex;
-  align-items: flex-start;
-  gap: var(--spacing-4);
-  margin-bottom: var(--spacing-5);
-`;
-
-const ModalIconWrapper = styled.div`
-  font-size: var(--text-2xl);
-  background: rgba(255, 255, 255, 0.05);
-  border: 1px solid rgba(255, 255, 255, 0.1);
-  padding: var(--spacing-3);
-  border-radius: var(--radius-xl);
-  min-width: 56px;
-  height: 56px;
-  display: flex;
-  align-items: center;
-  justify-content: center;
+  gap: var(--spacing-3);
   flex-shrink: 0;
 `;
 
-const ModalHeaderContent = styled.div`
-  flex: 1;
-  min-width: 0;
-`;
-
-const ModalBadgeRow = styled.div`
+const InlineLink = styled.a`
+  font-size: var(--text-sm);
+  font-weight: var(--font-medium);
+  color: var(--dark-400);
+  text-decoration: none;
   display: flex;
-  gap: var(--spacing-2);
-  flex-wrap: wrap;
   align-items: center;
-  margin-top: var(--spacing-1);
+  gap: 5px;
+  transition: color 0.18s ease;
+
+  &:hover { color: var(--accent-primary); }
+
+  svg { width: 14px; height: 14px; opacity: 0.7; }
 `;
 
-/* Structured placeholder for project cards that have no screenshot */
-const ProjectIconPlaceholder = styled.div`
+const ViewCaseStudyBtn = styled.button`
+  font-size: var(--text-sm);
+  font-weight: var(--font-medium);
+  color: var(--dark-400);
+  background: none;
+  border: none;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  gap: 5px;
+  padding: 0;
+  transition: color 0.18s ease;
+  font-family: inherit;
+
+  &:hover { color: var(--accent-primary); }
+`;
+
+const FeaturedImagePane = styled.div`
+  position: relative;
+  overflow: hidden;
+  background: var(--dark-900);
+  min-height: 260px;
+
+  img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    display: block;
+    transition: transform 0.5s cubic-bezier(0.4, 0, 0.2, 1);
+    filter: brightness(0.75);
+  }
+
+  &:hover img { transform: scale(1.04); filter: brightness(0.85); }
+
+  @media (max-width: 960px) { min-height: 200px; }
+`;
+
+const ImagePlaceholder = styled.div`
   width: 100%;
   height: 100%;
   display: flex;
@@ -644,366 +366,844 @@ const ProjectIconPlaceholder = styled.div`
   align-items: center;
   justify-content: center;
   gap: var(--spacing-3);
+  background: var(--dark-900);
+  min-height: 260px;
 `;
 
 const PlaceholderIcon = styled.span`
   font-size: 2.5rem;
-  line-height: 1;
-  opacity: 0.6;
+  opacity: 0.25;
 `;
 
-const PlaceholderCategory = styled.span`
-  font-size: 0.68rem;
+const PlaceholderCat = styled.span`
+  font-size: 0.65rem;
   font-weight: var(--font-medium);
   letter-spacing: 0.1em;
   text-transform: uppercase;
-  color: rgba(255, 255, 255, 0.3);
+  color: var(--dark-700);
 `;
 
-interface ProjectModalProps {
-  project: Project | null;
-  isOpen: boolean;
-  onClose: () => void;
-}
+/* ─── All projects table ──────────────────────────────────────────────────── */
 
-const caseStudySections = [
-  { key: 'problem',   label: 'Problem',   icon: '🎯', color: '#f87171' },
-  { key: 'solution',  label: 'Solution',  icon: '💡', color: '#60a5fa' },
-  { key: 'impact',    label: 'Impact',    icon: '📈', color: '#34d399' },
-  { key: 'learnings', label: 'Learnings', icon: '🧠', color: '#a78bfa' },
-] as const;
+const ProjectsTableSection = styled.div``;
 
-const ProjectModal: React.FC<ProjectModalProps> = ({ project, isOpen, onClose }) => {
-  // Close on Escape key
+const TableHeader = styled.div`
+  display: grid;
+  grid-template-columns: 1fr 160px 180px 120px;
+  gap: var(--spacing-4);
+  padding: var(--spacing-2) var(--spacing-4) var(--spacing-3);
+  border-bottom: 1px solid rgba(255, 255, 255, 0.06);
+  margin-bottom: 2px;
+
+  @media (max-width: 960px) { grid-template-columns: 1fr 140px 100px; }
+  @media (max-width: 640px) { display: none; }
+`;
+
+const TableHeaderCell = styled.span`
+  font-size: 0.65rem;
+  font-weight: var(--font-bold);
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: var(--dark-600);
+`;
+
+const TableBody = styled(motion.div)`
+  display: flex;
+  flex-direction: column;
+  gap: 1px;
+  background: rgba(255, 255, 255, 0.04);
+  border-radius: var(--radius-xl);
+  overflow: hidden;
+`;
+
+const TableRow = styled(motion.div)`
+  display: grid;
+  grid-template-columns: 1fr 160px 180px 120px;
+  gap: var(--spacing-4);
+  align-items: center;
+  padding: var(--spacing-5) var(--spacing-6);
+  background: var(--dark-950);
+  cursor: pointer;
+  transition: background 0.18s ease;
+
+  &:hover {
+    background: rgba(20, 27, 45, 0.9);
+
+    .row-arrow { color: var(--accent-primary); transform: translateX(3px); }
+  }
+
+  @media (max-width: 960px) {
+    grid-template-columns: 1fr 140px 100px;
+  }
+
+  @media (max-width: 640px) {
+    grid-template-columns: 1fr auto;
+    gap: var(--spacing-3);
+    padding: var(--spacing-4);
+  }
+`;
+
+const RowTitle = styled.div`
+  display: flex;
+  align-items: center;
+  gap: var(--spacing-3);
+  min-width: 0;
+`;
+
+const RowIcon = styled.span`
+  font-size: 1.1rem;
+  flex-shrink: 0;
+  line-height: 1;
+`;
+
+const RowTitleText = styled.div`
+  min-width: 0;
+`;
+
+const RowName = styled.h3`
+  font-size: var(--text-base);
+  font-weight: var(--font-semibold);
+  color: var(--dark-100);
+  letter-spacing: -0.01em;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  line-height: 1.3;
+`;
+
+const RowProblem = styled.p`
+  font-size: var(--text-xs);
+  color: var(--dark-500);
+  margin-top: 2px;
+  display: -webkit-box;
+  -webkit-line-clamp: 1;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+
+  @media (max-width: 640px) { display: none; }
+`;
+
+const RowCategory = styled.span`
+  font-size: var(--text-xs);
+  color: var(--dark-500);
+  font-weight: var(--font-medium);
+  white-space: nowrap;
+
+  @media (max-width: 640px) { display: none; }
+`;
+
+const RowTech = styled.div`
+  display: flex;
+  flex-wrap: wrap;
+  gap: 4px;
+
+  @media (max-width: 960px) { display: none; }
+`;
+
+const SmallTechPill = styled.span`
+  font-size: 0.65rem;
+  font-family: var(--font-mono);
+  color: var(--dark-600);
+  background: rgba(255, 255, 255, 0.04);
+  border: 1px solid rgba(255, 255, 255, 0.05);
+  padding: 1px 6px;
+  border-radius: var(--radius-sm);
+`;
+
+const RowArrow = styled.span`
+  font-size: var(--text-base);
+  color: var(--dark-700);
+  transition: color 0.18s ease, transform 0.18s ease;
+  justify-self: end;
+  flex-shrink: 0;
+`;
+
+/* ─── Modal ───────────────────────────────────────────────────────────────── */
+
+const ModalOverlay = styled(motion.div)`
+  position: fixed;
+  inset: 0;
+  background: rgba(0, 0, 0, 0.8);
+  z-index: 1000;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: var(--spacing-4);
+
+  @media (max-width: 640px) {
+    align-items: flex-end;
+    padding: 0;
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    transition: none !important;
+  }
+`;
+
+const ModalPanel = styled(motion.div)`
+  background: #0d1117;
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  border-radius: var(--radius-2xl);
+  max-width: 860px;
+  width: 100%;
+  position: relative;
+  overflow: hidden;
+  backface-visibility: hidden;
+  -webkit-backface-visibility: hidden;
+  will-change: transform;
+  box-shadow: 0 32px 64px rgba(0, 0, 0, 0.6);
+
+  @media (max-width: 1024px) { max-width: 95vw; }
+  @media (max-width: 768px) { max-width: 90vw; border-radius: var(--radius-xl); }
+  @media (max-width: 640px) {
+    max-width: 100vw;
+    border-radius: var(--radius-xl) var(--radius-xl) 0 0;
+    border-bottom: none;
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    transition: none !important;
+    animation: none !important;
+  }
+`;
+
+const ModalScroller = styled.div`
+  overflow-y: auto;
+  max-height: 88vh;
+  overscroll-behavior: contain;
+  touch-action: pan-y;
+  will-change: scroll-position;
+  contain: layout style;
+  scrollbar-width: thin;
+  scrollbar-color: rgba(255, 255, 255, 0.08) transparent;
+
+  &::-webkit-scrollbar { width: 4px; }
+  &::-webkit-scrollbar-track { background: transparent; }
+  &::-webkit-scrollbar-thumb {
+    background: rgba(255, 255, 255, 0.08);
+    border-radius: 99px;
+  }
+
+  @media (max-width: 768px) { max-height: 85vh; }
+  @media (max-width: 640px) { max-height: 92vh; }
+  @media (max-height: 600px) { max-height: 95vh; }
+`;
+
+const ModalImageStrip = styled.div`
+  width: 100%;
+  height: 200px;
+  overflow: hidden;
+  position: relative;
+  flex-shrink: 0;
+
+  img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    object-position: center;
+    display: block;
+    filter: brightness(0.6);
+  }
+
+  &::after {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background: linear-gradient(to bottom, transparent 40%, #0d1117 100%);
+  }
+
+  @media (max-width: 768px) { height: 160px; }
+  @media (max-width: 640px) { height: 140px; }
+`;
+
+const ModalBody = styled.div`
+  padding: var(--spacing-8) var(--spacing-8) var(--spacing-10);
+
+  @media (max-width: 768px) { padding: var(--spacing-6) var(--spacing-6) var(--spacing-8); }
+  @media (max-width: 640px) { padding: var(--spacing-5) var(--spacing-5) var(--spacing-8); }
+`;
+
+const CloseButton = styled.button`
+  position: absolute;
+  top: var(--spacing-4);
+  right: var(--spacing-4);
+  z-index: 10;
+  width: 36px;
+  height: 36px;
+  border-radius: 50%;
+  background: rgba(0, 0, 0, 0.5);
+  border: 1px solid rgba(255, 255, 255, 0.12);
+  color: var(--dark-300);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  font-size: 16px;
+  transition: background 0.18s ease, color 0.18s ease;
+  font-family: inherit;
+
+  &:hover { background: rgba(255, 255, 255, 0.1); color: var(--dark-50); }
+`;
+
+const ModalMeta = styled.div`
+  display: flex;
+  align-items: center;
+  gap: var(--spacing-3);
+  margin-bottom: var(--spacing-4);
+`;
+
+const ModalCatTag = styled.span`
+  font-size: 0.65rem;
+  font-weight: var(--font-medium);
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: var(--accent-primary);
+  opacity: 0.8;
+`;
+
+const ModalTitle = styled.h2`
+  font-size: clamp(1.4rem, 3.5vw, 2rem);
+  font-weight: var(--font-bold);
+  color: var(--dark-50);
+  letter-spacing: -0.025em;
+  line-height: 1.2;
+  margin-bottom: var(--spacing-4);
+`;
+
+const ModalLede = styled.p`
+  font-size: var(--text-base);
+  color: var(--dark-400);
+  line-height: 1.75;
+  margin-bottom: var(--spacing-8);
+  white-space: pre-line;
+`;
+
+const ModalDivider = styled.hr`
+  border: none;
+  border-top: 1px solid rgba(255, 255, 255, 0.06);
+  margin: var(--spacing-6) 0;
+`;
+
+// Case study as a clean reading layout — not coloured emoji cards
+const CaseStudySection = styled.div`
+  margin-bottom: var(--spacing-8);
+`;
+
+const CaseStudyItem = styled.div`
+  padding: var(--spacing-5) 0;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+
+  &:last-child { border-bottom: none; padding-bottom: 0; }
+  &:first-child { padding-top: 0; }
+`;
+
+const CaseStudyItemLabel = styled.p`
+  font-size: 0.68rem;
+  font-weight: var(--font-bold);
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: var(--dark-600);
+  margin-bottom: var(--spacing-2);
+`;
+
+const CaseStudyItemText = styled.p`
+  font-size: var(--text-sm);
+  color: var(--dark-400);
+  line-height: 1.75;
+`;
+
+const ModalSectionLabel = styled.p`
+  font-size: 0.68rem;
+  font-weight: var(--font-bold);
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: var(--dark-600);
+  margin-bottom: var(--spacing-3);
+`;
+
+const ModalTechRow = styled.div`
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--spacing-2);
+  margin-bottom: var(--spacing-8);
+`;
+
+const ModalTechTag = styled.span`
+  font-size: 0.72rem;
+  font-family: var(--font-mono);
+  color: var(--dark-400);
+  background: rgba(255, 255, 255, 0.05);
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  padding: 3px 10px;
+  border-radius: var(--radius-sm);
+`;
+
+const ModalActionsRow = styled.div`
+  display: flex;
+  gap: var(--spacing-3);
+  flex-wrap: wrap;
+`;
+
+const ModalActionLink = styled.a<{ $primary?: boolean }>`
+  display: inline-flex;
+  align-items: center;
+  gap: var(--spacing-2);
+  padding: 10px 20px;
+  border-radius: var(--radius-md);
+  font-size: var(--text-sm);
+  font-weight: var(--font-semibold);
+  text-decoration: none;
+  transition: all 0.2s ease;
+  letter-spacing: 0.01em;
+
+  ${props => props.$primary ? `
+    background: var(--accent-gradient);
+    color: var(--dark-950);
+    border: 1px solid transparent;
+    &:hover { transform: translateY(-1px); box-shadow: 0 6px 20px rgba(100,255,218,0.2); }
+  ` : `
+    background: transparent;
+    color: var(--dark-300);
+    border: 1px solid rgba(255,255,255,0.1);
+    &:hover { border-color: rgba(255,255,255,0.2); background: rgba(255,255,255,0.04); color: var(--dark-100); }
+  `}
+`;
+
+/* ─── SVG icons ───────────────────────────────────────────────────────────── */
+
+const GitHubSVG = () => (
+  <svg viewBox="0 0 16 16" fill="currentColor" aria-hidden="true">
+    <path d="M8 0C3.58 0 0 3.58 0 8c0 3.54 2.29 6.53 5.47 7.59.4.07.55-.17.55-.38 0-.19-.01-.82-.01-1.49-2.01.37-2.53-.49-2.69-.94-.09-.23-.48-.94-.82-1.13-.28-.15-.68-.52-.01-.53.63-.01 1.08.58 1.23.82.72 1.21 1.87.87 2.33.66.07-.52.28-.87.51-1.07-1.78-.2-3.64-.89-3.64-3.95 0-.87.31-1.59.82-2.15-.08-.2-.36-1.02.08-2.12 0 0 .67-.21 2.2.82.64-.18 1.32-.27 2-.27.68 0 1.36.09 2 .27 1.53-1.04 2.2-.82 2.2-.82.44 1.1.16 1.92.08 2.12.51.56.82 1.27.82 2.15 0 3.07-1.87 3.75-3.65 3.95.29.25.54.73.54 1.48 0 1.07-.01 1.93-.01 2.2 0 .21.15.46.55.38A8.013 8.013 0 0016 8c0-4.42-3.58-8-8-8z" />
+  </svg>
+);
+
+const ExternalSVG = () => (
+  <svg viewBox="0 0 16 16" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
+    <path d="M6 3H3a1 1 0 0 0-1 1v8a1 1 0 0 0 1 1h8a1 1 0 0 0 1-1V9" />
+    <polyline points="10 3 13 3 13 6" />
+    <line x1="7" y1="9" x2="13" y2="3" />
+  </svg>
+);
+
+const DownloadSVG = () => (
+  <svg viewBox="0 0 16 16" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
+    <path d="M2 11v2a1 1 0 0 0 1 1h10a1 1 0 0 0 1-1v-2" />
+    <polyline points="4 7 8 11 12 7" />
+    <line x1="8" y1="1" x2="8" y2="11" />
+  </svg>
+);
+
+/* ─── Modal component ─────────────────────────────────────────────────────── */
+
+interface ModalProps { project: Project | null; isOpen: boolean; onClose: () => void; }
+
+const caseStudyFields: { key: keyof Project['caseStudy']; label: string }[] = [
+  { key: 'problem',   label: 'The Problem'   },
+  { key: 'solution',  label: 'The Solution'  },
+  { key: 'impact',    label: 'Outcome'       },
+  { key: 'learnings', label: 'What I Learned'},
+];
+
+const ProjectModal: React.FC<ModalProps> = ({ project, isOpen, onClose }) => {
+  const handleKey = useCallback((e: KeyboardEvent) => { if (e.key === 'Escape') onClose(); }, [onClose]);
+
   useEffect(() => {
-    const handleKey = (e: KeyboardEvent) => { if (e.key === 'Escape') onClose(); };
     if (isOpen) document.addEventListener('keydown', handleKey);
     return () => document.removeEventListener('keydown', handleKey);
-  }, [isOpen, onClose]);
+  }, [isOpen, handleKey]);
 
-  // Lock body scroll — position:fixed technique works on iOS Safari where overflow:hidden is ignored
   useEffect(() => {
     if (!isOpen) return;
     const html = document.documentElement;
-    const prevHtmlOverflow = html.style.overflow;
-    const prevBodyOverflow = document.body.style.overflow;
-    // Lock scroll on both html and body — covers all browsers including modern iOS Safari
+    const prevH = html.style.overflow;
+    const prevB = document.body.style.overflow;
     html.style.overflow = 'hidden';
     document.body.style.overflow = 'hidden';
     return () => {
-      html.style.overflow = prevHtmlOverflow;
-      document.body.style.overflow = prevBodyOverflow;
+      html.style.overflow = prevH;
+      document.body.style.overflow = prevB;
     };
   }, [isOpen]);
 
   return (
     <AnimatePresence>
       {isOpen && project && (
-      <ModalOverlay
-        key="modal-overlay"
-        initial={{ opacity: 0 }}
-        animate={{ opacity: 1 }}
-        exit={{ opacity: 0 }}
-        transition={{ duration: 0.18, ease: 'easeOut' }}
-        onClick={onClose}
-      >
-        <ModalContent
-          initial={{ opacity: 0, scale: 0.95, y: 20 }}
-          animate={{ opacity: 1, scale: 1, y: 0 }}
-          exit={{ opacity: 0, scale: 0.96, y: 12 }}
-          transition={{ duration: 0.22, ease: [0.22, 1, 0.36, 1] }}
-          onClick={(e) => e.stopPropagation()}
-          role="dialog"
-          aria-modal="true"
-          aria-label={project.title}
+        <ModalOverlay
+          key="overlay"
+          initial={{ opacity: 0 }}
+          animate={{ opacity: 1 }}
+          exit={{ opacity: 0 }}
+          transition={{ duration: 0.18 }}
+          onClick={onClose}
         >
-          <CloseButton onClick={onClose} aria-label="Close">×</CloseButton>
+          <ModalPanel
+            initial={{ opacity: 0, y: 24, scale: 0.97 }}
+            animate={{ opacity: 1, y: 0, scale: 1 }}
+            exit={{ opacity: 0, y: 16, scale: 0.97 }}
+            transition={{ duration: 0.22, ease: [0.22, 1, 0.36, 1] }}
+            onClick={e => e.stopPropagation()}
+            role="dialog"
+            aria-modal="true"
+            aria-labelledby="modal-title"
+          >
+            <CloseButton onClick={onClose} aria-label="Close case study">×</CloseButton>
 
-          <ModalScroller>
-          {project.image && (
-            <ModalImageBanner>
-              {/*
-               * loading="eager" — the image is fetched immediately when the
-               * modal opens; lazy loading would defer the network request until
-               * the element enters the viewport, which is what caused the flash.
-               * decoding="async" lets the browser decode off the main thread so
-               * the modal animation stays smooth.
-               */}
-              <img
-                src={project.image}
-                alt={project.title}
-                loading="eager"
-                decoding="async"
-              />
-            </ModalImageBanner>
-          )}
+            <ModalScroller>
+              {project.image && (
+                <ModalImageStrip>
+                  <img src={project.image} alt={project.title} loading="eager" decoding="async" />
+                </ModalImageStrip>
+              )}
 
-          {/* All content below the banner */}
-          <ModalBody>
-            <ModalHeader>
-              <ModalIconWrapper aria-hidden="true">{project.icon}</ModalIconWrapper>
-              <ModalHeaderContent>
-                <ModalTitle>{project.title}</ModalTitle>
-                <ModalBadgeRow>
-                  <Badge variant="info">{project.category}</Badge>
-                  {project.featured && <Badge variant="success">Featured</Badge>}
-                </ModalBadgeRow>
-              </ModalHeaderContent>
-            </ModalHeader>
+              <ModalBody>
+                <ModalMeta>
+                  <ModalCatTag>{project.category}</ModalCatTag>
+                  {project.featured && (
+                    <>
+                      <FeaturedDot aria-hidden="true" />
+                      <Badge variant="success">Featured</Badge>
+                    </>
+                  )}
+                </ModalMeta>
 
-            {/* Short description */}
-            <ModalDescription>{project.description}</ModalDescription>
+                <ModalTitle id="modal-title">{project.title}</ModalTitle>
+                <ModalLede>{project.description}</ModalLede>
 
-            <SectionDivider />
+                <ModalDivider />
 
-            {/* Case study sections */}
-            <div style={{ marginBottom: 'var(--spacing-6)' }}>
-              <h4 style={{
-                color: 'var(--dark-100)',
-                fontSize: '0.7rem',
-                fontWeight: 'var(--font-bold)',
-                letterSpacing: '0.12em',
-                textTransform: 'uppercase',
-                marginBottom: 'var(--spacing-4)',
-                opacity: 0.6
-              }}>Case Study</h4>
+                <ModalSectionLabel>Case Study</ModalSectionLabel>
+                <CaseStudySection>
+                  {caseStudyFields.map(({ key, label }) => (
+                    <CaseStudyItem key={key}>
+                      <CaseStudyItemLabel>{label}</CaseStudyItemLabel>
+                      <CaseStudyItemText>{project.caseStudy[key]}</CaseStudyItemText>
+                    </CaseStudyItem>
+                  ))}
+                </CaseStudySection>
 
-              <CaseStudyGrid>
-                {caseStudySections.map(({ key, label, icon, color }) => (
-                  <CaseStudyCard key={key} $accentColor={color}>
-                    <CaseStudyLabel $color={color}>
-                      <span className="icon">{icon}</span>
-                      {label}
-                    </CaseStudyLabel>
-                    <CaseStudyText>{project.caseStudy[key]}</CaseStudyText>
-                  </CaseStudyCard>
-                ))}
-              </CaseStudyGrid>
-            </div>
+                <ModalDivider />
 
-            <SectionDivider />
+                <ModalSectionLabel>Stack</ModalSectionLabel>
+                <ModalTechRow>
+                  {project.technologies.map(t => <ModalTechTag key={t}>{t}</ModalTechTag>)}
+                </ModalTechRow>
 
-            {/* Tech stack */}
-            <div style={{ marginBottom: 'var(--spacing-6)' }}>
-              <h4 style={{
-                color: 'var(--dark-100)',
-                fontSize: '0.7rem',
-                fontWeight: 'var(--font-bold)',
-                letterSpacing: '0.12em',
-                textTransform: 'uppercase',
-                marginBottom: 'var(--spacing-3)',
-                opacity: 0.6
-              }}>Tech Stack</h4>
-              <ModalTech>
-                {project.technologies.map((tech: string) => (
-                  <TechTag key={tech}>{tech}</TechTag>
-                ))}
-              </ModalTech>
-            </div>
-
-            {/* Actions */}
-            <ModalActions>
-
-            <ActionButton
-              as="a"
-              href={project.github}
-              target="_blank"
-              rel="noopener noreferrer"
-              variant="primary"
-            >
-              📂 View Code
-            </ActionButton>
-            {project.liveDemo && (
-              <ActionButton
-                as="a"
-                href={project.liveDemo}
-                target="_blank"
-                rel="noopener noreferrer"
-                variant="secondary"
-              >
-                🚀 Live Demo
-              </ActionButton>
-            )}
-            {project.download && (
-              <ActionButton
-                as="a"
-                href={project.download}
-                target="_blank"
-                rel="noopener noreferrer"
-                variant="outline"
-              >
-                💾 Download
-              </ActionButton>
-            )}
-          </ModalActions>
-          </ModalBody>
-          </ModalScroller>
-        </ModalContent>
-      </ModalOverlay>
+                <ModalActionsRow>
+                  <ModalActionLink
+                    $primary
+                    href={project.github}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                  >
+                    <GitHubSVG /> Source Code
+                  </ModalActionLink>
+                  {project.liveDemo && (
+                    <ModalActionLink
+                      href={project.liveDemo}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                    >
+                      <ExternalSVG /> Live Demo
+                    </ModalActionLink>
+                  )}
+                  {project.download && (
+                    <ModalActionLink
+                      href={project.download}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                    >
+                      <DownloadSVG /> Download
+                    </ModalActionLink>
+                  )}
+                </ModalActionsRow>
+              </ModalBody>
+            </ModalScroller>
+          </ModalPanel>
+        </ModalOverlay>
       )}
     </AnimatePresence>
   );
 };
+
+/* ─── Main page component ─────────────────────────────────────────────────── */
 
 const Projects: React.FC = () => {
   const [selectedCategory, setSelectedCategory] = useState('All');
   const [selectedProject, setSelectedProject] = useState<Project | null>(null);
   const [isModalOpen, setIsModalOpen] = useState(false);
 
+  const openProject = useCallback((p: Project) => {
+    setSelectedProject(p);
+    setIsModalOpen(true);
+  }, []);
+
+  const closeModal = useCallback(() => setIsModalOpen(false), []);
 
   const filteredProjects = useMemo(() => {
-    return projectsData.filter(project => {
-      return selectedCategory === 'All' || project.category === selectedCategory;
-    });
+    if (selectedCategory === 'All') return projectsData;
+    return projectsData.filter(p => p.category === selectedCategory);
   }, [selectedCategory]);
+
+  const featuredProjects = useMemo(
+    () => filteredProjects.filter(p => p.featured),
+    [filteredProjects]
+  );
+
+  const otherProjects = useMemo(
+    () => filteredProjects.filter(p => !p.featured),
+    [filteredProjects]
+  );
 
   return (
     <>
       <SEO
         title="My Work — Rolan Lobo"
-        description="Real problems, real solutions. Here's the software I've built — encryption tools, zero-knowledge platforms, desktop applications, and cross-platform apps that solve problems people actually have."
-        keywords="Steganography, Polyglot Files, AES-256 Encryption, File Encryption, Security Tools, InvisioVault, BAR, Sortify, CursorCam, React Projects, Python Projects, Flask, Software Developer, Rolan Lobo, Rolan RNR, Privacy Software, Open Source"
+        description="Real problems, real solutions. Encryption tools, zero-knowledge platforms, offline-first mobile apps, and computer vision experiments — with case studies for each."
+        keywords="Steganography, AES-256 Encryption, File Encryption, InvisioVault, BAR, Sortify, CursorCam, React, Python, Flask, Privacy Software, Open Source, Rolan Lobo"
         url="https://rolan-rnr.netlify.app/projects"
       />
-      <ProjectsHero>
-        <Container>
-          <HeroTitle
-            initial={{ opacity: 0, y: 30 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.6 }}
-          >
-            My Work
-          </HeroTitle>
-          <HeroSubtitle
-            initial={{ opacity: 0, y: 20 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.6, delay: 0.2 }}
-          >
-            Every project started with a real problem.
-            <br />
-            Here's how I solved them.
-          </HeroSubtitle>
 
-          <FilterSection
-            initial={{ opacity: 0, y: 20 }}
+      <PageWrapper>
+        <Container>
+
+          {/* ── Hero ── */}
+          <HeroRow>
+            <HeroLeft
+              initial={{ opacity: 0, y: 20 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ duration: 0.5 }}
+            >
+              <PageLabel>Projects</PageLabel>
+              <PageTitle>Work that ships.</PageTitle>
+              <PageSubtitle>
+                Every project here started with a real problem. The case studies explain the
+                decision-making — not just the tech used.
+              </PageSubtitle>
+            </HeroLeft>
+
+            <HeroRight
+              initial={{ opacity: 0 }}
+              animate={{ opacity: 1 }}
+              transition={{ duration: 0.5, delay: 0.2 }}
+            >
+              <HeroStatsRow>
+                <StatBlock>
+                  <StatNumber>{projectsData.length}</StatNumber>
+                  <StatLabel>Total Projects</StatLabel>
+                </StatBlock>
+                <StatSeparator aria-hidden="true" />
+                <StatBlock>
+                  <StatNumber>{projectsData.filter(p => p.featured).length}</StatNumber>
+                  <StatLabel>Featured</StatLabel>
+                </StatBlock>
+                <StatSeparator aria-hidden="true" />
+                <StatBlock>
+                  <StatNumber>4</StatNumber>
+                  <StatLabel>Platforms</StatLabel>
+                </StatBlock>
+              </HeroStatsRow>
+            </HeroRight>
+          </HeroRow>
+
+          {/* ── Filter bar ── */}
+          <FilterBar
+            initial={{ opacity: 0, y: 10 }}
             animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.6, delay: 0.3 }}
+            transition={{ duration: 0.4, delay: 0.25 }}
           >
-            {PROJECT_CATEGORIES.map((category) => (
-              <FilterButton
-                key={category}
-                $active={selectedCategory === category}
-                onClick={() => setSelectedCategory(category)}
-                whileHover={{ scale: 1.05 }}
-                whileTap={{ scale: 0.95 }}
+            {PROJECT_CATEGORIES.map(cat => (
+              <FilterTab
+                key={cat}
+                $active={selectedCategory === cat}
+                onClick={() => setSelectedCategory(cat)}
+                aria-pressed={selectedCategory === cat}
               >
-                {category}
-              </FilterButton>
+                {CATEGORY_META[cat]?.label ?? cat}
+                <FilterCount $active={selectedCategory === cat}>
+                  {CATEGORY_META[cat]?.count(projectsData) ?? 0}
+                </FilterCount>
+              </FilterTab>
             ))}
-          </FilterSection>
-        </Container>
-      </ProjectsHero>
+          </FilterBar>
 
-      <Section style={{ paddingTop: 0 }}>
-        <Container>
           <AnimatePresence mode="wait">
-            {(
-              <ProjectsGrid
-                as={motion.div}
-                initial={{ opacity: 0 }}
-                animate={{ opacity: 1 }}
-                exit={{ opacity: 0 }}
-                key={selectedCategory} // Force re-render on category change for stagger effect
-              >
-                {filteredProjects.map((project, index) => (
-                  <ProjectCard
-                    key={project.id}
-                    initial={{ opacity: 0, y: 20 }}
-                    animate={{ opacity: 1, y: 0 }}
-                    transition={{ duration: 0.5, delay: index * 0.1 }}
-                    whileHover={{ y: -4 }}
-                    onClick={() => {
-                      setSelectedProject(project);
-                      setIsModalOpen(true);
-                    }}
-                  >
-                    <ProjectImageContainer $bgColor={project.bgColor} className="project-image">
-                      {project.image ? (
-                        <img
-                          src={project.image}
-                          alt={project.title}
-                          loading="lazy"
-                          decoding="async"
-                          style={{ width: '100%', height: '100%', objectFit: 'cover', display: 'block' }}
-                        />
-                      ) : (
-                        <ProjectIconPlaceholder>
-                          <PlaceholderIcon aria-hidden="true">{project.icon}</PlaceholderIcon>
-                          <PlaceholderCategory>{project.category}</PlaceholderCategory>
-                        </ProjectIconPlaceholder>
-                      )}
-                    </ProjectImageContainer>
+            <motion.div
+              key={selectedCategory}
+              initial={{ opacity: 0, y: 8 }}
+              animate={{ opacity: 1, y: 0 }}
+              exit={{ opacity: 0, y: -4 }}
+              transition={{ duration: 0.25 }}
+            >
 
-                    <ProjectContent>
-                      <ProjectTitle>{project.title}</ProjectTitle>
-                      <ProjectDescription>{project.description}</ProjectDescription>
+              {/* ── Featured projects ── */}
+              {featuredProjects.length > 0 && (
+                <div>
+                  <SectionLabel>
+                    Featured — {featuredProjects.length} project{featuredProjects.length !== 1 ? 's' : ''}
+                  </SectionLabel>
+                  <FeaturedList>
+                    {featuredProjects.map((project, i) => (
+                      <FeaturedItem
+                        key={project.id}
+                        initial={{ opacity: 0 }}
+                        animate={{ opacity: 1 }}
+                        transition={{ duration: 0.35, delay: i * 0.07 }}
+                        onClick={() => openProject(project)}
+                        role="button"
+                        tabIndex={0}
+                        aria-label={`Open case study for ${project.title}`}
+                        onKeyDown={e => (e.key === 'Enter' || e.key === ' ') && openProject(project)}
+                      >
+                        <FeaturedContent>
+                          <div>
+                            <FeaturedMeta>
+                              <FeaturedCategoryTag>{project.category}</FeaturedCategoryTag>
+                              {project.icon && (
+                                <>
+                                  <FeaturedDot aria-hidden="true" />
+                                  <span aria-hidden="true" style={{ fontSize: '0.9rem' }}>{project.icon}</span>
+                                </>
+                              )}
+                            </FeaturedMeta>
+                            <FeaturedTitle style={{ marginTop: 'var(--spacing-3)' }}>
+                              {project.title}
+                            </FeaturedTitle>
+                            <FeaturedProblem style={{ marginTop: 'var(--spacing-3)' }}>
+                              {project.caseStudy.problem}
+                            </FeaturedProblem>
+                          </div>
 
-                      <ProjectTech>
-                        {project.technologies.slice(0, 4).map((tech: string) => (
-                          <TechTag key={tech}>{tech}</TechTag>
-                        ))}
-                        {project.technologies.length > 4 && (
-                          <TechTag>+{project.technologies.length - 4}</TechTag>
-                        )}
-                      </ProjectTech>
+                          <FeaturedBottom>
+                            <FeaturedTechRow>
+                              {project.technologies.slice(0, 5).map(t => (
+                                <TechPill key={t}>{t}</TechPill>
+                              ))}
+                            </FeaturedTechRow>
+                            <FeaturedLinksRow>
+                              <InlineLink
+                                href={project.github}
+                                target="_blank"
+                                rel="noopener noreferrer"
+                                onClick={e => e.stopPropagation()}
+                                title="Source code"
+                              >
+                                <GitHubSVG /> Code
+                              </InlineLink>
+                              {project.liveDemo && (
+                                <InlineLink
+                                  href={project.liveDemo}
+                                  target="_blank"
+                                  rel="noopener noreferrer"
+                                  onClick={e => e.stopPropagation()}
+                                  title="Live demo"
+                                >
+                                  <ExternalSVG /> Demo
+                                </InlineLink>
+                              )}
+                              {project.download && !project.liveDemo && (
+                                <InlineLink
+                                  href={project.download}
+                                  target="_blank"
+                                  rel="noopener noreferrer"
+                                  onClick={e => e.stopPropagation()}
+                                  title="Download"
+                                >
+                                  <DownloadSVG /> Download
+                                </InlineLink>
+                              )}
+                              <ViewCaseStudyBtn onClick={() => openProject(project)}>
+                                Case study →
+                              </ViewCaseStudyBtn>
+                            </FeaturedLinksRow>
+                          </FeaturedBottom>
+                        </FeaturedContent>
 
-                      <ProjectActions>
-                        <ActionButton
-                          as="a"
-                          href={project.github}
-                          target="_blank"
-                          variant="secondary"
-                          onClick={(e: React.MouseEvent) => e.stopPropagation()}
-                        >
-                          GitHub
-                        </ActionButton>
-                        {project.liveDemo && (
-                          <ActionButton
-                            as="a"
-                            href={project.liveDemo}
-                            target="_blank"
-                            variant="primary"
-                            onClick={(e: React.MouseEvent) => e.stopPropagation()}
-                          >
-                            Live Demo
-                          </ActionButton>
-                        )}
-                        {!project.liveDemo && project.download && (
-                          <ActionButton
-                            as="a"
-                            href={project.download}
-                            target="_blank"
-                            variant="primary"
-                            onClick={(e: React.MouseEvent) => e.stopPropagation()}
-                          >
-                            Download
-                          </ActionButton>
-                        )}
-                      </ProjectActions>
-                    </ProjectContent>
-                  </ProjectCard>
-                ))}
-              </ProjectsGrid>
-            )}
+                        <FeaturedImagePane>
+                          {project.image ? (
+                            <img src={project.image} alt={project.title} loading="lazy" decoding="async" />
+                          ) : (
+                            <ImagePlaceholder>
+                              <PlaceholderIcon aria-hidden="true">{project.icon}</PlaceholderIcon>
+                              <PlaceholderCat>{project.category}</PlaceholderCat>
+                            </ImagePlaceholder>
+                          )}
+                        </FeaturedImagePane>
+                      </FeaturedItem>
+                    ))}
+                  </FeaturedList>
+                </div>
+              )}
+
+              {/* ── All / other projects table ── */}
+              {otherProjects.length > 0 && (
+                <ProjectsTableSection>
+                  <SectionLabel>
+                    {featuredProjects.length > 0 ? 'More Projects' : 'All Projects'} — {otherProjects.length}
+                  </SectionLabel>
+
+                  <TableHeader aria-hidden="true">
+                    <TableHeaderCell>Project</TableHeaderCell>
+                    <TableHeaderCell>Category</TableHeaderCell>
+                    <TableHeaderCell>Stack</TableHeaderCell>
+                    <TableHeaderCell />
+                  </TableHeader>
+
+                  <TableBody>
+                    {otherProjects.map((project, i) => (
+                      <TableRow
+                        key={project.id}
+                        initial={{ opacity: 0 }}
+                        animate={{ opacity: 1 }}
+                        transition={{ duration: 0.3, delay: i * 0.05 }}
+                        onClick={() => openProject(project)}
+                        role="button"
+                        tabIndex={0}
+                        aria-label={`Open case study for ${project.title}`}
+                        onKeyDown={e => (e.key === 'Enter' || e.key === ' ') && openProject(project)}
+                      >
+                        <RowTitle>
+                          <RowIcon aria-hidden="true">{project.icon}</RowIcon>
+                          <RowTitleText>
+                            <RowName>{project.title}</RowName>
+                            <RowProblem>{project.caseStudy.problem}</RowProblem>
+                          </RowTitleText>
+                        </RowTitle>
+
+                        <RowCategory>{project.category}</RowCategory>
+
+                        <RowTech>
+                          {project.technologies.slice(0, 3).map(t => (
+                            <SmallTechPill key={t}>{t}</SmallTechPill>
+                          ))}
+                          {project.technologies.length > 3 && (
+                            <SmallTechPill>+{project.technologies.length - 3}</SmallTechPill>
+                          )}
+                        </RowTech>
+
+                        <RowArrow className="row-arrow" aria-hidden="true">→</RowArrow>
+                      </TableRow>
+                    ))}
+                  </TableBody>
+                </ProjectsTableSection>
+              )}
+
+              {/* Edge case: filtered to a category with no results */}
+              {filteredProjects.length === 0 && (
+                <motion.div
+                  initial={{ opacity: 0 }}
+                  animate={{ opacity: 1 }}
+                  style={{ textAlign: 'center', padding: 'var(--spacing-20) 0', color: 'var(--dark-600)' }}
+                >
+                  No projects in this category yet.
+                </motion.div>
+              )}
+
+            </motion.div>
           </AnimatePresence>
         </Container>
-      </Section>
+      </PageWrapper>
 
-      <ProjectModal
-        project={selectedProject}
-        isOpen={isModalOpen}
-        onClose={() => setIsModalOpen(false)}
-      />
+      <ProjectModal project={selectedProject} isOpen={isModalOpen} onClose={closeModal} />
     </>
   );
 };
