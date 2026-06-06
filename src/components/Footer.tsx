@@ -5,16 +5,10 @@ import styled from 'styled-components';
 const FooterWrapper = styled.footer`
   border-top: 1px solid rgba(255, 255, 255, 0.06);
   background: var(--dark-950);
-  /* Generous padding on desktop, compact on mobile */
   padding: var(--spacing-12) 0 var(--spacing-8);
 
-  @media (max-width: 768px) {
-    padding: var(--spacing-8) 0 var(--spacing-6);
-  }
-
-  @media (max-width: 480px) {
-    padding: var(--spacing-6) 0 var(--spacing-5);
-  }
+  @media (max-width: 768px) { padding: var(--spacing-8) 0 var(--spacing-6); }
+  @media (max-width: 480px) { padding: var(--spacing-6) 0 var(--spacing-5); }
 `;
 
 const Inner = styled.div`
@@ -22,12 +16,9 @@ const Inner = styled.div`
   margin: 0 auto;
   padding: 0 var(--spacing-6);
 
-  @media (max-width: 480px) {
-    padding: 0 var(--spacing-4);
-  }
+  @media (max-width: 480px) { padding: 0 var(--spacing-4); }
 `;
 
-/* ── Top area: Brand left + Links right ─────────────────────────────── */
 const TopRow = styled.div`
   display: flex;
   align-items: flex-start;
@@ -35,7 +26,6 @@ const TopRow = styled.div`
   gap: var(--spacing-8);
   margin-bottom: var(--spacing-8);
 
-  /* On mobile: brand sits above the links row, but compact */
   @media (max-width: 640px) {
     flex-direction: column;
     gap: var(--spacing-6);
@@ -43,36 +33,41 @@ const TopRow = styled.div`
   }
 `;
 
-/* ── Brand block (left side) ─────────────────────────────────────────── */
 const BrandBlock = styled.div`
   display: flex;
   flex-direction: column;
   gap: var(--spacing-2);
   flex-shrink: 0;
 
-  @media (max-width: 640px) {
-    gap: var(--spacing-1);
-  }
+  @media (max-width: 640px) { gap: var(--spacing-1); }
 `;
 
 const BrandName = styled(Link)`
-  font-size: var(--text-xl);
-  font-weight: var(--font-extrabold);
-  color: var(--dark-100);
   text-decoration: none;
-  letter-spacing: -0.02em;
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+`;
+
+const BrandFullName = styled.span`
+  font-size: var(--text-base);
+  font-weight: var(--font-semibold);
+  color: var(--dark-100);
+  letter-spacing: -0.01em;
   line-height: 1;
 
-  span {
-    background: var(--accent-gradient);
-    -webkit-background-clip: text;
-    -webkit-text-fill-color: transparent;
-    background-clip: text;
-  }
+  @media (max-width: 640px) { font-size: var(--text-sm); }
+`;
 
-  @media (max-width: 640px) {
-    font-size: var(--text-lg);
-  }
+const BrandShorthand = styled.span`
+  font-size: var(--text-sm);
+  font-weight: var(--font-extrabold);
+  letter-spacing: -0.02em;
+  line-height: 1;
+  background: var(--accent-gradient);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
 `;
 
 const BrandTagline = styled.p`
@@ -80,19 +75,15 @@ const BrandTagline = styled.p`
   color: var(--dark-500);
   max-width: 260px;
   line-height: 1.55;
+  margin-top: var(--spacing-2);
 
-  /* On mobile: hide the tagline to save vertical space */
-  @media (max-width: 640px) {
-    display: none;
-  }
+  @media (max-width: 640px) { display: none; }
 `;
 
-/* ── Links block (right side) ────────────────────────────────────────── */
 const LinksBlock = styled.div`
   display: flex;
   gap: var(--spacing-12);
 
-  /* On mobile: the two groups sit side by side — no stacking */
   @media (max-width: 640px) {
     width: 100%;
     gap: 0;
@@ -105,9 +96,7 @@ const LinkGroup = styled.div`
   flex-direction: column;
   gap: var(--spacing-3);
 
-  @media (max-width: 640px) {
-    gap: var(--spacing-2);
-  }
+  @media (max-width: 640px) { gap: var(--spacing-2); }
 `;
 
 const LinkGroupLabel = styled.span`
@@ -118,9 +107,7 @@ const LinkGroupLabel = styled.span`
   color: var(--dark-600);
   margin-bottom: var(--spacing-1);
 
-  @media (max-width: 640px) {
-    font-size: 0.6rem;
-  }
+  @media (max-width: 640px) { font-size: 0.6rem; }
 `;
 
 const NavLink = styled(Link)`
@@ -129,13 +116,9 @@ const NavLink = styled(Link)`
   text-decoration: none;
   transition: color var(--transition-fast);
 
-  &:hover {
-    color: var(--accent-primary);
-  }
+  &:hover { color: var(--accent-primary); }
 
-  @media (max-width: 640px) {
-    font-size: var(--text-xs);
-  }
+  @media (max-width: 640px) { font-size: var(--text-xs); }
 `;
 
 const ExternalLink = styled.a`
@@ -144,16 +127,11 @@ const ExternalLink = styled.a`
   text-decoration: none;
   transition: color var(--transition-fast);
 
-  &:hover {
-    color: var(--accent-primary);
-  }
+  &:hover { color: var(--accent-primary); }
 
-  @media (max-width: 640px) {
-    font-size: var(--text-xs);
-  }
+  @media (max-width: 640px) { font-size: var(--text-xs); }
 `;
 
-/* ── Bottom bar ──────────────────────────────────────────────────────── */
 const BottomRow = styled.div`
   display: flex;
   align-items: center;
@@ -164,7 +142,7 @@ const BottomRow = styled.div`
   border-top: 1px solid rgba(255, 255, 255, 0.04);
 
   @media (max-width: 640px) {
-    flex-direction: row; /* Keep them on the same line even on mobile */
+    flex-direction: row;
     justify-content: space-between;
     padding-top: var(--spacing-4);
   }
@@ -201,13 +179,9 @@ const AvailabilityNote = styled(Link)`
     flex-shrink: 0;
   }
 
-  &:hover {
-    color: var(--accent-primary);
-  }
+  &:hover { color: var(--accent-primary); }
 
-  @media (max-width: 380px) {
-    display: none;
-  }
+  @media (max-width: 380px) { display: none; }
 `;
 
 const CopyEmailButton = styled.button`
@@ -221,12 +195,9 @@ const CopyEmailButton = styled.button`
   transition: color var(--transition-fast);
   font-family: inherit;
 
-  &:hover {
-    color: var(--accent-primary);
-  }
+  &:hover { color: var(--accent-primary); }
 `;
 
-/* ── Component ────────────────────────────────────────────────────────── */
 const Footer: React.FC = () => {
   const year = new Date().getFullYear();
   const [emailCopied, setEmailCopied] = useState(false);
@@ -243,11 +214,12 @@ const Footer: React.FC = () => {
       <Inner>
         <TopRow>
           <BrandBlock>
-            <BrandName to="/">
-              <span>RNR</span>
+            <BrandName to="/" aria-label="Rolan Lobo — home">
+              <BrandFullName>Rolan Lobo</BrandFullName>
+              <BrandShorthand>RNR</BrandShorthand>
             </BrandName>
             <BrandTagline>
-              Building digital products with craft and care — from security tools to web apps that actually work.
+              Software for people who care about their data.
             </BrandTagline>
           </BrandBlock>
 
@@ -258,37 +230,21 @@ const Footer: React.FC = () => {
               <NavLink to="/about">About</NavLink>
               <NavLink to="/projects">Work</NavLink>
               <NavLink to="/blog">Blog</NavLink>
-              <NavLink to="/contact">Let's Talk</NavLink>
+              <NavLink to="/contact">Contact</NavLink>
             </LinkGroup>
 
             <LinkGroup>
               <LinkGroupLabel>Connect</LinkGroupLabel>
-              <ExternalLink
-                href="https://github.com/Mrtracker-new"
-                target="_blank"
-                rel="noopener noreferrer"
-              >
+              <ExternalLink href="https://github.com/Mrtracker-new" target="_blank" rel="noopener noreferrer">
                 GitHub
               </ExternalLink>
-              <ExternalLink
-                href="https://www.linkedin.com/in/rolan-lobo/"
-                target="_blank"
-                rel="noopener noreferrer"
-              >
+              <ExternalLink href="https://www.linkedin.com/in/rolan-lobo/" target="_blank" rel="noopener noreferrer">
                 LinkedIn
               </ExternalLink>
-              <ExternalLink
-                href="https://dev.to/rolan_r_n_r"
-                target="_blank"
-                rel="noopener noreferrer"
-              >
+              <ExternalLink href="https://dev.to/rolan_r_n_r" target="_blank" rel="noopener noreferrer">
                 Dev.to
               </ExternalLink>
-              <CopyEmailButton
-                onClick={handleCopyEmail}
-                aria-label="Copy email address to clipboard"
-                title="rolanlobo901@gmail.com"
-              >
+              <CopyEmailButton onClick={handleCopyEmail} aria-label="Copy email address to clipboard" title="rolanlobo901@gmail.com">
                 {emailCopied ? '✓ Copied!' : 'Email'}
               </CopyEmailButton>
             </LinkGroup>
@@ -296,10 +252,8 @@ const Footer: React.FC = () => {
         </TopRow>
 
         <BottomRow>
-          <Copyright>&copy; {year} Rolan Lobo. All rights reserved.</Copyright>
-          <AvailabilityNote to="/contact">
-            Open to new projects
-          </AvailabilityNote>
+          <Copyright>© {year} Rolan Lobo. All rights reserved.</Copyright>
+          <AvailabilityNote to="/contact">Open to new projects</AvailabilityNote>
         </BottomRow>
       </Inner>
     </FooterWrapper>
