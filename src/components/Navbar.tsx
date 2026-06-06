@@ -23,7 +23,7 @@ const FixedContainer = styled.div`
 const NavbarIsland = styled(motion.nav)<{ $scrolled: boolean }>`
   pointer-events: auto;
   width: 100%;
-  max-width: var(--breakpoint-lg);
+  max-width: 1200px;
   background: rgba(9, 9, 11, 0.6);
   backdrop-filter: blur(20px);
   -webkit-backdrop-filter: blur(20px);
