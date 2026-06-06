@@ -72,12 +72,9 @@ function PageError({ message }: { message: string }) {
   );
 }
 
-// Lazy load visual enhancement components to reduce initial bundle size
-const BackgroundEffect = lazy(() => import('./components/BackgroundEffect'));
-const CursorEffect = lazy(() => import('./components/CursorEffect'));
+// Exit intent popup — lazy-loaded to keep initial bundle lean
 const ExitIntentPopup = lazy(() => import('./components/ExitIntentPopup'));
 
-// Lazy load pages for code splitting and better performance
 const Home = lazy(() => import('./pages/Home'));
 const About = lazy(() => import('./pages/About'));
 const Projects = lazy(() => import('./pages/Projects'));
@@ -126,10 +123,8 @@ function AppRoutes() {
   return (
     <Suspense fallback={<FullScreenLoading text="Loading Page..." />}>
       {supported ? (
-        // View Transitions API handles the cross-fade natively — no wrapper needed.
         routes
       ) : (
-        // Framer Motion AnimatePresence as fallback (Firefox, older Safari, etc.).
         <AnimatePresence mode="wait">
           {routes}
         </AnimatePresence>
@@ -144,8 +139,6 @@ function App() {
       <GlobalStyle />
       <ScrollToTop />
       <Suspense fallback={null}>
-        <BackgroundEffect />
-        <CursorEffect />
         <ExitIntentPopup />
       </Suspense>
       <Breadcrumb />
