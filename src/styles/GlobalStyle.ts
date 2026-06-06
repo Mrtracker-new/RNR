@@ -1,21 +1,21 @@
 import styled, { createGlobalStyle } from 'styled-components';
 
 export const GlobalStyle = createGlobalStyle`
-  /* CSS Variables - Minimal Design System */
+  /* ─── Design Tokens ───────────────────────────────────────────────────── */
   :root {
-    /* Primary Colors - More sophisticated palette */
     --primary-50: #fafafa;
     --primary-600: #2563eb;
     --primary-900: #0f172a;
 
-    /* Accent Colors - Vibrant but professional */
+    /* Accent — teal is the primary signal colour; purple is used sparingly */
     --accent-primary: #64ffda;
     --accent-secondary: #8b5cf6;
     --accent-tertiary: #f59e0b;
+    /* Gradient reserved for CTA buttons and active states only */
     --accent-gradient: linear-gradient(135deg, #64ffda 0%, #8b5cf6 100%);
     --accent-glow: rgba(100, 255, 218, 0.3);
 
-    /* Dark Theme Colors - Better contrast and minimal */
+    /* Dark-theme scale */
     --dark-50: #fafafa;
     --dark-100: #f4f4f5;
     --dark-200: #e4e4e7;
@@ -29,86 +29,85 @@ export const GlobalStyle = createGlobalStyle`
     --dark-900: #18181b;
     --dark-950: #09090b;
 
-    /* Status Colors - Refined */
+    /* Status */
     --success: #22c55e;
     --warning: #f59e0b;
     --error: #ef4444;
     --info: var(--accent-primary);
 
-    /* Font Families - Clean and modern */
+    /* Typography */
     --font-sans: 'Inter', 'SF Pro Display', system-ui, -apple-system, BlinkMacSystemFont, sans-serif;
     --font-mono: 'JetBrains Mono', 'SF Mono', 'Fira Code', 'Consolas', monospace;
 
-    /* Font Sizes - Refined scale */
-    --text-xs: 0.75rem;      /* 12px */
-    --text-sm: 0.875rem;     /* 14px */
-    --text-base: 1rem;       /* 16px */
-    --text-lg: 1.125rem;     /* 18px */
-    --text-xl: 1.25rem;      /* 20px */
-    --text-2xl: 1.5rem;      /* 24px */
-    --text-3xl: 1.875rem;    /* 30px */
-    --text-4xl: 2.25rem;     /* 36px */
-    --text-5xl: 3rem;        /* 48px */
-    --text-6xl: 3.75rem;     /* 60px */
-    --text-7xl: 4.5rem;      /* 72px */
+    /* Type scale */
+    --text-xs:   0.75rem;
+    --text-sm:   0.875rem;
+    --text-base: 1rem;
+    --text-lg:   1.125rem;
+    --text-xl:   1.25rem;
+    --text-2xl:  1.5rem;
+    --text-3xl:  1.875rem;
+    --text-4xl:  2.25rem;
+    --text-5xl:  3rem;
+    --text-6xl:  3.75rem;
+    --text-7xl:  4.5rem;
 
-    /* Font Weights */
-    --font-normal: 400;
-    --font-medium: 500;
-    --font-semibold: 600;
-    --font-bold: 700;
+    /* Weight */
+    --font-normal:    400;
+    --font-medium:    500;
+    --font-semibold:  600;
+    --font-bold:      700;
     --font-extrabold: 800;
 
-    /* Spacing Scale - Refined */
+    /* Spacing */
     --spacing-px: 1px;
-    --spacing-0: 0;
-    --spacing-1: 0.25rem;    /* 4px */
-    --spacing-2: 0.5rem;     /* 8px */
-    --spacing-3: 0.75rem;    /* 12px */
-    --spacing-4: 1rem;       /* 16px */
-    --spacing-5: 1.25rem;    /* 20px */
-    --spacing-6: 1.5rem;     /* 24px */
-    --spacing-8: 2rem;       /* 32px */
-    --spacing-10: 2.5rem;    /* 40px */
-    --spacing-12: 3rem;      /* 48px */
-    --spacing-16: 4rem;      /* 64px */
-    --spacing-20: 5rem;      /* 80px */
-    --spacing-24: 6rem;      /* 96px */
-    --spacing-32: 8rem;      /* 128px */
+    --spacing-0:  0;
+    --spacing-1:  0.25rem;
+    --spacing-2:  0.5rem;
+    --spacing-3:  0.75rem;
+    --spacing-4:  1rem;
+    --spacing-5:  1.25rem;
+    --spacing-6:  1.5rem;
+    --spacing-8:  2rem;
+    --spacing-10: 2.5rem;
+    --spacing-12: 3rem;
+    --spacing-16: 4rem;
+    --spacing-20: 5rem;
+    --spacing-24: 6rem;
+    --spacing-32: 8rem;
 
-    /* Breakpoints - Standard */
-    --breakpoint-sm: 640px;
-    --breakpoint-md: 768px;
-    --breakpoint-lg: 1024px;
-    --breakpoint-xl: 1280px;
+    /* Breakpoints */
+    --breakpoint-sm:  640px;
+    --breakpoint-md:  768px;
+    --breakpoint-lg:  1024px;
+    --breakpoint-xl:  1280px;
     --breakpoint-2xl: 1536px;
 
-    /* Shadows - Enhanced with personality */
-    --shadow-sm: 0 2px 4px 0 rgba(0, 0, 0, 0.15);
-    --shadow-md: 0 8px 16px -4px rgba(0, 0, 0, 0.3);
-    --shadow-lg: 0 20px 25px -5px rgba(0, 0, 0, 0.4);
-    --shadow-xl: 0 25px 50px -12px rgba(0, 0, 0, 0.5);
-    --shadow-accent: 0 8px 32px rgba(100, 255, 218, 0.25);
-    --shadow-glow: 0 0 40px rgba(100, 255, 218, 0.15);
-    --shadow-hover: 0 15px 35px rgba(100, 255, 218, 0.2);
-    
-    /* Border Radius - Minimal approach */
+    /* Shadows */
+    --shadow-sm:     0 2px 4px 0 rgba(0, 0, 0, 0.15);
+    --shadow-md:     0 8px 16px -4px rgba(0, 0, 0, 0.3);
+    --shadow-lg:     0 20px 25px -5px rgba(0, 0, 0, 0.4);
+    --shadow-xl:     0 25px 50px -12px rgba(0, 0, 0, 0.5);
+    --shadow-accent: 0 8px 32px rgba(100, 255, 218, 0.15);
+    --shadow-hover:  0 12px 28px rgba(100, 255, 218, 0.15);
+
+    /* Border radius */
     --radius-none: 0;
-    --radius-sm: 0.25rem;    /* 4px */
-    --radius-md: 0.5rem;     /* 8px */
-    --radius-lg: 0.75rem;    /* 12px */
-    --radius-xl: 1rem;       /* 16px */
-    --radius-2xl: 1.5rem;    /* 24px */
+    --radius-sm:   0.25rem;
+    --radius-md:   0.5rem;
+    --radius-lg:   0.75rem;
+    --radius-xl:   1rem;
+    --radius-2xl:  1.5rem;
     --radius-full: 50%;
 
-    /* Transitions - Smooth and refined */
-    --transition-fast: 150ms cubic-bezier(0.4, 0, 0.2, 1);
+    /* Transitions */
+    --transition-fast:   150ms cubic-bezier(0.4, 0, 0.2, 1);
     --transition-normal: 300ms cubic-bezier(0.4, 0, 0.2, 1);
-    --transition-slow: 500ms cubic-bezier(0.4, 0, 0.2, 1);
+    --transition-slow:   500ms cubic-bezier(0.4, 0, 0.2, 1);
     --transition-spring: 300ms cubic-bezier(0.175, 0.885, 0.32, 1.275);
   }
 
-  /* Global Styles - Minimal and Clean */
+  /* ─── Reset ───────────────────────────────────────────────────────────── */
   * {
     margin: 0;
     padding: 0;
@@ -145,43 +144,49 @@ export const GlobalStyle = createGlobalStyle`
     overflow-x: hidden;
     max-width: 100vw;
   }
-  /* Custom Scrollbar - Modern & Rectangular */
-  ::-webkit-scrollbar {
-    width: 8px;
-    height: 8px;
+
+  /*
+   * Ambient background — two subtle radial gradients anchored to opposite
+   * corners. Fixed so they don't repaint on scroll. Opacity kept low so
+   * content remains the clear focal point.
+   */
+  body::before {
+    content: '';
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background:
+      radial-gradient(ellipse 60% 50% at 15% 20%, rgba(100, 255, 218, 0.06) 0%, transparent 100%),
+      radial-gradient(ellipse 50% 40% at 85% 80%, rgba(139, 92, 246, 0.05) 0%, transparent 100%);
+    pointer-events: none;
+    z-index: -1;
   }
 
-  ::-webkit-scrollbar-track {
-    background: var(--dark-900);
-  }
+  /* ─── Scrollbar ───────────────────────────────────────────────────────── */
+  ::-webkit-scrollbar { width: 8px; height: 8px; }
+  ::-webkit-scrollbar-track { background: var(--dark-900); }
+  ::-webkit-scrollbar-thumb { background: var(--dark-600); border-radius: 4px; }
+  ::-webkit-scrollbar-thumb:hover { background: var(--accent-primary); }
 
-  ::-webkit-scrollbar-thumb {
-    background: var(--dark-600);
-    border-radius: 4px; /* Rectangular with slight rounding */
-    transition: var(--transition-fast);
-  }
-
-  ::-webkit-scrollbar-thumb:hover {
-    background: var(--accent-primary);
-  }
-
-  /* Selection - Clean */
+  /* ─── Selection ───────────────────────────────────────────────────────── */
   ::selection {
-    background: rgba(0, 217, 255, 0.2);
+    background: rgba(100, 255, 218, 0.2);
     color: var(--dark-50);
   }
 
-  /* Focus styles - Subtle */
-  *:focus {
+  /* ─── Focus — keyboard users see a clear ring; mouse users do not ─────── */
+  :focus-visible {
     outline: 2px solid var(--accent-primary);
     outline-offset: 2px;
   }
 
-  *:focus:not(:focus-visible) {
+  :focus:not(:focus-visible) {
     outline: none;
   }
 
-  /* Typography - Clean and minimal */
+  /* ─── Typography ──────────────────────────────────────────────────────── */
   h1, h2, h3, h4, h5, h6 {
     font-weight: var(--font-bold);
     line-height: 1.1;
@@ -189,41 +194,25 @@ export const GlobalStyle = createGlobalStyle`
     letter-spacing: -0.025em;
   }
 
-  h1 {
-    font-size: var(--text-6xl);
-    font-weight: var(--font-extrabold);
-    color: var(--dark-50);
-  }
-
-  h2 {
-    font-size: var(--text-4xl);
-    font-weight: var(--font-bold);
-    color: var(--dark-100);
-  }
-
-  h3 {
-    font-size: var(--text-2xl);
-    font-weight: var(--font-semibold);
-    color: var(--dark-200);
-  }
+  h1 { font-size: var(--text-6xl); font-weight: var(--font-extrabold); }
+  h2 { font-size: var(--text-4xl); font-weight: var(--font-bold); color: var(--dark-100); }
+  h3 { font-size: var(--text-2xl); font-weight: var(--font-semibold); color: var(--dark-200); }
 
   p {
     color: var(--dark-300);
     line-height: 1.7;
   }
 
-  /* Links - Subtle */
+  /* ─── Links ───────────────────────────────────────────────────────────── */
   a {
     color: var(--accent-primary);
     text-decoration: none;
     transition: var(--transition-fast);
   }
 
-  a:hover {
-    color: var(--dark-200);
-  }
+  a:hover { color: var(--dark-200); }
 
-  /* Buttons - Clean */
+  /* ─── Buttons ─────────────────────────────────────────────────────────── */
   button {
     cursor: pointer;
     border: none;
@@ -237,7 +226,7 @@ export const GlobalStyle = createGlobalStyle`
     cursor: not-allowed;
   }
 
-  /* Input styles - Minimal */
+  /* ─── Form elements ───────────────────────────────────────────────────── */
   input, textarea {
     font-family: inherit;
     border: 1px solid var(--dark-700);
@@ -253,14 +242,13 @@ export const GlobalStyle = createGlobalStyle`
     box-shadow: 0 0 0 1px var(--accent-primary);
   }
 
-  /* Images - Responsive */
   img {
     max-width: 100%;
     height: auto;
     display: block;
   }
 
-  /* Utility Classes */
+  /* ─── Utility ─────────────────────────────────────────────────────────── */
   .sr-only {
     position: absolute;
     width: 1px;
@@ -273,6 +261,7 @@ export const GlobalStyle = createGlobalStyle`
     border: 0;
   }
 
+  /* Used only in hero headline — intentional, limited to one instance */
   .text-gradient {
     background: linear-gradient(135deg, var(--accent-primary) 0%, var(--accent-secondary) 100%);
     -webkit-background-clip: text;
@@ -280,53 +269,22 @@ export const GlobalStyle = createGlobalStyle`
     background-clip: text;
   }
 
-  /* Enhanced Background Pattern */
-  body::before {
-    content: '';
-    position: fixed;
-    top: 0;
-    left: 0;
-    right: 0;
-    bottom: 0;
-    background: 
-      radial-gradient(circle at 20% 30%, rgba(100, 255, 218, 0.08) 0%, transparent 50%),
-      radial-gradient(circle at 80% 70%, rgba(139, 92, 246, 0.06) 0%, transparent 50%),
-      radial-gradient(circle at 40% 80%, rgba(100, 255, 218, 0.04) 0%, transparent 50%);
-    pointer-events: none;
-    z-index: -1;
-    opacity: 0.7;
-  }
-
-  /* Essential Animation Classes Only */
+  /* ─── Keyframes ───────────────────────────────────────────────────────── */
   @keyframes pulse {
-    0%, 100% {
-      opacity: 1;
-    }
-    50% {
-      opacity: 0.5;
-    }
+    0%, 100% { opacity: 1; }
+    50%       { opacity: 0.5; }
   }
 
   @keyframes spin {
-    from {
-      transform: rotate(0deg);
-    }
-    to {
-      transform: rotate(360deg);
-    }
+    from { transform: rotate(0deg); }
+    to   { transform: rotate(360deg); }
   }
 
-  .animate-pulse {
-    animation: pulse 2s cubic-bezier(0.4, 0, 0.6, 1) infinite;
-  }
+  .animate-pulse { animation: pulse 2s cubic-bezier(0.4, 0, 0.6, 1) infinite; }
+  .animate-spin  { animation: spin 1s linear infinite; }
 
-  .animate-spin {
-    animation: spin 1s linear infinite;
-  }
-  
-  /* ─── View Transitions API ─── */
-  /* Defines the cross-fade animation for browser-native page transitions.    */
-  /* Chrome 111+ / Safari 18+ use these; other browsers simply ignore them.   */
+  /* ─── View Transitions API ────────────────────────────────────────────── */
+  /* Chrome 111+ / Safari 18+ — other browsers ignore these rules */
   @keyframes vt-fade-out {
     from { opacity: 1; }
     to   { opacity: 0; }
@@ -337,15 +295,10 @@ export const GlobalStyle = createGlobalStyle`
     to   { opacity: 1; }
   }
 
-  ::view-transition-old(root) {
-    animation: vt-fade-out 200ms ease-out both;
-  }
+  ::view-transition-old(root) { animation: vt-fade-out 200ms ease-out both; }
+  ::view-transition-new(root) { animation: vt-fade-in  200ms ease-in  both; }
 
-  ::view-transition-new(root) {
-    animation: vt-fade-in 200ms ease-in both;
-  }
-
-  /* Accessibility: respect OS-level "Reduce Motion" preference */
+  /* ─── Reduced Motion ──────────────────────────────────────────────────── */
   @media (prefers-reduced-motion: reduce) {
     *, *::before, *::after {
       animation-duration: 0.001s !important;
@@ -353,31 +306,22 @@ export const GlobalStyle = createGlobalStyle`
       transition-duration: 0.001s !important;
     }
 
-    html {
-      scroll-behavior: auto;
-    }
+    html { scroll-behavior: auto; }
 
-    /* Suppress native View Transition cross-fade when motion is reduced */
     ::view-transition-old(root),
-    ::view-transition-new(root) {
-      animation: none !important;
-    }
+    ::view-transition-new(root) { animation: none !important; }
   }
 `;
 
-// Styled Components
+/* ─── Shared Layout Components ────────────────────────────────────────────── */
+
 export const Container = styled.div`
   max-width: var(--breakpoint-xl);
   margin: 0 auto;
   padding: 0 var(--spacing-4);
 
-  @media (min-width: 640px) {
-    padding: 0 var(--spacing-6);
-  }
-
-  @media (min-width: 1024px) {
-    padding: 0 var(--spacing-8);
-  }
+  @media (min-width: 640px)  { padding: 0 var(--spacing-6); }
+  @media (min-width: 1024px) { padding: 0 var(--spacing-8); }
 `;
 
 export const Section = styled.section<{ padding?: string }>`
@@ -388,7 +332,6 @@ export const Section = styled.section<{ padding?: string }>`
     padding: ${props => props.padding || '60px 0'};
   }
 `;
-
 
 export const Grid = styled.div<{ columns?: number; gap?: string }>`
   display: grid;
@@ -402,19 +345,18 @@ export const Grid = styled.div<{ columns?: number; gap?: string }>`
 `;
 
 export const Card = styled.div<{ hover?: boolean }>`
-  background: rgba(30, 41, 59, 0.6);
+  background: rgba(30, 41, 59, 0.5);
   border: 1px solid var(--dark-700);
   border-radius: var(--radius-xl);
   padding: var(--spacing-8);
-  backdrop-filter: blur(10px);
   transition: var(--transition-normal);
 
   ${props => props.hover && `
     &:hover {
-      transform: translateY(-8px);
+      transform: translateY(-4px);
       border-color: var(--accent-primary);
       box-shadow: var(--shadow-accent);
-      background: rgba(30, 41, 59, 0.8);
+      background: rgba(30, 41, 59, 0.7);
     }
   `}
 
@@ -437,7 +379,7 @@ export const Button = styled.button<{ variant?: 'primary' | 'secondary' | 'outli
 
   ${props => {
     const size = props.size || 'md';
-    const sizeStyles = {
+    const sizeStyles: Record<string, string> = {
       sm: 'padding: var(--spacing-2) var(--spacing-4); font-size: var(--text-sm);',
       md: 'padding: var(--spacing-3) var(--spacing-6); font-size: var(--text-base);',
       lg: 'padding: var(--spacing-4) var(--spacing-8); font-size: var(--text-lg);'
@@ -453,17 +395,13 @@ export const Button = styled.button<{ variant?: 'primary' | 'secondary' | 'outli
         color: var(--dark-950);
         border: 1px solid transparent;
         box-shadow: var(--shadow-md);
-        position: relative;
-        overflow: hidden;
 
         &:hover {
           transform: translateY(-2px);
           box-shadow: var(--shadow-hover);
         }
 
-        &:active {
-          transform: translateY(0);
-        }
+        &:active { transform: translateY(0); }
       `;
     } else if (variant === 'secondary') {
       return `
@@ -503,11 +441,11 @@ export const Badge = styled.span<{ variant?: 'success' | 'warning' | 'error' | '
 
   ${props => {
     const variant = props.variant || 'info';
-    const variants = {
+    const variants: Record<string, string> = {
       success: 'background: var(--dark-900); color: var(--success); border-color: var(--success);',
       warning: 'background: var(--dark-900); color: var(--warning); border-color: var(--warning);',
-      error: 'background: var(--dark-900); color: var(--error); border-color: var(--error);',
-      info: 'background: var(--dark-900); color: var(--accent-primary); border-color: var(--accent-primary);'
+      error:   'background: var(--dark-900); color: var(--error);   border-color: var(--error);',
+      info:    'background: var(--dark-900); color: var(--accent-primary); border-color: var(--accent-primary);'
     };
     return variants[variant];
   }}
