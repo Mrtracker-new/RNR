@@ -6,19 +6,20 @@ import SEO from '../components/SEO';
 
 import aboutImage from '../assets/images/Aboutme.webp';
 
-// Lazy load ResumeDownload to reduce initial bundle size
 const ResumeDownload = lazy(() => import('../components/ResumeDownload'));
+
+/* ─── Hero ────────────────────────────────────────────────────────────────── */
 
 const AboutHero = styled(Section)`
   padding-top: 140px;
   text-align: center;
-  
+
   @media (max-width: 768px) {
     padding-top: 120px;
     padding-left: var(--spacing-4);
     padding-right: var(--spacing-4);
   }
-  
+
   @media (max-width: 480px) {
     padding-top: 100px;
     padding-left: var(--spacing-3);
@@ -29,10 +30,7 @@ const AboutHero = styled(Section)`
 const HeroTitle = styled(motion.h1)`
   font-size: clamp(2.5rem, 6vw, 3.5rem);
   margin-bottom: var(--spacing-6);
-  background: linear-gradient(135deg, var(--accent-primary) 0%, var(--accent-secondary) 100%);
-  -webkit-background-clip: text;
-  -webkit-text-fill-color: transparent;
-  background-clip: text;
+  color: var(--dark-50);
   font-weight: var(--font-extrabold);
   letter-spacing: -0.025em;
 `;
@@ -55,14 +53,9 @@ const AboutImageSection = styled(motion.div)`
   display: flex;
   justify-content: center;
   margin-bottom: var(--spacing-16);
-  
-  @media (max-width: 968px) {
-    margin-bottom: var(--spacing-8); /* Reduced gap on mobile */
-  }
-  
-  @media (max-width: 640px) {
-    margin-bottom: var(--spacing-6); /* Even tighter on small screens */
-  }
+
+  @media (max-width: 968px) { margin-bottom: var(--spacing-8); }
+  @media (max-width: 640px) { margin-bottom: var(--spacing-6); }
 `;
 
 const AboutImageContainer = styled.div`
@@ -71,51 +64,35 @@ const AboutImageContainer = styled.div`
   height: 450px;
   border-radius: var(--radius-2xl);
   overflow: hidden;
-  border: 2px solid var(--dark-800);
+  border: 1px solid rgba(255, 255, 255, 0.08);
   box-shadow: var(--shadow-lg);
   margin: 0 auto;
-  transition: var(--transition-normal);
+  transition: border-color var(--transition-normal);
 
-  &:hover {
-    border-color: var(--accent-primary);
-  }
+  &:hover { border-color: rgba(100, 255, 218, 0.3); }
 
-  @media (max-width: 768px) {
-    width: 400px;
-    height: 400px;
-  }
-
-  @media (max-width: 480px) {
-    width: 360px;
-    height: 360px;
-    margin: 0 auto;
-  }
-  
-  @media (max-width: 360px) {
-    width: 320px;
-    height: 320px;
-  }
+  @media (max-width: 768px) { width: 400px; height: 400px; }
+  @media (max-width: 480px) { width: 360px; height: 360px; margin: 0 auto; }
+  @media (max-width: 360px) { width: 320px; height: 320px; }
 `;
 
 const AboutImage = styled.img`
   width: 100%;
   height: 100%;
   object-fit: cover;
-  transition: var(--transition-normal);
+  transition: transform var(--transition-slow);
 
-  &:hover {
-    transform: scale(1.05);
-  }
+  &:hover { transform: scale(1.04); }
 `;
 
-/* --- NEW JOURNEY SECTION STYLES --- */
+/* ─── Journey ─────────────────────────────────────────────────────────────── */
 
 const JourneySection = styled(Section)`
   position: relative;
   overflow: hidden;
 `;
 
-const JourneyHeader = styled.div`
+const SectionHeader = styled.div`
   text-align: center;
   margin-bottom: var(--spacing-20);
   position: relative;
@@ -135,16 +112,14 @@ const SectionTitle = styled(motion.h2)`
     bottom: -10px;
     left: 50%;
     transform: translateX(-50%);
-    width: 60px;
-    height: 4px;
-    background: var(--accent-gradient);
+    width: 40px;
+    height: 3px;
+    background: var(--accent-primary);
     border-radius: var(--radius-sm);
   }
 `;
 
-const JourneyTitle = SectionTitle;
-
-const JourneySubtitle = styled(motion.p)`
+const SectionSubtitle = styled(motion.p)`
   color: var(--dark-400);
   font-size: var(--text-lg);
   max-width: 500px;
@@ -160,19 +135,17 @@ const JourneyContainer = styled.div`
 
 const ProgressLineContainer = styled.div`
   position: absolute;
-  left: 50%; /* Center on desktop */
+  left: 50%;
   top: 0;
   bottom: 0;
-  width: 4px;
+  width: 2px;
   background: var(--dark-800);
   transform: translateX(-50%);
   z-index: 1;
   border-radius: var(--radius-full);
-  overflow: hidden; 
+  overflow: hidden;
 
-  @media (max-width: 768px) {
-    left: 24px; /* Move to left on mobile */
-  }
+  @media (max-width: 768px) { left: 24px; }
 `;
 
 const ProgressLine = styled(motion.div)`
@@ -180,7 +153,7 @@ const ProgressLine = styled(motion.div)`
   top: 0;
   left: 0;
   right: 0;
-  background: var(--accent-gradient);
+  background: var(--accent-primary);
   transform-origin: top;
   width: 100%;
   height: 100%;
@@ -192,59 +165,53 @@ const JourneyItemWrapper = styled.div<{ $align: 'left' | 'right' }>`
   padding-bottom: var(--spacing-16);
   position: relative;
   width: 50%;
-  ${props => props.$align === 'left' ? 'margin-right: auto; padding-right: 40px;' : 'margin-left: auto; padding-left: 40px;'}
+  ${props => props.$align === 'left'
+    ? 'margin-right: auto; padding-right: 40px;'
+    : 'margin-left: auto; padding-left: 40px;'}
 
   @media (max-width: 768px) {
     width: 100%;
     justify-content: flex-start;
-    padding-left: 60px; /* Space for line */
+    padding-left: 60px;
     padding-right: 0;
     margin: 0;
     padding-bottom: var(--spacing-12);
   }
 `;
 
-const Marker = styled(motion.div) <{ $align: 'left' | 'right' }>`
-    position: absolute;
-    top: 24px;
-    width: 16px;
-    height: 16px;
-    background: var(--dark-950);
-    border: 3px solid var(--accent-primary);
-    border-radius: 50%;
-    z-index: 5;
-    box-shadow: 0 0 0 4px rgba(30, 41, 59, 0.5), 0 0 15px var(--accent-primary);
-    
-    /* Desktop Positioning */
-    ${props => props.$align === 'left' ? 'right: -10px;' : 'left: -10px;'} /* -8px for perfect center + border adj */
+const Marker = styled(motion.div)<{ $align: 'left' | 'right' }>`
+  position: absolute;
+  top: 24px;
+  width: 14px;
+  height: 14px;
+  background: var(--dark-950);
+  border: 2px solid var(--accent-primary);
+  border-radius: 50%;
+  z-index: 5;
+  box-shadow: 0 0 0 4px rgba(30, 41, 59, 0.8);
 
-    @media (max-width: 768px) {
-        /* Mobile Positioning - Independent of align prop */
-        left: 18px; /* Line is at 24px center. Marker 16px wide. 24 - 8 = 16. + visual tweak */
-        right: auto;
-    }
+  ${props => props.$align === 'left' ? 'right: -9px;' : 'left: -9px;'}
+
+  @media (max-width: 768px) {
+    left: 18px;
+    right: auto;
+  }
 `;
-
 
 const JourneyCard = styled(motion.div)`
   background: rgba(30, 41, 59, 0.4);
-  backdrop-filter: blur(12px);
-  -webkit-backdrop-filter: blur(12px);
-  border: 1px solid rgba(255, 255, 255, 0.05);
+  border: 1px solid rgba(255, 255, 255, 0.06);
   padding: var(--spacing-6);
   border-radius: var(--radius-xl);
   width: 100%;
   position: relative;
   overflow: hidden;
-  transition: background 0.3s ease, border-color 0.3s ease, box-shadow 0.3s ease, transform 0.3s ease;
-  will-change: transform, opacity;
-  text-align: left; /* Force clear alignment */
+  transition: background 0.3s ease, border-color 0.3s ease;
+  text-align: left;
 
   &:hover {
     background: rgba(30, 41, 59, 0.6);
-    border-color: rgba(100, 255, 218, 0.3);
-    box-shadow: 0 10px 40px -10px rgba(0,0,0,0.5);
-    transform: translateY(-5px);
+    border-color: rgba(100, 255, 218, 0.2);
   }
 
   &::before {
@@ -254,8 +221,8 @@ const JourneyCard = styled(motion.div)`
     left: 0;
     width: 2px;
     height: 100%;
-    background: var(--accent-gradient);
-    opacity: 0.7;
+    background: var(--accent-primary);
+    opacity: 0.6;
   }
 `;
 
@@ -265,120 +232,92 @@ const JourneyYear = styled.span`
   font-size: var(--text-sm);
   color: var(--accent-primary);
   margin-bottom: var(--spacing-2);
-  padding: 4px 12px;
-  background: rgba(100, 255, 218, 0.1);
+  padding: 3px 10px;
+  background: rgba(100, 255, 218, 0.08);
   border-radius: var(--radius-md);
-  border: 1px solid rgba(100, 255, 218, 0.2);
+  border: 1px solid rgba(100, 255, 218, 0.15);
 `;
 
 const JourneyCardTitle = styled.h3`
-  font-size: 1.25rem;
+  font-size: 1.2rem;
   color: var(--dark-50);
-  margin-bottom: var(--spacing-2);
-  font-weight: 700;
+  margin-bottom: var(--spacing-1);
+  font-weight: var(--font-bold);
 `;
 
 const JourneyCardRole = styled.h4`
-  font-size: 1rem;
-  color: var(--dark-200);
+  font-size: 0.9rem;
+  color: var(--dark-300);
   margin-bottom: var(--spacing-3);
-  font-weight: 500;
+  font-weight: var(--font-medium);
   display: flex;
   align-items: center;
   gap: var(--spacing-2);
-  
+
   &::before {
-      content: '';
-      display: inline-block;
-      width: 6px;
-      height: 6px;
-      background-color: var(--accent-secondary);
-      border-radius: 50%;
+    content: '';
+    display: inline-block;
+    width: 5px;
+    height: 5px;
+    background-color: var(--accent-secondary);
+    border-radius: 50%;
+    flex-shrink: 0;
   }
 `;
 
 const JourneyDescription = styled.p`
   font-size: var(--text-base);
   color: var(--dark-400);
-  line-height: 1.6;
+  line-height: 1.65;
 `;
 
 const JourneyTechStack = styled.div`
   display: flex;
   flex-wrap: wrap;
-  gap: 8px;
+  gap: 6px;
   margin-top: var(--spacing-4);
 `;
 
 const TechTag = styled.span`
-  font-size: 0.75rem;
-  color: var(--dark-300);
-  background: rgba(255, 255, 255, 0.05);
+  font-size: 0.72rem;
+  color: var(--dark-400);
+  background: rgba(255, 255, 255, 0.04);
   padding: 2px 8px;
-  border-radius: 4px;
-  transition: var(--transition-fast);
-
-  &:hover {
-      color: var(--accent-primary);
-      background: rgba(100, 255, 218, 0.1);
-  }
+  border-radius: var(--radius-sm);
+  border: 1px solid rgba(255, 255, 255, 0.06);
 `;
 
-/* --- SKILLS SECTION STYLES --- */
+/* ─── Skills ──────────────────────────────────────────────────────────────── */
 
 const SkillsSection = styled(Section)`
   position: relative;
 `;
 
-const SkillsHeader = styled.div`
-  text-align: center;
-  margin-bottom: var(--spacing-16);
-`;
-
-const SkillsTitle = SectionTitle;
-
-const SkillsSubtitle = styled(motion.p)`
-  color: var(--dark-400);
-  font-size: var(--text-lg);
-  max-width: 500px;
-  margin: 0 auto;
-`;
-
 const SkillsGrid = styled.div`
   display: grid;
   grid-template-columns: repeat(2, 1fr);
-  gap: var(--spacing-8);
+  gap: var(--spacing-6);
   max-width: 1400px;
   margin: 0 auto;
 
-  @media (max-width: 1024px) {
-    grid-template-columns: repeat(2, 1fr);
-  }
-
   @media (max-width: 768px) {
     grid-template-columns: 1fr;
-    gap: var(--spacing-6);
+    gap: var(--spacing-5);
   }
 `;
 
 const SkillCard = styled(motion.div)`
-  background: linear-gradient(135deg, rgba(30, 41, 59, 0.5) 0%, rgba(30, 41, 59, 0.3) 100%);
-  backdrop-filter: blur(12px);
-  -webkit-backdrop-filter: blur(12px);
-  border: 1px solid rgba(255, 255, 255, 0.08);
+  background: rgba(30, 41, 59, 0.4);
+  border: 1px solid rgba(255, 255, 255, 0.07);
   padding: var(--spacing-8);
   border-radius: var(--radius-xl);
   position: relative;
   overflow: hidden;
-  transition: background 0.3s ease, border-color 0.3s ease, box-shadow 0.3s ease, transform 0.3s ease;
-  will-change: auto;
-  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.2);
+  transition: border-color 0.3s ease, background 0.3s ease;
 
   &:hover {
-    background: linear-gradient(135deg, rgba(30, 41, 59, 0.7) 0%, rgba(30, 41, 59, 0.5) 100%);
-    border-color: rgba(100, 255, 218, 0.3);
-    transform: translateY(-4px);
-    box-shadow: 0 8px 30px rgba(100, 255, 218, 0.15);
+    background: rgba(30, 41, 59, 0.6);
+    border-color: rgba(100, 255, 218, 0.2);
   }
 
   &::before {
@@ -387,41 +326,32 @@ const SkillCard = styled(motion.div)`
     top: 0;
     left: 0;
     width: 100%;
-    height: 4px;
-    background: var(--accent-gradient);
-    opacity: 0.8;
+    height: 2px;
+    background: var(--accent-primary);
+    opacity: 0.5;
   }
 
-  &::after {
-    content: '';
-    position: absolute;
-    top: 0;
-    right: 0;
-    bottom: 0;
-    left: 0;
-    background: radial-gradient(circle at top right, rgba(100, 255, 218, 0.05) 0%, transparent 50%);
-    pointer-events: none;
-  }
+  @media (max-width: 768px) { padding: var(--spacing-6); }
 `;
 
 const SkillCategory = styled.h3`
-  font-size: var(--text-xl);
-  color: var(--dark-50);
-  margin-bottom: var(--spacing-6);
-  font-weight: var(--font-bold);
+  font-size: var(--text-base);
+  color: var(--dark-200);
+  margin-bottom: var(--spacing-5);
+  font-weight: var(--font-semibold);
   display: flex;
   align-items: center;
   gap: var(--spacing-3);
-  letter-spacing: -0.02em;
+  letter-spacing: -0.01em;
 
   &::before {
     content: '';
     display: inline-block;
-    width: 10px;
-    height: 10px;
-    background: var(--accent-gradient);
+    width: 8px;
+    height: 8px;
+    background: var(--accent-primary);
     border-radius: 50%;
-    box-shadow: 0 0 15px rgba(100, 255, 218, 0.6);
+    flex-shrink: 0;
   }
 `;
 
@@ -429,160 +359,103 @@ const SkillsList = styled.ul`
   list-style: none;
   display: flex;
   flex-wrap: wrap;
-  gap: var(--spacing-3);
+  gap: var(--spacing-2);
 `;
 
 const SkillItem = styled.li`
-  color: var(--dark-200);
+  color: var(--dark-300);
   font-size: var(--text-sm);
   font-weight: var(--font-medium);
   display: inline-flex;
   align-items: center;
-  gap: var(--spacing-2);
-  transition: var(--transition-fast);
-  padding: var(--spacing-2) var(--spacing-4);
+  padding: var(--spacing-2) var(--spacing-3);
   border-radius: var(--radius-md);
-  background: rgba(100, 255, 218, 0.08);
-  border: 1px solid rgba(100, 255, 218, 0.15);
+  background: rgba(255, 255, 255, 0.04);
+  border: 1px solid rgba(255, 255, 255, 0.06);
+  transition: border-color var(--transition-fast), color var(--transition-fast);
   cursor: default;
 
   &:hover {
     color: var(--accent-primary);
-    background: rgba(100, 255, 218, 0.15);
-    border-color: rgba(100, 255, 218, 0.3);
-    transform: translateY(-2px);
-    box-shadow: 0 4px 12px rgba(100, 255, 218, 0.2);
+    border-color: rgba(100, 255, 218, 0.25);
   }
 `;
 
-/* --- SERVICES SECTION STYLES --- */
+/* ─── Focus Areas — editorial format (option c) ───────────────────────────── */
 
-const ServicesSection = styled(Section)`
+const FocusSection = styled(Section)`
   position: relative;
-  background: rgba(15, 23, 42, 0.3);
 `;
 
-const ServicesHeader = styled.div`
-  text-align: center;
-  margin-bottom: var(--spacing-16);
-`;
-
-const ServicesTitle = SectionTitle;
-
-const ServicesSubtitle = styled(motion.p)`
-  color: var(--dark-400);
-  font-size: var(--text-lg);
-  max-width: 500px;
-  margin: 0 auto;
-`;
-
-const ServicesGrid = styled.div`
+const FocusGrid = styled.div`
   display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
-  gap: var(--spacing-8);
-  max-width: 1100px;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 1px;
+  background: rgba(255, 255, 255, 0.06);
+  border-radius: var(--radius-xl);
+  overflow: hidden;
+  max-width: 900px;
   margin: 0 auto;
 
-  @media (max-width: 768px) {
+  @media (max-width: 640px) {
     grid-template-columns: 1fr;
-    gap: var(--spacing-6);
   }
 `;
 
-const ServiceCard = styled(motion.div)`
-  background: rgba(30, 41, 59, 0.5);
-  backdrop-filter: blur(12px);
-  -webkit-backdrop-filter: blur(12px);
-  border: 1px solid rgba(255, 255, 255, 0.05);
-  padding: var(--spacing-8);
-  border-radius: var(--radius-xl);
-  position: relative;
-  overflow: hidden;
-  transition: background 0.3s ease, border-color 0.3s ease, box-shadow 0.3s ease, transform 0.3s ease;
-  cursor: default;
-  will-change: auto;
+const FocusArea = styled(motion.div)`
+  background: var(--dark-950);
+  padding: var(--spacing-10) var(--spacing-8);
+  transition: background 0.25s ease;
 
   &:hover {
-    background: rgba(30, 41, 59, 0.7);
-    border-color: rgba(100, 255, 218, 0.3);
-    transform: translateY(-6px);
-    box-shadow: 0 10px 40px -10px rgba(100, 255, 218, 0.2);
+    background: rgba(30, 41, 59, 0.4);
   }
 
-  &::after {
-    content: '';
-    position: absolute;
-    bottom: 0;
-    left: 0;
-    right: 0;
-    height: 2px;
-    background: var(--accent-gradient);
-    opacity: 0;
-    transition: opacity 0.3s ease;
-  }
-
-  &:hover::after {
-    opacity: 1;
-  }
+  @media (max-width: 768px) { padding: var(--spacing-8) var(--spacing-6); }
 `;
 
-const ServiceIcon = styled.div`
-  width: 56px;
-  height: 56px;
-  background: rgba(100, 255, 218, 0.1);
-  border: 1px solid rgba(100, 255, 218, 0.2);
-  border-radius: var(--radius-lg);
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  margin-bottom: var(--spacing-5);
-  font-size: 1.75rem;
-  transition: var(--transition-normal);
-
-  ${ServiceCard}:hover & {
-    background: rgba(100, 255, 218, 0.15);
-    border-color: rgba(100, 255, 218, 0.4);
-    transform: scale(1.05);
-  }
-`;
-
-const ServiceTitle = styled.h3`
-  font-size: var(--text-2xl);
-  color: var(--dark-50);
-  margin-bottom: var(--spacing-3);
-  font-weight: var(--font-semibold);
-`;
-
-const ServiceDescription = styled.p`
-  color: var(--dark-400);
-  font-size: var(--text-base);
-  line-height: 1.7;
+const FocusAreaNumber = styled.span`
+  display: block;
+  font-family: var(--font-mono);
+  font-size: 0.7rem;
+  color: var(--accent-primary);
+  letter-spacing: 0.1em;
   margin-bottom: var(--spacing-4);
+  opacity: 0.7;
 `;
 
-const ServiceFeatures = styled.ul`
-  list-style: none;
-  display: flex;
-  flex-direction: column;
-  gap: var(--spacing-2);
+const FocusAreaTitle = styled.h3`
+  font-size: var(--text-xl);
+  color: var(--dark-100);
+  font-weight: var(--font-semibold);
+  margin-bottom: var(--spacing-3);
+  letter-spacing: -0.02em;
+  line-height: 1.2;
 `;
 
-const ServiceFeature = styled.li`
-  color: var(--dark-300);
+const FocusAreaBody = styled.p`
   font-size: var(--text-sm);
-  display: flex;
-  align-items: flex-start;
-  gap: var(--spacing-2);
-
-  &::before {
-    content: '✓';
-    color: var(--accent-primary);
-    font-weight: var(--font-bold);
-    margin-top: 2px;
-  }
+  color: var(--dark-500);
+  line-height: 1.7;
 `;
 
-// Data — chronological order: scroll down = move forward in time
+const FocusAreaProjects = styled.div`
+  margin-top: var(--spacing-4);
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--spacing-2);
+`;
+
+const FocusProject = styled.span`
+  font-size: 0.7rem;
+  font-family: var(--font-mono);
+  color: var(--dark-500);
+  border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+  padding-bottom: 1px;
+`;
+
+/* ─── Data ────────────────────────────────────────────────────────────────── */
+
 const timelineData = [
   {
     year: '2019',
@@ -592,21 +465,21 @@ const timelineData = [
     tags: ['Python Base', 'Web Basics', 'Self-Learning', 'Curiosity']
   },
   {
-    year: '2019 - 2022',
+    year: '2019 – 2022',
     title: 'Diploma in DTDM',
     role: 'Student',
-    description: 'Graduated with a Diploma in Tool & Die Making (DTDM). Developed a strong engineering mindset, precision, and problem-solving skills that translated seamlessly into software engineering.',
+    description: 'Graduated with a Diploma in Tool & Die Making. Developed a strong engineering mindset, precision thinking, and problem-solving habits that translated directly into software engineering.',
     tags: ['Engineering Fundamentals', 'Precision', 'Problem Solving', 'Logic']
   },
   {
-    year: '2022 - 2023',
+    year: '2022 – 2023',
     title: 'Industry Experience',
     role: 'Tool & Die Designer',
     description: 'Worked as a Tool & Die designer in precision manufacturing. Tolerances are measured in microns and errors are physically costly. This built an engineering mindset that carries directly into software: design for edge cases first, validate assumptions constantly, and never ship code you have not tested under real load.',
     tags: ['Precision Engineering', 'CAD/CAM', 'Manufacturing Tolerances', 'Quality Control']
   },
   {
-    year: '2024 - Present',
+    year: '2024 – Present',
     title: 'Computer Science Degree',
     role: 'Student & Freelancer',
     description: 'Pursuing advanced studies in Computer Science while actively freelancing. Deepening knowledge in algorithms, system design, and AI/ML foundations while building real-world projects for clients.',
@@ -614,7 +487,6 @@ const timelineData = [
   }
 ];
 
-// Skills Data
 const skillsData = [
   {
     category: 'Frontend',
@@ -634,85 +506,69 @@ const skillsData = [
   }
 ];
 
-// Services Data
-const servicesData = [
+const focusAreas = [
   {
-    icon: '🌐',
-    title: 'Web Development',
-    description: 'Modern, responsive websites and web applications built with the latest technologies.',
-    features: ['Custom web applications', 'E-commerce platforms', 'Landing pages', 'Performance optimization']
+    number: '01',
+    title: 'Privacy & Security Tools',
+    body: 'Software that takes privacy seriously as an architecture constraint, not a feature. AES-256 encryption, zero-knowledge design, and steganography — built into products people actually use.',
+    projects: ['BAR', 'InvisioVault', 'LinkNest']
   },
   {
-    icon: '💻',
-    title: 'Full-Stack Applications',
-    description: 'End-to-end solutions from database design to polished user interfaces.',
-    features: ['RESTful API development', 'Database architecture', 'User authentication', 'Real-time features']
+    number: '02',
+    title: 'Offline-First Software',
+    body: 'Applications that work without the cloud because cloud dependency is a choice, not a requirement. Local-first architecture with optional sync — full user control over data.',
+    projects: ['BAR Desktop', 'LinkNest', 'Contact Manager']
   },
   {
-    icon: '🎨',
-    title: 'UI/UX Design',
-    description: 'Beautiful, intuitive interfaces that prioritize user experience and accessibility.',
-    features: ['Responsive design', 'Wireframing & prototyping', 'Design systems', 'Brand consistency']
+    number: '03',
+    title: 'Computer Vision Experiments',
+    body: 'Using cameras as input devices for accessibility and novel interaction. MediaPipe, facial landmark detection, and real-time coordinate mapping at sub-50ms latency.',
+    projects: ['CursorCam']
   },
   {
-    icon: '🔒',
-    title: 'Security Applications',
-    description: 'Specialized tools for data security, encryption, and secure file handling.',
-    features: ['Steganography tools', 'File encryption', 'Polyglot file creation', 'Secure data transmission']
-  },
-  {
-    icon: '⚡',
-    title: 'Performance Optimization',
-    description: 'Speed up your application and improve user experience through strategic optimizations.',
-    features: ['Code optimization', 'Bundle size reduction', 'Caching strategies', 'Load time improvements']
-  },
-  {
-    icon: '🛠️',
-    title: 'Consultation & Support',
-    description: 'Technical guidance and ongoing support for your development projects.',
-    features: ['Code review', 'Architecture planning', 'Technical mentoring', 'Troubleshooting']
+    number: '04',
+    title: 'Cross-Platform Applications',
+    body: 'One problem, multiple platforms. Web, Windows desktop, Android, and iOS — choosing the right tool for each target rather than forcing a single stack everywhere.',
+    projects: ['YT-Downloader', 'Contact Manager', 'Sortify']
   }
 ];
 
-const containerVariants = {
+/* ─── Animation variants ──────────────────────────────────────────────────── */
+
+const containerVariants: Variants = {
   hidden: { opacity: 0 },
   visible: {
     opacity: 1,
-    transition: {
-      staggerChildren: 0.2,
-      delayChildren: 0.1
-    }
+    transition: { staggerChildren: 0.2, delayChildren: 0.1 }
   }
 };
 
-const itemVariants = {
+const itemVariants: Variants = {
   hidden: { opacity: 0, y: 30 },
   visible: { opacity: 1, y: 0 }
 };
 
+/*
+ * No bounce on timeline cards — a precision engineering background calls for
+ * restrained motion, not playful overshoot.
+ */
 const cardVariants: Variants = {
-  offscreen: {
-    y: 50,
-    opacity: 0,
-  },
+  offscreen: { y: 40, opacity: 0 },
   onscreen: {
     y: 0,
     opacity: 1,
-    transition: {
-      type: "spring",
-      bounce: 0.4,
-      duration: 0.8
-    }
+    transition: { type: 'spring', bounce: 0, duration: 0.6 }
   }
 };
+
+/* ─── Component ───────────────────────────────────────────────────────────── */
 
 const About: React.FC = () => {
   const journeyRef = useRef(null);
 
-  // Scroll Progress Animation for Journey
   const { scrollYProgress } = useScroll({
     target: journeyRef,
-    offset: ["start end", "end center"]
+    offset: ['start end', 'end center']
   });
 
   const scaleY = useSpring(scrollYProgress, {
@@ -721,32 +577,28 @@ const About: React.FC = () => {
     restDelta: 0.001
   });
 
-
   return (
     <>
       <SEO
-        title="About Rolan Lobo - Full-Stack Engineer & Security Developer"
-        description="Rolan Lobo is a full-stack engineer from Karnataka, India, who crossed from precision manufacturing into software engineering. He specialises in AES-256 encryption tools, zero-knowledge applications, and production web software."
-        keywords="About Rolan Lobo, Rolan RNR, Rolan rnr, Software Engineer India, Full Stack Developer India, Freelance Developer India, Karnataka Developer, Freelance Web Developer, Security Software Developer, Steganography Developer, Polyglot Files Developer, React Developer India, Python Developer India"
+        title="About Rolan Lobo — Software Developer"
+        description="Rolan Lobo is a software developer from Karnataka, India, who crossed from precision manufacturing into software engineering. He specialises in privacy-focused tools, AES-256 encryption, zero-knowledge applications, and cross-platform software."
+        keywords="About Rolan Lobo, Rolan RNR, Software Developer India, Privacy Tools Developer, Security Software Engineer, Freelance Developer India, Karnataka Developer, Open Source Developer"
         image="https://rolan-rnr.netlify.app/og-social-card.png"
         url="https://rolan-rnr.netlify.app/about"
       />
-      {/* Hero Section */}
+
+      {/* Hero */}
       <AboutHero>
         <Container>
-          <motion.div
-            variants={containerVariants}
-            initial="hidden"
-            animate="visible"
-          >
+          <motion.div variants={containerVariants} initial="hidden" animate="visible">
             <HeroTitle variants={itemVariants}>
               Engineered, Then Coded.
             </HeroTitle>
             <HeroSubtitle variants={itemVariants}>
-              From tool and die manufacturing to full-stack software development —
-              I bring an engineer's precision to every system I build.
-              Today that means web applications, privacy-focused security tools,
-              and cross-platform desktop software.
+              From tool and die manufacturing to security software — I bring
+              physical-world precision to digital systems. Today that means
+              encryption tools, privacy-first applications, and cross-platform
+              software that works without a cloud.
             </HeroSubtitle>
 
             <ResumeButtonWrapper variants={itemVariants}>
@@ -759,7 +611,7 @@ const About: React.FC = () => {
               <AboutImageContainer>
                 <AboutImage
                   src={aboutImage}
-                  alt="About Rolan Lobo (Rolan RNR)"
+                  alt="Rolan Lobo"
                   loading="lazy"
                   decoding="async"
                 />
@@ -769,91 +621,92 @@ const About: React.FC = () => {
         </Container>
       </AboutHero>
 
-      {/* RE-DESIGNED Journey Section */}
+      {/* Journey Timeline */}
       <JourneySection ref={journeyRef}>
-        <JourneyHeader>
-          <JourneyTitle
-            initial={{ opacity: 0, y: 20 }}
-            whileInView={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.5 }}
-            viewport={{ once: true }}
-          >
-            The Road Here
-          </JourneyTitle>
-          <br />
-          <JourneySubtitle
-            initial={{ opacity: 0 }}
-            whileInView={{ opacity: 1 }}
-            transition={{ delay: 0.2, duration: 0.5 }}
-            viewport={{ once: true }}
-          >
-            From precision manufacturing to production-grade software — every step sharpened the craft.
-          </JourneySubtitle>
-        </JourneyHeader>
-
-        <JourneyContainer>
-          <ProgressLineContainer>
-            <ProgressLine style={{ scaleY }} />
-          </ProgressLineContainer>
-
-          {timelineData.map((item, index) => (
-            <JourneyItemWrapper key={index} $align={index % 2 === 0 ? 'left' : 'right'}>
-              <Marker $align={index % 2 === 0 ? 'left' : 'right'} />
-              <JourneyCard
-                initial="offscreen"
-                whileInView="onscreen"
-                viewport={{ once: true, amount: 0.1, margin: "-50px" }}
-                variants={cardVariants}
-              >
-                <JourneyYear>{item.year}</JourneyYear>
-                <JourneyCardTitle>{item.title}</JourneyCardTitle>
-                <JourneyCardRole>{item.role}</JourneyCardRole>
-                <JourneyDescription>{item.description}</JourneyDescription>
-                <JourneyTechStack>
-                  {item.tags.map(tag => (
-                    <TechTag key={tag}>{tag}</TechTag>
-                  ))}
-                </JourneyTechStack>
-              </JourneyCard>
-            </JourneyItemWrapper>
-          ))}
-        </JourneyContainer>
-      </JourneySection>
-
-      {/* Skills Section */}
-      <SkillsSection>
         <Container>
-          <SkillsHeader>
-            <SkillsTitle
+          <SectionHeader>
+            <SectionTitle
               initial={{ opacity: 0, y: 20 }}
               whileInView={{ opacity: 1, y: 0 }}
               transition={{ duration: 0.5 }}
               viewport={{ once: true }}
             >
-              Skills & Technologies
-            </SkillsTitle>
+              The Road Here
+            </SectionTitle>
             <br />
-            <SkillsSubtitle
+            <SectionSubtitle
               initial={{ opacity: 0 }}
               whileInView={{ opacity: 1 }}
               transition={{ delay: 0.2, duration: 0.5 }}
               viewport={{ once: true }}
             >
-              Tools and technologies I use to bring ideas to life
-            </SkillsSubtitle>
-          </SkillsHeader>
+              From precision manufacturing to production-grade software — every step sharpened the craft.
+            </SectionSubtitle>
+          </SectionHeader>
+
+          <JourneyContainer>
+            <ProgressLineContainer aria-hidden="true">
+              <ProgressLine style={{ scaleY }} />
+            </ProgressLineContainer>
+
+            {timelineData.map((item, index) => (
+              <JourneyItemWrapper key={index} $align={index % 2 === 0 ? 'left' : 'right'}>
+                <Marker
+                  $align={index % 2 === 0 ? 'left' : 'right'}
+                  aria-hidden="true"
+                />
+                <JourneyCard
+                  initial="offscreen"
+                  whileInView="onscreen"
+                  viewport={{ once: true, amount: 0.1, margin: '-50px' }}
+                  variants={cardVariants}
+                >
+                  <JourneyYear>{item.year}</JourneyYear>
+                  <JourneyCardTitle>{item.title}</JourneyCardTitle>
+                  <JourneyCardRole>{item.role}</JourneyCardRole>
+                  <JourneyDescription>{item.description}</JourneyDescription>
+                  <JourneyTechStack>
+                    {item.tags.map(tag => (
+                      <TechTag key={tag}>{tag}</TechTag>
+                    ))}
+                  </JourneyTechStack>
+                </JourneyCard>
+              </JourneyItemWrapper>
+            ))}
+          </JourneyContainer>
+        </Container>
+      </JourneySection>
+
+      {/* Skills */}
+      <SkillsSection>
+        <Container>
+          <SectionHeader>
+            <SectionTitle
+              initial={{ opacity: 0, y: 20 }}
+              whileInView={{ opacity: 1, y: 0 }}
+              transition={{ duration: 0.5 }}
+              viewport={{ once: true }}
+            >
+              Skills &amp; Technologies
+            </SectionTitle>
+            <br />
+            <SectionSubtitle
+              initial={{ opacity: 0 }}
+              whileInView={{ opacity: 1 }}
+              transition={{ delay: 0.2, duration: 0.5 }}
+              viewport={{ once: true }}
+            >
+              Tools and technologies I work with across the full stack
+            </SectionSubtitle>
+          </SectionHeader>
 
           <SkillsGrid>
             {skillsData.map((skillGroup, index) => (
               <SkillCard
                 key={skillGroup.category}
-                initial={{ opacity: 0, y: 30 }}
+                initial={{ opacity: 0, y: 24 }}
                 whileInView={{ opacity: 1, y: 0 }}
-                transition={{
-                  duration: 0.5,
-                  delay: index * 0.1,
-                  ease: 'easeOut'
-                }}
+                transition={{ duration: 0.45, delay: index * 0.08, ease: 'easeOut' }}
                 viewport={{ once: true, amount: 0.2 }}
               >
                 <SkillCategory>{skillGroup.category}</SkillCategory>
@@ -868,59 +721,53 @@ const About: React.FC = () => {
         </Container>
       </SkillsSection>
 
-      {/* Services Section */}
-      <ServicesSection>
+      {/* Focus Areas — editorial grid, option (c) */}
+      <FocusSection>
         <Container>
-          <ServicesHeader>
-            <ServicesTitle
+          <SectionHeader>
+            <SectionTitle
               initial={{ opacity: 0, y: 20 }}
               whileInView={{ opacity: 1, y: 0 }}
               transition={{ duration: 0.5 }}
               viewport={{ once: true }}
             >
-              Services Offered
-            </ServicesTitle>
+              What I Focus On
+            </SectionTitle>
             <br />
-            <ServicesSubtitle
+            <SectionSubtitle
               initial={{ opacity: 0 }}
               whileInView={{ opacity: 1 }}
               transition={{ delay: 0.2, duration: 0.5 }}
               viewport={{ once: true }}
             >
-              Professional services tailored to your needs
-            </ServicesSubtitle>
-          </ServicesHeader>
+              Areas where my projects and interests converge
+            </SectionSubtitle>
+          </SectionHeader>
 
-          <ServicesGrid>
-            {servicesData.map((service, index) => (
-              <ServiceCard
-                key={service.title}
-                initial={{ opacity: 0, y: 30 }}
-                whileInView={{ opacity: 1, y: 0 }}
-                transition={{
-                  duration: 0.5,
-                  delay: index * 0.1,
-                  ease: 'easeOut'
-                }}
+          <FocusGrid>
+            {focusAreas.map((area, index) => (
+              <FocusArea
+                key={area.number}
+                initial={{ opacity: 0 }}
+                whileInView={{ opacity: 1 }}
+                transition={{ duration: 0.5, delay: index * 0.07 }}
                 viewport={{ once: true, amount: 0.2 }}
               >
-                <ServiceIcon>{service.icon}</ServiceIcon>
-                <ServiceTitle>{service.title}</ServiceTitle>
-                <ServiceDescription>{service.description}</ServiceDescription>
-                <ServiceFeatures>
-                  {service.features.map((feature) => (
-                    <ServiceFeature key={feature}>{feature}</ServiceFeature>
+                <FocusAreaNumber>{area.number}</FocusAreaNumber>
+                <FocusAreaTitle>{area.title}</FocusAreaTitle>
+                <FocusAreaBody>{area.body}</FocusAreaBody>
+                <FocusAreaProjects>
+                  {area.projects.map(p => (
+                    <FocusProject key={p}>{p}</FocusProject>
                   ))}
-                </ServiceFeatures>
-              </ServiceCard>
+                </FocusAreaProjects>
+              </FocusArea>
             ))}
-          </ServicesGrid>
+          </FocusGrid>
         </Container>
-      </ServicesSection>
-
+      </FocusSection>
     </>
   );
 };
 
 export default About;
-
