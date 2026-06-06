@@ -125,10 +125,7 @@ const ProjectsHero = styled(Section)`
 const HeroTitle = styled(motion.h1)`
   font-size: clamp(2.5rem, 6vw, 3.5rem);
   margin-bottom: var(--spacing-6);
-  background: linear-gradient(135deg, var(--accent-primary) 0%, var(--accent-secondary) 100%);
-  -webkit-background-clip: text;
-  -webkit-text-fill-color: transparent;
-  background-clip: text;
+  color: var(--dark-50);
   font-weight: var(--font-extrabold);
   letter-spacing: -0.025em;
 `;
@@ -603,6 +600,66 @@ const ModalActions = styled.div`
 
 
 
+// Named components replacing previous inline styles in the modal header
+const ModalHeader = styled.div`
+  display: flex;
+  align-items: flex-start;
+  gap: var(--spacing-4);
+  margin-bottom: var(--spacing-5);
+`;
+
+const ModalIconWrapper = styled.div`
+  font-size: var(--text-2xl);
+  background: rgba(255, 255, 255, 0.05);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  padding: var(--spacing-3);
+  border-radius: var(--radius-xl);
+  min-width: 56px;
+  height: 56px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+`;
+
+const ModalHeaderContent = styled.div`
+  flex: 1;
+  min-width: 0;
+`;
+
+const ModalBadgeRow = styled.div`
+  display: flex;
+  gap: var(--spacing-2);
+  flex-wrap: wrap;
+  align-items: center;
+  margin-top: var(--spacing-1);
+`;
+
+/* Structured placeholder for project cards that have no screenshot */
+const ProjectIconPlaceholder = styled.div`
+  width: 100%;
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: var(--spacing-3);
+`;
+
+const PlaceholderIcon = styled.span`
+  font-size: 2.5rem;
+  line-height: 1;
+  opacity: 0.6;
+`;
+
+const PlaceholderCategory = styled.span`
+  font-size: 0.68rem;
+  font-weight: var(--font-medium);
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: rgba(255, 255, 255, 0.3);
+`;
+
 interface ProjectModalProps {
   project: Project | null;
   isOpen: boolean;
@@ -683,31 +740,16 @@ const ProjectModal: React.FC<ProjectModalProps> = ({ project, isOpen, onClose })
 
           {/* All content below the banner */}
           <ModalBody>
-            {/* Header */}
-            <div style={{ display: 'flex', alignItems: 'flex-start', gap: 'var(--spacing-4)', marginBottom: 'var(--spacing-5)' }}>
-              <div style={{
-                fontSize: 'var(--text-2xl)',
-                background: 'rgba(255,255,255,0.05)',
-                border: '1px solid rgba(255,255,255,0.1)',
-                padding: 'var(--spacing-3)',
-                borderRadius: 'var(--radius-xl)',
-                minWidth: '56px',
-                height: '56px',
-                display: 'flex',
-                alignItems: 'center',
-                justifyContent: 'center',
-                flexShrink: 0
-              }}>
-                {project.icon}
-              </div>
-              <div style={{ flex: 1, minWidth: 0 }}>
+            <ModalHeader>
+              <ModalIconWrapper aria-hidden="true">{project.icon}</ModalIconWrapper>
+              <ModalHeaderContent>
                 <ModalTitle>{project.title}</ModalTitle>
-                <div style={{ display: 'flex', gap: 'var(--spacing-2)', flexWrap: 'wrap', alignItems: 'center', marginTop: 'var(--spacing-1)' }}>
+                <ModalBadgeRow>
                   <Badge variant="info">{project.category}</Badge>
-                  {project.featured && <Badge variant="success">⭐ Featured</Badge>}
-                </div>
-              </div>
-            </div>
+                  {project.featured && <Badge variant="success">Featured</Badge>}
+                </ModalBadgeRow>
+              </ModalHeaderContent>
+            </ModalHeader>
 
             {/* Short description */}
             <ModalDescription>{project.description}</ModalDescription>
@@ -819,8 +861,8 @@ const Projects: React.FC = () => {
     <>
       <SEO
         title="My Work — Rolan Lobo"
-        description="Real problems, real solutions. Here's the software I've built — security tools, web apps, and desktop applications that solve problems people actually have."
-        keywords="Steganography, Polyglot Files, Hide Files in Images, YouTube Downloader, Video Downloader, YouTube to MP3, File Encryption, Security Tools, InvisioVault, BAR, Sortify, React Projects, Python Projects, Flask, Full Stack Developer, Rolan Lobo, Rolan RNR"
+        description="Real problems, real solutions. Here's the software I've built — encryption tools, zero-knowledge platforms, desktop applications, and cross-platform apps that solve problems people actually have."
+        keywords="Steganography, Polyglot Files, AES-256 Encryption, File Encryption, Security Tools, InvisioVault, BAR, Sortify, CursorCam, React Projects, Python Projects, Flask, Software Developer, Rolan Lobo, Rolan RNR, Privacy Software, Open Source"
         url="https://rolan-rnr.netlify.app/projects"
       />
       <ProjectsHero>
@@ -879,7 +921,7 @@ const Projects: React.FC = () => {
                     initial={{ opacity: 0, y: 20 }}
                     animate={{ opacity: 1, y: 0 }}
                     transition={{ duration: 0.5, delay: index * 0.1 }}
-                    whileHover={{ y: -8 }}
+                    whileHover={{ y: -4 }}
                     onClick={() => {
                       setSelectedProject(project);
                       setIsModalOpen(true);
@@ -895,7 +937,10 @@ const Projects: React.FC = () => {
                           style={{ width: '100%', height: '100%', objectFit: 'cover', display: 'block' }}
                         />
                       ) : (
-                        <div style={{ fontSize: '4rem' }}>{project.icon}</div>
+                        <ProjectIconPlaceholder>
+                          <PlaceholderIcon aria-hidden="true">{project.icon}</PlaceholderIcon>
+                          <PlaceholderCategory>{project.category}</PlaceholderCategory>
+                        </ProjectIconPlaceholder>
                       )}
                     </ProjectImageContainer>
 
