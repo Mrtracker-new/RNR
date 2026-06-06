@@ -32,10 +32,7 @@ const ContactHero = styled(Section)`
 const HeroTitle = styled(motion.h1)`
   font-size: clamp(2.5rem, 6vw, 4rem);
   margin-bottom: var(--spacing-6);
-  background: linear-gradient(135deg, var(--accent-primary) 0%, var(--accent-secondary) 100%);
-  -webkit-background-clip: text;
-  -webkit-text-fill-color: transparent;
-  background-clip: text;
+  color: var(--dark-50);
   font-weight: var(--font-extrabold);
   letter-spacing: -0.025em;
 `;
@@ -662,8 +659,8 @@ const Contact: React.FC = () => {
     <>
       <SEO
         title="Work With Me — Rolan Lobo"
-        description="Have a project in mind or just want to chat? I'm always open to interesting conversations and new collaborations. Let's build something great together."
-        keywords="Contact Rolan Lobo, Rolan RNR, Hire Developer, Freelance Web Developer"
+        description="Have a project that needs privacy-first thinking, encryption engineering, or cross-platform development? I'm open to new projects for Q3 2026. Let's talk."
+        keywords="Contact Rolan Lobo, Rolan RNR, Hire Software Developer, Freelance Developer India, Privacy Developer, Security Software Consultant"
         url="https://rolan-rnr.netlify.app/contact"
       />
       <FAQSchema />
