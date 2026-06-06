@@ -1,4 +1,4 @@
-import { useState, useEffect, lazy, Suspense } from 'react';
+import { lazy, Suspense } from 'react';
 import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
 import { AnimatePresence } from 'framer-motion';
 import styled from 'styled-components';
@@ -10,6 +10,7 @@ import ScrollToTop from './components/ScrollToTop';
 import Breadcrumb from './components/Breadcrumb';
 import { useViewTransition } from './hooks/useViewTransition';
 import ErrorBoundary from './components/ErrorBoundary';
+import { ROUTES } from './utils/routes';
 
 const SkipLink = styled.a`
   position: absolute;
@@ -93,27 +94,27 @@ function AppRoutes() {
 
   const routes = (
     <Routes>
-      <Route path="/" element={
+      <Route path={ROUTES.HOME} element={
         <ErrorBoundary fallback={<PageError message="Home page failed to load" />}>
           <Home />
         </ErrorBoundary>
       } />
-      <Route path="/about" element={
+      <Route path={ROUTES.ABOUT} element={
         <ErrorBoundary fallback={<PageError message="About page failed to load" />}>
           <About />
         </ErrorBoundary>
       } />
-      <Route path="/projects" element={
+      <Route path={ROUTES.PROJECTS} element={
         <ErrorBoundary fallback={<PageError message="Projects page failed to load" />}>
           <Projects />
         </ErrorBoundary>
       } />
-      <Route path="/blog" element={
+      <Route path={ROUTES.BLOG} element={
         <ErrorBoundary fallback={<PageError message="Blog page failed to load" />}>
           <Blog />
         </ErrorBoundary>
       } />
-      <Route path="/contact" element={
+      <Route path={ROUTES.CONTACT} element={
         <ErrorBoundary fallback={<PageError message="Contact page failed to load" />}>
           <Contact />
         </ErrorBoundary>
@@ -138,28 +139,6 @@ function AppRoutes() {
 }
 
 function App() {
-  const [isLoading, setIsLoading] = useState(true);
-
-  useEffect(() => {
-    const handleLoad = () => setIsLoading(false);
-
-    if (document.readyState === 'complete') {
-      handleLoad();
-    } else {
-      window.addEventListener('load', handleLoad);
-      return () => window.removeEventListener('load', handleLoad);
-    }
-  }, []);
-
-  if (isLoading) {
-    return (
-      <>
-        <GlobalStyle />
-        <FullScreenLoading text="Just a moment…" />
-      </>
-    );
-  }
-
   return (
     <Router>
       <GlobalStyle />

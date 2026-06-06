@@ -1,13 +1,3 @@
-/**
- * Dev.to Blog Integration
- *
- * Fetches blog posts from Dev.to's free public API.
- * No API key needed for reading public articles.
- * Works directly from the browser — zero CORS issues.
- *
- * Docs: https://developers.forem.com/api/v1
- */
-
 export interface BlogPost {
     id: string;
     title: string;
@@ -20,13 +10,41 @@ export interface BlogPost {
     tags?: Array<{ name: string; slug: string }>;
 }
 
-// Will be swapped in once username is set
 const DEVTO_USERNAME = import.meta.env.VITE_DEVTO_USERNAME || '';
-
 const DEVTO_API = 'https://dev.to/api';
+const CACHE_KEY = 'rnr_devto_posts';
+const CACHE_TTL_MS = 60 * 60 * 1000; // 1 hour
 
-// In-memory cache so we don't re-fetch on every component render
-let _cache: BlogPost[] | null = null;
+interface CacheEntry {
+    posts: BlogPost[];
+    fetchedAt: number;
+}
+
+let _memCache: BlogPost[] | null = null;
+
+function readLocalCache(): CacheEntry | null {
+    try {
+        const raw = localStorage.getItem(CACHE_KEY);
+        if (!raw) return null;
+        const entry: CacheEntry = JSON.parse(raw);
+        return entry;
+    } catch {
+        return null;
+    }
+}
+
+function writeLocalCache(posts: BlogPost[]): void {
+    try {
+        const entry: CacheEntry = { posts, fetchedAt: Date.now() };
+        localStorage.setItem(CACHE_KEY, JSON.stringify(entry));
+    } catch {
+        // localStorage unavailable (private mode, quota exceeded) — fail silently
+    }
+}
+
+function isFresh(entry: CacheEntry): boolean {
+    return Date.now() - entry.fetchedAt < CACHE_TTL_MS;
+}
 
 function mapDevtoPost(raw: Record<string, unknown>): BlogPost {
     const tags = ((raw.tag_list as string[]) || []).map((t: string) => ({
@@ -56,50 +74,62 @@ async function fetchFromDevto(limit: number): Promise<BlogPost[]> {
         return [];
     }
 
-    // No auth header — Dev.to public article reads need none,
-    // and sending api-key causes a CORS preflight block.
     const url = `${DEVTO_API}/articles?username=${DEVTO_USERNAME}&per_page=${limit}&state=all`;
     const response = await fetch(url);
-
     if (!response.ok) throw new Error(`Dev.to API error: ${response.status}`);
 
     const data = await response.json();
     return (data as Record<string, unknown>[]).map(mapDevtoPost);
 }
 
-/**
- * Fetch latest blog posts
- * @param limit - Number of posts to return (default: 3)
- */
+async function hydrateCache(): Promise<BlogPost[]> {
+    const fresh = await fetchFromDevto(100);
+    _memCache = fresh;
+    writeLocalCache(fresh);
+    return fresh;
+}
+
+async function getPosts(): Promise<BlogPost[]> {
+    // 1. Serve from in-memory cache immediately (same session)
+    if (_memCache) return _memCache;
+
+    // 2. Serve from localStorage if fresh
+    const stored = readLocalCache();
+    if (stored && isFresh(stored)) {
+        _memCache = stored.posts;
+        return _memCache;
+    }
+
+    // 3. Stale-while-revalidate: serve stale data instantly, refresh in background
+    if (stored) {
+        _memCache = stored.posts;
+        hydrateCache().catch(() => {});
+        return _memCache;
+    }
+
+    // 4. No cache at all — fetch and block
+    return hydrateCache();
+}
+
 export async function getLatestPosts(limit = 3): Promise<BlogPost[]> {
     try {
-        if (_cache) return _cache.slice(0, limit);
-        // Warm the full cache so subsequent getAllPosts() calls are free
-        _cache = await fetchFromDevto(100);
-        return _cache.slice(0, limit);
+        const all = await getPosts();
+        return all.slice(0, limit);
     } catch (error) {
         console.error('Error fetching blog posts from Dev.to:', error);
         return [];
     }
 }
 
-/**
- * Fetch all blog posts
- */
 export async function getAllPosts(): Promise<BlogPost[]> {
     try {
-        if (_cache) return _cache;
-        _cache = await fetchFromDevto(100);
-        return _cache;
+        return await getPosts();
     } catch (error) {
         console.error('Error fetching blog posts from Dev.to:', error);
         return [];
     }
 }
 
-/**
- * Format a date string for display (e.g. "Jan 16, 2026")
- */
 export function formatPostDate(dateString: string): string {
     return new Date(dateString).toLocaleDateString('en-US', {
         year: 'numeric',

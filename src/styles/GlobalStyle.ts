@@ -389,17 +389,6 @@ export const Section = styled.section<{ padding?: string }>`
   }
 `;
 
-export const FlexCenter = styled.div`
-  display: flex;
-  align-items: center;
-  justify-content: center;
-`;
-
-export const FlexBetween = styled.div`
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-`;
 
 export const Grid = styled.div<{ columns?: number; gap?: string }>`
   display: grid;
