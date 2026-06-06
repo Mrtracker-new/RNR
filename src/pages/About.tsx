@@ -1,457 +1,509 @@
-import React, { useRef, lazy, Suspense } from 'react';
+import React, { lazy, Suspense } from 'react';
 import styled from 'styled-components';
-import { motion, useScroll, useSpring, Variants } from 'framer-motion';
-import { Container, Section } from '../styles/GlobalStyle';
+import { motion, Variants } from 'framer-motion';
+import { Container } from '../styles/GlobalStyle';
 import SEO from '../components/SEO';
-
 import aboutImage from '../assets/images/Aboutme.webp';
 
 const ResumeDownload = lazy(() => import('../components/ResumeDownload'));
 
-/* ─── Hero ────────────────────────────────────────────────────────────────── */
+/* ─── Motion ──────────────────────────────────────────────────────────────── */
 
-const AboutHero = styled(Section)`
-  padding-top: 140px;
-  text-align: center;
+const fadeUp: Variants = {
+  hidden:  { opacity: 0, y: 18 },
+  visible: (delay: number = 0) => ({
+    opacity: 1,
+    y: 0,
+    transition: { duration: 0.52, delay, ease: [0.22, 1, 0.36, 1] },
+  }),
+};
+
+/* ─── Root ────────────────────────────────────────────────────────────────── */
+
+const PageWrapper = styled.div`
+  padding-top: 128px;
+  padding-bottom: var(--spacing-24);
 
   @media (max-width: 768px) {
-    padding-top: 120px;
-    padding-left: var(--spacing-4);
-    padding-right: var(--spacing-4);
+    padding-top: 80px;
+    padding-bottom: var(--spacing-16);
+  }
+`;
+
+/* ─── Shared section divider ──────────────────────────────────────────────── */
+
+const Section = styled.section`
+  padding: var(--spacing-16) 0;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+
+  &:last-of-type { border-bottom: none; padding-bottom: 0; }
+
+  @media (max-width: 768px) { padding: var(--spacing-10) 0; }
+  @media (max-width: 480px) { padding: var(--spacing-8) 0; }
+`;
+
+/* ─── Section heading row ─────────────────────────────────────────────────── */
+
+const SectionHeading = styled.div`
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: var(--spacing-4);
+  margin-bottom: var(--spacing-10);
+
+  @media (max-width: 640px) { margin-bottom: var(--spacing-7); }
+`;
+
+const SectionLabel = styled(motion.p)`
+  font-size: 0.68rem;
+  font-weight: var(--font-bold);
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: var(--dark-600);
+`;
+
+const SectionCount = styled.span`
+  font-size: 0.68rem;
+  font-family: var(--font-mono);
+  color: var(--dark-700);
+`;
+
+/* ══════════════════════════════════════════════════════════════════════════ */
+/* HERO                                                                       */
+/* ══════════════════════════════════════════════════════════════════════════ */
+
+const HeroSection = styled.section`
+  padding: var(--spacing-14) 0 var(--spacing-14);
+  border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+
+  @media (max-width: 768px) {
+    padding: var(--spacing-8) 0 var(--spacing-10);
   }
 
   @media (max-width: 480px) {
-    padding-top: 100px;
-    padding-left: var(--spacing-3);
-    padding-right: var(--spacing-3);
+    padding: var(--spacing-6) 0 var(--spacing-8);
   }
 `;
 
+const HeroGrid = styled.div`
+  display: grid;
+  grid-template-columns: 1fr 280px;
+  gap: var(--spacing-14);
+  align-items: start;
+
+  @media (max-width: 900px) {
+    grid-template-columns: 1fr 220px;
+    gap: var(--spacing-10);
+  }
+
+  @media (max-width: 640px) {
+    grid-template-columns: 1fr;
+    gap: var(--spacing-6);
+    /* Centre the image above the text cleanly */
+    justify-items: center;
+  }
+`;
+
+const HeroContent = styled.div`
+  display: flex;
+  flex-direction: column;
+
+  @media (max-width: 640px) {
+    /* When grid becomes single-column and justify-items:center is active,
+     * force text column to fill the full width so text stays left-aligned */
+    width: 100%;
+    align-self: stretch;
+    justify-self: stretch;
+  }
+`;
+
+const HeroLabel = styled(motion.p)`
+  font-size: 0.68rem;
+  font-weight: var(--font-bold);
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: var(--dark-600);
+  margin-bottom: var(--spacing-4);
+`;
+
 const HeroTitle = styled(motion.h1)`
-  font-size: clamp(2.5rem, 6vw, 3.5rem);
-  margin-bottom: var(--spacing-6);
-  color: var(--dark-50);
+  font-size: clamp(2rem, 4.5vw, 3.2rem);
   font-weight: var(--font-extrabold);
-  letter-spacing: -0.025em;
+  color: var(--dark-50);
+  letter-spacing: -0.03em;
+  line-height: 1.1;
+  margin-bottom: var(--spacing-6);
 `;
 
-const HeroSubtitle = styled(motion.p)`
-  font-size: var(--text-xl);
+const HeroBio = styled(motion.p)`
+  font-size: var(--text-base);
   color: var(--dark-400);
-  max-width: 600px;
-  margin: 0 auto var(--spacing-8);
-  line-height: 1.7;
-`;
-
-const ResumeButtonWrapper = styled(motion.div)`
-  display: flex;
-  justify-content: center;
+  line-height: 1.8;
   margin-bottom: var(--spacing-8);
+  max-width: 460px;
 `;
 
-const AboutImageSection = styled(motion.div)`
-  display: flex;
-  justify-content: center;
-  margin-bottom: var(--spacing-16);
+const HeroImage = styled(motion.div)`
+  @media (max-width: 640px) {
+    order: -1;
+    /* Full width of the stacked column, constrained with max-width so it
+     * doesn't stretch wall-to-wall. Centred via the parent flex column. */
+    width: 100%;
+    max-width: 240px;
+    align-self: center;
+  }
 
-  @media (max-width: 968px) { margin-bottom: var(--spacing-8); }
-  @media (max-width: 640px) { margin-bottom: var(--spacing-6); }
+  @media (max-width: 400px) {
+    max-width: 200px;
+  }
 `;
 
-const AboutImageContainer = styled.div`
+const ImageFrame = styled.div`
   position: relative;
-  width: 450px;
-  height: 450px;
   border-radius: var(--radius-2xl);
   overflow: hidden;
+  aspect-ratio: 3 / 4;
   border: 1px solid rgba(255, 255, 255, 0.08);
-  box-shadow: var(--shadow-lg);
-  margin: 0 auto;
-  transition: border-color var(--transition-normal);
+  background: var(--dark-900);
 
-  &:hover { border-color: rgba(100, 255, 218, 0.3); }
+  img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    object-position: center top;
+    display: block;
+    filter: brightness(0.85) saturate(0.9);
+    transition: filter 0.45s ease;
+  }
 
-  @media (max-width: 768px) { width: 400px; height: 400px; }
-  @media (max-width: 480px) { width: 360px; height: 360px; margin: 0 auto; }
-  @media (max-width: 360px) { width: 320px; height: 320px; }
-`;
-
-const AboutImage = styled.img`
-  width: 100%;
-  height: 100%;
-  object-fit: cover;
-  transition: transform var(--transition-slow);
-
-  &:hover { transform: scale(1.04); }
-`;
-
-/* ─── Journey ─────────────────────────────────────────────────────────────── */
-
-const JourneySection = styled(Section)`
-  position: relative;
-  overflow: hidden;
-`;
-
-const SectionHeader = styled.div`
-  text-align: center;
-  margin-bottom: var(--spacing-20);
-  position: relative;
-  z-index: 2;
-`;
-
-const SectionTitle = styled(motion.h2)`
-  font-size: var(--text-4xl);
-  color: var(--dark-100);
-  margin-bottom: var(--spacing-4);
-  display: inline-block;
-  position: relative;
+  &:hover img { filter: brightness(0.95) saturate(1); }
 
   &::after {
     content: '';
     position: absolute;
-    bottom: -10px;
-    left: 50%;
-    transform: translateX(-50%);
-    width: 40px;
-    height: 3px;
-    background: var(--accent-primary);
-    border-radius: var(--radius-sm);
+    inset: 0;
+    background: linear-gradient(to bottom, transparent 50%, rgba(9, 9, 11, 0.45) 100%);
+    pointer-events: none;
+  }
+
+  @media (max-width: 640px) {
+    border-radius: var(--radius-xl);
+    /* 4:5 portrait — taller than a square so the full subject fits without
+     * harsh cropping. object-position shifts down so the person is centred
+     * rather than anchored to the top (stairs) of the photo. */
+    aspect-ratio: 4 / 5;
+
+    img {
+      object-position: center 30%;
+    }
   }
 `;
 
-const SectionSubtitle = styled(motion.p)`
-  color: var(--dark-400);
-  font-size: var(--text-lg);
-  max-width: 500px;
-  margin: 0 auto;
-`;
+/* ══════════════════════════════════════════════════════════════════════════ */
+/* TIMELINE                                                                   */
+/* ══════════════════════════════════════════════════════════════════════════ */
 
-const JourneyContainer = styled.div`
-  max-width: 1000px;
-  margin: 0 auto;
+const Timeline = styled.div`
   position: relative;
-  padding: var(--spacing-4) 0;
-`;
-
-const ProgressLineContainer = styled.div`
-  position: absolute;
-  left: 50%;
-  top: 0;
-  bottom: 0;
-  width: 2px;
-  background: var(--dark-800);
-  transform: translateX(-50%);
-  z-index: 1;
-  border-radius: var(--radius-full);
-  overflow: hidden;
-
-  @media (max-width: 768px) { left: 24px; }
-`;
-
-const ProgressLine = styled(motion.div)`
-  position: absolute;
-  top: 0;
-  left: 0;
-  right: 0;
-  background: var(--accent-primary);
-  transform-origin: top;
-  width: 100%;
-  height: 100%;
-`;
-
-const JourneyItemWrapper = styled.div<{ $align: 'left' | 'right' }>`
   display: flex;
-  justify-content: ${props => props.$align === 'left' ? 'flex-end' : 'flex-start'};
-  padding-bottom: var(--spacing-16);
-  position: relative;
-  width: 50%;
-  ${props => props.$align === 'left'
-    ? 'margin-right: auto; padding-right: 40px;'
-    : 'margin-left: auto; padding-left: 40px;'}
+  flex-direction: column;
 
-  @media (max-width: 768px) {
-    width: 100%;
-    justify-content: flex-start;
-    padding-left: 60px;
-    padding-right: 0;
-    margin: 0;
-    padding-bottom: var(--spacing-12);
-  }
-`;
-
-const Marker = styled(motion.div)<{ $align: 'left' | 'right' }>`
-  position: absolute;
-  top: 24px;
-  width: 14px;
-  height: 14px;
-  background: var(--dark-950);
-  border: 2px solid var(--accent-primary);
-  border-radius: 50%;
-  z-index: 5;
-  box-shadow: 0 0 0 4px rgba(30, 41, 59, 0.8);
-
-  ${props => props.$align === 'left' ? 'right: -9px;' : 'left: -9px;'}
-
-  @media (max-width: 768px) {
-    left: 18px;
-    right: auto;
-  }
-`;
-
-const JourneyCard = styled(motion.div)`
-  background: rgba(30, 41, 59, 0.4);
-  border: 1px solid rgba(255, 255, 255, 0.06);
-  padding: var(--spacing-6);
-  border-radius: var(--radius-xl);
-  width: 100%;
-  position: relative;
-  overflow: hidden;
-  transition: background 0.3s ease, border-color 0.3s ease;
-  text-align: left;
-
-  &:hover {
-    background: rgba(30, 41, 59, 0.6);
-    border-color: rgba(100, 255, 218, 0.2);
-  }
-
+  /* Continuous vertical line — sits at the right edge of the year column */
   &::before {
     content: '';
     position: absolute;
+    left: 148px;
     top: 0;
-    left: 0;
-    width: 2px;
-    height: 100%;
-    background: var(--accent-primary);
-    opacity: 0.6;
+    bottom: 0;
+    width: 1px;
+    background: rgba(255, 255, 255, 0.06);
+
+    @media (max-width: 560px) { display: none; }
   }
 `;
 
-const JourneyYear = styled.span`
-  display: inline-block;
-  font-family: var(--font-mono);
-  font-size: var(--text-sm);
-  color: var(--accent-primary);
-  margin-bottom: var(--spacing-2);
-  padding: 3px 10px;
-  background: rgba(100, 255, 218, 0.08);
-  border-radius: var(--radius-md);
-  border: 1px solid rgba(100, 255, 218, 0.15);
-`;
+const TimelineItem = styled(motion.div)`
+  display: grid;
+  grid-template-columns: 148px 1fr;
+  gap: var(--spacing-8);
+  padding: var(--spacing-8) 0;
+  position: relative;
 
-const JourneyCardTitle = styled.h3`
-  font-size: 1.2rem;
-  color: var(--dark-50);
-  margin-bottom: var(--spacing-1);
-  font-weight: var(--font-bold);
-`;
+  & + & { border-top: 1px solid rgba(255, 255, 255, 0.04); }
 
-const JourneyCardRole = styled.h4`
-  font-size: 0.9rem;
-  color: var(--dark-300);
-  margin-bottom: var(--spacing-3);
-  font-weight: var(--font-medium);
-  display: flex;
-  align-items: center;
-  gap: var(--spacing-2);
-
-  &::before {
+  /* Dot — centred on the vertical line (148px - 4.5px = ~144px left) */
+  &::after {
     content: '';
-    display: inline-block;
-    width: 5px;
-    height: 5px;
-    background-color: var(--accent-secondary);
+    position: absolute;
+    left: 144px;
+    top: calc(var(--spacing-8) + 10px);
+    width: 9px;
+    height: 9px;
     border-radius: 50%;
-    flex-shrink: 0;
+    background: var(--dark-900);
+    border: 2px solid rgba(255, 255, 255, 0.14);
+    transition: border-color 0.2s ease;
+
+    @media (max-width: 560px) { display: none; }
+  }
+
+  &:hover::after { border-color: var(--accent-primary); }
+
+  @media (max-width: 560px) {
+    grid-template-columns: 1fr;
+    gap: var(--spacing-3);
+    padding: var(--spacing-6) 0;
   }
 `;
 
-const JourneyDescription = styled.p`
-  font-size: var(--text-base);
-  color: var(--dark-400);
-  line-height: 1.65;
+const TimelineYear = styled.div`
+  text-align: right;
+  padding-top: 4px;
+  /* Right padding creates the visual gap between the pill and the dot */
+  padding-right: var(--spacing-8);
+
+  @media (max-width: 560px) {
+    text-align: left;
+    padding-right: 0;
+  }
 `;
 
-const JourneyTechStack = styled.div`
+const YearPill = styled.span`
+  display: inline-block;
+  font-size: 0.7rem;
+  font-family: var(--font-mono);
+  color: var(--accent-primary);
+  background: rgba(100, 255, 218, 0.06);
+  border: 1px solid rgba(100, 255, 218, 0.15);
+  padding: 3px 9px;
+  border-radius: var(--radius-md);
+  letter-spacing: 0.04em;
+  white-space: nowrap;
+`;
+
+const TimelineContent = styled.div`
+  padding-left: var(--spacing-6);
+
+  @media (max-width: 560px) { padding-left: 0; }
+`;
+
+const TimelineTitle = styled.h3`
+  font-size: var(--text-lg);
+  font-weight: var(--font-bold);
+  color: var(--dark-100);
+  letter-spacing: -0.015em;
+  line-height: 1.25;
+  margin-bottom: 3px;
+`;
+
+const TimelineRole = styled.p`
+  font-size: var(--text-sm);
+  color: var(--dark-600);
+  font-weight: var(--font-medium);
+  margin-bottom: var(--spacing-4);
+`;
+
+const TimelineDesc = styled.p`
+  font-size: var(--text-sm);
+  color: var(--dark-400);
+  line-height: 1.78;
+  margin-bottom: var(--spacing-4);
+`;
+
+const TimelineTags = styled.div`
   display: flex;
   flex-wrap: wrap;
-  gap: 6px;
-  margin-top: var(--spacing-4);
+  gap: var(--spacing-2);
 `;
 
-const TechTag = styled.span`
-  font-size: 0.72rem;
-  color: var(--dark-400);
+const TimelineTag = styled.span`
+  font-size: 0.68rem;
+  font-family: var(--font-mono);
+  color: var(--dark-600);
   background: rgba(255, 255, 255, 0.04);
-  padding: 2px 8px;
+  border: 1px solid rgba(255, 255, 255, 0.07);
+  padding: 2px 9px;
   border-radius: var(--radius-sm);
-  border: 1px solid rgba(255, 255, 255, 0.06);
 `;
 
-/* ─── Skills ──────────────────────────────────────────────────────────────── */
-
-const SkillsSection = styled(Section)`
-  position: relative;
-`;
+/* ══════════════════════════════════════════════════════════════════════════ */
+/* SKILLS                                                                     */
+/* ══════════════════════════════════════════════════════════════════════════ */
 
 const SkillsGrid = styled.div`
   display: grid;
   grid-template-columns: repeat(2, 1fr);
-  gap: var(--spacing-6);
-  max-width: 1400px;
-  margin: 0 auto;
+  gap: var(--spacing-5);
 
-  @media (max-width: 768px) {
+  @media (max-width: 640px) {
     grid-template-columns: 1fr;
-    gap: var(--spacing-5);
+    gap: var(--spacing-3);
   }
 `;
 
 const SkillCard = styled(motion.div)`
-  background: rgba(30, 41, 59, 0.4);
-  border: 1px solid rgba(255, 255, 255, 0.07);
-  padding: var(--spacing-8);
+  border: 1px solid rgba(255, 255, 255, 0.1);
   border-radius: var(--radius-xl);
-  position: relative;
-  overflow: hidden;
-  transition: border-color 0.3s ease, background 0.3s ease;
+  padding: var(--spacing-8);
+  background: rgba(255, 255, 255, 0.03);
+  transition: border-color 0.22s ease, background 0.22s ease;
 
   &:hover {
-    background: rgba(30, 41, 59, 0.6);
-    border-color: rgba(100, 255, 218, 0.2);
-  }
-
-  &::before {
-    content: '';
-    position: absolute;
-    top: 0;
-    left: 0;
-    width: 100%;
-    height: 2px;
-    background: var(--accent-primary);
-    opacity: 0.5;
+    border-color: rgba(255, 255, 255, 0.16);
+    background: rgba(255, 255, 255, 0.05);
   }
 
   @media (max-width: 768px) { padding: var(--spacing-6); }
 `;
 
-const SkillCategory = styled.h3`
-  font-size: var(--text-base);
-  color: var(--dark-200);
-  margin-bottom: var(--spacing-5);
-  font-weight: var(--font-semibold);
+const SkillCardHeader = styled.div`
   display: flex;
   align-items: center;
-  gap: var(--spacing-3);
-  letter-spacing: -0.01em;
-
-  &::before {
-    content: '';
-    display: inline-block;
-    width: 8px;
-    height: 8px;
-    background: var(--accent-primary);
-    border-radius: 50%;
-    flex-shrink: 0;
-  }
+  gap: var(--spacing-2);
+  margin-bottom: var(--spacing-6);
+  padding-bottom: var(--spacing-4);
+  border-bottom: 1px solid rgba(255, 255, 255, 0.06);
 `;
 
-const SkillsList = styled.ul`
-  list-style: none;
+const SkillDot = styled.span`
+  width: 6px;
+  height: 6px;
+  border-radius: 50%;
+  background: var(--accent-primary);
+  opacity: 0.5;
+  flex-shrink: 0;
+`;
+
+const SkillCategory = styled.h3`
+  font-size: 0.7rem;
+  font-weight: var(--font-bold);
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: var(--dark-500);
+`;
+
+const SkillChips = styled.div`
   display: flex;
   flex-wrap: wrap;
-  gap: var(--spacing-2);
+  gap: 8px;
 `;
 
-const SkillItem = styled.li`
-  color: var(--dark-300);
-  font-size: var(--text-sm);
+const SkillChip = styled.span`
+  font-size: 0.82rem;
   font-weight: var(--font-medium);
-  display: inline-flex;
-  align-items: center;
-  padding: var(--spacing-2) var(--spacing-3);
-  border-radius: var(--radius-md);
+  color: var(--dark-300);
   background: rgba(255, 255, 255, 0.04);
-  border: 1px solid rgba(255, 255, 255, 0.06);
-  transition: border-color var(--transition-fast), color var(--transition-fast);
+  border: 1px solid rgba(255, 255, 255, 0.09);
+  padding: 5px 12px;
+  border-radius: var(--radius-md);
+  transition: color 0.18s ease, border-color 0.18s ease, background 0.18s ease;
   cursor: default;
+  line-height: 1.4;
+  white-space: nowrap;
 
   &:hover {
     color: var(--accent-primary);
-    border-color: rgba(100, 255, 218, 0.25);
+    border-color: rgba(100, 255, 218, 0.22);
+    background: rgba(100, 255, 218, 0.05);
   }
 `;
 
-/* ─── Focus Areas — editorial format (option c) ───────────────────────────── */
-
-const FocusSection = styled(Section)`
-  position: relative;
-`;
+/* ══════════════════════════════════════════════════════════════════════════ */
+/* FOCUS AREAS                                                                */
+/* ══════════════════════════════════════════════════════════════════════════ */
 
 const FocusGrid = styled.div`
   display: grid;
   grid-template-columns: repeat(2, 1fr);
-  gap: 1px;
-  background: rgba(255, 255, 255, 0.06);
-  border-radius: var(--radius-xl);
-  overflow: hidden;
-  max-width: 900px;
-  margin: 0 auto;
+  gap: var(--spacing-4);
 
   @media (max-width: 640px) {
     grid-template-columns: 1fr;
+    gap: var(--spacing-3);
   }
 `;
 
-const FocusArea = styled(motion.div)`
-  background: var(--dark-950);
-  padding: var(--spacing-10) var(--spacing-8);
-  transition: background 0.25s ease;
+const FocusCard = styled(motion.div)`
+  border: 1px solid rgba(255, 255, 255, 0.07);
+  border-radius: var(--radius-xl);
+  padding: var(--spacing-8);
+  background: rgba(255, 255, 255, 0.02);
+  display: flex;
+  flex-direction: column;
+  gap: var(--spacing-3);
+  position: relative;
+  overflow: hidden;
+  transition: border-color 0.22s ease, background 0.22s ease;
+
+  /* Left accent line slides up on hover */
+  &::before {
+    content: '';
+    position: absolute;
+    left: 0; bottom: 0;
+    width: 2px;
+    height: 0%;
+    background: var(--accent-primary);
+    opacity: 0.5;
+    transition: height 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+    border-radius: 0 2px 0 0;
+  }
 
   &:hover {
-    background: rgba(30, 41, 59, 0.4);
+    border-color: rgba(255, 255, 255, 0.12);
+    background: rgba(255, 255, 255, 0.035);
+    &::before { height: 100%; }
   }
 
-  @media (max-width: 768px) { padding: var(--spacing-8) var(--spacing-6); }
+  @media (max-width: 768px) { padding: var(--spacing-6); }
 `;
 
-const FocusAreaNumber = styled.span`
-  display: block;
+const FocusNumber = styled.span`
+  font-size: 0.68rem;
   font-family: var(--font-mono);
-  font-size: 0.7rem;
-  color: var(--accent-primary);
-  letter-spacing: 0.1em;
-  margin-bottom: var(--spacing-4);
-  opacity: 0.7;
+  color: var(--dark-700);
+  letter-spacing: 0.08em;
 `;
 
-const FocusAreaTitle = styled.h3`
-  font-size: var(--text-xl);
-  color: var(--dark-100);
+const FocusTitle = styled.h3`
+  font-size: var(--text-lg);
   font-weight: var(--font-semibold);
-  margin-bottom: var(--spacing-3);
-  letter-spacing: -0.02em;
-  line-height: 1.2;
+  color: var(--dark-100);
+  letter-spacing: -0.015em;
+  line-height: 1.25;
 `;
 
-const FocusAreaBody = styled.p`
+const FocusBody = styled.p`
   font-size: var(--text-sm);
   color: var(--dark-500);
-  line-height: 1.7;
+  line-height: 1.75;
+  flex: 1;
 `;
 
-const FocusAreaProjects = styled.div`
-  margin-top: var(--spacing-4);
+const FocusDivider = styled.div`
+  height: 1px;
+  background: rgba(255, 255, 255, 0.06);
+  margin-top: var(--spacing-2);
+`;
+
+const FocusProjects = styled.div`
   display: flex;
   flex-wrap: wrap;
-  gap: var(--spacing-2);
+  gap: var(--spacing-3);
+  padding-top: var(--spacing-1);
 `;
 
 const FocusProject = styled.span`
-  font-size: 0.7rem;
+  font-size: 0.68rem;
   font-family: var(--font-mono);
-  color: var(--dark-500);
-  border-bottom: 1px solid rgba(255, 255, 255, 0.1);
-  padding-bottom: 1px;
+  color: var(--dark-600);
+  letter-spacing: 0.02em;
+
+  /* Dot separator — added via CSS so we don't clutter JSX */
+  &:not(:last-child)::after {
+    content: '·';
+    margin-left: var(--spacing-3);
+    color: var(--dark-800);
+  }
 `;
 
 /* ─── Data ────────────────────────────────────────────────────────────────── */
@@ -460,314 +512,283 @@ const timelineData = [
   {
     year: '2019',
     title: 'The Spark',
-    role: 'Aspiring Developer',
-    description: 'The beginning of my journey into technology. Started self-learning programming basics, exploring Python and web technologies, and writing my first lines of code.',
-    tags: ['Python Base', 'Web Basics', 'Self-Learning', 'Curiosity']
+    role: 'Self-Taught',
+    description:
+      'Started self-learning programming — Python, web basics, first lines of code. The beginning of understanding what software can actually do, and why the details matter.',
+    tags: ['Python', 'Web Basics', 'Self-Learning'],
   },
   {
     year: '2019 – 2022',
     title: 'Diploma in DTDM',
     role: 'Student',
-    description: 'Graduated with a Diploma in Tool & Die Making. Developed a strong engineering mindset, precision thinking, and problem-solving habits that translated directly into software engineering.',
-    tags: ['Engineering Fundamentals', 'Precision', 'Problem Solving', 'Logic']
+    description:
+      'Graduated with a Diploma in Tool & Die Making. Engineering precision at micron tolerances built a mindset that transferred directly into software: design for edge cases first, test every assumption, measure before you cut.',
+    tags: ['Engineering', 'Precision', 'Problem Solving'],
   },
   {
     year: '2022 – 2023',
     title: 'Industry Experience',
     role: 'Tool & Die Designer',
-    description: 'Worked as a Tool & Die designer in precision manufacturing. Tolerances are measured in microns and errors are physically costly. This built an engineering mindset that carries directly into software: design for edge cases first, validate assumptions constantly, and never ship code you have not tested under real load.',
-    tags: ['Precision Engineering', 'CAD/CAM', 'Manufacturing Tolerances', 'Quality Control']
+    description:
+      'Worked in precision manufacturing where errors are physically costly. This discipline carries into every codebase: validate inputs, handle failures gracefully, never ship what you haven\'t stress-tested under real conditions.',
+    tags: ['CAD/CAM', 'Manufacturing', 'Quality Control'],
   },
   {
     year: '2024 – Present',
     title: 'Computer Science Degree',
     role: 'Student & Freelancer',
-    description: 'Pursuing advanced studies in Computer Science while actively freelancing. Deepening knowledge in algorithms, system design, and AI/ML foundations while building real-world projects for clients.',
-    tags: ['Algorithms', 'System Design', 'AI Foundations', 'Freelancing']
-  }
+    description:
+      'Pursuing CS while actively shipping real products for clients. Deepening foundations in algorithms, system design, and AI/ML — applied to actual problems, not just coursework exercises.',
+    tags: ['Algorithms', 'System Design', 'AI/ML', 'Freelancing'],
+  },
 ];
 
 const skillsData = [
   {
     category: 'Frontend',
-    skills: ['React', 'TypeScript', 'JavaScript', 'HTML/CSS', 'Tailwind CSS', 'Styled Components', 'Framer Motion', 'Responsive Design']
+    skills: ['React', 'TypeScript', 'JavaScript', 'HTML / CSS', 'Tailwind CSS', 'Styled Components', 'Framer Motion', 'Responsive Design'],
   },
   {
     category: 'Backend',
-    skills: ['Python', 'Flask', 'Node.js', 'REST APIs', 'Database Design', 'Authentication']
+    skills: ['Python', 'Flask', 'Node.js', 'REST APIs', 'Database Design', 'Authentication'],
   },
   {
     category: 'Tools & Workflow',
-    skills: ['Git & GitHub', 'VS Code', 'Postman', 'npm/pip', 'Chrome DevTools', 'Figma']
+    skills: ['Git & GitHub', 'VS Code', 'Postman', 'npm / pip', 'Chrome DevTools', 'Figma'],
   },
   {
     category: 'Security & Systems',
-    skills: ['AES-256 Encryption', 'ECDH Key Exchange', 'Zero-Knowledge Design', 'Steganography', 'File System APIs', 'Cross-Platform Architecture']
-  }
+    skills: ['AES-256', 'ECDH Key Exchange', 'Zero-Knowledge Design', 'Steganography', 'File System APIs', 'Cross-Platform'],
+  },
 ];
 
 const focusAreas = [
   {
     number: '01',
     title: 'Privacy & Security Tools',
-    body: 'Software that takes privacy seriously as an architecture constraint, not a feature. AES-256 encryption, zero-knowledge design, and steganography — built into products people actually use.',
-    projects: ['BAR', 'InvisioVault', 'LinkNest']
+    body: 'Software where privacy is an architecture constraint, not a feature. AES-256, zero-knowledge design, steganography — built into products people actually use.',
+    projects: ['BAR', 'InvisioVault', 'LinkNest'],
   },
   {
     number: '02',
     title: 'Offline-First Software',
-    body: 'Applications that work without the cloud because cloud dependency is a choice, not a requirement. Local-first architecture with optional sync — full user control over data.',
-    projects: ['BAR Desktop', 'LinkNest', 'Contact Manager']
+    body: 'Cloud dependency is a choice. Local-first architecture with optional sync — full user control, no account required to use the app.',
+    projects: ['BAR Desktop', 'LinkNest', 'Contact Manager'],
   },
   {
     number: '03',
-    title: 'Computer Vision Experiments',
-    body: 'Using cameras as input devices for accessibility and novel interaction. MediaPipe, facial landmark detection, and real-time coordinate mapping at sub-50ms latency.',
-    projects: ['CursorCam']
+    title: 'Computer Vision',
+    body: 'Cameras as accessibility input devices. MediaPipe landmark detection mapped to screen coordinates at sub-50ms latency — no specialist hardware.',
+    projects: ['CursorCam'],
   },
   {
     number: '04',
-    title: 'Cross-Platform Applications',
-    body: 'One problem, multiple platforms. Web, Windows desktop, Android, and iOS — choosing the right tool for each target rather than forcing a single stack everywhere.',
-    projects: ['YT-Downloader', 'Contact Manager', 'Sortify']
-  }
+    title: 'Cross-Platform Apps',
+    body: 'One problem, the right platform. Web, Windows, Android, iOS — choosing the best tool per target rather than forcing a single stack everywhere.',
+    projects: ['YT-Downloader', 'Contact Manager', 'Sortify'],
+  },
 ];
 
-/* ─── Animation variants ──────────────────────────────────────────────────── */
-
-const containerVariants: Variants = {
-  hidden: { opacity: 0 },
-  visible: {
-    opacity: 1,
-    transition: { staggerChildren: 0.2, delayChildren: 0.1 }
-  }
-};
-
-const itemVariants: Variants = {
-  hidden: { opacity: 0, y: 30 },
-  visible: { opacity: 1, y: 0 }
-};
-
-/*
- * No bounce on timeline cards — a precision engineering background calls for
- * restrained motion, not playful overshoot.
- */
-const cardVariants: Variants = {
-  offscreen: { y: 40, opacity: 0 },
-  onscreen: {
-    y: 0,
-    opacity: 1,
-    transition: { type: 'spring', bounce: 0, duration: 0.6 }
-  }
-};
+const totalSkills = skillsData.reduce((n, g) => n + g.skills.length, 0);
 
 /* ─── Component ───────────────────────────────────────────────────────────── */
 
-const About: React.FC = () => {
-  const journeyRef = useRef(null);
+const About: React.FC = () => (
+  <>
+    <SEO
+      title="About Rolan Lobo — Software Developer"
+      description="Rolan Lobo is a software developer from Karnataka, India, who crossed from precision manufacturing into software engineering. Specialising in privacy-focused tools, AES-256 encryption, zero-knowledge applications, and cross-platform software."
+      keywords="About Rolan Lobo, Rolan RNR, Software Developer India, Privacy Tools Developer, Security Software Engineer, Freelance Developer India, Karnataka Developer, Open Source Developer"
+      image="https://rolan-rnr.netlify.app/og-social-card.png"
+      url="https://rolan-rnr.netlify.app/about"
+    />
 
-  const { scrollYProgress } = useScroll({
-    target: journeyRef,
-    offset: ['start end', 'end center']
-  });
+    <PageWrapper>
+      <Container>
 
-  const scaleY = useSpring(scrollYProgress, {
-    stiffness: 100,
-    damping: 30,
-    restDelta: 0.001
-  });
+        {/* ══ HERO ══════════════════════════════════════════════════════════ */}
+        <HeroSection>
+          <HeroGrid>
 
-  return (
-    <>
-      <SEO
-        title="About Rolan Lobo — Software Developer"
-        description="Rolan Lobo is a software developer from Karnataka, India, who crossed from precision manufacturing into software engineering. He specialises in privacy-focused tools, AES-256 encryption, zero-knowledge applications, and cross-platform software."
-        keywords="About Rolan Lobo, Rolan RNR, Software Developer India, Privacy Tools Developer, Security Software Engineer, Freelance Developer India, Karnataka Developer, Open Source Developer"
-        image="https://rolan-rnr.netlify.app/og-social-card.png"
-        url="https://rolan-rnr.netlify.app/about"
-      />
+            <HeroContent>
+              <HeroLabel
+                variants={fadeUp}
+                custom={0}
+                initial="hidden"
+                animate="visible"
+              >
+                About
+              </HeroLabel>
 
-      {/* Hero */}
-      <AboutHero>
-        <Container>
-          <motion.div variants={containerVariants} initial="hidden" animate="visible">
-            <HeroTitle variants={itemVariants}>
-              Engineered, Then Coded.
-            </HeroTitle>
-            <HeroSubtitle variants={itemVariants}>
-              From tool and die manufacturing to security software — I bring
-              physical-world precision to digital systems. Today that means
-              encryption tools, privacy-first applications, and cross-platform
-              software that works without a cloud.
-            </HeroSubtitle>
+              <HeroTitle
+                variants={fadeUp}
+                custom={0.08}
+                initial="hidden"
+                animate="visible"
+              >
+                Engineered,<br />then coded.
+              </HeroTitle>
 
-            <ResumeButtonWrapper variants={itemVariants}>
-              <Suspense fallback={null}>
-                <ResumeDownload variant="primary" size="lg" tooltipPosition="right" />
-              </Suspense>
-            </ResumeButtonWrapper>
+              <HeroBio
+                variants={fadeUp}
+                custom={0.16}
+                initial="hidden"
+                animate="visible"
+              >
+                I crossed from precision manufacturing into software engineering —
+                bringing a discipline where edge cases are assumed, not discovered.
+                Today I build privacy-first tools, encryption software, and
+                cross-platform apps that work without a cloud.
+              </HeroBio>
 
-            <AboutImageSection variants={itemVariants}>
-              <AboutImageContainer>
-                <AboutImage
+              <motion.div
+                variants={fadeUp}
+                custom={0.24}
+                initial="hidden"
+                animate="visible"
+              >
+                <Suspense fallback={null}>
+                  <ResumeDownload variant="primary" size="lg" tooltipPosition="right" />
+                </Suspense>
+              </motion.div>
+            </HeroContent>
+
+            <HeroImage
+              initial={{ opacity: 0, scale: 0.97 }}
+              animate={{ opacity: 1, scale: 1 }}
+              transition={{ duration: 0.6, delay: 0.18, ease: [0.22, 1, 0.36, 1] }}
+            >
+              <ImageFrame>
+                <img
                   src={aboutImage}
-                  alt="Rolan Lobo"
+                  alt="Rolan Lobo — Software Developer"
                   loading="lazy"
                   decoding="async"
                 />
-              </AboutImageContainer>
-            </AboutImageSection>
-          </motion.div>
-        </Container>
-      </AboutHero>
+              </ImageFrame>
+            </HeroImage>
 
-      {/* Journey Timeline */}
-      <JourneySection ref={journeyRef}>
-        <Container>
-          <SectionHeader>
-            <SectionTitle
-              initial={{ opacity: 0, y: 20 }}
-              whileInView={{ opacity: 1, y: 0 }}
-              transition={{ duration: 0.5 }}
+          </HeroGrid>
+        </HeroSection>
+
+        {/* ══ TIMELINE ══════════════════════════════════════════════════════ */}
+        <Section>
+          <SectionHeading>
+            <SectionLabel
+              initial={{ opacity: 0 }}
+              whileInView={{ opacity: 1 }}
+              transition={{ duration: 0.4 }}
               viewport={{ once: true }}
             >
               The Road Here
-            </SectionTitle>
-            <br />
-            <SectionSubtitle
-              initial={{ opacity: 0 }}
-              whileInView={{ opacity: 1 }}
-              transition={{ delay: 0.2, duration: 0.5 }}
-              viewport={{ once: true }}
-            >
-              From precision manufacturing to production-grade software — every step sharpened the craft.
-            </SectionSubtitle>
-          </SectionHeader>
+            </SectionLabel>
+            <SectionCount>{timelineData.length} milestones</SectionCount>
+          </SectionHeading>
 
-          <JourneyContainer>
-            <ProgressLineContainer aria-hidden="true">
-              <ProgressLine style={{ scaleY }} />
-            </ProgressLineContainer>
+          <Timeline>
+            {timelineData.map((item, i) => (
+              <TimelineItem
+                key={i}
+                custom={i * 0.07}
+                variants={fadeUp}
+                initial="hidden"
+                whileInView="visible"
+                viewport={{ once: true, amount: 0.12 }}
+              >
+                <TimelineYear>
+                  <YearPill>{item.year}</YearPill>
+                </TimelineYear>
 
-            {timelineData.map((item, index) => (
-              <JourneyItemWrapper key={index} $align={index % 2 === 0 ? 'left' : 'right'}>
-                <Marker
-                  $align={index % 2 === 0 ? 'left' : 'right'}
-                  aria-hidden="true"
-                />
-                <JourneyCard
-                  initial="offscreen"
-                  whileInView="onscreen"
-                  viewport={{ once: true, amount: 0.1, margin: '-50px' }}
-                  variants={cardVariants}
-                >
-                  <JourneyYear>{item.year}</JourneyYear>
-                  <JourneyCardTitle>{item.title}</JourneyCardTitle>
-                  <JourneyCardRole>{item.role}</JourneyCardRole>
-                  <JourneyDescription>{item.description}</JourneyDescription>
-                  <JourneyTechStack>
-                    {item.tags.map(tag => (
-                      <TechTag key={tag}>{tag}</TechTag>
-                    ))}
-                  </JourneyTechStack>
-                </JourneyCard>
-              </JourneyItemWrapper>
+                <TimelineContent>
+                  <TimelineTitle>{item.title}</TimelineTitle>
+                  <TimelineRole>{item.role}</TimelineRole>
+                  <TimelineDesc>{item.description}</TimelineDesc>
+                  <TimelineTags>
+                    {item.tags.map(t => <TimelineTag key={t}>{t}</TimelineTag>)}
+                  </TimelineTags>
+                </TimelineContent>
+              </TimelineItem>
             ))}
-          </JourneyContainer>
-        </Container>
-      </JourneySection>
+          </Timeline>
+        </Section>
 
-      {/* Skills */}
-      <SkillsSection>
-        <Container>
-          <SectionHeader>
-            <SectionTitle
-              initial={{ opacity: 0, y: 20 }}
-              whileInView={{ opacity: 1, y: 0 }}
-              transition={{ duration: 0.5 }}
-              viewport={{ once: true }}
-            >
-              Skills &amp; Technologies
-            </SectionTitle>
-            <br />
-            <SectionSubtitle
+        {/* ══ SKILLS ════════════════════════════════════════════════════════ */}
+        <Section>
+          <SectionHeading>
+            <SectionLabel
               initial={{ opacity: 0 }}
               whileInView={{ opacity: 1 }}
-              transition={{ delay: 0.2, duration: 0.5 }}
+              transition={{ duration: 0.4 }}
               viewport={{ once: true }}
             >
-              Tools and technologies I work with across the full stack
-            </SectionSubtitle>
-          </SectionHeader>
+              Skills & Stack
+            </SectionLabel>
+            <SectionCount>{totalSkills} tools</SectionCount>
+          </SectionHeading>
 
           <SkillsGrid>
-            {skillsData.map((skillGroup, index) => (
+            {skillsData.map((group, i) => (
               <SkillCard
-                key={skillGroup.category}
-                initial={{ opacity: 0, y: 24 }}
-                whileInView={{ opacity: 1, y: 0 }}
-                transition={{ duration: 0.45, delay: index * 0.08, ease: 'easeOut' }}
-                viewport={{ once: true, amount: 0.2 }}
+                key={group.category}
+                custom={i * 0.07}
+                variants={fadeUp}
+                initial="hidden"
+                whileInView="visible"
+                viewport={{ once: true, amount: 0.15 }}
               >
-                <SkillCategory>{skillGroup.category}</SkillCategory>
-                <SkillsList>
-                  {skillGroup.skills.map((skill) => (
-                    <SkillItem key={skill}>{skill}</SkillItem>
-                  ))}
-                </SkillsList>
+                <SkillCardHeader>
+                  <SkillDot aria-hidden="true" />
+                  <SkillCategory>{group.category}</SkillCategory>
+                </SkillCardHeader>
+                <SkillChips>
+                  {group.skills.map(s => <SkillChip key={s}>{s}</SkillChip>)}
+                </SkillChips>
               </SkillCard>
             ))}
           </SkillsGrid>
-        </Container>
-      </SkillsSection>
+        </Section>
 
-      {/* Focus Areas — editorial grid, option (c) */}
-      <FocusSection>
-        <Container>
-          <SectionHeader>
-            <SectionTitle
-              initial={{ opacity: 0, y: 20 }}
-              whileInView={{ opacity: 1, y: 0 }}
-              transition={{ duration: 0.5 }}
+        {/* ══ FOCUS AREAS ═══════════════════════════════════════════════════ */}
+        <Section>
+          <SectionHeading>
+            <SectionLabel
+              initial={{ opacity: 0 }}
+              whileInView={{ opacity: 1 }}
+              transition={{ duration: 0.4 }}
               viewport={{ once: true }}
             >
               What I Focus On
-            </SectionTitle>
-            <br />
-            <SectionSubtitle
-              initial={{ opacity: 0 }}
-              whileInView={{ opacity: 1 }}
-              transition={{ delay: 0.2, duration: 0.5 }}
-              viewport={{ once: true }}
-            >
-              Areas where my projects and interests converge
-            </SectionSubtitle>
-          </SectionHeader>
+            </SectionLabel>
+            <SectionCount>{focusAreas.length} areas</SectionCount>
+          </SectionHeading>
 
           <FocusGrid>
-            {focusAreas.map((area, index) => (
-              <FocusArea
+            {focusAreas.map((area, i) => (
+              <FocusCard
                 key={area.number}
-                initial={{ opacity: 0 }}
-                whileInView={{ opacity: 1 }}
-                transition={{ duration: 0.5, delay: index * 0.07 }}
-                viewport={{ once: true, amount: 0.2 }}
+                custom={i * 0.07}
+                variants={fadeUp}
+                initial="hidden"
+                whileInView="visible"
+                viewport={{ once: true, amount: 0.12 }}
               >
-                <FocusAreaNumber>{area.number}</FocusAreaNumber>
-                <FocusAreaTitle>{area.title}</FocusAreaTitle>
-                <FocusAreaBody>{area.body}</FocusAreaBody>
-                <FocusAreaProjects>
+                <FocusNumber>{area.number}</FocusNumber>
+                <FocusTitle>{area.title}</FocusTitle>
+                <FocusBody>{area.body}</FocusBody>
+                <FocusDivider aria-hidden="true" />
+                <FocusProjects>
                   {area.projects.map(p => (
                     <FocusProject key={p}>{p}</FocusProject>
                   ))}
-                </FocusAreaProjects>
-              </FocusArea>
+                </FocusProjects>
+              </FocusCard>
             ))}
           </FocusGrid>
-        </Container>
-      </FocusSection>
-    </>
-  );
-};
+        </Section>
+
+      </Container>
+    </PageWrapper>
+  </>
+);
 
 export default About;
