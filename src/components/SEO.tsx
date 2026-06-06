@@ -16,10 +16,10 @@ interface SEOProps {
 }
 
 const SEO: React.FC<SEOProps> = ({
-  title = 'Rolan Lobo — Full Stack Developer & Builder',
-  description = "I'm Rolan Lobo (RNR) — a full-stack developer and builder from Karnataka, India. I craft fast, accessible digital products: from security tools and desktop apps to web applications people actually enjoy using. Let's build something great together.",
-  keywords = 'Rolan Lobo, Rolan RNR, Rolan rnr, rolan lobo, Full Stack Developer, Software Engineer, Freelance Developer, Mobile App Developer, React Native, Flutter, Freelancer India, Web Developer, Python Developer, Flask Developer, React Developer, Steganography, Polyglot Files, InvisioVault, RNR',
-  image = 'https://rolan-rnr.netlify.app/logo512.png',
+  title = 'Rolan Lobo — Full-Stack Developer & Security Engineer | Karnataka, India',
+  description = 'Rolan Lobo is a full-stack developer from Karnataka, India, specializing in AES-256 encryption tools, privacy-focused applications, and production web software. Available for freelance and full-time remote roles.',
+  keywords = 'Rolan Lobo, Rolan RNR, Full Stack Developer, Security Engineer, Software Engineer, Freelance Developer, React Developer, Python Developer, Flask Developer, AES-256 Encryption, Steganography, InvisioVault, BAR, CursorCam, Karnataka, India',
+  image = 'https://rolan-rnr.netlify.app/og-social-card.png',
   url = 'https://rolan-rnr.netlify.app/',
   type = 'website',
   publishedAt,
@@ -47,16 +47,21 @@ const SEO: React.FC<SEOProps> = ({
       <meta property="og:title" content={title} />
       <meta property="og:description" content={description} />
       <meta property="og:image" content={image} />
+      <meta property="og:image:width" content="1200" />
+      <meta property="og:image:height" content="630" />
+      <meta property="og:image:alt" content="Rolan Lobo — Full-Stack Developer & Security Engineer" />
       <meta property="og:site_name" content={siteName} />
       <meta property="og:locale" content="en_US" />
 
       {/* Twitter */}
-      <meta property="twitter:card" content="summary_large_image" />
-      <meta property="twitter:url" content={url} />
-      <meta property="twitter:title" content={title} />
-      <meta property="twitter:description" content={description} />
-      <meta property="twitter:image" content={image} />
-      <meta property="twitter:creator" content={twitterHandle} />
+      <meta name="twitter:card" content="summary_large_image" />
+      <meta name="twitter:site" content={twitterHandle} />
+      <meta name="twitter:creator" content={twitterHandle} />
+      <meta name="twitter:url" content={url} />
+      <meta name="twitter:title" content={title} />
+      <meta name="twitter:description" content={description} />
+      <meta name="twitter:image" content={image} />
+      <meta name="twitter:image:alt" content="Rolan Lobo — Full-Stack Developer & Security Engineer" />
 
       {/* Article Open Graph Tags */}
       {type === 'article' && publishedAt && (
@@ -87,6 +92,10 @@ const SEO: React.FC<SEOProps> = ({
       }
       <meta name="language" content="English" />
       <meta name="theme-color" content="#64ffda" />
+
+      {/* hreflang */}
+      <link rel="alternate" hrefLang="en" href={url} />
+      <link rel="alternate" hrefLang="x-default" href="https://rolan-rnr.netlify.app/" />
 
       {/* Structured Data (JSON-LD) - Person Schema */}
       <script type="application/ld+json">

@@ -133,9 +133,9 @@ const Blog: React.FC = () => {
     return (
         <>
             <SEO
-                title="Blog — Rolan Lobo | Dev.to Articles on Web Dev & Security"
-                description="Technical articles by Rolan Lobo published on Dev.to. Topics include full-stack web development, Python, React, TypeScript, security tools, steganography, and software engineering."
-                keywords="Rolan Lobo blog, Dev.to articles, web development tutorials, React tutorials, Python programming, security tools, software engineering blog"
+                title="Technical Writing — Rolan Lobo | Dev.to Articles"
+                description="Technical articles by Rolan Lobo on full-stack web development, AES-256 encryption, steganography, React, Python, and security engineering. Published on Dev.to."
+                keywords="Rolan Lobo blog, Dev.to articles, web development tutorials, React tutorials, Python programming, security tools, steganography, software engineering"
                 url="https://rolan-rnr.netlify.app/blog"
                 type="website"
             />
@@ -194,15 +194,21 @@ const Blog: React.FC = () => {
                             animate={{ opacity: 1, y: 0 }}
                             transition={{ duration: 0.6 }}
                         >
-                            My Writing
+                            Technical Writing
                         </Title>
                         <Subtitle
                             initial={{ opacity: 0, y: 20 }}
                             animate={{ opacity: 1, y: 0 }}
                             transition={{ duration: 0.6, delay: 0.1 }}
                         >
-                            Things I've learned, figured out, and wanted to share.
+                            From encryption architecture to accessibility trade-offs — things I've shipped, broken, and rebuilt.
                         </Subtitle>
+                        {/* Static fallback for crawlers — JS-rendered content is invisible to Googlebot on first pass */}
+                        <noscript>
+                            <p style={{ color: '#94a3b8', marginTop: '1rem' }}>
+                                Articles are loaded from Dev.to. <a href="https://dev.to/rolan_r_n_r" rel="noopener noreferrer">Read all articles by Rolan Lobo on Dev.to →</a>
+                            </p>
+                        </noscript>
                     </Header>
 
                     {error ? (
