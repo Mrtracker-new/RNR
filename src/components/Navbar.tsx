@@ -4,7 +4,6 @@ import styled from 'styled-components';
 import { motion, AnimatePresence } from 'framer-motion';
 import { scrollOptimizer } from '../utils/performance';
 
-// Fixed container ensuring it stays on top
 const FixedContainer = styled.div`
   position: fixed;
   top: 0;
@@ -12,7 +11,7 @@ const FixedContainer = styled.div`
   right: 0;
   z-index: 1000;
   padding: var(--spacing-4);
-  pointer-events: none; /* Let clicks pass through the padding area */
+  pointer-events: none;
   display: flex;
   justify-content: center;
 
@@ -21,9 +20,8 @@ const FixedContainer = styled.div`
   }
 `;
 
-// The actual "Island" navbar
-const NavbarIsland = styled(motion.nav) <{ $scrolled: boolean }>`
-  pointer-events: auto; /* Re-enable clicks */
+const NavbarIsland = styled(motion.nav)<{ $scrolled: boolean }>`
+  pointer-events: auto;
   width: 100%;
   max-width: var(--breakpoint-lg);
   background: rgba(9, 9, 11, 0.6);
@@ -38,22 +36,19 @@ const NavbarIsland = styled(motion.nav) <{ $scrolled: boolean }>`
   box-shadow: 0 8px 32px rgba(0, 0, 0, 0.2);
   transition: all 0.4s cubic-bezier(0.16, 1, 0.3, 1);
 
-  /* Desktop: Floating Island */
   @media (min-width: 769px) {
     margin-top: ${props => props.$scrolled ? 'var(--spacing-2)' : 'var(--spacing-4)'};
-    background: ${props => props.$scrolled ? 'rgba(9, 9, 11, 0.8)' : 'rgba(9, 9, 11, 0.5)'};
-    width: ${props => props.$scrolled ? 'auto' : '100%'}; /* Shrink on scroll? maybe just stay wide */
+    background: ${props => props.$scrolled ? 'rgba(9, 9, 11, 0.85)' : 'rgba(9, 9, 11, 0.5)'};
     min-width: 600px;
   }
 
-  /* Mobile: Full width top bar */
   @media (max-width: 768px) {
     border-radius: 0;
     border-top: none;
     border-left: none;
     border-right: none;
-    background: rgba(9, 9, 11, 0.95); /* Higher opacity for mobile */
-    backdrop-filter: blur(10px); /* Reduced blur for performance */
+    background: rgba(9, 9, 11, 0.95);
+    backdrop-filter: blur(10px);
     -webkit-backdrop-filter: blur(10px);
     padding: var(--spacing-3) var(--spacing-4);
   }
@@ -69,7 +64,7 @@ const Logo = styled(Link)`
   gap: var(--spacing-2);
   z-index: 10;
   position: relative;
-  
+
   span {
     background: var(--accent-gradient);
     -webkit-background-clip: text;
@@ -84,7 +79,7 @@ const NavLinks = styled.div`
   position: relative;
   background: rgba(255, 255, 255, 0.03);
   padding: 4px;
-  border-radius: var(--radius-lg); // Changed from radius-full
+  border-radius: var(--radius-lg);
   border: 1px solid rgba(255, 255, 255, 0.05);
 
   @media (max-width: 768px) {
@@ -92,7 +87,7 @@ const NavLinks = styled.div`
   }
 `;
 
-const NavItem = styled(Link) <{ $active: boolean }>`
+const NavItem = styled(Link)<{ $active: boolean }>`
   position: relative;
   padding: 8px 16px;
   font-size: var(--text-sm);
@@ -102,7 +97,7 @@ const NavItem = styled(Link) <{ $active: boolean }>`
   transition: color 0.3s ease;
   z-index: 1;
   border-radius: var(--radius-md);
-  display: flex; // Ensure block model
+  display: flex;
   align-items: center;
   justify-content: center;
 
@@ -116,7 +111,7 @@ const ActivePill = styled(motion.div)`
   inset: 0;
   border-radius: var(--radius-md);
   background: rgba(255, 255, 255, 0.08);
-  z-index: -1; // Behind content
+  z-index: -1;
 `;
 
 const MobileToggle = styled.button`
@@ -127,7 +122,7 @@ const MobileToggle = styled.button`
   padding: var(--spacing-2);
   cursor: pointer;
   z-index: 20;
-  font-size: 1.5rem; // Adjusted size
+  font-size: 1.5rem;
 
   @media (max-width: 768px) {
     display: block;
@@ -166,15 +161,15 @@ const MobileLink = styled(Link)`
 `;
 
 const navItems = [
-  { path: '/', label: 'Home' },
-  { path: '/about', label: 'About' },
-  { path: '/projects', label: 'Work' },
-  { path: '/blog', label: 'Blog' },
-  { path: '/contact', label: "Let's Talk" }
+  { path: '/',         label: 'Home'    },
+  { path: '/about',    label: 'About'   },
+  { path: '/projects', label: 'Work'    },
+  { path: '/blog',     label: 'Blog'    },
+  { path: '/contact',  label: 'Contact' },
 ];
 
 const Navbar: React.FC = () => {
-  const [scrolled, setScrolled] = useState(false);
+  const [scrolled, setScrolled]         = useState(false);
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
   const location = useLocation();
 
@@ -183,18 +178,11 @@ const Navbar: React.FC = () => {
       setScrolled(scrollY > 20);
     };
     const unsubscribe = scrollOptimizer.subscribe(handleScrollUpdate);
-    return () => {
-      if (unsubscribe) unsubscribe();
-    };
+    return () => { if (unsubscribe) unsubscribe(); };
   }, []);
 
-  // Lock body scroll when mobile menu is open
   useEffect(() => {
-    if (mobileMenuOpen) {
-      document.body.style.overflow = 'hidden';
-    } else {
-      document.body.style.overflow = 'unset';
-    }
+    document.body.style.overflow = mobileMenuOpen ? 'hidden' : 'unset';
   }, [mobileMenuOpen]);
 
   return (
@@ -204,7 +192,7 @@ const Navbar: React.FC = () => {
           $scrolled={scrolled}
           initial={{ y: -50, opacity: 0 }}
           animate={{ y: 0, opacity: 1 }}
-          transition={{ duration: 0.6, ease: "easeOut" }}
+          transition={{ duration: 0.6, ease: 'easeOut' }}
         >
           <Logo to="/" onClick={() => setMobileMenuOpen(false)}>
             <span>RNR</span>
@@ -215,16 +203,13 @@ const Navbar: React.FC = () => {
               const isActive = location.pathname === item.path;
               return (
                 <div key={item.path} style={{ position: 'relative' }}>
-                  <NavItem
-                    to={item.path}
-                    $active={isActive}
-                  >
+                  <NavItem to={item.path} $active={isActive}>
                     {item.label}
                     {isActive && (
                       <ActivePill
                         layoutId="nav-pill"
-                        transition={{ type: "spring", stiffness: 300, damping: 30 }}
-                        style={{ inset: 0 }} // Ensure pill covers the item area
+                        transition={{ type: 'spring', stiffness: 300, damping: 30 }}
+                        style={{ inset: 0 }}
                       />
                     )}
                   </NavItem>
@@ -254,7 +239,7 @@ const Navbar: React.FC = () => {
             initial={{ opacity: 0, y: -20 }}
             animate={{ opacity: 1, y: 0 }}
             exit={{ opacity: 0, y: -20 }}
-            transition={{ type: "spring", damping: 25, stiffness: 200 }}
+            transition={{ type: 'spring', damping: 25, stiffness: 200 }}
           >
             {navItems.map((item, index) => (
               <motion.div
@@ -266,19 +251,22 @@ const Navbar: React.FC = () => {
                 <MobileLink to={item.path} onClick={() => setMobileMenuOpen(false)}>
                   {item.label}
                   {location.pathname === item.path && (
-                    <motion.span layoutId="mobile-dot" style={{ width: 8, height: 8, borderRadius: '50%', background: 'var(--accent-primary)' }} />
+                    <motion.span
+                      layoutId="mobile-dot"
+                      style={{ width: 8, height: 8, borderRadius: '50%', background: 'var(--accent-primary)' }}
+                    />
                   )}
                 </MobileLink>
               </motion.div>
             ))}
 
             <motion.div
-              style={{ marginTop: 'auto', textAlign: 'center', color: 'var(--dark-400)', fontSize: '0.9rem' }}
+              style={{ marginTop: 'auto', textAlign: 'center', color: 'var(--dark-500)', fontSize: '0.85rem' }}
               initial={{ opacity: 0 }}
               animate={{ opacity: 1 }}
               transition={{ delay: 0.4 }}
             >
-              &copy; {new Date().getFullYear()} Rolan Lobo &mdash; Developer &amp; Builder
+              © {new Date().getFullYear()} Rolan Lobo
             </motion.div>
           </MobileMenu>
         )}
