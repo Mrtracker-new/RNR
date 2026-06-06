@@ -86,7 +86,6 @@ const SEO: React.FC<SEOProps> = ({
         : <meta name="robots" content="index, follow, max-image-preview:large, max-snippet:-1, max-video-preview:-1" />
       }
       <meta name="language" content="English" />
-      <meta name="revisit-after" content="7 days" />
       <meta name="theme-color" content="#64ffda" />
 
       {/* Structured Data (JSON-LD) - Person Schema */}

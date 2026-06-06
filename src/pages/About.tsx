@@ -122,25 +122,27 @@ const JourneyHeader = styled.div`
   z-index: 2;
 `;
 
-const JourneyTitle = styled(motion.h2)`
+const SectionTitle = styled(motion.h2)`
   font-size: var(--text-4xl);
   color: var(--dark-100);
   margin-bottom: var(--spacing-4);
   display: inline-block;
-  position: relative; /* For Pseudo-element */
-  
+  position: relative;
+
   &::after {
-      content: '';
-      position: absolute;
-      bottom: -10px;
-      left: 50%;
-      transform: translateX(-50%);
-      width: 60px;
-      height: 4px;
-      background: var(--accent-gradient);
-      border-radius: var(--radius-sm);
+    content: '';
+    position: absolute;
+    bottom: -10px;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 60px;
+    height: 4px;
+    background: var(--accent-gradient);
+    border-radius: var(--radius-sm);
   }
 `;
+
+const JourneyTitle = SectionTitle;
 
 const JourneySubtitle = styled(motion.p)`
   color: var(--dark-400);
@@ -234,8 +236,7 @@ const JourneyCard = styled(motion.div)`
   width: 100%;
   position: relative;
   overflow: hidden;
-  /* Specific transitions to avoid conflict with Framer Motion */
-  transition: background 0.3s ease, border-color 0.3s ease, box-shadow 0.3s ease;
+  transition: background 0.3s ease, border-color 0.3s ease, box-shadow 0.3s ease, transform 0.3s ease;
   will-change: transform, opacity;
   text-align: left; /* Force clear alignment */
 
@@ -334,25 +335,7 @@ const SkillsHeader = styled.div`
   margin-bottom: var(--spacing-16);
 `;
 
-const SkillsTitle = styled(motion.h2)`
-  font-size: var(--text-4xl);
-  color: var(--dark-100);
-  margin-bottom: var(--spacing-4);
-  display: inline-block;
-  position: relative;
-  
-  &::after {
-    content: '';
-    position: absolute;
-    bottom: -10px;
-    left: 50%;
-    transform: translateX(-50%);
-    width: 60px;
-    height: 4px;
-    background: var(--accent-gradient);
-    border-radius: var(--radius-sm);
-  }
-`;
+const SkillsTitle = SectionTitle;
 
 const SkillsSubtitle = styled(motion.p)`
   color: var(--dark-400);
@@ -387,7 +370,7 @@ const SkillCard = styled(motion.div)`
   border-radius: var(--radius-xl);
   position: relative;
   overflow: hidden;
-  transition: background 0.3s ease, border-color 0.3s ease, box-shadow 0.3s ease;
+  transition: background 0.3s ease, border-color 0.3s ease, box-shadow 0.3s ease, transform 0.3s ease;
   will-change: auto;
   box-shadow: 0 4px 20px rgba(0, 0, 0, 0.2);
 
@@ -484,25 +467,7 @@ const ServicesHeader = styled.div`
   margin-bottom: var(--spacing-16);
 `;
 
-const ServicesTitle = styled(motion.h2)`
-  font-size: var(--text-4xl);
-  color: var(--dark-100);
-  margin-bottom: var(--spacing-4);
-  display: inline-block;
-  position: relative;
-  
-  &::after {
-    content: '';
-    position: absolute;
-    bottom: -10px;
-    left: 50%;
-    transform: translateX(-50%);
-    width: 60px;
-    height: 4px;
-    background: var(--accent-gradient);
-    border-radius: var(--radius-sm);
-  }
-`;
+const ServicesTitle = SectionTitle;
 
 const ServicesSubtitle = styled(motion.p)`
   color: var(--dark-400);
@@ -533,7 +498,7 @@ const ServiceCard = styled(motion.div)`
   border-radius: var(--radius-xl);
   position: relative;
   overflow: hidden;
-  transition: background 0.3s ease, border-color 0.3s ease, box-shadow 0.3s ease;
+  transition: background 0.3s ease, border-color 0.3s ease, box-shadow 0.3s ease, transform 0.3s ease;
   cursor: default;
   will-change: auto;
 

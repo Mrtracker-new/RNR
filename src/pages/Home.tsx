@@ -506,7 +506,7 @@ const StatsBar = styled(motion.div)`
 
 const StatsContent = styled(Container)`
   display: flex;
-  justify-content: space-around;
+  justify-content: space-evenly;
   align-items: center;
   gap: var(--spacing-8);
   
@@ -730,16 +730,21 @@ const Home: React.FC = () => {
               </Button>
               <div
                 onMouseEnter={() => {
-                  // Only show preview on desktop (screen width > 968px)
-                  if (window.innerWidth > 968) {
-                    setShowResumePreview(true);
-                  }
+                  if (window.innerWidth > 968) setShowResumePreview(true);
                 }}
                 onMouseLeave={() => {
-                  if (window.innerWidth > 968) {
-                    setShowResumePreview(false);
+                  if (window.innerWidth > 968) setShowResumePreview(false);
+                }}
+                onKeyDown={(e) => {
+                  if (e.key === 'Enter' || e.key === ' ') {
+                    e.preventDefault();
+                    setShowResumePreview((prev) => !prev);
                   }
                 }}
+                onBlur={() => setShowResumePreview(false)}
+                role="button"
+                tabIndex={0}
+                aria-label="Preview resume — hover or press Enter to toggle"
               >
                 <Suspense fallback={null}>
                   <ResumeDownload variant="outline" size="lg" showTooltip={false} />
