@@ -1,943 +1,731 @@
 import React, { useState } from 'react';
 import styled from 'styled-components';
 import { motion, AnimatePresence } from 'framer-motion';
-import { Container, Section } from '../styles/GlobalStyle';
 import SEO from '../components/SEO';
-
 import FAQSchema from '../components/FAQSchema';
 
-// --- Styled Components ---
+/* ══════════════════════════════════════════════════════════════════════════
+   LAYOUT
+   ══════════════════════════════════════════════════════════════════════════ */
 
-const ContactHero = styled(Section)`
-  padding-top: 120px;
-  padding-bottom: 60px;
-  text-align: center;
-  position: relative;
-  overflow: hidden;
+/** Page-level wrapper — accounts for fixed navbar height (≈72px) */
+const PageWrapper = styled.div`
+  box-sizing: border-box;
+  width: 100%;
+  padding-top: 128px;
+  padding-bottom: 96px;
 
-  &::before {
-    content: '';
-    position: absolute;
-    top: -20%;
-    left: 50%;
-    transform: translateX(-50%);
-    width: 600px;
-    height: 600px;
-    background: radial-gradient(circle, rgba(100, 255, 218, 0.03) 0%, transparent 70%);
-    z-index: -1;
-    pointer-events: none;
+  @media (max-width: 1024px) { padding-top: 108px; padding-bottom: 72px; }
+  @media (max-width: 768px)  { padding-top: 92px;  padding-bottom: 56px; }
+`;
+
+/** Centred max-width container — matches Navbar island (1200px) */
+const Wrap = styled.div`
+  box-sizing: border-box;
+  width: 100%;
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 0 48px;
+
+  @media (max-width: 1024px) { padding: 0 32px; }
+  @media (max-width: 640px)  { padding: 0 20px; }
+`;
+
+/**
+ * Two-column grid.
+ * Left  → info panel   (minmax keeps it from shrinking below 320px)
+ * Right → form panel   (1fr fills remaining space)
+ */
+const Grid = styled.div`
+  display: grid;
+  grid-template-columns: minmax(320px, 420px) 1fr;
+  gap: 64px;
+  align-items: start;
+
+  @media (max-width: 1024px) {
+    grid-template-columns: minmax(280px, 380px) 1fr;
+    gap: 40px;
+  }
+
+  @media (max-width: 768px) {
+    grid-template-columns: 1fr;
+    gap: 32px;
   }
 `;
 
-const HeroTitle = styled(motion.h1)`
-  font-size: clamp(2.5rem, 6vw, 4rem);
-  margin-bottom: var(--spacing-6);
-  color: var(--dark-50);
-  font-weight: var(--font-extrabold);
-  letter-spacing: -0.025em;
+/* ══════════════════════════════════════════════════════════════════════════
+   LEFT COLUMN — INFO PANEL
+   ══════════════════════════════════════════════════════════════════════════ */
+
+const InfoPanel = styled.div`
+  box-sizing: border-box;
+  display: flex;
+  flex-direction: column;
+  gap: 0;
 `;
 
-const HeroSubtitle = styled(motion.p)`
-  font-size: var(--text-xl);
-  color: var(--dark-300);
-  max-width: 600px;
-  margin: 0 auto;
-  line-height: 1.6;
+/* ─── Intro ─────────────────────────────────────────────────────────────── */
+
+const IntroSection = styled.div`
+  padding-bottom: 40px;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.06);
+  margin-bottom: 40px;
 `;
 
-const AvailabilityBanner = styled(motion.div)`
+const PageLabel = styled.p`
+  font-size: 0.68rem;
+  font-weight: 700;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: #52525b;
+  margin: 0 0 20px;
+`;
+
+const Headline = styled.h1`
+  font-size: clamp(1.85rem, 3vw, 2.6rem);
+  font-weight: 800;
+  color: #f4f4f5;
+  letter-spacing: -0.03em;
+  line-height: 1.1;
+  margin: 0 0 16px;
+`;
+
+const Subline = styled.p`
+  font-size: 0.95rem;
+  color: #a1a1aa;
+  line-height: 1.75;
+  margin: 0 0 24px;
+  max-width: 360px;
+`;
+
+const AvailPill = styled.div`
   display: inline-flex;
   align-items: center;
-  gap: var(--spacing-3);
-  margin: var(--spacing-6) auto 0;
-  padding: 10px 20px;
-  background: rgba(34, 197, 94, 0.06);
-  border: 1px solid rgba(34, 197, 94, 0.2);
+  gap: 8px;
+  padding: 6px 14px;
+  border: 1px solid rgba(74, 222, 128, 0.22);
   border-radius: 999px;
-  font-size: var(--text-sm);
-  color: var(--success);
-  font-weight: var(--font-medium);
-  letter-spacing: 0.01em;
+  font-size: 0.78rem;
+  font-weight: 500;
+  color: #4ade80;
+  width: fit-content;
 `;
 
-const StatusDot = styled.span`
-  width: 8px;
-  height: 8px;
-  background: var(--success);
+const PulseDot = styled.span`
+  width: 7px;
+  height: 7px;
   border-radius: 50%;
+  background: #4ade80;
   flex-shrink: 0;
   position: relative;
 
   &::after {
     content: '';
     position: absolute;
-    inset: -4px;
+    inset: -3px;
     border-radius: 50%;
-    background: rgba(34, 197, 94, 0.25);
-    animation: pulse-ring 2s ease-out infinite;
+    background: rgba(74, 222, 128, 0.2);
+    animation: pulse 2s ease-out infinite;
   }
 
-  @keyframes pulse-ring {
-    0% { transform: scale(0.8); opacity: 1; }
-    100% { transform: scale(1.8); opacity: 0; }
-  }
-`;
-
-const ContactContent = styled(Container)`
-  display: grid;
-  grid-template-columns: 1fr 1fr;
-  gap: var(--spacing-16);
-  align-items: start;
-  padding-top: var(--spacing-4);
-  padding-bottom: 120px;
-
-  @media (max-width: 968px) {
-    grid-template-columns: 1fr;
-    gap: var(--spacing-10);
-    padding-top: 0;
-    padding-bottom: 80px;
+  @keyframes pulse {
+    0%   { transform: scale(0.8); opacity: 1; }
+    100% { transform: scale(1.9); opacity: 0; }
   }
 `;
 
-// Left Column: Contact Info
-const InfoColumn = styled(motion.div)`
-  display: flex;
-  flex-direction: column;
-  gap: var(--spacing-10);
+/* ─── Details table ─────────────────────────────────────────────────────── */
+
+const DetailsSection = styled.div`
+  padding-bottom: 40px;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.06);
+  margin-bottom: 40px;
 `;
 
-const InfoCard = styled(motion.div)`
-  background: rgba(30, 41, 59, 0.3);
-  backdrop-filter: blur(12px);
-  border: 1px solid rgba(255, 255, 255, 0.05);
-  border-radius: var(--radius-2xl);
-  padding: var(--spacing-10);
-  transition: transform 0.3s ease, border-color 0.3s ease;
-
-  &:hover {
-    transform: translateY(-4px);
-    border-color: rgba(100, 255, 218, 0.2);
-  }
-
-  @media (max-width: 640px) {
-    padding: var(--spacing-8);
-  }
+const BlockLabel = styled.p`
+  font-size: 0.68rem;
+  font-weight: 700;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: #52525b;
+  margin: 0 0 20px;
 `;
 
-const InfoTitle = styled.h3`
-  font-size: var(--text-xl);
-  color: var(--dark-100);
-  margin-bottom: var(--spacing-4);
-  font-weight: var(--font-bold);
-  display: flex;
-  align-items: center;
-  gap: var(--spacing-3);
-`;
-
-
-const SocialGrid = styled.div`
-  display: grid;
-  grid-template-columns: repeat(4, 1fr);
-  gap: var(--spacing-3);
-  
-  @media (max-width: 480px) {
-    grid-template-columns: repeat(2, 1fr);
-    gap: var(--spacing-2);
-  }
-`;
-
-const SocialCardButton = styled(motion.a)`
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
-  padding: var(--spacing-4);
-  background: rgba(255, 255, 255, 0.03);
-  border: 1px solid rgba(255, 255, 255, 0.05);
-  border-radius: var(--radius-xl);
-  color: var(--dark-300);
-  text-decoration: none;
-  transition: all 0.3s ease;
-  gap: var(--spacing-2);
-
-  @media (max-width: 480px) {
-    padding: var(--spacing-3);
-    border-radius: var(--radius-lg);
-    gap: var(--spacing-1);
-  }
-
-  span {
-    font-size: var(--text-sm);
-    font-weight: var(--font-medium);
-    
-    @media (max-width: 480px) {
-      font-size: var(--text-xs);
-    }
-  }
-
-  svg {
-    width: 24px;
-    height: 24px;
-    fill: currentColor;
-    margin-bottom: 4px;
-    
-    @media (max-width: 480px) {
-      width: 20px;
-      height: 20px;
-      margin-bottom: 2px;
-    }
-  }
-
-  &:hover {
-    background: rgba(100, 255, 218, 0.1);
-    border-color: var(--accent-primary);
-    transform: translateY(-4px);
-    color: var(--accent-primary);
-    box-shadow: 0 4px 12px rgba(100, 255, 218, 0.15);
-  }
-`;
-
-// "What I Build" section — service deliverables
-const ServicesCard = styled(motion.div)`
-  background: rgba(30, 41, 59, 0.3);
-  backdrop-filter: blur(12px);
-  border: 1px solid rgba(139, 92, 246, 0.15);
-  border-radius: var(--radius-2xl);
-  padding: var(--spacing-10);
-  transition: transform 0.3s ease, border-color 0.3s ease;
-
-  &:hover {
-    transform: translateY(-4px);
-    border-color: rgba(139, 92, 246, 0.3);
-  }
-
-  @media (max-width: 640px) {
-    padding: var(--spacing-8);
-  }
-`;
-
-const ServicesTitle = styled.h3`
-  font-size: var(--text-xl);
-  color: var(--dark-100);
-  margin-bottom: var(--spacing-5);
-  font-weight: var(--font-bold);
-  display: flex;
-  align-items: center;
-  gap: var(--spacing-3);
-`;
-
-const ServicesList = styled.ul`
-  list-style: none;
-  padding: 0;
+const DetailsTable = styled.dl`
   margin: 0;
   display: flex;
   flex-direction: column;
-  gap: var(--spacing-5);
 `;
 
-const ServiceItem = styled.li`
+const DetailsRow = styled.div`
   display: flex;
-  align-items: flex-start;
-  gap: var(--spacing-4);
-  color: var(--dark-300);
-  font-size: var(--text-sm);
-  line-height: 1.6;
-  padding-bottom: var(--spacing-5);
+  justify-content: space-between;
+  align-items: baseline;
+  gap: 16px;
+  padding: 12px 0;
   border-bottom: 1px solid rgba(255, 255, 255, 0.04);
 
-  &:last-child {
-    padding-bottom: 0;
-    border-bottom: none;
-  }
+  &:last-child { border-bottom: none; }
 `;
 
-const ServiceIcon = styled.span`
-  font-size: 1rem;
+const DetailsKey = styled.dt`
+  font-size: 0.85rem;
+  color: #52525b;
+  font-weight: 500;
   flex-shrink: 0;
-  margin-top: 1px;
 `;
 
-const ServiceText = styled.div`
-  flex: 1;
-
-  strong {
-    display: block;
-    color: var(--dark-100);
-    font-weight: var(--font-semibold);
-    font-size: var(--text-base);
-    margin-bottom: 4px;
-  }
+const DetailsVal = styled.dd`
+  font-size: 0.85rem;
+  color: #d4d4d8;
+  text-align: right;
+  margin: 0;
 `;
 
-// Availability + pricing card
-const AvailabilityCard = styled(motion.div)`
-  background: linear-gradient(135deg, rgba(100, 255, 218, 0.04) 0%, rgba(139, 92, 246, 0.04) 100%);
-  border: 1px solid rgba(100, 255, 218, 0.1);
-  border-radius: var(--radius-2xl);
-  padding: var(--spacing-10);
-  transition: border-color 0.3s ease;
+/* ─── Social links ──────────────────────────────────────────────────────── */
 
-  &:hover {
-    border-color: rgba(100, 255, 218, 0.2);
-  }
+const SocialsSection = styled.div``;
 
-  @media (max-width: 640px) {
-    padding: var(--spacing-8);
-  }
-`;
-
-const AvailabilityTitle = styled.h3`
-  font-size: var(--text-xl);
-  color: var(--dark-100);
-  margin-bottom: var(--spacing-5);
-  font-weight: var(--font-bold);
-  display: flex;
-  align-items: center;
-  gap: var(--spacing-3);
-`;
-
-const AvailabilityGrid = styled.div`
+const SocialList = styled.div`
   display: flex;
   flex-direction: column;
-  gap: var(--spacing-5);
+  gap: 2px;
 `;
 
-const AvailabilityRow = styled.div`
+const SocialLink = styled.a`
+  box-sizing: border-box;
   display: flex;
-  align-items: flex-start;
-  gap: var(--spacing-4);
-  padding-bottom: var(--spacing-5);
-  border-bottom: 1px solid rgba(255, 255, 255, 0.04);
+  align-items: center;
+  justify-content: space-between;
+  padding: 10px 12px;
+  border-radius: 10px;
+  border: 1px solid transparent;
+  text-decoration: none;
+  transition: background 0.18s ease, border-color 0.18s ease;
+  min-height: 44px; /* a11y touch target */
 
-  &:last-child {
-    padding-bottom: 0;
-    border-bottom: none;
+  &:hover {
+    background: rgba(255, 255, 255, 0.04);
+    border-color: rgba(255, 255, 255, 0.07);
+  }
+
+  &:focus-visible {
+    outline: 2px solid #64ffda;
+    outline-offset: 2px;
   }
 `;
 
-const AvailabilityRowIcon = styled.span`
-  font-size: 1rem;
-  flex-shrink: 0;
-  margin-top: 2px;
+const SocialLeft = styled.div`
+  display: flex;
+  align-items: center;
+  gap: 12px;
 `;
 
-const AvailabilityRowText = styled.div`
-  flex: 1;
-
-  strong {
-    display: block;
-    color: var(--dark-100);
-    font-size: var(--text-sm);
-    font-weight: var(--font-semibold);
-    margin-bottom: 1px;
-  }
-
-  span {
-    color: var(--dark-400);
-    font-size: var(--text-sm);
-  }
-`;
-
-const EmailQuickTap = styled.a`
+const SocialIconBox = styled.span`
+  width: 32px;
+  height: 32px;
+  border-radius: 8px;
+  background: rgba(255, 255, 255, 0.05);
+  border: 1px solid rgba(255, 255, 255, 0.07);
   display: flex;
   align-items: center;
   justify-content: center;
-  gap: var(--spacing-2);
-  padding: 14px 20px;
-  background: rgba(100, 255, 218, 0.06);
-  border: 1px solid rgba(100, 255, 218, 0.15);
-  border-radius: var(--radius-xl);
-  color: var(--accent-primary);
-  text-decoration: none;
-  font-size: var(--text-base);
-  font-weight: var(--font-semibold);
-  transition: all 0.3s ease;
-  margin-top: var(--spacing-8);
-  letter-spacing: 0.01em;
-
-  &:hover {
-    background: rgba(100, 255, 218, 0.12);
-    border-color: rgba(100, 255, 218, 0.3);
-    transform: translateY(-2px);
-    box-shadow: 0 8px 24px rgba(100, 255, 218, 0.12);
-    color: var(--accent-primary);
-  }
+  flex-shrink: 0;
+  color: #71717a;
+  transition: color 0.18s ease, border-color 0.18s ease;
 
   svg {
-    width: 18px;
-    height: 18px;
+    width: 14px;
+    height: 14px;
+    fill: currentColor;
+  }
+
+  ${SocialLink}:hover & {
+    color: #d4d4d8;
+    border-color: rgba(255, 255, 255, 0.12);
   }
 `;
 
-// Right Column: Contact Form
-const FormColumn = styled(motion.div)`
-  position: relative;
+const SocialName = styled.span`
+  font-size: 0.875rem;
+  font-weight: 500;
+  color: #71717a;
+  transition: color 0.18s ease;
+
+  ${SocialLink}:hover & { color: #a1a1aa; }
 `;
 
-const StyledForm = styled.form`
-  background: rgba(30, 41, 59, 0.4);
-  backdrop-filter: blur(20px);
-  -webkit-backdrop-filter: blur(20px);
-  border: 1px solid rgba(100, 255, 218, 0.1);
-  border-radius: var(--radius-2xl);
-  padding: var(--spacing-10);
-  box-shadow: 0 20px 40px rgba(0, 0, 0, 0.2);
-  
-  @media (max-width: 640px) {
-    padding: var(--spacing-7);
-  }
+const SocialRight = styled.div`
+  display: flex;
+  align-items: center;
+  gap: 6px;
 `;
 
-const FormGroup = styled.div`
-  margin-bottom: var(--spacing-7);
-  position: relative;
+const SocialHandle = styled.span`
+  font-size: 0.72rem;
+  font-family: 'JetBrains Mono', monospace;
+  color: #3f3f46;
 `;
 
-const Label = styled.label`
-  display: block;
-  font-size: var(--text-sm);
-  font-weight: var(--font-medium);
-  color: var(--dark-300);
-  margin-bottom: var(--spacing-2);
-  margin-left: 4px;
-`;
+const ArrowSVG = () => (
+  <svg width="11" height="11" viewBox="0 0 11 11" fill="none" stroke="#3f3f46" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
+    <path d="M2 9 9 2M4 2h5v5" />
+  </svg>
+);
 
-const Input = styled.input<{ $hasError?: boolean }>`
+/* ══════════════════════════════════════════════════════════════════════════
+   RIGHT COLUMN — FORM PANEL
+   ══════════════════════════════════════════════════════════════════════════ */
+
+const FormCard = styled.div`
+  box-sizing: border-box;
   width: 100%;
-  padding: 14px 16px;
-  background: rgba(15, 23, 42, 0.6);
-  border: 1px solid ${props => props.$hasError ? 'var(--error)' : 'rgba(255, 255, 255, 0.1)'};
-  border-radius: var(--radius-lg);
-  color: var(--dark-100);
-  font-size: var(--text-base);
-  transition: all 0.3s ease;
+  height: auto;
+  min-height: fit-content;
+  border: 1px solid rgba(255, 255, 255, 0.09);
+  border-radius: 20px;
+  background: rgba(255, 255, 255, 0.025);
+  overflow: hidden;
+`;
 
-  &:focus {
-    outline: none;
-    border-color: ${props => props.$hasError ? 'var(--error)' : 'var(--accent-primary)'};
-    background: rgba(15, 23, 42, 0.8);
-    box-shadow: 0 0 0 4px ${props => props.$hasError ? 'rgba(239, 68, 68, 0.1)' : 'rgba(100, 255, 218, 0.1)'};
-  }
+const CardHead = styled.div`
+  box-sizing: border-box;
+  padding: 32px 32px 24px;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.06);
 
-  &::placeholder {
-    color: var(--dark-500);
+  @media (max-width: 1024px) { padding: 24px 24px 20px; }
+  @media (max-width: 768px)  { padding: 20px 20px 16px; }
+`;
+
+const CardTitle = styled.h2`
+  font-size: 1.2rem;
+  font-weight: 700;
+  color: #e4e4e7;
+  letter-spacing: -0.02em;
+  margin: 0 0 6px;
+`;
+
+const CardSubtitle = styled.p`
+  font-size: 0.85rem;
+  color: #52525b;
+  line-height: 1.6;
+  margin: 0;
+`;
+
+const CardBody = styled.form`
+  box-sizing: border-box;
+  padding: 32px;
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+
+  @media (max-width: 1024px) { padding: 24px; }
+  @media (max-width: 768px)  { padding: 20px; }
+`;
+
+/* Name + Email side-by-side */
+const FieldRow = styled.div`
+  box-sizing: border-box;
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 16px;
+
+  @media (max-width: 580px) {
+    grid-template-columns: 1fr;
   }
 `;
 
-const Textarea = styled.textarea<{ $hasError?: boolean }>`
+const FieldGroup = styled.div`
+  box-sizing: border-box;
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+`;
+
+const FieldLabel = styled.label`
+  font-size: 0.72rem;
+  font-weight: 600;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  color: #52525b;
+`;
+
+const fieldBase = `
+  box-sizing: border-box;
   width: 100%;
-  padding: 14px 16px;
-  background: rgba(15, 23, 42, 0.6);
-  border: 1px solid ${props => props.$hasError ? 'var(--error)' : 'rgba(255, 255, 255, 0.1)'};
-  border-radius: var(--radius-lg);
-  color: var(--dark-100);
-  font-size: var(--text-base);
-  min-height: 150px;
-  resize: vertical;
-  transition: all 0.3s ease;
+  padding: 11px 14px;
+  background: rgba(255, 255, 255, 0.03);
+  border-radius: 10px;
+  color: #e4e4e7;
+  font-size: 0.875rem;
   font-family: inherit;
+  line-height: 1.5;
+  transition: border-color 0.18s ease, background 0.18s ease, box-shadow 0.18s ease;
+
+  &::placeholder { color: #3f3f46; }
 
   &:focus {
     outline: none;
-    border-color: ${props => props.$hasError ? 'var(--error)' : 'var(--accent-primary)'};
-    background: rgba(15, 23, 42, 0.8);
-    box-shadow: 0 0 0 4px ${props => props.$hasError ? 'rgba(239, 68, 68, 0.1)' : 'rgba(100, 255, 218, 0.1)'};
-  }
-
-  &::placeholder {
-    color: var(--dark-500);
+    background: rgba(255, 255, 255, 0.05);
   }
 `;
 
-const ErrorText = styled(motion.span)`
-  display: block;
-  color: var(--error);
-  font-size: var(--text-xs);
-  margin-top: 6px;
-  margin-left: 4px;
+const FieldInput = styled.input<{ $err?: boolean }>`
+  ${fieldBase}
+  border: 1px solid ${p => p.$err ? 'rgba(239,68,68,0.55)' : 'rgba(255,255,255,0.08)'};
+  height: 44px; /* equal height across all inputs */
+
+  &:focus {
+    border-color: ${p => p.$err ? 'rgba(239,68,68,0.8)' : 'rgba(255,255,255,0.22)'};
+    box-shadow: 0 0 0 3px ${p => p.$err ? 'rgba(239,68,68,0.07)' : 'rgba(255,255,255,0.04)'};
+  }
 `;
 
-const SubmitButton = styled(motion.button)`
-  width: 100%;
-  padding: 16px;
-  background: var(--accent-gradient);
-  color: var(--dark-950);
+const FieldTextarea = styled.textarea<{ $err?: boolean }>`
+  ${fieldBase}
+  border: 1px solid ${p => p.$err ? 'rgba(239,68,68,0.55)' : 'rgba(255,255,255,0.08)'};
+  min-height: 160px;
+  resize: vertical;
+
+  &:focus {
+    border-color: ${p => p.$err ? 'rgba(239,68,68,0.8)' : 'rgba(255,255,255,0.22)'};
+    box-shadow: 0 0 0 3px ${p => p.$err ? 'rgba(239,68,68,0.07)' : 'rgba(255,255,255,0.04)'};
+  }
+`;
+
+const FieldError = styled(motion.p)`
+  font-size: 0.72rem;
+  color: rgba(239, 68, 68, 0.85);
+  margin: 0;
+  line-height: 1.4;
+`;
+
+/* Submit row — button left, email link right */
+const FormActions = styled.div`
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 16px;
+  flex-wrap: wrap;
+  padding-top: 4px; /* 24px total gap from last field via parent gap:20px + this 4px */
+
+  @media (max-width: 480px) {
+    flex-direction: column;
+    align-items: stretch;
+  }
+`;
+
+const SubmitBtn = styled(motion.button)`
+  box-sizing: border-box;
+  padding: 11px 28px;
+  background: #e4e4e7;
+  color: #09090b;
   border: none;
-  border-radius: var(--radius-lg);
-  font-weight: var(--font-bold);
-  font-size: var(--text-base);
+  border-radius: 10px;
+  font-weight: 700;
+  font-size: 0.875rem;
   cursor: pointer;
   display: flex;
   align-items: center;
   justify-content: center;
-  gap: var(--spacing-3);
-  transition: all 0.3s ease;
-  position: relative;
-  overflow: hidden;
+  gap: 8px;
+  white-space: nowrap;
+  min-height: 44px;
+  transition: background 0.18s ease, opacity 0.18s ease;
 
-  &:disabled {
-    opacity: 0.7;
-    cursor: not-allowed;
-  }
+  &:hover:not(:disabled) { background: #f4f4f5; }
+  &:disabled { opacity: 0.5; cursor: not-allowed; }
+  &:focus-visible { outline: 2px solid #64ffda; outline-offset: 2px; }
 
-  &:hover:not(:disabled) {
-    transform: translateY(-2px);
-    box-shadow: 0 10px 25px rgba(100, 255, 218, 0.25);
-  }
+  @media (max-width: 480px) { width: 100%; }
 `;
 
-const StatusMessage = styled(motion.div) <{ type: 'success' | 'error' }>`
-  padding: var(--spacing-4);
-  border-radius: var(--radius-lg);
-  margin-top: var(--spacing-6);
+const DirectLink = styled.a`
+  font-size: 0.85rem;
+  color: #3f3f46;
+  text-decoration: none;
+  transition: color 0.18s ease;
+  min-height: 44px;
   display: flex;
   align-items: center;
-  gap: var(--spacing-3);
-  background: ${props => props.type === 'success' ? 'rgba(16, 185, 129, 0.1)' : 'rgba(239, 68, 68, 0.1)'};
-  border: 1px solid ${props => props.type === 'success' ? 'rgba(16, 185, 129, 0.2)' : 'rgba(239, 68, 68, 0.2)'};
-  color: ${props => props.type === 'success' ? 'var(--success)' : 'var(--error)'};
-  font-size: var(--text-sm);
+
+  &:hover { color: #71717a; }
+  &:focus-visible { outline: 2px solid #64ffda; outline-offset: 2px; border-radius: 2px; }
+
+  @media (max-width: 480px) { justify-content: center; }
 `;
 
-const FormTitle = styled.h2`
-  font-size: var(--text-2xl);
-  color: var(--dark-50);
-  font-weight: var(--font-bold);
-  margin-bottom: var(--spacing-2);
-  letter-spacing: -0.025em;
-`;
-
-const FormSubtitle = styled.p`
-  color: var(--dark-400);
-  font-size: var(--text-sm);
-  margin-bottom: var(--spacing-8);
+const StatusBanner = styled(motion.div)<{ $t: 'success' | 'error' }>`
+  box-sizing: border-box;
+  padding: 14px 16px;
+  border-radius: 10px;
+  border: 1px solid ${p => p.$t === 'success' ? 'rgba(74,222,128,0.2)' : 'rgba(239,68,68,0.2)'};
+  background: ${p => p.$t === 'success' ? 'rgba(74,222,128,0.05)' : 'rgba(239,68,68,0.05)'};
+  color: ${p => p.$t === 'success' ? '#4ade80' : 'rgba(239,68,68,0.9)'};
+  font-size: 0.875rem;
   line-height: 1.5;
 `;
 
-// Icons
-const GitHubIcon = () => (
-  <svg viewBox="0 0 24 24">
-    <path d="M12 0c-6.626 0-12 5.373-12 12 0 5.302 3.438 9.8 8.207 11.387.599.111.793-.261.793-.577v-2.234c-3.338.726-4.033-1.416-4.033-1.416-.546-1.387-1.333-1.756-1.333-1.756-1.089-.745.083-.729.083-.729 1.205.084 1.839 1.237 1.839 1.237 1.07 1.834 2.807 1.304 3.492.997.107-.775.418-1.305.762-1.604-2.665-.305-5.467-1.334-5.467-5.931 0-1.311.469-2.381 1.236-3.221-.124-.303-.535-1.524.117-3.176 0 0 1.008-.322 3.301 1.23.957-.266 1.983-.399 3.003-.404 1.02.005 2.047.138 3.006.404 2.291-1.552 3.297-1.23 3.297-1.23.653 1.653.242 2.874.118 3.176.77.84 1.235 1.911 1.235 3.221 0 4.609-2.807 5.624-5.479 5.921.43.372.823 1.102.823 2.222v3.293c0 .319.192.694.801.576 4.765-1.589 8.199-6.086 8.199-11.386 0-6.627-5.373-12-12-12z" />
-  </svg>
+const Spinner = () => (
+  <motion.span
+    animate={{ rotate: 360 }}
+    transition={{ repeat: Infinity, duration: 0.9, ease: 'linear' }}
+    style={{ display: 'inline-block', width: 13, height: 13, border: '2px solid rgba(9,9,11,0.2)', borderTopColor: '#09090b', borderRadius: '50%' }}
+  />
 );
 
-const LinkedInIcon = () => (
-  <svg viewBox="0 0 24 24">
-    <path d="M20.447 20.452h-3.554v-5.569c0-1.328-.027-3.037-1.852-3.037-1.853 0-2.136 1.445-2.136 2.939v5.667H9.351V9h3.414v1.561h.046c.477-.9 1.637-1.85 3.37-1.85 3.601 0 4.267 2.37 4.267 5.455v6.286zM5.337 7.433c-1.144 0-2.063-.926-2.063-2.065 0-1.138.92-2.063 2.063-2.063 1.14 0 2.064.925 2.064 2.063 0 1.139-.925 2.065-2.064 2.065zm1.782 13.019H3.555V9h3.564v11.452zM22.225 0H1.771C.792 0 0 .774 0 1.729v20.542C0 23.227.792 24 1.771 24h20.451C23.2 24 24 23.227 24 22.271V1.729C24 .774 23.2 0 22.222 0h.003z" />
-  </svg>
-);
+/* ─── SVG icons ──────────────────────────────────────────────────────────── */
 
-const InstagramIcon = () => (
-  <svg viewBox="0 0 24 24">
-    <path d="M12 2.163c3.204 0 3.584.012 4.85.07 3.252.148 4.771 1.691 4.919 4.919.058 1.265.069 1.645.069 4.849 0 3.205-.012 3.584-.069 4.849-.149 3.225-1.664 4.771-4.919 4.919-1.266.058-1.644.07-4.85.07-3.204 0-3.584-.012-4.849-.07-3.26-.149-4.771-1.699-4.919-4.92-.058-1.265-.07-1.644-.07-4.849 0-3.204.013-3.583.07-4.849.149-3.227 1.664-4.771 4.919-4.919 1.266-.057 1.645-.069 4.849-.069zm0-2.163c-3.259 0-3.667.014-4.947.072-4.358.2-6.78 2.618-6.98 6.98-.059 1.281-.073 1.689-.073 4.948 0 3.259.014 3.668.072 4.948.2 4.358 2.618 6.78 6.98 6.98 1.281.058 1.689.072 4.948.072 3.259 0 3.668-.014 4.948-.072 4.354-.2 6.782-2.618 6.979-6.98.059-1.28.073-1.689.073-4.948 0-3.259-.014-3.667-.072-4.947-.196-4.354-2.617-6.78-6.979-6.98-1.281-.059-1.69-.073-4.949-.073zm0 5.838c-3.403 0-6.162 2.759-6.162 6.162s2.759 6.163 6.162 6.163 6.162-2.759 6.162-6.163c0-3.403-2.759-6.162-6.162-6.162zm0 10.162c-2.209 0-4-1.79-4-4 0-2.209 1.791-4 4-4s4 1.791 4 4c0 2.21-1.791 4-4 4zm6.406-11.845c-.796 0-1.441.645-1.441 1.44s.645 1.44 1.441 1.44c.795 0 1.439-.645 1.439-1.44s-.644-1.44-1.439-1.44z" />
-  </svg>
-);
+const GitHubSVG    = () => <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 0c-6.626 0-12 5.373-12 12 0 5.302 3.438 9.8 8.207 11.387.599.111.793-.261.793-.577v-2.234c-3.338.726-4.033-1.416-4.033-1.416-.546-1.387-1.333-1.756-1.333-1.756-1.089-.745.083-.729.083-.729 1.205.084 1.839 1.237 1.839 1.237 1.07 1.834 2.807 1.304 3.492.997.107-.775.418-1.305.762-1.604-2.665-.305-5.467-1.334-5.467-5.931 0-1.311.469-2.381 1.236-3.221-.124-.303-.535-1.524.117-3.176 0 0 1.008-.322 3.301 1.23.957-.266 1.983-.399 3.003-.404 1.02.005 2.047.138 3.006.404 2.291-1.552 3.297-1.23 3.297-1.23.653 1.653.242 2.874.118 3.176.77.84 1.235 1.911 1.235 3.221 0 4.609-2.807 5.624-5.479 5.921.43.372.823 1.102.823 2.222v3.293c0 .319.192.694.801.576 4.765-1.589 8.199-6.086 8.199-11.386 0-6.627-5.373-12-12-12z"/></svg>;
+const LinkedInSVG  = () => <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M20.447 20.452h-3.554v-5.569c0-1.328-.027-3.037-1.852-3.037-1.853 0-2.136 1.445-2.136 2.939v5.667H9.351V9h3.414v1.561h.046c.477-.9 1.637-1.85 3.37-1.85 3.601 0 4.267 2.37 4.267 5.455v6.286zM5.337 7.433c-1.144 0-2.063-.926-2.063-2.065 0-1.138.92-2.063 2.063-2.063 1.14 0 2.064.925 2.064 2.063 0 1.139-.925 2.065-2.064 2.065zm1.782 13.019H3.555V9h3.564v11.452zM22.225 0H1.771C.792 0 0 .774 0 1.729v20.542C0 23.227.792 24 1.771 24h20.451C23.2 24 24 23.227 24 22.271V1.729C24 .774 23.2 0 22.222 0h.003z"/></svg>;
+const InstagramSVG = () => <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 2.163c3.204 0 3.584.012 4.85.07 3.252.148 4.771 1.691 4.919 4.919.058 1.265.069 1.645.069 4.849 0 3.205-.012 3.584-.069 4.849-.149 3.225-1.664 4.771-4.919 4.919-1.266.058-1.644.07-4.85.07-3.204 0-3.584-.012-4.849-.07-3.26-.149-4.771-1.699-4.919-4.92-.058-1.265-.07-1.644-.07-4.849 0-3.204.013-3.583.07-4.849.149-3.227 1.664-4.771 4.919-4.919 1.266-.057 1.645-.069 4.849-.069zm0-2.163c-3.259 0-3.667.014-4.947.072-4.358.2-6.78 2.618-6.98 6.98-.059 1.281-.073 1.689-.073 4.948 0 3.259.014 3.668.072 4.948.2 4.358 2.618 6.78 6.98 6.98 1.281.058 1.689.072 4.948.072 3.259 0 3.668-.014 4.948-.072 4.354-.2 6.782-2.618 6.979-6.98.059-1.28.073-1.689.073-4.948 0-3.259-.014-3.667-.072-4.947-.196-4.354-2.617-6.78-6.979-6.98-1.281-.059-1.69-.073-4.949-.073zm0 5.838c-3.403 0-6.162 2.759-6.162 6.162s2.759 6.163 6.162 6.163 6.162-2.759 6.162-6.163c0-3.403-2.759-6.162-6.162-6.162zm0 10.162c-2.209 0-4-1.79-4-4 0-2.209 1.791-4 4-4s4 1.791 4 4c0 2.21-1.791 4-4 4zm6.406-11.845c-.796 0-1.441.645-1.441 1.44s.645 1.44 1.441 1.44c.795 0 1.439-.645 1.439-1.44s-.644-1.44-1.439-1.44z"/></svg>;
+const DevToSVG     = () => <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M7.42 10.05c-.18-.16-.46-.23-.84-.23H6l.02 2.44.04 2.45.56-.02c.41 0 .63-.07.83-.26.24-.24.26-.36.26-2.2 0-1.91-.02-1.96-.29-2.18zM0 4.94v14.12h24V4.94H0zM8.56 15.3c-.44.58-1.06.77-2.53.77H4.71V8.53h1.4c1.67 0 2.16.18 2.6.9.27.43.29.6.32 2.57.05 2.23-.02 2.73-.47 3.3zm5.09-5.47h-2.47v1.77h1.52v1.28l-.72.04-.75.03v1.77l1.22.03 1.2.04v1.28h-1.6c-1.53 0-1.6-.01-1.87-.3l-.3-.28v-3.16c0-3.02.01-3.18.25-3.48.23-.31.25-.31 1.88-.31h1.64v1.29zm4.68 5.45c-.17.43-.64.79-1 .79-.18 0-.45-.15-.67-.39-.32-.32-.45-.63-.82-2.08l-.9-3.39-.45-1.67h.76c.4 0 .75.02.75.05 0 .06 1.16 4.54 1.26 4.83.04.15.32-.7.73-2.3l.66-2.52.74-.04c.4-.02.74 0 .74.04 0 .14-1.67 6.38-1.8 6.68z"/></svg>;
 
-const DevToIcon = () => (
-  <svg viewBox="0 0 24 24">
-    <path d="M7.42 10.05c-.18-.16-.46-.23-.84-.23H6l.02 2.44.04 2.45.56-.02c.41 0 .63-.07.83-.26.24-.24.26-.36.26-2.2 0-1.91-.02-1.96-.29-2.18zM0 4.94v14.12h24V4.94H0zM8.56 15.3c-.44.58-1.06.77-2.53.77H4.71V8.53h1.4c1.67 0 2.16.18 2.6.9.27.43.29.6.32 2.57.05 2.23-.02 2.73-.47 3.3zm5.09-5.47h-2.47v1.77h1.52v1.28l-.72.04-.75.03v1.77l1.22.03 1.2.04v1.28h-1.6c-1.53 0-1.6-.01-1.87-.3l-.3-.28v-3.16c0-3.02.01-3.18.25-3.48.23-.31.25-.31 1.88-.31h1.64v1.29zm4.68 5.45c-.17.43-.64.79-1 .79-.18 0-.45-.15-.67-.39-.32-.32-.45-.63-.82-2.08l-.9-3.39-.45-1.67h.76c.4 0 .75.02.75.05 0 .06 1.16 4.54 1.26 4.83.04.15.32-.7.73-2.3l.66-2.52.74-.04c.4-.02.74 0 .74.04 0 .14-1.67 6.38-1.8 6.68z" />
-  </svg>
-);
+/* ─── Data ────────────────────────────────────────────────────────────────── */
 
-const MailIcon = () => (
-  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
-    <rect x="2" y="4" width="20" height="16" rx="2" />
-    <path d="m22 7-8.97 5.7a1.94 1.94 0 0 1-2.06 0L2 7" />
-  </svg>
-);
+const socials = [
+  { name: 'GitHub',    handle: 'Mrtracker-new', href: 'https://github.com/Mrtracker-new',        Icon: GitHubSVG    },
+  { name: 'LinkedIn',  handle: 'rolan-lobo',     href: 'https://www.linkedin.com/in/rolan-lobo/', Icon: LinkedInSVG  },
+  { name: 'Instagram', handle: 'rolan_r_n_r',    href: 'https://www.instagram.com/rolan_r_n_r/',  Icon: InstagramSVG },
+  { name: 'Dev.to',    handle: 'rolan_r_n_r',    href: 'https://dev.to/rolan_r_n_r',              Icon: DevToSVG     },
+];
 
-// --- Component ---
+/* ─── Types ───────────────────────────────────────────────────────────────── */
 
-interface FormData {
-  name: string;
-  email: string;
-  subject: string;
-  message: string;
-}
+interface FD { name: string; email: string; subject: string; message: string; }
+interface FE { name?: string; email?: string; subject?: string; message?: string; }
 
-interface FormErrors {
-  name?: string;
-  email?: string;
-  subject?: string;
-  message?: string;
-}
-
-const containerVariants = {
-  hidden: { opacity: 0 },
-  visible: {
-    opacity: 1,
-    transition: { staggerChildren: 0.1, delayChildren: 0.1 }
-  }
-};
-
-const itemSlideLeft = {
-  hidden: { opacity: 0, x: -30 },
-  visible: { opacity: 1, x: 0, transition: { duration: 0.6 } }
-};
-
-const itemSlideRight = {
-  hidden: { opacity: 0, x: 30 },
-  visible: { opacity: 1, x: 0, transition: { duration: 0.6 } }
-};
+/* ══════════════════════════════════════════════════════════════════════════
+   COMPONENT
+   ══════════════════════════════════════════════════════════════════════════ */
 
 const Contact: React.FC = () => {
+  const [form, setForm]   = useState<FD>({ name: '', email: '', subject: '', message: '' });
+  const [errs, setErrs]   = useState<FE>({});
+  const [busy, setBusy]   = useState(false);
+  const [status, setStatus] = useState<{ t: 'success' | 'error'; msg: string } | null>(null);
 
-  const [formData, setFormData] = useState<FormData>({
-    name: '',
-    email: '',
-    subject: '',
-    message: ''
-  });
-  const [errors, setErrors] = useState<FormErrors>({});
-  const [isSubmitting, setIsSubmitting] = useState(false);
-  const [status, setStatus] = useState<{ type: 'success' | 'error', message: string } | null>(null);
-
-  const handleInputChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
+  const change = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
     const { name, value } = e.target;
-    setFormData(prev => ({ ...prev, [name]: value }));
-    if (errors[name as keyof FormErrors]) {
-      setErrors(prev => ({ ...prev, [name]: undefined }));
-    }
+    setForm(p => ({ ...p, [name]: value }));
+    if (errs[name as keyof FE]) setErrs(p => ({ ...p, [name]: undefined }));
   };
 
-  const validateForm = (): boolean => {
-    const newErrors: FormErrors = {};
-    if (!formData.name.trim()) newErrors.name = 'Please enter your name';
-    if (!formData.email.trim()) newErrors.email = 'Email is required';
-    else if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(formData.email)) newErrors.email = 'Please enter a valid email address';
-    if (!formData.subject.trim()) newErrors.subject = 'Subject is required';
-    if (!formData.message.trim()) newErrors.message = 'Message is required';
-    else if (formData.message.length < 10) newErrors.message = 'Message must be at least 10 characters';
-
-    setErrors(newErrors);
-    return Object.keys(newErrors).length === 0;
+  const validate = (): boolean => {
+    const e: FE = {};
+    if (!form.name.trim())    e.name    = 'Name is required';
+    if (!form.email.trim())   e.email   = 'Email is required';
+    else if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(form.email)) e.email = 'Enter a valid email';
+    if (!form.subject.trim()) e.subject = 'Subject is required';
+    if (!form.message.trim()) e.message = 'Message is required';
+    else if (form.message.length < 10) e.message = 'At least 10 characters';
+    setErrs(e);
+    return !Object.keys(e).length;
   };
 
-  const handleSubmit = async (e: React.FormEvent) => {
+  const submit = async (e: React.FormEvent) => {
     e.preventDefault();
-    if (!validateForm()) return;
-
-    setIsSubmitting(true);
+    if (!validate()) return;
+    setBusy(true);
     setStatus(null);
-
     try {
-      const formDataToSubmit = new URLSearchParams();
-      formDataToSubmit.append('form-name', 'contact');
-      formDataToSubmit.append('name', formData.name);
-      formDataToSubmit.append('email', formData.email);
-      formDataToSubmit.append('subject', formData.subject);
-      formDataToSubmit.append('message', formData.message);
-
-      if (window.location.hostname === 'localhost' || window.location.hostname === '127.0.0.1') {
-        await new Promise(resolve => setTimeout(resolve, 1000));
-        setStatus({ type: 'success', message: "Got it! Rolan will be in touch within 24 hours." });
-        setFormData({ name: '', email: '', subject: '', message: '' });
+      const body = new URLSearchParams({ 'form-name': 'contact', ...form });
+      if (['localhost', '127.0.0.1'].includes(window.location.hostname)) {
+        await new Promise(r => setTimeout(r, 800));
+        setStatus({ t: 'success', msg: "Got it — I'll reply within 24 hours." });
+        setForm({ name: '', email: '', subject: '', message: '' });
         return;
       }
-
-      const response = await fetch('/', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
-        body: formDataToSubmit.toString()
-      });
-
-      if (response.ok) {
-        setStatus({ type: 'success', message: "Got it! Rolan will be in touch within 24 hours." });
-        setFormData({ name: '', email: '', subject: '', message: '' });
-      } else {
-        throw new Error('Network response was not ok');
-      }
-    } catch (error) {
-      console.error('Form submission failed:', error);
-      setStatus({ type: 'error', message: 'Something went wrong. Please try again or email me directly.' });
-    } finally {
-      setIsSubmitting(false);
-    }
+      const res = await fetch('/', { method: 'POST', headers: { 'Content-Type': 'application/x-www-form-urlencoded' }, body: body.toString() });
+      if (res.ok) { setStatus({ t: 'success', msg: "Got it — I'll reply within 24 hours." }); setForm({ name: '', email: '', subject: '', message: '' }); }
+      else throw new Error();
+    } catch { setStatus({ t: 'error', msg: 'Something went wrong. Email me directly at rolanlobo901@gmail.com' }); }
+    finally { setBusy(false); }
   };
 
   return (
     <>
       <SEO
         title="Work With Me — Rolan Lobo"
-        description="Have a project that needs privacy-first thinking, encryption engineering, or cross-platform development? I'm open to new projects for Q3 2026. Let's talk."
+        description="Open to freelance, contract, and full-time roles. Privacy-first engineering, cross-platform development, and encryption tools. Reply within 24 hours."
         keywords="Contact Rolan Lobo, Rolan RNR, Hire Software Developer, Freelance Developer India, Privacy Developer, Security Software Consultant"
         url="https://rolan-rnr.netlify.app/contact"
       />
       <FAQSchema />
 
-      <ContactHero>
-        <Container>
-          <HeroTitle
-            initial={{ opacity: 0, y: 30 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.6 }}
-          >
-            Let's build something<br />great together.
-          </HeroTitle>
-          <HeroSubtitle
-            initial={{ opacity: 0, y: 20 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.6, delay: 0.2 }}
-          >
-            Got an idea? A project? Or just want to say hi?
-            <br />I read every message and reply within 24 hours.
-          </HeroSubtitle>
-          <AvailabilityBanner
-            initial={{ opacity: 0, y: 16 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.5, delay: 0.35 }}
-          >
-            <StatusDot aria-hidden="true" />
-            Currently accepting projects for Q3 2026
-          </AvailabilityBanner>
-        </Container>
-      </ContactHero>
+      <PageWrapper>
+        <Wrap>
+          <Grid>
 
-      <ContactContent
-        as={motion.div}
-        variants={containerVariants}
-        initial="hidden"
-        animate="visible"
-      >
-        <InfoColumn variants={itemSlideLeft}>
-          {/* What I Can Build */}
-          <ServicesCard>
-            <ServicesTitle><span>🛠️</span> What I Can Build For You</ServicesTitle>
-            <ServicesList>
-              <ServiceItem>
-                <ServiceIcon>🌐</ServiceIcon>
-                <ServiceText>
-                  <strong>Full-Stack Web Apps</strong>
-                  React, TypeScript, Node.js/Flask — from prototype to production deployment on Netlify, Vercel, or your infrastructure.
-                </ServiceText>
-              </ServiceItem>
-              <ServiceItem>
-                <ServiceIcon>🖥️</ServiceIcon>
-                <ServiceText>
-                  <strong>Desktop Applications</strong>
-                  Offline-first Windows tools with PyQt5 or Electron — installable .exe, no cloud dependency, full local control.
-                </ServiceText>
-              </ServiceItem>
-              <ServiceItem>
-                <ServiceIcon>📱</ServiceIcon>
-                <ServiceText>
-                  <strong>Android & iOS Apps</strong>
-                  Flutter or React Native PWAs — cross-platform, offline-capable, APK-ready for distribution.
-                </ServiceText>
-              </ServiceItem>
-              <ServiceItem>
-                <ServiceIcon>🔒</ServiceIcon>
-                <ServiceText>
-                  <strong>Security Integrations</strong>
-                  AES-256 encryption, zero-knowledge architectures, steganography, self-destructing file systems, and E2E messaging.
-                </ServiceText>
-              </ServiceItem>
-            </ServicesList>
-          </ServicesCard>
+            {/* ══ LEFT — INFO PANEL ══════════════════════════════════════ */}
+            <InfoPanel>
 
-          {/* Availability + Pricing */}
-          <AvailabilityCard>
-            <AvailabilityTitle><span>📅</span> Availability & Scope</AvailabilityTitle>
-            <AvailabilityGrid>
-              <AvailabilityRow>
-                <AvailabilityRowIcon>🟢</AvailabilityRowIcon>
-                <AvailabilityRowText>
-                  <strong>Open for Q3 2026</strong>
-                  <span>Accepting new projects now · Response within 24h</span>
-                </AvailabilityRowText>
-              </AvailabilityRow>
-              <AvailabilityRow>
-                <AvailabilityRowIcon>🌍</AvailabilityRowIcon>
-                <AvailabilityRowText>
-                  <strong>Remote-First, Worldwide</strong>
-                  <span>Karnataka, India (IST · UTC+5:30) · Async-friendly</span>
-                </AvailabilityRowText>
-              </AvailabilityRow>
-              <AvailabilityRow>
-                <AvailabilityRowIcon>💼</AvailabilityRowIcon>
-                <AvailabilityRowText>
-                  <strong>Project Types</strong>
-                  <span>Freelance · Contract · Full-time · Open-source collab</span>
-                </AvailabilityRowText>
-              </AvailabilityRow>
-            </AvailabilityGrid>
-            <EmailQuickTap
-              href="mailto:rolanlobo901@gmail.com?subject=Project Inquiry"
-              aria-label="Email Rolan Lobo directly"
+              {/* Intro */}
+              <IntroSection>
+                <PageLabel>Contact</PageLabel>
+                <Headline>Let's build<br />something good.</Headline>
+                <Subline>
+                  Open to freelance projects, contracts, and collaborations.
+                  I read every message and reply within 24 hours with honest
+                  thoughts on how I can help.
+                </Subline>
+                <AvailPill>
+                  <PulseDot aria-hidden="true" />
+                  Open for Q3 2026
+                </AvailPill>
+              </IntroSection>
+
+              {/* Details */}
+              <DetailsSection>
+                <BlockLabel>Details</BlockLabel>
+                <DetailsTable>
+                  {[
+                    ['Location',    'Karnataka, India'],
+                    ['Timezone',    'IST · UTC +5:30'],
+                    ['Response',    'Within 24 hours'],
+                    ['Work type',   'Remote · Async-friendly'],
+                    ['Engagements', 'Freelance · Contract · Full-time'],
+                  ].map(([k, v]) => (
+                    <DetailsRow key={k}>
+                      <DetailsKey>{k}</DetailsKey>
+                      <DetailsVal>{v}</DetailsVal>
+                    </DetailsRow>
+                  ))}
+                </DetailsTable>
+              </DetailsSection>
+
+            </InfoPanel>
+
+            {/* ══ RIGHT — FORM CARD ═════════════════════════════════════ */}
+            <motion.div
+              initial={{ opacity: 0, y: 16 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ duration: 0.5, delay: 0.15, ease: [0.22, 1, 0.36, 1] }}
             >
-              <MailIcon />
-              rolanlobo901@gmail.com
-            </EmailQuickTap>
-          </AvailabilityCard>
+              <FormCard>
+                <CardHead>
+                  <CardTitle>Send a message</CardTitle>
+                  <CardSubtitle>
+                    Tell me what you're working on — I'll respond with honest thoughts on how I can help.
+                  </CardSubtitle>
+                </CardHead>
 
-          {/* Connect */}
-          <InfoCard>
-            <InfoTitle><span>🌐</span> Connect</InfoTitle>
-            <SocialGrid>
-              <SocialCardButton
-                href="https://github.com/Mrtracker-new"
-                target="_blank" rel="noopener noreferrer"
-                whileHover={{ scale: 1.02 }}
-                whileTap={{ scale: 0.98 }}
-              >
-                <GitHubIcon />
-                <span>GitHub</span>
-              </SocialCardButton>
-              <SocialCardButton
-                href="https://www.linkedin.com/in/rolan-lobo/"
-                target="_blank" rel="noopener noreferrer"
-                whileHover={{ scale: 1.02 }}
-                whileTap={{ scale: 0.98 }}
-              >
-                <LinkedInIcon />
-                <span>LinkedIn</span>
-              </SocialCardButton>
-              <SocialCardButton
-                href="https://www.instagram.com/rolan_r_n_r/"
-                target="_blank" rel="noopener noreferrer"
-                whileHover={{ scale: 1.02 }}
-                whileTap={{ scale: 0.98 }}
-              >
-                <InstagramIcon />
-                <span>Instagram</span>
-              </SocialCardButton>
-              <SocialCardButton
-                href="https://dev.to/rolan_r_n_r"
-                target="_blank" rel="noopener noreferrer"
-                whileHover={{ scale: 1.02 }}
-                whileTap={{ scale: 0.98 }}
-              >
-                <DevToIcon />
-                <span>Dev.to</span>
-              </SocialCardButton>
-            </SocialGrid>
-          </InfoCard>
-        </InfoColumn>
+                <CardBody
+                  name="contact"
+                  method="POST"
+                  data-netlify="true"
+                  data-netlify-honeypot="bot-field"
+                  onSubmit={submit}
+                >
+                  <input type="hidden" name="form-name" value="contact" />
+                  <p hidden><label>Don't fill this: <input name="bot-field" /></label></p>
 
-        <FormColumn variants={itemSlideRight}>
-          <StyledForm
-            name="contact"
-            method="POST"
-            data-netlify="true"
-            data-netlify-honeypot="bot-field"
-            onSubmit={handleSubmit}
-          >
-            <input type="hidden" name="form-name" value="contact" />
-            <p hidden>
-              <label>Don't fill this out: <input name="bot-field" /></label>
-            </p>
+                  {/* Name + Email */}
+                  <FieldRow>
+                    <FieldGroup>
+                      <FieldLabel htmlFor="c-name">Name <span aria-hidden="true">*</span></FieldLabel>
+                      <FieldInput
+                        type="text" id="c-name" name="name" required aria-required="true"
+                        aria-describedby={errs.name ? 'c-name-err' : undefined}
+                        placeholder="Your name" value={form.name} onChange={change} $err={!!errs.name}
+                      />
+                      <AnimatePresence>
+                        {errs.name && <FieldError id="c-name-err" role="alert" initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }}>{errs.name}</FieldError>}
+                      </AnimatePresence>
+                    </FieldGroup>
 
-            <FormTitle>Send a Message</FormTitle>
-            <FormSubtitle>
-              Tell me what you're working on — I'll respond within 24 hours with honest thoughts on how I can help.
-            </FormSubtitle>
+                    <FieldGroup>
+                      <FieldLabel htmlFor="c-email">Email <span aria-hidden="true">*</span></FieldLabel>
+                      <FieldInput
+                        type="email" id="c-email" name="email" required aria-required="true"
+                        aria-describedby={errs.email ? 'c-email-err' : undefined}
+                        placeholder="you@example.com" value={form.email} onChange={change} $err={!!errs.email}
+                      />
+                      <AnimatePresence>
+                        {errs.email && <FieldError id="c-email-err" role="alert" initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }}>{errs.email}</FieldError>}
+                      </AnimatePresence>
+                    </FieldGroup>
+                  </FieldRow>
 
-            <FormGroup>
-              <Label htmlFor="name">Your Name <span aria-hidden="true">*</span></Label>
-              <Input
-                type="text"
-                id="name"
-                name="name"
-                required
-                aria-required="true"
-                aria-describedby={errors.name ? 'name-error' : undefined}
-                placeholder="What should I call you?"
-                value={formData.name}
-                onChange={handleInputChange}
-                $hasError={!!errors.name}
-              />
-              {errors.name && <ErrorText id="name-error" role="alert" initial={{ opacity: 0 }} animate={{ opacity: 1 }}>{errors.name}</ErrorText>}
-            </FormGroup>
+                  {/* Subject */}
+                  <FieldGroup>
+                    <FieldLabel htmlFor="c-subject">Subject <span aria-hidden="true">*</span></FieldLabel>
+                    <FieldInput
+                      type="text" id="c-subject" name="subject" required aria-required="true"
+                      aria-describedby={errs.subject ? 'c-sub-err' : undefined}
+                      placeholder="What's on your mind?" value={form.subject} onChange={change} $err={!!errs.subject}
+                    />
+                    <AnimatePresence>
+                      {errs.subject && <FieldError id="c-sub-err" role="alert" initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }}>{errs.subject}</FieldError>}
+                    </AnimatePresence>
+                  </FieldGroup>
 
-            <FormGroup>
-              <Label htmlFor="email">Email Address <span aria-hidden="true">*</span></Label>
-              <Input
-                type="email"
-                id="email"
-                name="email"
-                required
-                aria-required="true"
-                aria-describedby={errors.email ? 'email-error' : undefined}
-                placeholder="you@example.com"
-                value={formData.email}
-                onChange={handleInputChange}
-                $hasError={!!errors.email}
-              />
-              {errors.email && <ErrorText id="email-error" role="alert" initial={{ opacity: 0 }} animate={{ opacity: 1 }}>{errors.email}</ErrorText>}
-            </FormGroup>
+                  {/* Message */}
+                  <FieldGroup>
+                    <FieldLabel htmlFor="c-message">Message <span aria-hidden="true">*</span></FieldLabel>
+                    <FieldTextarea
+                      id="c-message" name="message" required aria-required="true"
+                      aria-describedby={errs.message ? 'c-msg-err' : undefined}
+                      placeholder="Tell me about the project, what you need, or just say hello…"
+                      value={form.message} onChange={change} $err={!!errs.message}
+                    />
+                    <AnimatePresence>
+                      {errs.message && <FieldError id="c-msg-err" role="alert" initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }}>{errs.message}</FieldError>}
+                    </AnimatePresence>
+                  </FieldGroup>
 
-            <FormGroup>
-              <Label htmlFor="subject">Subject <span aria-hidden="true">*</span></Label>
-              <Input
-                type="text"
-                id="subject"
-                name="subject"
-                required
-                aria-required="true"
-                aria-describedby={errors.subject ? 'subject-error' : undefined}
-                placeholder="What's on your mind?"
-                value={formData.subject}
-                onChange={handleInputChange}
-                $hasError={!!errors.subject}
-              />
-              {errors.subject && <ErrorText id="subject-error" role="alert" initial={{ opacity: 0 }} animate={{ opacity: 1 }}>{errors.subject}</ErrorText>}
-            </FormGroup>
+                  {/* Actions */}
+                  <FormActions>
+                    <SubmitBtn type="submit" disabled={busy} whileTap={{ scale: 0.97 }}>
+                      {busy ? <><Spinner />Sending…</> : 'Send message'}
+                    </SubmitBtn>
+                    <DirectLink href="mailto:rolanlobo901@gmail.com" aria-label="Email Rolan directly">
+                      or email directly
+                    </DirectLink>
+                  </FormActions>
 
-            <FormGroup>
-              <Label htmlFor="message">Message <span aria-hidden="true">*</span></Label>
-              <Textarea
-                id="message"
-                name="message"
-                required
-                aria-required="true"
-                aria-describedby={errors.message ? 'message-error' : undefined}
-                placeholder="Tell me what you're working on, what you need, or just say hello..."
-                value={formData.message}
-                onChange={handleInputChange}
-                $hasError={!!errors.message}
-              />
-              {errors.message && <ErrorText id="message-error" role="alert" initial={{ opacity: 0 }} animate={{ opacity: 1 }}>{errors.message}</ErrorText>}
-            </FormGroup>
+                  {/* Status banner */}
+                  <div aria-live="polite" aria-atomic="true">
+                    <AnimatePresence>
+                      {status && (
+                        <StatusBanner
+                          $t={status.t}
+                          initial={{ opacity: 0, y: 6 }}
+                          animate={{ opacity: 1, y: 0 }}
+                          exit={{ opacity: 0 }}
+                          transition={{ duration: 0.28 }}
+                        >
+                          {status.msg}
+                        </StatusBanner>
+                      )}
+                    </AnimatePresence>
+                  </div>
+                </CardBody>
+              </FormCard>
 
-            <SubmitButton
-              type="submit"
-              disabled={isSubmitting}
-              whileTap={{ scale: 0.98 }}
-            >
-              {isSubmitting ? (
-                <>
-                  <motion.div
-                    animate={{ rotate: 360 }}
-                    transition={{ repeat: Infinity, duration: 1, ease: 'linear' }}
-                    style={{ width: 18, height: 18, border: '2px solid rgba(0,0,0,0.2)', borderTopColor: 'currentColor', borderRadius: '50%' }}
-                  />
-                  Sending...
-                </>
-              ) : (
-                <>
-                  Send Message <span>🚀</span>
-                </>
-              )}
-            </SubmitButton>
+              {/* Social links — grouped under the form to save left-col space */}
+              <SocialsSection style={{ marginTop: 16 }}>
+                <BlockLabel>Find me on</BlockLabel>
+                <SocialList>
+                  {socials.map(({ name, handle, href, Icon }) => (
+                    <SocialLink key={name} href={href} target="_blank" rel="noopener noreferrer" aria-label={`${name} — @${handle}`}>
+                      <SocialLeft>
+                        <SocialIconBox><Icon /></SocialIconBox>
+                        <SocialName>{name}</SocialName>
+                      </SocialLeft>
+                      <SocialRight>
+                        <SocialHandle>@{handle}</SocialHandle>
+                        <ArrowSVG />
+                      </SocialRight>
+                    </SocialLink>
+                  ))}
+                </SocialList>
+              </SocialsSection>
+            </motion.div>
 
-            <div aria-live="polite" aria-atomic="true">
-              <AnimatePresence>
-                {status && (
-                  <StatusMessage
-                    type={status.type}
-                    initial={{ opacity: 0, y: 10 }}
-                    animate={{ opacity: 1, y: 0 }}
-                    exit={{ opacity: 0 }}
-                  >
-                    <span>{status.type === 'success' ? '✅' : '❌'}</span>
-                    {status.message}
-                  </StatusMessage>
-                )}
-              </AnimatePresence>
-            </div>
-          </StyledForm>
-        </FormColumn>
-      </ContactContent>
+          </Grid>
+        </Wrap>
+      </PageWrapper>
     </>
   );
 };
