@@ -1,179 +1,132 @@
 import React from 'react';
 import styled from 'styled-components';
-import { motion } from 'framer-motion';
 import { BlogPost, formatPostDate } from '../utils/devto';
 
-// Styled Components
-const Card = styled(motion.article)`
-  background: rgba(255, 255, 255, 0.02);
-  border: 1px solid rgba(255, 255, 255, 0.08);
-  border-radius: var(--radius-xl);
-  overflow: hidden;
-  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
-  height: 100%;
-  display: flex;
-  flex-direction: column;
 
-  &:hover {
-    transform: translateY(-8px);
-    border-color: rgba(100, 255, 218, 0.3);
-    box-shadow: 0 20px 40px rgba(100, 255, 218, 0.1);
+
+const Article = styled.article`
+  display: grid;
+  grid-template-columns: 1fr auto;
+  align-items: start;
+  gap: var(--spacing-6);
+  padding: var(--spacing-6) 0;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+  cursor: pointer;
+  transition: none;
+
+  &:last-child { border-bottom: none; }
+
+  &:hover .post-title { color: var(--dark-50); }
+  &:hover .post-arrow { color: var(--accent-primary); transform: translate(2px, -2px); }
+  &:hover .post-thumb img { filter: brightness(0.9); }
+
+  @media (max-width: 640px) {
+    grid-template-columns: 1fr;
+    gap: var(--spacing-4);
   }
 `;
 
-const CoverImage = styled.div<{ $imageUrl?: string }>`
-  width: 100%;
-  aspect-ratio: 16 / 9;
-  background: ${props => props.$imageUrl
-    ? `url(${props.$imageUrl})`
-    : 'linear-gradient(135deg, rgba(100, 255, 218, 0.1) 0%, rgba(139, 92, 246, 0.1) 100%)'
-  };
-  background-size: cover;
-  background-position: center;
-  position: relative;
-  overflow: hidden;
-
-  &::after {
-    content: '';
-    position: absolute;
-    inset: 0;
-    background: linear-gradient(180deg, transparent 0%, rgba(9, 9, 11, 0.8) 100%);
-  }
-`;
-
-const Content = styled.div`
-  padding: var(--spacing-6);
+const PostLeft = styled.div`
   display: flex;
   flex-direction: column;
   gap: var(--spacing-3);
-  flex: 1;
+  min-width: 0;
 `;
 
-const Title = styled.h3`
-  font-size: var(--text-xl);
-  font-weight: var(--font-bold);
-  color: var(--dark-100);
-  line-height: 1.4;
-  margin: 0;
+const PostMeta = styled.div`
+  display: flex;
+  align-items: center;
+  gap: var(--spacing-3);
+  flex-wrap: wrap;
+`;
+
+const PostDate = styled.time`
+  font-size: 0.72rem;
+  font-family: var(--font-mono);
+  color: var(--dark-600);
+  letter-spacing: 0.04em;
+`;
+
+const MetaDot = styled.span`
+  width: 3px;
+  height: 3px;
+  border-radius: 50%;
+  background: var(--dark-700);
+  flex-shrink: 0;
+`;
+
+const PostTag = styled.span`
+  font-size: 0.68rem;
+  font-weight: var(--font-medium);
+  color: var(--dark-600);
+  letter-spacing: 0.04em;
+`;
+
+const PostTitle = styled.h3`
+  font-size: var(--text-lg);
+  font-weight: var(--font-semibold);
+  color: var(--dark-200);
+  line-height: 1.35;
+  letter-spacing: -0.015em;
+  transition: color 0.18s ease;
+
+  @media (max-width: 640px) { font-size: var(--text-base); }
+`;
+
+const PostExcerpt = styled.p`
+  font-size: var(--text-sm);
+  color: var(--dark-600);
+  line-height: 1.65;
   display: -webkit-box;
   -webkit-line-clamp: 2;
   -webkit-box-orient: vertical;
   overflow: hidden;
-  text-overflow: ellipsis;
 `;
 
-const Excerpt = styled.p`
-  font-size: var(--text-sm);
-  color: var(--dark-400);
-  line-height: 1.6;
-  margin: 0;
-  display: -webkit-box;
-  -webkit-line-clamp: 3;
-  -webkit-box-orient: vertical;
-  overflow: hidden;
-  text-overflow: ellipsis;
-  flex: 1;
-`;
-
-const Meta = styled.div`
+const PostRight = styled.div`
   display: flex;
-  align-items: center;
-  justify-content: space-between;
+  flex-direction: column;
+  align-items: flex-end;
   gap: var(--spacing-3);
-  padding-top: var(--spacing-3);
-  border-top: 1px solid rgba(255, 255, 255, 0.05);
-  margin-top: auto;
-  flex-wrap: wrap;
-  
-  @media (max-width: 768px) {
-    gap: var(--spacing-2);
-  }
-`;
-
-const Date = styled.time`
-  font-size: var(--text-xs);
-  color: var(--dark-500);
-  text-transform: uppercase;
-  letter-spacing: 0.05em;
-`;
-
-const TagsContainer = styled.div`
-  display: flex;
-  gap: var(--spacing-2);
-  flex-wrap: wrap;
-  margin-top: var(--spacing-2);
-`;
-
-const Tag = styled.span`
-  font-size: var(--text-xs);
-  color: var(--accent-primary);
-  background: rgba(100, 255, 218, 0.1);
-  padding: var(--spacing-1) var(--spacing-2);
-  border-radius: var(--radius-md);
-  border: 1px solid rgba(100, 255, 218, 0.2);
-`;
-
-const ReadMoreButton = styled.a`
-  display: inline-flex;
-  align-items: center;
-  gap: var(--spacing-2);
-  padding: var(--spacing-2) var(--spacing-4);
-  background: rgba(100, 255, 218, 0.1);
-  border: 1px solid rgba(100, 255, 218, 0.3);
-  border-radius: var(--radius-md);
-  color: var(--accent-primary);
-  font-size: var(--text-sm);
-  font-weight: var(--font-medium);
-  text-decoration: none;
-  transition: all 0.2s ease;
-  width: fit-content;
-  white-space: nowrap;
-  min-width: max-content;
-
-  &:hover {
-    background: rgba(100, 255, 218, 0.2);
-    transform: translateX(4px);
-  }
-
-  svg {
-    width: 14px;
-    height: 14px;
-    flex-shrink: 0;
-  }
-
-  @media (max-width: 1024px) {
-    padding: var(--spacing-2) var(--spacing-3);
-    font-size: var(--text-xs);
-    gap: var(--spacing-1-5);
-    
-    svg {
-      width: 12px;
-      height: 12px;
-    }
-  }
-  
-  @media (max-width: 768px) {
-    padding: 6px 12px;
-    font-size: 0.75rem;
-    gap: 6px;
-    
-    svg {
-      width: 11px;
-      height: 11px;
-    }
-  }
+  flex-shrink: 0;
 
   @media (max-width: 640px) {
-    padding: 5px 10px;
-    font-size: 0.7rem;
-    gap: 4px;
-    
-    svg {
-      width: 10px;
-      height: 10px;
-    }
+    flex-direction: row;
+    align-items: center;
+    justify-content: space-between;
   }
 `;
+
+const PostThumb = styled.div`
+  width: 100px;
+  height: 68px;
+  border-radius: var(--radius-md);
+  overflow: hidden;
+  background: var(--dark-900);
+  flex-shrink: 0;
+
+  img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    display: block;
+    filter: brightness(0.75);
+    transition: filter 0.25s ease;
+  }
+
+  @media (max-width: 640px) { width: 80px; height: 54px; }
+`;
+
+const PostArrow = styled.span`
+  font-size: var(--text-base);
+  color: var(--dark-700);
+  transition: color 0.18s ease, transform 0.18s ease;
+  display: block;
+
+  @media (max-width: 640px) { display: none; }
+`;
+
+/* ─── Component ───────────────────────────────────────────────────────────── */
 
 interface BlogCardProps {
   post: BlogPost;
@@ -181,54 +134,46 @@ interface BlogCardProps {
 
 const BlogCard: React.FC<BlogCardProps> = ({ post }) => {
   const formattedDate = formatPostDate(post.publishedAt);
-  const displayTags = post.tags?.slice(0, 3) || [];
+  const primaryTag = post.tags?.[0];
 
   return (
-    <Card
-      initial={{ opacity: 0, y: 20 }}
-      animate={{ opacity: 1, y: 0 }}
-      transition={{ duration: 0.4 }}
+    <Article
+      as="a"
+      href={post.url}
+      target="_blank"
+      rel="noopener noreferrer"
+      aria-label={`Read "${post.title}" on Dev.to`}
     >
-      <CoverImage $imageUrl={post.coverImage?.url} />
+      <PostLeft>
+        <PostMeta>
+          <PostDate dateTime={post.publishedAt}>{formattedDate}</PostDate>
+          {primaryTag && (
+            <>
+              <MetaDot aria-hidden="true" />
+              <PostTag>#{primaryTag.name}</PostTag>
+            </>
+          )}
+        </PostMeta>
 
-      <Content>
-        <Title>{post.title}</Title>
+        <PostTitle className="post-title">{post.title}</PostTitle>
 
-        <Excerpt>{post.brief}</Excerpt>
+        {post.brief && <PostExcerpt>{post.brief}</PostExcerpt>}
+      </PostLeft>
 
-        {displayTags.length > 0 && (
-          <TagsContainer>
-            {displayTags.map((tag) => (
-              <Tag key={tag.slug}>#{tag.name}</Tag>
-            ))}
-          </TagsContainer>
+      <PostRight>
+        {post.coverImage?.url && (
+          <PostThumb className="post-thumb">
+            <img
+              src={post.coverImage.url}
+              alt=""
+              loading="lazy"
+              decoding="async"
+            />
+          </PostThumb>
         )}
-
-        <Meta>
-          <Date dateTime={post.publishedAt}>{formattedDate}</Date>
-          <ReadMoreButton
-            href={post.url}
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            Read on Dev.to
-            <svg
-              xmlns="http://www.w3.org/2000/svg"
-              fill="none"
-              viewBox="0 0 24 24"
-              stroke="currentColor"
-            >
-              <path
-                strokeLinecap="round"
-                strokeLinejoin="round"
-                strokeWidth={2}
-                d="M10 6H6a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-4M14 4h6m0 0v6m0-6L10 14"
-              />
-            </svg>
-          </ReadMoreButton>
-        </Meta>
-      </Content>
-    </Card>
+        <PostArrow className="post-arrow" aria-hidden="true">↗</PostArrow>
+      </PostRight>
+    </Article>
   );
 };
 
