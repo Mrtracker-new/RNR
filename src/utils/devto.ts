@@ -75,7 +75,10 @@ async function fetchFromDevto(limit: number): Promise<BlogPost[]> {
     }
 
     const url = `${DEVTO_API}/articles?username=${DEVTO_USERNAME}&per_page=${limit}&state=all`;
-    const response = await fetch(url);
+    const response = await fetch(url, {
+        credentials: 'omit',
+        referrerPolicy: 'no-referrer',
+    });
     if (!response.ok) throw new Error(`Dev.to API error: ${response.status}`);
 
     const data = await response.json();

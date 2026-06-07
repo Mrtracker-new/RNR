@@ -168,6 +168,8 @@ const BlogCard: React.FC<BlogCardProps> = ({ post }) => {
               alt=""
               loading="lazy"
               decoding="async"
+              crossOrigin="anonymous"
+              referrerPolicy="no-referrer"
             />
           </PostThumb>
         )}
