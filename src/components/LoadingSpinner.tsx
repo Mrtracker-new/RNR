@@ -1,6 +1,5 @@
 import React from 'react';
 import styled, { keyframes } from 'styled-components';
-import { motion } from 'framer-motion';
 
 const spin = keyframes`
   0% { transform: rotate(0deg); }
@@ -12,13 +11,24 @@ const pulse = keyframes`
   50% { opacity: 0.5; }
 `;
 
-const LoadingContainer = styled(motion.div)`
+const fadeIn = keyframes`
+  from { opacity: 0; transform: scale(0.85); }
+  to   { opacity: 1; transform: scale(1); }
+`;
+
+const overlayFadeIn = keyframes`
+  from { opacity: 0; }
+  to   { opacity: 1; }
+`;
+
+const LoadingContainer = styled.div`
   display: flex;
   flex-direction: column;
   align-items: center;
   justify-content: center;
   gap: var(--spacing-4);
   padding: var(--spacing-8);
+  animation: ${fadeIn} 0.3s ease both;
 `;
 
 const Spinner = styled.div<{ size?: 'sm' | 'md' | 'lg' }>`
@@ -31,7 +41,7 @@ const Spinner = styled.div<{ size?: 'sm' | 'md' | 'lg' }>`
     };
     return `width: ${sizes[size]}; height: ${sizes[size]};`;
   }}
-  
+
   border: 2px solid var(--dark-800);
   border-top: 2px solid var(--accent-primary);
   border-radius: 50%;
@@ -137,12 +147,7 @@ const LoadingSpinner: React.FC<LoadingSpinnerProps> = ({
   };
 
   return (
-    <LoadingContainer
-      className={className}
-      initial={{ opacity: 0, scale: 0.8 }}
-      animate={{ opacity: 1, scale: 1 }}
-      transition={{ duration: 0.3 }}
-    >
+    <LoadingContainer className={className}>
       {renderSpinner()}
       {text && <LoadingText $variant={textVariant}>{text}</LoadingText>}
     </LoadingContainer>
@@ -150,7 +155,7 @@ const LoadingSpinner: React.FC<LoadingSpinnerProps> = ({
 };
 
 // Full screen loading overlay
-export const LoadingOverlay = styled(motion.div)`
+export const LoadingOverlay = styled.div`
   position: fixed;
   top: 0;
   left: 0;
@@ -162,6 +167,7 @@ export const LoadingOverlay = styled(motion.div)`
   align-items: center;
   justify-content: center;
   z-index: 9999;
+  animation: ${overlayFadeIn} 0.5s ease both;
 `;
 
 interface FullScreenLoadingProps {
@@ -171,16 +177,9 @@ interface FullScreenLoadingProps {
 
 export const FullScreenLoading: React.FC<FullScreenLoadingProps> = ({
   text = 'Hang tight…',
-  onComplete
 }) => {
   return (
-    <LoadingOverlay
-      initial={{ opacity: 0 }}
-      animate={{ opacity: 1 }}
-      exit={{ opacity: 0 }}
-      transition={{ duration: 0.5 }}
-      onAnimationComplete={onComplete}
-    >
+    <LoadingOverlay>
       <LoadingSpinner
         type="ripple"
         size="lg"

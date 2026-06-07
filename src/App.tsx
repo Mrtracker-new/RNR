@@ -3,8 +3,8 @@ import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
 import { AnimatePresence } from 'framer-motion';
 import styled from 'styled-components';
 import { GlobalStyle } from './styles/GlobalStyle';
-import Navbar from './components/Navbar';
-import Footer from './components/Footer';
+const Navbar = lazy(() => import('./components/Navbar'));
+const Footer = lazy(() => import('./components/Footer'));
 import { FullScreenLoading } from './components/LoadingSpinner';
 import ScrollToTop from './components/ScrollToTop';
 import Breadcrumb from './components/Breadcrumb';
@@ -143,11 +143,15 @@ function App() {
       </Suspense>
       <Breadcrumb />
       <SkipLink href="#main-content">Skip to main content</SkipLink>
-      <Navbar />
+      <Suspense fallback={null}>
+        <Navbar />
+      </Suspense>
       <main id="main-content" role="main" tabIndex={-1} style={{ minHeight: 'calc(100vh - 80px)' }}>
         <AppRoutes />
       </main>
-      <Footer />
+      <Suspense fallback={null}>
+        <Footer />
+      </Suspense>
     </Router>
   );
 }
