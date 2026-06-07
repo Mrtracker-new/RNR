@@ -3,51 +3,45 @@
   <head>
     <meta charset="utf-8" />
     <link rel="icon" href="/favicon.ico" />
-
-    <!-- Viewport and Display -->
     <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=5, viewport-fit=cover" />
     <meta name="theme-color" content="#09090b" />
     <meta http-equiv="X-UA-Compatible" content="IE=edge" />
-
-    <!-- Performance -->
     <meta http-equiv="x-dns-prefetch-control" content="on" />
     <meta name="format-detection" content="telephone=no" />
     <meta name="mobile-web-app-capable" content="yes" />
     <meta name="apple-mobile-web-app-capable" content="yes" />
     <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
 
-    <!-- Preconnect for fonts and external resources -->
-    <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link rel="preconnect" href="https://dev.to">
-    <link rel="dns-prefetch" href="https://fonts.googleapis.com">
-    <link rel="dns-prefetch" href="https://fonts.gstatic.com">
-    <link rel="dns-prefetch" href="https://dev.to">
-    <link rel="dns-prefetch" href="https://res.cloudinary.com">
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link rel="dns-prefetch" href="https://dev.to" />
+    <link rel="dns-prefetch" href="https://res.cloudinary.com" />
 
-    <!-- Async font loading with noscript fallback -->
-    <link rel="preload" href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" as="style" onload="this.onload=null;this.rel='stylesheet'">
-    <link rel="preload" href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500;600&display=swap" as="style" onload="this.onload=null;this.rel='stylesheet'">
+    <link rel="preload" as="image" href="/images/Home_dp_450.webp" fetchpriority="high" />
+
+    <link
+      rel="stylesheet"
+      href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap"
+      media="print"
+      onload="this.media='all'"
+    />
+    <link
+      rel="stylesheet"
+      href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500;600&display=optional"
+      media="print"
+      onload="this.media='all'"
+    />
     <noscript>
-      <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap">
-      <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500;600&display=swap">
+      <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" />
+      <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500;600&display=swap" />
     </noscript>
 
-    <!-- Prevent FOUC -->
     <style>
-      body {
-        font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', sans-serif;
-        background-color: #09090b;
-        color: #f4f4f5;
-        margin: 0;
-        padding: 0;
-      }
-      #root {
-        min-height: 100vh;
-      }
+      *, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
+      body { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', sans-serif; background-color: #09090b; color: #f4f4f5; }
+      #root { min-height: 100vh; overflow-x: hidden; max-width: 100vw; }
     </style>
 
-    <!-- Primary SEO -->
     <title>Rolan Lobo — Software Developer</title>
     <meta
       name="description"
@@ -60,11 +54,9 @@
     <meta name="revisit-after" content="7 days" />
     <meta name="rating" content="general" />
 
-    <!-- Webmaster Verification -->
     <meta name="google-site-verification" content="BMHKQxsBW7s7l3Gt1ZZQVThuHZXcOylqxF3ktxdaMh4" />
     <meta name="msvalidate.01" content="F4905437E7C6EE0E43C7F93C18D926FC" />
 
-    <!-- Open Graph -->
     <meta property="og:type" content="website" />
     <meta property="og:url" content="https://rolan-rnr.netlify.app/" />
     <meta property="og:title" content="Rolan Lobo — Software Developer" />
@@ -76,7 +68,6 @@
     <meta property="og:site_name" content="Rolan Lobo" />
     <meta property="og:locale" content="en_US" />
 
-    <!-- Twitter Card -->
     <meta name="twitter:card" content="summary_large_image" />
     <meta name="twitter:url" content="https://rolan-rnr.netlify.app/" />
     <meta name="twitter:title" content="Rolan Lobo — Software Developer" />
@@ -84,7 +75,6 @@
     <meta name="twitter:image" content="https://rolan-rnr.netlify.app/og-social-card.png" />
     <meta name="twitter:image:alt" content="Rolan Lobo — Software Developer" />
 
-    <!-- Security -->
     <meta name="referrer" content="strict-origin-when-cross-origin" />
     <meta http-equiv="Content-Security-Policy" content="upgrade-insecure-requests" />
 
@@ -94,7 +84,6 @@
   <body>
     <noscript>You need to enable JavaScript to run this app.</noscript>
 
-    <!-- Hidden form for Netlify Forms detection -->
     <form name="contact" netlify netlify-honeypot="bot-field" hidden>
       <input type="text" name="name" />
       <input type="email" name="email" />

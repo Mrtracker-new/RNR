@@ -1,6 +1,6 @@
 import { lazy, Suspense } from 'react';
 import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
-import { AnimatePresence } from 'framer-motion';
+import { LazyMotion, domAnimation, AnimatePresence } from 'framer-motion';
 import styled from 'styled-components';
 import { GlobalStyle } from './styles/GlobalStyle';
 const Navbar = lazy(() => import('./components/Navbar'));
@@ -72,7 +72,6 @@ function PageError({ message }: { message: string }) {
   );
 }
 
-// Exit intent popup — lazy-loaded to keep initial bundle lean
 const ExitIntentPopup = lazy(() => import('./components/ExitIntentPopup'));
 
 const Home = lazy(() => import('./pages/Home'));
@@ -82,10 +81,6 @@ const Contact = lazy(() => import('./pages/Contact'));
 const Blog = lazy(() => import('./pages/Blog'));
 const NotFound = lazy(() => import('./pages/NotFound'));
 
-/**
- * Inner component that must live *inside* <Router> so it can call
- * useViewTransition() (which needs useLocation() from React Router).
- */
 function AppRoutes() {
   const { supported } = useViewTransition();
 
@@ -135,24 +130,26 @@ function AppRoutes() {
 
 function App() {
   return (
-    <Router>
-      <GlobalStyle />
-      <ScrollToTop />
-      <Suspense fallback={null}>
-        <ExitIntentPopup />
-      </Suspense>
-      <Breadcrumb />
-      <SkipLink href="#main-content">Skip to main content</SkipLink>
-      <Suspense fallback={null}>
-        <Navbar />
-      </Suspense>
-      <main id="main-content" role="main" tabIndex={-1} style={{ minHeight: 'calc(100vh - 80px)' }}>
-        <AppRoutes />
-      </main>
-      <Suspense fallback={null}>
-        <Footer />
-      </Suspense>
-    </Router>
+    <LazyMotion features={domAnimation} strict>
+      <Router>
+        <GlobalStyle />
+        <ScrollToTop />
+        <Suspense fallback={null}>
+          <ExitIntentPopup />
+        </Suspense>
+        <Breadcrumb />
+        <SkipLink href="#main-content">Skip to main content</SkipLink>
+        <Suspense fallback={null}>
+          <Navbar />
+        </Suspense>
+        <main id="main-content" role="main" tabIndex={-1} style={{ minHeight: 'calc(100vh - 80px)' }}>
+          <AppRoutes />
+        </main>
+        <Suspense fallback={null}>
+          <Footer />
+        </Suspense>
+      </Router>
+    </LazyMotion>
   );
 }
 

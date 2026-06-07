@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import styled from 'styled-components';
-import { motion, AnimatePresence } from 'framer-motion';
+import { m, AnimatePresence } from 'framer-motion';
 import SEO from '../components/SEO';
 import FAQSchema from '../components/FAQSchema';
 
@@ -393,7 +393,7 @@ const FieldTextarea = styled.textarea<{ $err?: boolean }>`
   }
 `;
 
-const FieldError = styled(motion.p)`
+const FieldError = styled(m.p)`
   font-size: 0.72rem;
   color: rgba(239, 68, 68, 0.85);
   margin: 0;
@@ -415,7 +415,7 @@ const FormActions = styled.div`
   }
 `;
 
-const SubmitBtn = styled(motion.button)`
+const SubmitBtn = styled(m.button)`
   box-sizing: border-box;
   padding: 11px 28px;
   background: #e4e4e7;
@@ -455,7 +455,7 @@ const DirectLink = styled.a`
   @media (max-width: 480px) { justify-content: center; }
 `;
 
-const StatusBanner = styled(motion.div)<{ $t: 'success' | 'error' }>`
+const StatusBanner = styled(m.div)<{ $t: 'success' | 'error' }>`
   box-sizing: border-box;
   padding: 14px 16px;
   border-radius: 10px;
@@ -467,7 +467,7 @@ const StatusBanner = styled(motion.div)<{ $t: 'success' | 'error' }>`
 `;
 
 const Spinner = () => (
-  <motion.span
+  <m.span
     animate={{ rotate: 360 }}
     transition={{ repeat: Infinity, duration: 0.9, ease: 'linear' }}
     style={{ display: 'inline-block', width: 13, height: 13, border: '2px solid rgba(9,9,11,0.2)', borderTopColor: '#09090b', borderRadius: '50%' }}
@@ -597,7 +597,7 @@ const Contact: React.FC = () => {
             </InfoPanel>
 
             {/* ══ RIGHT — FORM CARD ═════════════════════════════════════ */}
-            <motion.div
+            <m.div
               initial={{ opacity: 0, y: 16 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ duration: 0.5, delay: 0.15, ease: [0.22, 1, 0.36, 1] }}
@@ -721,7 +721,7 @@ const Contact: React.FC = () => {
                   ))}
                 </SocialList>
               </SocialsSection>
-            </motion.div>
+            </m.div>
 
           </Grid>
         </Wrap>

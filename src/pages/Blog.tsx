@@ -1,6 +1,6 @@
 import React, { useState, useEffect, lazy, Suspense } from 'react';
 import styled from 'styled-components';
-import { motion, AnimatePresence } from 'framer-motion';
+import { m, AnimatePresence } from 'framer-motion';
 import { Helmet } from 'react-helmet-async';
 import { Container } from '../styles/GlobalStyle';
 import SEO from '../components/SEO';
@@ -39,7 +39,7 @@ const HeroRow = styled.div`
   }
 `;
 
-const HeroLeft = styled(motion.div)``;
+const HeroLeft = styled(m.div)``;
 
 const PageLabel = styled.p`
   font-size: 0.7rem;
@@ -50,7 +50,7 @@ const PageLabel = styled.p`
   margin-bottom: var(--spacing-3);
 `;
 
-const PageTitle = styled(motion.h1)`
+const PageTitle = styled(m.h1)`
   font-size: clamp(2.2rem, 5vw, 3.5rem);
   font-weight: var(--font-extrabold);
   color: var(--dark-50);
@@ -59,14 +59,14 @@ const PageTitle = styled(motion.h1)`
   margin-bottom: var(--spacing-4);
 `;
 
-const PageSubtitle = styled(motion.p)`
+const PageSubtitle = styled(m.p)`
   font-size: var(--text-base);
   color: var(--dark-500);
   max-width: 480px;
   line-height: 1.65;
 `;
 
-const HeroRight = styled(motion.div)`
+const HeroRight = styled(m.div)`
   flex-shrink: 0;
 `;
 
@@ -90,7 +90,7 @@ const DevToLink = styled.a`
 
 /* ─── Filter bar ──────────────────────────────────────────────────────────── */
 
-const FilterRow = styled(motion.div)`
+const FilterRow = styled(m.div)`
   display: flex;
   align-items: center;
   justify-content: space-between;
@@ -162,7 +162,7 @@ const PostCount = styled.p`
 
 /* ─── Post list ───────────────────────────────────────────────────────────── */
 
-const PostList = styled(motion.div)`
+const PostList = styled(m.div)`
   /* BlogCard rows handle their own borders — no wrapper border needed */
 `;
 
@@ -209,7 +209,7 @@ const SkeletonThumb = styled.div`
 
 /* ─── States ──────────────────────────────────────────────────────────────── */
 
-const StateBox = styled(motion.div)`
+const StateBox = styled(m.div)`
   padding: var(--spacing-20) 0;
   text-align: center;
 `;
@@ -497,7 +497,7 @@ const Blog: React.FC = () => {
                 transition={{ duration: 0.2 }}
               >
                 {visiblePosts.map((post, index) => (
-                  <motion.div
+                  <m.div
                     key={post.id}
                     initial={{ opacity: 0 }}
                     animate={{ opacity: 1 }}
@@ -517,7 +517,7 @@ const Blog: React.FC = () => {
                     >
                       <BlogCard post={post} />
                     </Suspense>
-                  </motion.div>
+                  </m.div>
                 ))}
               </PostList>
             </AnimatePresence>

@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import styled from 'styled-components';
-import { motion, AnimatePresence } from 'framer-motion';
+import { m, AnimatePresence } from 'framer-motion';
 import { Button } from '../styles/GlobalStyle';
 
 interface ResumeDownloadProps {
@@ -17,7 +17,7 @@ const ResumeButtonWrapper = styled.div`
 `;
 
 // Tooltip container that appears on hover
-const PreviewTooltip = styled(motion.div) <{ $position: 'top' | 'right' | 'bottom' | 'left' }>`
+const PreviewTooltip = styled(m.div) <{ $position: 'top' | 'right' | 'bottom' | 'left' }>`
   position: absolute;
   z-index: 1000;
   pointer-events: none;

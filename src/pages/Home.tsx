@@ -1,6 +1,6 @@
 import React, { useState, useEffect, lazy, Suspense } from 'react';
 import styled, { keyframes } from 'styled-components';
-import { motion, Variants, AnimatePresence } from 'framer-motion';
+import { m, Variants, AnimatePresence } from 'framer-motion';
 import { Link } from 'react-router-dom';
 import { Container, Button } from '../styles/GlobalStyle';
 import SEO from '../components/SEO';
@@ -99,7 +99,7 @@ const HeroContent = styled(Container)`
   }
 `;
 
-const TextContent = styled(motion.div)`
+const TextContent = styled(m.div)`
   display: flex;
   flex-direction: column;
   align-items: flex-start;
@@ -111,7 +111,7 @@ const TextContent = styled(motion.div)`
   }
 `;
 
-const ProfileImageContainer = styled(motion.div)`
+const ProfileImageContainer = styled(m.div)`
   width: 100%;
   max-width: 420px;
   aspect-ratio: 1;
@@ -201,7 +201,7 @@ const ResumeHintText = styled.div`
   pointer-events: none;
 `;
 
-const RolePill = styled(motion.div)`
+const RolePill = styled(m.div)`
   display: inline-flex;
   align-items: center;
   gap: var(--spacing-2);
@@ -223,7 +223,7 @@ const RoleText = styled.span`
   letter-spacing: 0.03em;
 `;
 
-const Headline = styled(motion.h1)`
+const Headline = styled(m.h1)`
   font-size: clamp(2rem, 4.5vw, 4.5rem);
   font-weight: var(--font-extrabold);
   line-height: 1.1;
@@ -249,7 +249,7 @@ const Headline = styled(motion.h1)`
   }
 `;
 
-const Subheadline = styled(motion.p)`
+const Subheadline = styled(m.p)`
   font-size: clamp(0.95rem, 1.5vw, 1.15rem);
   color: var(--dark-400);
   line-height: 1.7;
@@ -277,7 +277,7 @@ const Subheadline = styled(motion.p)`
   }
 `;
 
-const CTAContainer = styled(motion.div)`
+const CTAContainer = styled(m.div)`
   display: flex;
   gap: var(--spacing-3) var(--spacing-4);
   align-items: center;
@@ -333,7 +333,7 @@ const StatusDot = styled.span`
   }
 `;
 
-const AvailabilityBadge = styled(motion.div)`
+const AvailabilityBadge = styled(m.div)`
   display: inline-flex;
   align-items: center;
   gap: var(--spacing-2);
@@ -359,7 +359,7 @@ const AvailabilityBadge = styled(motion.div)`
 
 /* ─── Stats bar ───────────────────────────────────────────────────────────── */
 
-const StatsBar = styled(motion.div)`
+const StatsBar = styled(m.div)`
   position: relative;
   bottom: auto;
   left: auto;
@@ -468,7 +468,7 @@ const SectionHeader = styled.div`
   }
 `;
 
-const SectionLabel = styled.h2`
+const SectionLabel = styled.p`
   font-size: var(--text-xs);
   font-weight: var(--font-bold);
   letter-spacing: 0.12em;
@@ -496,7 +496,7 @@ const FeaturedGrid = styled.div`
   }
 `;
 
-const MotionLink = motion(Link);
+const MotionLink = m(Link);
 
 const FeaturedCard = styled(MotionLink)`
   background: rgba(30, 41, 59, 0.35);
@@ -602,14 +602,14 @@ const BlogHeader = styled.div`
   margin-bottom: var(--spacing-12);
 `;
 
-const BlogTitle = styled(motion.h2)`
+const BlogTitle = styled(m.h2)`
   font-size: clamp(2rem, 4vw, 3rem);
   font-weight: var(--font-bold);
   color: var(--dark-50);
   margin-bottom: var(--spacing-3);
 `;
 
-const BlogSubtitle = styled(motion.p)`
+const BlogSubtitle = styled(m.p)`
   font-size: var(--text-base);
   color: var(--dark-400);
   max-width: 600px;
@@ -687,7 +687,7 @@ const Home: React.FC = () => {
 
       <HeroSection>
         <HeroContent
-          as={motion.div}
+          as={m.div}
           variants={containerVariants}
           initial="hidden"
           animate="visible"
@@ -742,7 +742,7 @@ const Home: React.FC = () => {
             <AnimatePresence mode="wait">
               {!showResumePreview ? (
                 <StylizedImage
-                  as={motion.div}
+                  as={m.div}
                   key="profile"
                   initial={{ opacity: 1 }}
                   exit={{ opacity: 0 }}
@@ -753,11 +753,16 @@ const Home: React.FC = () => {
                     srcSet={`${profileImage150} 150w, ${profileImage300} 300w, ${profileImage450} 450w, ${profileImage600} 600w, ${profileImage900} 900w, ${profileImage} 1673w`}
                     sizes="(max-width: 968px) 280px, 450px"
                     alt="Rolan Lobo — Software Developer"
+                    fetchPriority="high"
+                    loading="eager"
+                    decoding="sync"
+                    width={450}
+                    height={450}
                   />
                 </StylizedImage>
               ) : (
                 <StylizedImage
-                  as={motion.div}
+                  as={m.div}
                   key="resume"
                   initial={{ opacity: 0 }}
                   animate={{ opacity: 1 }}
@@ -861,7 +866,7 @@ const Home: React.FC = () => {
 
             <BlogGrid>
               {blogPosts.map((post, index) => (
-                <motion.div
+                <m.div
                   key={post.id}
                   initial={{ opacity: 0, y: 20 }}
                   animate={{ opacity: 1, y: 0 }}
@@ -870,7 +875,7 @@ const Home: React.FC = () => {
                   <Suspense fallback={<div style={{ height: '400px' }} />}>
                     <BlogCard post={post} />
                   </Suspense>
-                </motion.div>
+                </m.div>
               ))}
             </BlogGrid>
 

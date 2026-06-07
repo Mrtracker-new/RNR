@@ -1,6 +1,6 @@
 import React, { useState, useEffect, useCallback } from 'react';
 import styled, { keyframes } from 'styled-components';
-import { motion, AnimatePresence } from 'framer-motion';
+import { m, AnimatePresence } from 'framer-motion';
 import { useNavigate } from 'react-router-dom';
 
 interface ExitIntentPopupProps {
@@ -20,7 +20,7 @@ const borderPulse = keyframes`
   50%       { opacity: 0.8; }
 `;
 
-const Overlay = styled(motion.div)`
+const Overlay = styled(m.div)`
   position: fixed;
   inset: 0;
   z-index: 9999;
@@ -33,7 +33,7 @@ const Overlay = styled(motion.div)`
   padding: var(--spacing-5);
 `;
 
-const Modal = styled(motion.div)`
+const Modal = styled(m.div)`
   width: 100%;
   max-width: 420px;
   position: relative;

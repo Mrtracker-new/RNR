@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { Link, useLocation } from 'react-router-dom';
 import styled from 'styled-components';
-import { motion, AnimatePresence } from 'framer-motion';
+import { m, AnimatePresence } from 'framer-motion';
 import { scrollOptimizer } from '../utils/performance';
 
 const FixedContainer = styled.div`
@@ -20,7 +20,7 @@ const FixedContainer = styled.div`
   }
 `;
 
-const NavbarIsland = styled(motion.nav)<{ $scrolled: boolean }>`
+const NavbarIsland = styled(m.nav)<{ $scrolled: boolean }>`
   pointer-events: auto;
   width: 100%;
   max-width: 1200px;
@@ -106,7 +106,7 @@ const NavItem = styled(Link)<{ $active: boolean }>`
   }
 `;
 
-const ActivePill = styled(motion.div)`
+const ActivePill = styled(m.div)`
   position: absolute;
   inset: 0;
   border-radius: var(--radius-md);
@@ -129,7 +129,7 @@ const MobileToggle = styled.button`
   }
 `;
 
-const MobileMenu = styled(motion.div)`
+const MobileMenu = styled(m.div)`
   position: fixed;
   top: 0;
   left: 0;
@@ -242,32 +242,33 @@ const Navbar: React.FC = () => {
             transition={{ type: 'spring', damping: 25, stiffness: 200 }}
           >
             {navItems.map((item, index) => (
-              <motion.div
+              <m.div
                 key={item.path}
                 initial={{ opacity: 0, x: -20 }}
                 animate={{ opacity: 1, x: 0 }}
                 transition={{ delay: index * 0.05 }}
               >
-                <MobileLink to={item.path} onClick={() => setMobileMenuOpen(false)}>
+                <MobileLink to={item.path} onClick={() => setMobileMenuOpen(false)}
+                >
                   {item.label}
                   {location.pathname === item.path && (
-                    <motion.span
+                    <m.span
                       layoutId="mobile-dot"
                       style={{ width: 8, height: 8, borderRadius: '50%', background: 'var(--accent-primary)' }}
                     />
                   )}
                 </MobileLink>
-              </motion.div>
+              </m.div>
             ))}
 
-            <motion.div
+            <m.div
               style={{ marginTop: 'auto', textAlign: 'center', color: 'var(--dark-500)', fontSize: '0.85rem' }}
               initial={{ opacity: 0 }}
               animate={{ opacity: 1 }}
               transition={{ delay: 0.4 }}
             >
               © {new Date().getFullYear()} Rolan Lobo
-            </motion.div>
+            </m.div>
           </MobileMenu>
         )}
       </AnimatePresence>

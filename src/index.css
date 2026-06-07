@@ -1,2 +1,1 @@
-/* Fonts are now loaded via preload in index.html for better performance */
-/* This prevents render-blocking and improves First Contentful Paint (FCP) */
+@import './styles/critical.css';

@@ -1,6 +1,6 @@
 import React, { lazy, Suspense } from 'react';
 import styled from 'styled-components';
-import { motion, Variants } from 'framer-motion';
+import { m, Variants } from 'framer-motion';
 import { Container } from '../styles/GlobalStyle';
 import SEO from '../components/SEO';
 import aboutImage from '../assets/images/Aboutme.webp';
@@ -54,7 +54,7 @@ const SectionHeading = styled.div`
   @media (max-width: 640px) { margin-bottom: var(--spacing-7); }
 `;
 
-const SectionLabel = styled(motion.p)`
+const SectionLabel = styled(m.p)`
   font-size: 0.68rem;
   font-weight: var(--font-bold);
   letter-spacing: 0.14em;
@@ -117,7 +117,7 @@ const HeroContent = styled.div`
   }
 `;
 
-const HeroLabel = styled(motion.p)`
+const HeroLabel = styled(m.p)`
   font-size: 0.68rem;
   font-weight: var(--font-bold);
   letter-spacing: 0.14em;
@@ -126,7 +126,7 @@ const HeroLabel = styled(motion.p)`
   margin-bottom: var(--spacing-4);
 `;
 
-const HeroTitle = styled(motion.h1)`
+const HeroTitle = styled(m.h1)`
   font-size: clamp(2rem, 4.5vw, 3.2rem);
   font-weight: var(--font-extrabold);
   color: var(--dark-50);
@@ -135,7 +135,7 @@ const HeroTitle = styled(motion.h1)`
   margin-bottom: var(--spacing-6);
 `;
 
-const HeroBio = styled(motion.p)`
+const HeroBio = styled(m.p)`
   font-size: var(--text-base);
   color: var(--dark-400);
   line-height: 1.8;
@@ -143,7 +143,7 @@ const HeroBio = styled(motion.p)`
   max-width: 460px;
 `;
 
-const HeroImage = styled(motion.div)`
+const HeroImage = styled(m.div)`
   @media (max-width: 640px) {
     order: -1;
     /* Full width of the stacked column, constrained with max-width so it
@@ -222,7 +222,7 @@ const Timeline = styled.div`
   }
 `;
 
-const TimelineItem = styled(motion.div)`
+const TimelineItem = styled(m.div)`
   display: grid;
   grid-template-columns: 148px 1fr;
   gap: var(--spacing-8);
@@ -341,7 +341,7 @@ const SkillsGrid = styled.div`
   }
 `;
 
-const SkillCard = styled(motion.div)`
+const SkillCard = styled(m.div)`
   border: 1px solid rgba(255, 255, 255, 0.1);
   border-radius: var(--radius-xl);
   padding: var(--spacing-8);
@@ -423,7 +423,7 @@ const FocusGrid = styled.div`
   }
 `;
 
-const FocusCard = styled(motion.div)`
+const FocusCard = styled(m.div)`
   border: 1px solid rgba(255, 255, 255, 0.07);
   border-radius: var(--radius-xl);
   padding: var(--spacing-8);
@@ -641,7 +641,7 @@ const About: React.FC = () => (
                 cross-platform apps that work without a cloud.
               </HeroBio>
 
-              <motion.div
+              <m.div
                 variants={fadeUp}
                 custom={0.24}
                 initial="hidden"
@@ -650,7 +650,7 @@ const About: React.FC = () => (
                 <Suspense fallback={null}>
                   <ResumeDownload variant="primary" size="lg" tooltipPosition="right" />
                 </Suspense>
-              </motion.div>
+              </m.div>
             </HeroContent>
 
             <HeroImage

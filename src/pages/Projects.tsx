@@ -1,6 +1,6 @@
 import React, { useState, useMemo, useEffect, useCallback } from 'react';
 import styled from 'styled-components';
-import { motion, AnimatePresence } from 'framer-motion';
+import { m, AnimatePresence } from 'framer-motion';
 import { Container, Badge } from '../styles/GlobalStyle';
 import SEO from '../components/SEO';
 import { projectsData, PROJECT_CATEGORIES } from '../data/projects';
@@ -46,7 +46,7 @@ const HeroRow = styled.div`
   }
 `;
 
-const HeroLeft = styled(motion.div)``;
+const HeroLeft = styled(m.div)``;
 
 const PageLabel = styled.p`
   font-size: 0.7rem;
@@ -57,7 +57,7 @@ const PageLabel = styled.p`
   margin-bottom: var(--spacing-3);
 `;
 
-const PageTitle = styled(motion.h1)`
+const PageTitle = styled(m.h1)`
   font-size: clamp(2.2rem, 5vw, 3.5rem);
   font-weight: var(--font-extrabold);
   color: var(--dark-50);
@@ -66,14 +66,14 @@ const PageTitle = styled(motion.h1)`
   margin-bottom: var(--spacing-4);
 `;
 
-const PageSubtitle = styled(motion.p)`
+const PageSubtitle = styled(m.p)`
   font-size: var(--text-base);
   color: var(--dark-500);
   max-width: 480px;
   line-height: 1.65;
 `;
 
-const HeroRight = styled(motion.div)`
+const HeroRight = styled(m.div)`
   display: flex;
   flex-direction: column;
   align-items: flex-end;
@@ -131,7 +131,7 @@ const HeroStatsRow = styled.div`
 
 /* ─── Filter bar ──────────────────────────────────────────────────────────── */
 
-const FilterBar = styled(motion.div)`
+const FilterBar = styled(m.div)`
   display: flex;
   align-items: center;
   gap: 2px;
@@ -208,7 +208,7 @@ const FeaturedList = styled.div`
   @media (max-width: 768px) { margin-bottom: var(--spacing-12); }
 `;
 
-const FeaturedItem = styled(motion.div)`
+const FeaturedItem = styled(m.div)`
   display: grid;
   grid-template-columns: 1fr 360px;
   background: var(--dark-950);
@@ -407,7 +407,7 @@ const TableHeaderCell = styled.span`
   color: var(--dark-600);
 `;
 
-const TableBody = styled(motion.div)`
+const TableBody = styled(m.div)`
   display: flex;
   flex-direction: column;
   gap: 1px;
@@ -416,7 +416,7 @@ const TableBody = styled(motion.div)`
   overflow: hidden;
 `;
 
-const TableRow = styled(motion.div)`
+const TableRow = styled(m.div)`
   display: grid;
   grid-template-columns: 1fr 160px 180px 120px;
   gap: var(--spacing-4);
@@ -520,7 +520,7 @@ const RowArrow = styled.span`
 
 /* ─── Modal ───────────────────────────────────────────────────────────────── */
 
-const ModalOverlay = styled(motion.div)`
+const ModalOverlay = styled(m.div)`
   position: fixed;
   inset: 0;
   background: rgba(0, 0, 0, 0.8);
@@ -540,7 +540,7 @@ const ModalOverlay = styled(motion.div)`
   }
 `;
 
-const ModalPanel = styled(motion.div)`
+const ModalPanel = styled(m.div)`
   background: #0d1117;
   border: 1px solid rgba(255, 255, 255, 0.08);
   border-radius: var(--radius-2xl);
@@ -1027,7 +1027,7 @@ const Projects: React.FC = () => {
           </FilterBar>
 
           <AnimatePresence mode="wait">
-            <motion.div
+            <m.div
               key={selectedCategory}
               initial={{ opacity: 0, y: 8 }}
               animate={{ opacity: 1, y: 0 }}
@@ -1189,16 +1189,16 @@ const Projects: React.FC = () => {
 
               {/* Edge case: filtered to a category with no results */}
               {filteredProjects.length === 0 && (
-                <motion.div
+                <m.div
                   initial={{ opacity: 0 }}
                   animate={{ opacity: 1 }}
                   style={{ textAlign: 'center', padding: 'var(--spacing-20) 0', color: 'var(--dark-600)' }}
                 >
                   No projects in this category yet.
-                </motion.div>
+                </m.div>
               )}
 
-            </motion.div>
+            </m.div>
           </AnimatePresence>
         </Container>
       </PageWrapper>

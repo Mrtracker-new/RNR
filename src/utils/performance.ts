@@ -1,4 +1,4 @@
-// Scroll performance utilities
+
 
 export class ScrollOptimizer {
   private isScrolling = false;
@@ -13,7 +13,6 @@ export class ScrollOptimizer {
   }
 
   private init() {
-    // Optimized scroll listener using passive events
     const handleScroll = () => {
       if (this.animationFrameId) {
         cancelAnimationFrame(this.animationFrameId);
@@ -24,7 +23,6 @@ export class ScrollOptimizer {
         this.scrollDirection = currentScrollY > this.lastScrollY ? 'down' : 'up';
         this.lastScrollY = currentScrollY;
 
-        // Notify observers
         this.observers.forEach(callback => {
           callback({
             scrollY: currentScrollY,
@@ -33,13 +31,11 @@ export class ScrollOptimizer {
           });
         });
 
-        // Set scrolling state
         if (!this.isScrolling) {
           this.isScrolling = true;
           document.body.classList.add('is-scrolling');
         }
 
-        // Clear timeout and reset scrolling state
         if (this.scrollTimeout) {
           clearTimeout(this.scrollTimeout);
         }
@@ -48,7 +44,6 @@ export class ScrollOptimizer {
           this.isScrolling = false;
           document.body.classList.remove('is-scrolling');
 
-          // Notify observers that scrolling ended
           this.observers.forEach(callback => {
             callback({
               scrollY: currentScrollY,
@@ -62,8 +57,7 @@ export class ScrollOptimizer {
 
     window.addEventListener('scroll', handleScroll, { passive: true });
 
-    // Cleanup on page unload
-    window.addEventListener('beforeunload', () => {
+    window.addEventListener('pagehide', () => {
       if (this.animationFrameId) {
         cancelAnimationFrame(this.animationFrameId);
       }
@@ -73,13 +67,11 @@ export class ScrollOptimizer {
     });
   }
 
-  // Subscribe to scroll events
   subscribe(callback: Function) {
     this.observers.add(callback);
     return () => this.observers.delete(callback);
   }
 
-  // Get current scroll info
   getScrollInfo() {
     return {
       scrollY: this.lastScrollY,
@@ -88,7 +80,6 @@ export class ScrollOptimizer {
     };
   }
 
-  // Smooth scroll to element
   scrollToElement(element: Element | string, offset = 0) {
     const target = typeof element === 'string' ? document.querySelector(element) : element;
     if (!target) return;
@@ -102,7 +93,6 @@ export class ScrollOptimizer {
         behavior: 'smooth'
       });
     } else {
-      // Fallback for older browsers
       this.smoothScrollPolyfill(targetPosition);
     }
   }
@@ -118,7 +108,6 @@ export class ScrollOptimizer {
       const progress = timestamp - start;
       const percentage = Math.min(progress / duration, 1);
 
-      // Easing function for smooth animation
       const ease = 1 - Math.pow(1 - percentage, 3);
 
       window.scrollTo(0, startPosition + (distance * ease));
@@ -132,5 +121,4 @@ export class ScrollOptimizer {
   }
 }
 
-// Global scroll optimizer instance
 export const scrollOptimizer = new ScrollOptimizer();

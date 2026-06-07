@@ -1,7 +1,7 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
 import styled from 'styled-components';
-import { motion } from 'framer-motion';
+import { m } from 'framer-motion';
 import SEO from '../components/SEO';
 
 
@@ -15,7 +15,7 @@ const Wrapper = styled.div`
   padding: 60px 20px;
 `;
 
-const Code = styled(motion.span)`
+const Code = styled(m.span)`
   font-size: clamp(6rem, 20vw, 10rem);
   font-weight: 800;
   line-height: 1;
@@ -26,19 +26,19 @@ const Code = styled(motion.span)`
   letter-spacing: -0.05em;
 `;
 
-const Title = styled(motion.h1)`
+const Title = styled(m.h1)`
   font-size: clamp(1.25rem, 4vw, 1.75rem);
   color: var(--dark-200);
   margin: var(--spacing-4) 0 var(--spacing-3);
 `;
 
-const Sub = styled(motion.p)`
+const Sub = styled(m.p)`
   color: var(--dark-400);
   font-size: var(--text-base);
   margin-bottom: var(--spacing-8);
 `;
 
-const HomeLink = styled(motion(Link))`
+const HomeLink = styled(m(Link))`
   display: inline-flex;
   align-items: center;
   gap: var(--spacing-2);

@@ -2,39 +2,63 @@ import { defineConfig } from 'vite'
 import react from '@vitejs/plugin-react'
 import viteCompression from 'vite-plugin-compression'
 
-// https://vitejs.dev/config/
 export default defineConfig({
   plugins: [
-    react(),
-    // Gzip — broad compatibility fallback
+    react({
+      babel: {
+        plugins: process.env.NODE_ENV === 'production'
+          ? [['babel-plugin-styled-components', {
+              displayName: false,
+              pure: true,
+              ssr: false,
+              fileName: false,
+            }]]
+          : [],
+      },
+    }),
     viteCompression({ algorithm: 'gzip', ext: '.gz', threshold: 1024 }),
-    // Brotli — Netlify and modern CDNs serve .br files with ~20% better compression than gzip
     viteCompression({ algorithm: 'brotliCompress', ext: '.br', threshold: 1024 }),
   ],
   build: {
     outDir: 'build',
     sourcemap: false,
-    // Warn when any individual chunk exceeds 400 KB
+    minify: 'terser',
+    terserOptions: {
+      compress: {
+        passes: 2,
+        drop_console: true,
+        drop_debugger: true,
+        pure_getters: true,
+        unsafe_math: true,
+        pure_funcs: ['console.log', 'console.info', 'console.warn'],
+        toplevel: true,
+      },
+      mangle: { toplevel: true },
+      format: { comments: false },
+    },
     chunkSizeWarningLimit: 400,
     rollupOptions: {
+      treeshake: {
+        preset: 'recommended',
+        moduleSideEffects: (id) => {
+          if (id.endsWith('.css')) return true;
+          if (id.includes('node_modules/framer-motion')) return false;
+          if (id.includes('node_modules/styled-components')) return false;
+          return true;
+        },
+      },
       output: {
-        // Function form correctly intercepts node_modules in React 19 + Vite 6
+        compact: true,
         manualChunks(id) {
           if (id.includes('node_modules/react-dom') || id.includes('node_modules/react/')) {
             return 'react-vendor';
           }
-          if (id.includes('node_modules/framer-motion')) {
-            return 'motion';
-          }
+          if (id.includes('node_modules/framer-motion')) return 'motion';
           if (id.includes('node_modules/react-router') || id.includes('node_modules/react-router-dom')) {
             return 'router';
           }
-          if (id.includes('node_modules/styled-components')) {
-            return 'styled';
-          }
-          if (id.includes('node_modules/react-helmet-async')) {
-            return 'helmet';
-          }
+          if (id.includes('node_modules/styled-components')) return 'styled';
+          if (id.includes('node_modules/react-helmet-async')) return 'helmet';
         },
       },
     },
