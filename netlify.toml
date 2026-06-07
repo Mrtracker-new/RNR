@@ -40,3 +40,9 @@
   for = "/*.woff2"
   [headers.values]
     Cache-Control = "public, max-age=31536000, immutable"
+
+[[headers]]
+  for = "/*.pdf"
+  [headers.values]
+    Cache-Control = "public, max-age=604800"
+    Content-Disposition = "inline"

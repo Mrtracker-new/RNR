@@ -29,8 +29,6 @@ export default defineConfig({
         drop_console: true,
         drop_debugger: true,
         pure_getters: true,
-        unsafe_math: true,
-        pure_funcs: ['console.log', 'console.info', 'console.warn'],
         toplevel: true,
       },
       mangle: { toplevel: true },

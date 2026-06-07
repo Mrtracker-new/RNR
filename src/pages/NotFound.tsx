@@ -62,6 +62,7 @@ const NotFound: React.FC = () => (
     <SEO
       title="404 — Page Not Found | Rolan Lobo"
       description="The page you're looking for doesn't exist. But hey — my homepage does."
+      noIndex={true}
     />
     <Wrapper>
       <Code

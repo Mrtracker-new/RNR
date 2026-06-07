@@ -74,7 +74,7 @@ async function fetchFromDevto(limit: number): Promise<BlogPost[]> {
         return [];
     }
 
-    const url = `${DEVTO_API}/articles?username=${DEVTO_USERNAME}&per_page=${limit}&state=all`;
+    const url = `${DEVTO_API}/articles?username=${encodeURIComponent(DEVTO_USERNAME)}&per_page=${limit}&state=all`;
     const response = await fetch(url, {
         credentials: 'omit',
         referrerPolicy: 'no-referrer',
