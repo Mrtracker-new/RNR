@@ -496,9 +496,7 @@ const FeaturedGrid = styled.div`
   }
 `;
 
-const MotionLink = m(Link);
-
-const FeaturedCard = styled(MotionLink)`
+const FeaturedCard = styled(Link)`
   background: rgba(30, 41, 59, 0.35);
   border: 1px solid rgba(255, 255, 255, 0.06);
   border-radius: var(--radius-xl);
@@ -812,31 +810,32 @@ const Home: React.FC = () => {
 
             <FeaturedGrid>
               {featuredProjects.map((project: Project, index: number) => (
-                <FeaturedCard
+                <m.div
                   key={project.id}
-                  to="/projects"
                   initial={{ opacity: 0, y: 20 }}
                   whileInView={{ opacity: 1, y: 0 }}
-                  viewport={{ once: true }}
+                  viewport={{ once: true, amount: 0.05 }}
                   transition={{ duration: 0.4, delay: index * 0.08 }}
                 >
-                  <FeaturedCardHeader>
-                    <FeaturedCardMeta>
-                      <FeaturedCardIcon aria-hidden="true">{project.icon}</FeaturedCardIcon>
-                      <FeaturedCardCategory>{project.category}</FeaturedCardCategory>
-                    </FeaturedCardMeta>
-                    <ArrowIcon aria-hidden="true">↗</ArrowIcon>
-                  </FeaturedCardHeader>
+                  <FeaturedCard to="/projects">
+                    <FeaturedCardHeader>
+                      <FeaturedCardMeta>
+                        <FeaturedCardIcon aria-hidden="true">{project.icon}</FeaturedCardIcon>
+                        <FeaturedCardCategory>{project.category}</FeaturedCardCategory>
+                      </FeaturedCardMeta>
+                      <ArrowIcon aria-hidden="true">↗</ArrowIcon>
+                    </FeaturedCardHeader>
 
-                  <FeaturedCardTitle>{project.title}</FeaturedCardTitle>
-                  <FeaturedCardDescription>{project.description}</FeaturedCardDescription>
+                    <FeaturedCardTitle>{project.title}</FeaturedCardTitle>
+                    <FeaturedCardDescription>{project.description}</FeaturedCardDescription>
 
-                  <FeaturedCardTech>
-                    {project.technologies.slice(0, 4).map((tech: string) => (
-                      <TechPill key={tech}>{tech}</TechPill>
-                    ))}
-                  </FeaturedCardTech>
-                </FeaturedCard>
+                    <FeaturedCardTech>
+                      {project.technologies.slice(0, 4).map((tech: string) => (
+                        <TechPill key={tech}>{tech}</TechPill>
+                      ))}
+                    </FeaturedCardTech>
+                  </FeaturedCard>
+                </m.div>
               ))}
             </FeaturedGrid>
           </Container>
