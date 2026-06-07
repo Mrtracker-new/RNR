@@ -324,34 +324,34 @@ export const Container = styled.div`
   @media (min-width: 1024px) { padding: 0 var(--spacing-8); }
 `;
 
-export const Section = styled.section<{ padding?: string }>`
-  padding: ${props => props.padding || '80px 0'};
+export const Section = styled.section<{ $padding?: string }>`
+  padding: ${props => props.$padding || '80px 0'};
   position: relative;
 
   @media (max-width: 768px) {
-    padding: ${props => props.padding || '60px 0'};
+    padding: ${props => props.$padding || '60px 0'};
   }
 `;
 
-export const Grid = styled.div<{ columns?: number; gap?: string }>`
+export const Grid = styled.div<{ $columns?: number; $gap?: string }>`
   display: grid;
-  grid-template-columns: repeat(${props => props.columns || 1}, 1fr);
-  gap: ${props => props.gap || 'var(--spacing-8)'};
+  grid-template-columns: repeat(${props => props.$columns || 1}, 1fr);
+  gap: ${props => props.$gap || 'var(--spacing-8)'};
 
   @media (max-width: 768px) {
     grid-template-columns: 1fr;
-    gap: ${props => props.gap || 'var(--spacing-6)'};
+    gap: ${props => props.$gap || 'var(--spacing-6)'};
   }
 `;
 
-export const Card = styled.div<{ hover?: boolean }>`
+export const Card = styled.div<{ $hover?: boolean }>`
   background: rgba(30, 41, 59, 0.5);
   border: 1px solid var(--dark-700);
   border-radius: var(--radius-xl);
   padding: var(--spacing-8);
   transition: var(--transition-normal);
 
-  ${props => props.hover && `
+  ${props => props.$hover && `
     &:hover {
       transform: translateY(-4px);
       border-color: var(--accent-primary);
@@ -365,7 +365,7 @@ export const Card = styled.div<{ hover?: boolean }>`
   }
 `;
 
-export const Button = styled.button<{ variant?: 'primary' | 'secondary' | 'outline'; size?: 'sm' | 'md' | 'lg' }>`
+export const Button = styled.button<{ $variant?: 'primary' | 'secondary' | 'outline'; $size?: 'sm' | 'md' | 'lg' }>`
   display: inline-flex;
   align-items: center;
   justify-content: center;
@@ -378,7 +378,7 @@ export const Button = styled.button<{ variant?: 'primary' | 'secondary' | 'outli
   border: 1px solid transparent;
 
   ${props => {
-    const size = props.size || 'md';
+    const size = props.$size || 'md';
     const sizeStyles: Record<string, string> = {
       sm: 'padding: var(--spacing-2) var(--spacing-4); font-size: var(--text-sm);',
       md: 'padding: var(--spacing-3) var(--spacing-6); font-size: var(--text-base);',
@@ -388,7 +388,7 @@ export const Button = styled.button<{ variant?: 'primary' | 'secondary' | 'outli
   }}
 
   ${props => {
-    const variant = props.variant || 'primary';
+    const variant = props.$variant || 'primary';
     if (variant === 'primary') {
       return `
         background: var(--accent-gradient);
@@ -430,7 +430,7 @@ export const Button = styled.button<{ variant?: 'primary' | 'secondary' | 'outli
   }}
 `;
 
-export const Badge = styled.span<{ variant?: 'success' | 'warning' | 'error' | 'info' }>`
+export const Badge = styled.span<{ $variant?: 'success' | 'warning' | 'error' | 'info' }>`
   display: inline-flex;
   align-items: center;
   padding: var(--spacing-1) var(--spacing-3);
@@ -440,7 +440,7 @@ export const Badge = styled.span<{ variant?: 'success' | 'warning' | 'error' | '
   border: 1px solid;
 
   ${props => {
-    const variant = props.variant || 'info';
+    const variant = props.$variant || 'info';
     const variants: Record<string, string> = {
       success: 'background: var(--dark-900); color: var(--success); border-color: var(--success);',
       warning: 'background: var(--dark-900); color: var(--warning); border-color: var(--warning);',

@@ -861,7 +861,7 @@ const ProjectModal: React.FC<ModalProps> = ({ project, isOpen, onClose }) => {
                   {project.featured && (
                     <>
                       <FeaturedDot aria-hidden="true" />
-                      <Badge variant="success">Featured</Badge>
+                      <Badge $variant="success">Featured</Badge>
                     </>
                   )}
                 </ModalMeta>

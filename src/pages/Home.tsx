@@ -496,7 +496,9 @@ const FeaturedGrid = styled.div`
   }
 `;
 
-const FeaturedCard = styled(motion.article)`
+const MotionLink = motion(Link);
+
+const FeaturedCard = styled(MotionLink)`
   background: rgba(30, 41, 59, 0.35);
   border: 1px solid rgba(255, 255, 255, 0.06);
   border-radius: var(--radius-xl);
@@ -707,10 +709,10 @@ const Home: React.FC = () => {
             </Subheadline>
 
             <CTAContainer variants={itemVariants}>
-              <Button as={Link} to="/projects" variant="primary" size="lg">
+              <Button as={Link} to="/projects" $variant="primary" $size="lg">
                 Explore My Work
               </Button>
-              <Button as={Link} to="/contact" variant="outline" size="lg">
+              <Button as={Link} to="/contact" $variant="outline" $size="lg">
                 Start a Conversation
               </Button>
               <div
@@ -807,7 +809,6 @@ const Home: React.FC = () => {
               {featuredProjects.map((project: Project, index: number) => (
                 <FeaturedCard
                   key={project.id}
-                  as={Link}
                   to="/projects"
                   initial={{ opacity: 0, y: 20 }}
                   whileInView={{ opacity: 1, y: 0 }}
@@ -873,7 +874,7 @@ const Home: React.FC = () => {
               ))}
             </BlogGrid>
 
-            <ViewAllButton as={Link} to="/blog" variant="outline" size="md">
+            <ViewAllButton as={Link} to="/blog" $variant="outline" $size="md">
               Read My Technical Writing →
             </ViewAllButton>
           </Container>

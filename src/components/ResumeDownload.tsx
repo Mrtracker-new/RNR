@@ -166,8 +166,8 @@ const ResumeDownload: React.FC<ResumeDownloadProps> = ({
         as="a"
         href="/resume_rolan_lobo.pdf"
         download="Rolan_Lobo_Resume.pdf"
-        variant={variant}
-        size={size}
+        $variant={variant}
+        $size={size}
         aria-label="Download Rolan Lobo's Resume"
       >
         📄 Download Resume
