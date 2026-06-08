@@ -1,9 +1,13 @@
 # https://www.robotstxt.org/robotstxt.html
+
 User-agent: *
+Allow: /
+Disallow: /node_modules/
+Disallow: /.git/
+
+# Bingbot explicit allow (helps with indexing priority)
+User-agent: Bingbot
 Allow: /
 
 # Sitemap
 Sitemap: https://rolan-rnr.netlify.app/sitemap.xml
-
-# Crawl delay (optional - helps prevent overloading your server)
-Crawl-delay: 1

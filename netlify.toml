@@ -16,10 +16,10 @@
     Referrer-Policy = "strict-origin-when-cross-origin"
     Strict-Transport-Security = "max-age=31536000; includeSubDomains; preload"
     Cross-Origin-Opener-Policy = "same-origin"
-    Cross-Origin-Resource-Policy = "same-site"
+    Cross-Origin-Resource-Policy = "cross-origin"
     Permissions-Policy = "camera=(), microphone=(), geolocation=(), payment=(), usb=()"
     # styled-components requires 'unsafe-inline' for style injection
-    Content-Security-Policy = "default-src 'self'; script-src 'self'; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com; font-src 'self' https://fonts.gstatic.com; img-src 'self' data: https: blob:; connect-src 'self' https://dev.to https://res.cloudinary.com https://fonts.googleapis.com https://fonts.gstatic.com https://rolan-rnr.netlify.app; frame-ancestors 'none'; upgrade-insecure-requests;"
+    Content-Security-Policy = "default-src 'self'; script-src 'self' 'unsafe-inline'; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com; font-src 'self' https://fonts.gstatic.com; img-src 'self' data: https: blob:; connect-src 'self' https://dev.to https://res.cloudinary.com https://fonts.googleapis.com https://fonts.gstatic.com https://rolan-rnr.netlify.app; frame-ancestors 'none'; upgrade-insecure-requests;"
 
 [[headers]]
   for = "/*.html"
