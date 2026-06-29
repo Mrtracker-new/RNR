@@ -2,6 +2,13 @@
   command = "npm run build"
   publish = "build"
 
+[build.environment]
+  NODE_VERSION = "20"
+
+[[plugins]]
+  package = "netlify-plugin-chromium"
+
+
 [[redirects]]
   from = "/*"
   to = "/index.html"
