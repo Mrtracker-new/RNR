@@ -1,31 +1,48 @@
 :root {
   --primary-50: #fafafa;
-  --primary-600: #2563eb;
+  --primary-600: #3b82f6;
   --primary-900: #0f172a;
 
-  --accent-primary: #64ffda;
-  --accent-secondary: #8b5cf6;
-  --accent-tertiary: #f59e0b;
-  --accent-gradient: linear-gradient(135deg, #64ffda 0%, #8b5cf6 100%);
-  --accent-glow: rgba(100, 255, 218, 0.3);
+  /* ── Single brand accent — electric blue. Used for ~5% of pixels only:
+     CTAs, links, focus rings, active states. No gradients, no glow. ── */
+  --accent-primary: #3b82f6;
+  --accent-hover: #5c9bff;
+  --accent-press: #2e6fe0;
+  --accent-subtle: rgba(59, 130, 246, 0.10);
+  --accent-border: rgba(59, 130, 246, 0.30);
+  /* Legacy aliases kept so existing references resolve to the one accent
+     instead of the old teal/violet. Gradient is now a flat accent fill. */
+  --accent-secondary: #3b82f6;
+  --accent-tertiary: #3b82f6;
+  --accent-gradient: #3b82f6;
+  --accent-glow: rgba(59, 130, 246, 0.22);
 
-  --dark-50: #fafafa;
-  --dark-100: #f4f4f5;
-  --dark-200: #e4e4e7;
-  --dark-300: #d4d4d8;
-  --dark-400: #a1a1aa;
-  --dark-350: #b8b8c0;
-  --dark-500: #71717a;
-  --dark-600: #52525b;
-  --dark-700: #3f3f46;
-  --dark-800: #27272a;
-  --dark-850: #1f1f23;
-  --dark-900: #18181b;
-  --dark-950: #09090b;
+  /* ── Cool-grey neutral ramp with a faint blue undertone (not pure zinc).
+     Names preserved (--dark-*) so no component needs renaming. ── */
+  --dark-50: #f7f8f8;
+  --dark-100: #eceef0;
+  --dark-200: #d3d6da;
+  --dark-300: #b3b7bd;
+  --dark-400: #8a8f98;
+  --dark-350: #a0a5ac;
+  --dark-500: #6b7079;
+  --dark-600: #4c515a;
+  --dark-700: #363a41;
+  --dark-800: #22252b;
+  --dark-850: #191c21;
+  --dark-900: #131519;
+  --dark-950: #0a0b0d;
 
-  --success: #22c55e;
-  --warning: #f59e0b;
-  --error: #ef4444;
+  /* Semantic surface aliases for new work */
+  --bg-base: #0a0b0d;
+  --bg-raised: #101216;
+  --bg-overlay: #16181d;
+  --border-subtle: rgba(255, 255, 255, 0.06);
+  --border-strong: rgba(255, 255, 255, 0.12);
+
+  --success: #3fb950;
+  --warning: #d29922;
+  --error: #f85149;
   --info: var(--accent-primary);
 
   --font-sans: 'Inter', 'SF Pro Display', system-ui, -apple-system, BlinkMacSystemFont, sans-serif;
@@ -73,12 +90,14 @@
   --breakpoint-xl:  1280px;
   --breakpoint-2xl: 1536px;
 
-  --shadow-sm:     0 2px 4px 0 rgba(0, 0, 0, 0.15);
-  --shadow-md:     0 8px 16px -4px rgba(0, 0, 0, 0.3);
-  --shadow-lg:     0 20px 25px -5px rgba(0, 0, 0, 0.4);
-  --shadow-xl:     0 25px 50px -12px rgba(0, 0, 0, 0.5);
-  --shadow-accent: 0 8px 32px rgba(100, 255, 218, 0.15);
-  --shadow-hover:  0 12px 28px rgba(100, 255, 218, 0.15);
+  --shadow-sm:     0 1px 2px 0 rgba(0, 0, 0, 0.40);
+  --shadow-md:     0 4px 12px -2px rgba(0, 0, 0, 0.35);
+  --shadow-lg:     0 12px 32px -6px rgba(0, 0, 0, 0.45);
+  --shadow-xl:     0 24px 64px -12px rgba(0, 0, 0, 0.60);
+  /* Elevation is done with borders + neutral shadow, not colored glow.
+     Accent aliases now carry a crisp shadow, not a teal halo. */
+  --shadow-accent: 0 4px 12px -2px rgba(0, 0, 0, 0.35);
+  --shadow-hover:  0 12px 32px -6px rgba(0, 0, 0, 0.45);
 
   --radius-none: 0;
   --radius-sm:   0.25rem;
@@ -126,6 +145,8 @@ body {
   max-width: 100vw;
 }
 
+/* Flat base — no ambient colored glow. A near-invisible top vignette adds
+   depth without the "AI portfolio" wash. */
 body::before {
   content: '';
   position: fixed;
@@ -134,8 +155,7 @@ body::before {
   right: 0;
   bottom: 0;
   background:
-    radial-gradient(ellipse 60% 50% at 15% 20%, rgba(100, 255, 218, 0.06) 0%, transparent 100%),
-    radial-gradient(ellipse 50% 40% at 85% 80%, rgba(139, 92, 246, 0.05) 0%, transparent 100%);
+    radial-gradient(ellipse 80% 50% at 50% -10%, rgba(255, 255, 255, 0.015) 0%, transparent 70%);
   pointer-events: none;
   z-index: -1;
 }
@@ -146,7 +166,7 @@ body::before {
 ::-webkit-scrollbar-thumb:hover { background: var(--accent-primary); }
 
 ::selection {
-  background: rgba(100, 255, 218, 0.2);
+  background: rgba(59, 130, 246, 0.28);
   color: var(--dark-50);
 }
 
@@ -229,11 +249,11 @@ img {
   border: 0;
 }
 
+/* Retired gradient text — now a solid bright monochrome emphasis.
+   Kept as a class so any residual usage degrades gracefully. */
 .text-gradient {
-  background: linear-gradient(135deg, var(--accent-primary) 0%, var(--accent-secondary) 100%);
-  -webkit-background-clip: text;
-  -webkit-text-fill-color: transparent;
-  background-clip: text;
+  color: var(--dark-50);
+  -webkit-text-fill-color: currentColor;
 }
 
 @keyframes pulse {
