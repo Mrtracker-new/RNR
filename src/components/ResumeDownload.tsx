@@ -59,14 +59,13 @@ const PreviewTooltip = styled(m.div) <{ $position: 'top' | 'right' | 'bottom' | 
 
 // Card container for the preview
 const PreviewCard = styled.div<{ $position: 'top' | 'right' | 'bottom' | 'left' }>`
-  background: rgba(30, 41, 59, 0.95);
+  background: var(--bg-overlay);
   backdrop-filter: blur(20px);
   -webkit-backdrop-filter: blur(20px);
-  border: 1px solid rgba(100, 255, 218, 0.2);
+  border: 1px solid var(--border-strong);
   border-radius: var(--radius-xl);
   padding: var(--spacing-4);
-  box-shadow: 0 20px 40px rgba(0, 0, 0, 0.5),
-              0 0 20px rgba(100, 255, 218, 0.15);
+  box-shadow: var(--shadow-lg);
   width: 320px;
   
   /* Arrow pointing to button - changes based on position */
@@ -85,7 +84,7 @@ const PreviewCard = styled.div<{ $position: 'top' | 'right' | 'bottom' | 'left' 
             transform: translateX(-50%);
             border-left: 8px solid transparent;
             border-right: 8px solid transparent;
-            border-top: 8px solid rgba(30, 41, 59, 0.95);
+            border-top: 8px solid var(--bg-overlay);
           `;
       case 'right':
         return `
@@ -93,7 +92,7 @@ const PreviewCard = styled.div<{ $position: 'top' | 'right' | 'bottom' | 'left' 
             top: 24px;
             border-top: 8px solid transparent;
             border-bottom: 8px solid transparent;
-            border-right: 8px solid rgba(30, 41, 59, 0.95);
+            border-right: 8px solid var(--bg-overlay);
           `;
       case 'bottom':
         return `
@@ -102,7 +101,7 @@ const PreviewCard = styled.div<{ $position: 'top' | 'right' | 'bottom' | 'left' 
             transform: translateX(-50%);
             border-left: 8px solid transparent;
             border-right: 8px solid transparent;
-            border-bottom: 8px solid rgba(30, 41, 59, 0.95);
+            border-bottom: 8px solid var(--bg-overlay);
           `;
       case 'left':
         return `
@@ -111,7 +110,7 @@ const PreviewCard = styled.div<{ $position: 'top' | 'right' | 'bottom' | 'left' 
             transform: translateY(-50%);
             border-top: 8px solid transparent;
             border-bottom: 8px solid transparent;
-            border-left: 8px solid rgba(30, 41, 59, 0.95);
+            border-left: 8px solid var(--bg-overlay);
           `;
     }
   }}

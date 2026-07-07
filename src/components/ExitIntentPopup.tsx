@@ -1,5 +1,5 @@
 import React, { useState, useEffect, useCallback } from 'react';
-import styled, { keyframes } from 'styled-components';
+import styled from 'styled-components';
 import { m, AnimatePresence } from 'framer-motion';
 import { useNavigate } from 'react-router-dom';
 
@@ -14,11 +14,6 @@ interface ExitIntentPopupProps {
   secondaryActionPath?: string;
   activationDelay?: number;
 }
-
-const borderPulse = keyframes`
-  0%, 100% { opacity: 0.35; }
-  50%       { opacity: 0.8; }
-`;
 
 const Overlay = styled(m.div)`
   position: fixed;
@@ -41,48 +36,15 @@ const Modal = styled(m.div)`
   padding: 44px 40px 36px;
   text-align: center;
   overflow: hidden;
-  background: rgba(10, 10, 12, 0.96);
-  border: 1px solid rgba(100, 255, 218, 0.12);
+  background: var(--bg-overlay);
+  border: 1px solid var(--border-strong);
   box-shadow:
     0 0 0 1px rgba(255, 255, 255, 0.03),
-    0 32px 80px rgba(0, 0, 0, 0.6),
-    0 0 100px rgba(100, 255, 218, 0.03);
+    var(--shadow-modal, 0 24px 64px rgba(0, 0, 0, 0.6));
 
   @supports (backdrop-filter: blur(24px)) {
     backdrop-filter: blur(28px);
     -webkit-backdrop-filter: blur(28px);
-  }
-
-  &::before {
-    content: '';
-    position: absolute;
-    inset: 0;
-    border-radius: 20px;
-    padding: 1px;
-    background: linear-gradient(
-      135deg,
-      rgba(100, 255, 218, 0.45) 0%,
-      rgba(139, 92, 246, 0.25) 50%,
-      rgba(100, 255, 218, 0.45) 100%
-    );
-    -webkit-mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);
-    -webkit-mask-composite: xor;
-    mask-composite: exclude;
-    pointer-events: none;
-    animation: ${borderPulse} 3.5s ease-in-out infinite;
-  }
-
-  &::after {
-    content: '';
-    position: absolute;
-    top: -50px;
-    left: 50%;
-    transform: translateX(-50%);
-    width: 240px;
-    height: 140px;
-    background: radial-gradient(ellipse, rgba(100, 255, 218, 0.08) 0%, transparent 70%);
-    pointer-events: none;
-    z-index: 0;
   }
 
   > * { position: relative; z-index: 1; }
@@ -120,9 +82,9 @@ const CloseButton = styled.button`
 const IconWrapper = styled.div`
   width: 52px;
   height: 52px;
-  background: linear-gradient(135deg, rgba(100, 255, 218, 0.08) 0%, rgba(139, 92, 246, 0.08) 100%);
+  background: var(--accent-subtle);
   border-radius: 50%;
-  border: 1px solid rgba(100, 255, 218, 0.12);
+  border: 1px solid var(--accent-border);
   display: flex;
   align-items: center;
   justify-content: center;
@@ -156,21 +118,18 @@ const ButtonGroup = styled.div`
 const PrimaryBtn = styled.button`
   width: 100%;
   padding: 13px 24px;
-  background: linear-gradient(135deg, var(--accent-primary) 0%, var(--accent-secondary) 100%);
-  color: #09090b;
+  background: var(--accent-primary);
+  color: #ffffff;
   border: none;
   border-radius: 10px;
   font-size: 0.9rem;
   font-weight: var(--font-semibold);
   letter-spacing: 0.01em;
   cursor: pointer;
-  transition: opacity 0.2s ease, transform 0.15s ease;
+  transition: background 0.2s ease;
 
-  &:hover {
-    opacity: 0.88;
-    transform: translateY(-1px);
-  }
-  &:active { transform: translateY(0); }
+  &:hover { background: var(--accent-hover); }
+  &:active { background: var(--accent-press); }
 `;
 
 const SecondaryBtn = styled.button`
@@ -209,14 +168,8 @@ const DismissLink = styled.button`
 
 const BriefcaseIcon = () => (
   <svg width="24" height="24" viewBox="0 0 24 24" fill="none"
-    stroke="url(#bGrad)" strokeWidth="1.8"
+    stroke="var(--accent-primary)" strokeWidth="1.8"
     strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
-    <defs>
-      <linearGradient id="bGrad" x1="0%" y1="0%" x2="100%" y2="100%">
-        <stop offset="0%" stopColor="#64ffda" />
-        <stop offset="100%" stopColor="#8b5cf6" />
-      </linearGradient>
-    </defs>
     <rect x="2" y="7" width="20" height="14" rx="2" ry="2" />
     <path d="M16 7V5a2 2 0 0 0-2-2h-4a2 2 0 0 0-2 2v2" />
     <path d="M2 12h20" />

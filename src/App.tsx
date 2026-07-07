@@ -47,16 +47,16 @@ const PageErrorWrapper = styled.div`
   button {
     margin-top: 1.25rem;
     padding: 0.6rem 1.5rem;
-    border: 1px solid var(--accent-primary, #667eea);
+    border: 1px solid var(--accent-primary, #3b82f6);
     border-radius: 999px;
     background: transparent;
-    color: var(--accent-primary, #667eea);
+    color: var(--accent-primary, #3b82f6);
     cursor: pointer;
     font-size: 0.95rem;
     transition: background 0.2s;
 
     &:hover {
-      background: var(--accent-primary, #667eea);
+      background: var(--accent-primary, #3b82f6);
       color: #fff;
     }
   }

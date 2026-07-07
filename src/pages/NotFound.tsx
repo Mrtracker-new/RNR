@@ -19,10 +19,7 @@ const Code = styled(m.span)`
   font-size: clamp(6rem, 20vw, 10rem);
   font-weight: 800;
   line-height: 1;
-  background: linear-gradient(135deg, var(--accent-primary) 0%, var(--accent-secondary) 100%);
-  -webkit-background-clip: text;
-  -webkit-text-fill-color: transparent;
-  background-clip: text;
+  color: var(--dark-800);
   letter-spacing: -0.05em;
 `;
 
@@ -43,17 +40,16 @@ const HomeLink = styled(m(Link))`
   align-items: center;
   gap: var(--spacing-2);
   padding: var(--spacing-3) var(--spacing-8);
-  background: var(--accent-gradient);
-  color: var(--dark-950);
+  background: var(--accent-primary);
+  color: #ffffff;
   font-weight: var(--font-semibold);
   border-radius: var(--radius-md);
   text-decoration: none;
-  transition: transform var(--transition-normal), box-shadow var(--transition-normal);
+  transition: background var(--transition-normal);
 
   &:hover {
-    transform: translateY(-2px);
-    box-shadow: var(--shadow-hover);
-    color: var(--dark-950);
+    background: var(--accent-hover);
+    color: #ffffff;
   }
 `;
 

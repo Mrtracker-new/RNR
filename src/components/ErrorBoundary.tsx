@@ -20,19 +20,18 @@ const ErrorFallback = styled.div`
   justify-content: center;
   min-height: 100vh;
   padding: 2rem;
-  background: linear-gradient(135deg, #1a1a2e 0%, #0f3460 100%);
-  color: #fff;
+  background: var(--bg-base);
+  color: var(--dark-100);
   text-align: center;
 `;
 
 const ErrorContainer = styled.div`
   max-width: 600px;
-  background: rgba(255, 255, 255, 0.05);
-  backdrop-filter: blur(10px);
+  background: var(--bg-raised);
   border-radius: 20px;
   padding: 3rem;
-  box-shadow: 0 8px 32px 0 rgba(31, 38, 135, 0.37);
-  border: 1px solid rgba(255, 255, 255, 0.18);
+  box-shadow: var(--shadow-lg);
+  border: 1px solid var(--border-subtle);
 `;
 
 const ErrorIcon = styled.div`
@@ -50,16 +49,13 @@ const ErrorIcon = styled.div`
 const ErrorTitle = styled.h1`
   font-size: 2rem;
   margin-bottom: 1rem;
-  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-  -webkit-background-clip: text;
-  -webkit-text-fill-color: transparent;
-  background-clip: text;
+  color: var(--dark-50);
 `;
 
 const ErrorMessage = styled.p`
   font-size: 1.1rem;
   margin-bottom: 2rem;
-  color: rgba(255, 255, 255, 0.8);
+  color: var(--dark-400);
   line-height: 1.6;
 `;
 
@@ -67,22 +63,15 @@ const ReloadButton = styled.button`
   padding: 1rem 2.5rem;
   font-size: 1rem;
   font-weight: 600;
-  color: #fff;
-  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  color: #ffffff;
+  background: var(--accent-primary);
   border: none;
   border-radius: 50px;
   cursor: pointer;
-  transition: all 0.3s ease;
-  box-shadow: 0 4px 15px 0 rgba(102, 126, 234, 0.4);
+  transition: background 0.2s ease;
 
-  &:hover {
-    transform: translateY(-2px);
-    box-shadow: 0 6px 20px 0 rgba(102, 126, 234, 0.6);
-  }
-
-  &:active {
-    transform: translateY(0);
-  }
+  &:hover { background: var(--accent-hover); }
+  &:active { background: var(--accent-press); }
 `;
 
 const ErrorDetails = styled.details`

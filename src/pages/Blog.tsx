@@ -538,7 +538,7 @@ const Blog: React.FC = () => {
 
           {/* Static fallback for crawlers */}
           <noscript>
-            <p style={{ color: '#94a3b8', marginTop: '2rem', fontSize: '0.875rem' }}>
+            <p style={{ color: 'var(--dark-400)', marginTop: '2rem', fontSize: '0.875rem' }}>
               Articles are loaded from Dev.to.{' '}
               <a href="https://dev.to/rolan_r_n_r" rel="noopener noreferrer">
                 Read all articles by Rolan Lobo on Dev.to →

@@ -66,10 +66,7 @@ const Logo = styled(Link)`
   position: relative;
 
   span {
-    background: var(--accent-gradient);
-    -webkit-background-clip: text;
-    -webkit-text-fill-color: transparent;
-    background-clip: text;
+    color: var(--dark-50);
   }
 `;
 

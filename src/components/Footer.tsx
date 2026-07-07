@@ -64,10 +64,7 @@ const BrandShorthand = styled.span`
   font-weight: var(--font-extrabold);
   letter-spacing: -0.02em;
   line-height: 1;
-  background: var(--accent-gradient);
-  -webkit-background-clip: text;
-  -webkit-text-fill-color: transparent;
-  background-clip: text;
+  color: var(--accent-primary);
 `;
 
 const BrandTagline = styled.p`
@@ -174,8 +171,8 @@ const AvailabilityNote = styled(Link)`
     width: 6px;
     height: 6px;
     border-radius: 50%;
-    background: #10b981;
-    box-shadow: 0 0 6px rgba(16, 185, 129, 0.6);
+    background: var(--success);
+    box-shadow: 0 0 6px rgba(63, 185, 80, 0.6);
     flex-shrink: 0;
   }
 

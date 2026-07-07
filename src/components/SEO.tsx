@@ -91,7 +91,7 @@ const SEO: React.FC<SEOProps> = ({
         : <meta name="robots" content="index, follow, max-image-preview:large, max-snippet:-1, max-video-preview:-1" />
       }
       <meta name="language" content="English" />
-      <meta name="theme-color" content="#64ffda" />
+      <meta name="theme-color" content="#0a0b0d" />
 
       {/* hreflang */}
       <link rel="alternate" hrefLang="en" href={url} />
