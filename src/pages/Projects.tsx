@@ -179,7 +179,7 @@ const FilterCount = styled.span<{ $active: boolean }>`
   font-family: var(--font-mono);
   padding: 1px 6px;
   border-radius: 99px;
-  background: ${props => props.$active ? 'rgba(100, 255, 218, 0.15)' : 'rgba(255,255,255,0.06)'};
+  background: ${props => props.$active ? 'var(--accent-subtle)' : 'rgba(255,255,255,0.06)'};
   color: ${props => props.$active ? 'var(--accent-primary)' : 'var(--dark-600)'};
   font-weight: var(--font-semibold);
   transition: background 0.18s ease, color 0.18s ease;
@@ -215,7 +215,7 @@ const FeaturedItem = styled(m.div)`
   cursor: pointer;
   transition: background 0.2s ease;
 
-  &:hover { background: rgba(20, 27, 45, 0.9); }
+  &:hover { background: var(--bg-overlay); }
 
   @media (max-width: 960px) {
     grid-template-columns: 1fr;
@@ -427,7 +427,7 @@ const TableRow = styled(m.div)`
   transition: background 0.18s ease;
 
   &:hover {
-    background: rgba(20, 27, 45, 0.9);
+    background: var(--bg-overlay);
 
     .row-arrow { color: var(--accent-primary); transform: translateX(3px); }
   }
@@ -541,8 +541,8 @@ const ModalOverlay = styled(m.div)`
 `;
 
 const ModalPanel = styled(m.div)`
-  background: #0d1117;
-  border: 1px solid rgba(255, 255, 255, 0.08);
+  background: var(--bg-overlay);
+  border: 1px solid var(--border-subtle);
   border-radius: var(--radius-2xl);
   max-width: 860px;
   width: 100%;
@@ -609,7 +609,7 @@ const ModalImageStrip = styled.div`
     content: '';
     position: absolute;
     inset: 0;
-    background: linear-gradient(to bottom, transparent 40%, #0d1117 100%);
+    background: linear-gradient(to bottom, transparent 40%, var(--bg-overlay) 100%);
   }
 
   @media (max-width: 768px) { height: 160px; }
@@ -757,10 +757,11 @@ const ModalActionLink = styled.a<{ $primary?: boolean }>`
   letter-spacing: 0.01em;
 
   ${props => props.$primary ? `
-    background: var(--accent-gradient);
-    color: var(--dark-950);
+    background: var(--accent-primary);
+    color: #ffffff;
     border: 1px solid transparent;
-    &:hover { transform: translateY(-1px); box-shadow: 0 6px 20px rgba(100,255,218,0.2); }
+    &:hover { background: var(--accent-hover); }
+    &:active { background: var(--accent-press); }
   ` : `
     background: transparent;
     color: var(--dark-300);

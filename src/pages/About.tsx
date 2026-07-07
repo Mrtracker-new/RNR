@@ -273,8 +273,8 @@ const YearPill = styled.span`
   font-size: 0.7rem;
   font-family: var(--font-mono);
   color: var(--accent-primary);
-  background: rgba(100, 255, 218, 0.06);
-  border: 1px solid rgba(100, 255, 218, 0.15);
+  background: var(--accent-subtle);
+  border: 1px solid var(--accent-border);
   padding: 3px 9px;
   border-radius: var(--radius-md);
   letter-spacing: 0.04em;
@@ -403,8 +403,8 @@ const SkillChip = styled.span`
 
   &:hover {
     color: var(--accent-primary);
-    border-color: rgba(100, 255, 218, 0.22);
-    background: rgba(100, 255, 218, 0.05);
+    border-color: var(--accent-border);
+    background: var(--accent-subtle);
   }
 `;
 
