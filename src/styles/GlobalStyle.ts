@@ -35,18 +35,16 @@ export const Grid = styled.div<{ $columns?: number; $gap?: string }>`
 `;
 
 export const Card = styled.div<{ $hover?: boolean }>`
-  background: rgba(30, 41, 59, 0.5);
-  border: 1px solid var(--dark-700);
+  background: var(--bg-raised);
+  border: 1px solid var(--border-subtle);
   border-radius: var(--radius-xl);
   padding: var(--spacing-8);
-  transition: var(--transition-normal);
+  transition: border-color 0.22s ease, background 0.22s ease;
 
   ${props => props.$hover && `
     &:hover {
-      transform: translateY(-4px);
-      border-color: var(--accent-primary);
-      box-shadow: var(--shadow-accent);
-      background: rgba(30, 41, 59, 0.7);
+      border-color: var(--border-strong);
+      background: var(--bg-overlay);
     }
   `}
 
@@ -81,40 +79,37 @@ export const Button = styled.button<{ $variant?: 'primary' | 'secondary' | 'outl
     const variant = props.$variant || 'primary';
     if (variant === 'primary') {
       return `
-        background: var(--accent-gradient);
-        color: var(--dark-950);
+        background: var(--accent-primary);
+        color: #ffffff;
         border: 1px solid transparent;
-        box-shadow: var(--shadow-md);
+        box-shadow: var(--shadow-sm);
 
-        &:hover {
-          transform: translateY(-2px);
-          box-shadow: var(--shadow-hover);
-        }
-
-        &:active { transform: translateY(0); }
+        &:hover { background: var(--accent-hover); }
+        &:active { background: var(--accent-press); }
       `;
     } else if (variant === 'secondary') {
       return `
         background: var(--dark-800);
-        color: var(--dark-200);
-        border-color: var(--dark-700);
+        color: var(--dark-100);
+        border-color: var(--border-subtle);
 
         &:hover {
           background: var(--dark-700);
-          border-color: var(--dark-600);
+          border-color: var(--border-strong);
         }
+        &:active { background: var(--dark-800); }
       `;
     } else if (variant === 'outline') {
       return `
         background: transparent;
-        color: var(--dark-300);
-        border-color: var(--dark-700);
+        color: var(--dark-200);
+        border-color: var(--border-strong);
 
         &:hover {
-          background: var(--dark-800);
           border-color: var(--accent-primary);
           color: var(--accent-primary);
         }
+        &:active { background: var(--accent-subtle); }
       `;
     }
   }}
@@ -132,10 +127,10 @@ export const Badge = styled.span<{ $variant?: 'success' | 'warning' | 'error' | 
   ${props => {
     const variant = props.$variant || 'info';
     const variants: Record<string, string> = {
-      success: 'background: var(--dark-900); color: var(--success); border-color: var(--success);',
-      warning: 'background: var(--dark-900); color: var(--warning); border-color: var(--warning);',
-      error:   'background: var(--dark-900); color: var(--error);   border-color: var(--error);',
-      info:    'background: var(--dark-900); color: var(--accent-primary); border-color: var(--accent-primary);'
+      success: 'background: rgba(63,185,80,0.10); color: var(--success); border-color: rgba(63,185,80,0.30);',
+      warning: 'background: rgba(210,153,34,0.10); color: var(--warning); border-color: rgba(210,153,34,0.30);',
+      error:   'background: rgba(248,81,73,0.10);  color: var(--error);   border-color: rgba(248,81,73,0.30);',
+      info:    'background: var(--accent-subtle); color: var(--accent-primary); border-color: var(--accent-border);'
     };
     return variants[variant];
   }}
