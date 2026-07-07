@@ -189,6 +189,38 @@ async function main() {
       // Allow framer-motion entrance animations to settle
       await new Promise(r => setTimeout(r, 1500));
 
+      // ── Serialize styled-components CSS into the DOM ──────────────────────
+      // In production, styled-components v6 runs in "speedy" mode and injects
+      // rules via CSSStyleSheet.insertRule() straight into the CSSOM. Those
+      // rules live in sheet.cssRules and are NOT reflected in the <style>
+      // element's text node, so page.content() would emit an EMPTY
+      // <style data-styled> tag — shipping prerendered markup with no component
+      // CSS (the FOUC / flash of unstyled content on first paint).
+      //
+      // Read the rules back out of the CSSOM and write them into the tag's
+      // textContent so the serialized HTML carries the real CSS and paints
+      // fully styled before any JS executes.
+      const inlinedRules = await page.evaluate(() => {
+        let total = 0;
+        document.querySelectorAll('style[data-styled]').forEach((tag) => {
+          // Skip if the tag already has its CSS as text (dev/non-speedy path)
+          if (tag.textContent && tag.textContent.trim().length > 0) return;
+          const sheet = tag.sheet;
+          if (!sheet) return;
+          let css = '';
+          try {
+            for (const rule of sheet.cssRules) css += rule.cssText;
+          } catch {
+            // Cross-origin sheet — not ours, ignore
+            return;
+          }
+          tag.textContent = css;
+          total += css.length;
+        });
+        return total;
+      });
+      console.log(`[prerender]   inlined ${inlinedRules} chars of styled CSS`);
+
       // Get the fully rendered HTML
       const html = await page.content();
       await page.close();
