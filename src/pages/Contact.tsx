@@ -77,14 +77,14 @@ const PageLabel = styled.p`
   font-weight: 700;
   letter-spacing: 0.14em;
   text-transform: uppercase;
-  color: #52525b;
+  color: var(--dark-600);
   margin: 0 0 20px;
 `;
 
 const Headline = styled.h1`
   font-size: clamp(1.85rem, 3vw, 2.6rem);
   font-weight: 800;
-  color: #f4f4f5;
+  color: var(--dark-100);
   letter-spacing: -0.03em;
   line-height: 1.1;
   margin: 0 0 16px;
@@ -92,7 +92,7 @@ const Headline = styled.h1`
 
 const Subline = styled.p`
   font-size: 0.95rem;
-  color: #a1a1aa;
+  color: var(--dark-400);
   line-height: 1.75;
   margin: 0 0 24px;
   max-width: 360px;
@@ -103,11 +103,11 @@ const AvailPill = styled.div`
   align-items: center;
   gap: 8px;
   padding: 6px 14px;
-  border: 1px solid rgba(74, 222, 128, 0.22);
+  border: 1px solid rgba(63, 185, 80, 0.22);
   border-radius: 999px;
   font-size: 0.78rem;
   font-weight: 500;
-  color: #4ade80;
+  color: var(--success);
   width: fit-content;
 `;
 
@@ -115,7 +115,7 @@ const PulseDot = styled.span`
   width: 7px;
   height: 7px;
   border-radius: 50%;
-  background: #4ade80;
+  background: var(--success);
   flex-shrink: 0;
   position: relative;
 
@@ -124,7 +124,7 @@ const PulseDot = styled.span`
     position: absolute;
     inset: -3px;
     border-radius: 50%;
-    background: rgba(74, 222, 128, 0.2);
+    background: rgba(63, 185, 80, 0.2);
     animation: pulse 2s ease-out infinite;
   }
 
@@ -147,7 +147,7 @@ const BlockLabel = styled.p`
   font-weight: 700;
   letter-spacing: 0.14em;
   text-transform: uppercase;
-  color: #52525b;
+  color: var(--dark-600);
   margin: 0 0 20px;
 `;
 
@@ -170,14 +170,14 @@ const DetailsRow = styled.div`
 
 const DetailsKey = styled.dt`
   font-size: 0.85rem;
-  color: #52525b;
+  color: var(--dark-600);
   font-weight: 500;
   flex-shrink: 0;
 `;
 
 const DetailsVal = styled.dd`
   font-size: 0.85rem;
-  color: #d4d4d8;
+  color: var(--dark-200);
   text-align: right;
   margin: 0;
 `;
@@ -210,7 +210,7 @@ const SocialLink = styled.a`
   }
 
   &:focus-visible {
-    outline: 2px solid #64ffda;
+    outline: 2px solid var(--accent-primary);
     outline-offset: 2px;
   }
 `;
@@ -231,7 +231,7 @@ const SocialIconBox = styled.span`
   align-items: center;
   justify-content: center;
   flex-shrink: 0;
-  color: #71717a;
+  color: var(--dark-500);
   transition: color 0.18s ease, border-color 0.18s ease;
 
   svg {
@@ -241,7 +241,7 @@ const SocialIconBox = styled.span`
   }
 
   ${SocialLink}:hover & {
-    color: #d4d4d8;
+    color: var(--dark-200);
     border-color: rgba(255, 255, 255, 0.12);
   }
 `;
@@ -249,10 +249,10 @@ const SocialIconBox = styled.span`
 const SocialName = styled.span`
   font-size: 0.875rem;
   font-weight: 500;
-  color: #71717a;
+  color: var(--dark-500);
   transition: color 0.18s ease;
 
-  ${SocialLink}:hover & { color: #a1a1aa; }
+  ${SocialLink}:hover & { color: var(--dark-400); }
 `;
 
 const SocialRight = styled.div`
@@ -264,11 +264,11 @@ const SocialRight = styled.div`
 const SocialHandle = styled.span`
   font-size: 0.72rem;
   font-family: 'JetBrains Mono', monospace;
-  color: #3f3f46;
+  color: var(--dark-700);
 `;
 
 const ArrowSVG = () => (
-  <svg width="11" height="11" viewBox="0 0 11 11" fill="none" stroke="#3f3f46" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
+  <svg width="11" height="11" viewBox="0 0 11 11" fill="none" stroke="var(--dark-700)" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
     <path d="M2 9 9 2M4 2h5v5" />
   </svg>
 );
@@ -300,14 +300,14 @@ const CardHead = styled.div`
 const CardTitle = styled.h2`
   font-size: 1.2rem;
   font-weight: 700;
-  color: #e4e4e7;
+  color: var(--dark-200);
   letter-spacing: -0.02em;
   margin: 0 0 6px;
 `;
 
 const CardSubtitle = styled.p`
   font-size: 0.85rem;
-  color: #52525b;
+  color: var(--dark-600);
   line-height: 1.6;
   margin: 0;
 `;
@@ -347,7 +347,7 @@ const FieldLabel = styled.label`
   font-weight: 600;
   letter-spacing: 0.06em;
   text-transform: uppercase;
-  color: #52525b;
+  color: var(--dark-600);
 `;
 
 const fieldBase = `
@@ -356,13 +356,13 @@ const fieldBase = `
   padding: 11px 14px;
   background: rgba(255, 255, 255, 0.03);
   border-radius: 10px;
-  color: #e4e4e7;
+  color: var(--dark-200);
   font-size: 0.875rem;
   font-family: inherit;
   line-height: 1.5;
   transition: border-color 0.18s ease, background 0.18s ease, box-shadow 0.18s ease;
 
-  &::placeholder { color: #3f3f46; }
+  &::placeholder { color: var(--dark-700); }
 
   &:focus {
     outline: none;
@@ -418,8 +418,8 @@ const FormActions = styled.div`
 const SubmitBtn = styled(m.button)`
   box-sizing: border-box;
   padding: 11px 28px;
-  background: #e4e4e7;
-  color: #09090b;
+  background: var(--accent-primary);
+  color: #ffffff;
   border: none;
   border-radius: 10px;
   font-weight: 700;
@@ -433,24 +433,25 @@ const SubmitBtn = styled(m.button)`
   min-height: 44px;
   transition: background 0.18s ease, opacity 0.18s ease;
 
-  &:hover:not(:disabled) { background: #f4f4f5; }
+  &:hover:not(:disabled) { background: var(--accent-hover); }
+  &:active:not(:disabled) { background: var(--accent-press); }
   &:disabled { opacity: 0.5; cursor: not-allowed; }
-  &:focus-visible { outline: 2px solid #64ffda; outline-offset: 2px; }
+  &:focus-visible { outline: 2px solid var(--accent-primary); outline-offset: 2px; }
 
   @media (max-width: 480px) { width: 100%; }
 `;
 
 const DirectLink = styled.a`
   font-size: 0.85rem;
-  color: #3f3f46;
+  color: var(--dark-700);
   text-decoration: none;
   transition: color 0.18s ease;
   min-height: 44px;
   display: flex;
   align-items: center;
 
-  &:hover { color: #71717a; }
-  &:focus-visible { outline: 2px solid #64ffda; outline-offset: 2px; border-radius: 2px; }
+  &:hover { color: var(--dark-500); }
+  &:focus-visible { outline: 2px solid var(--accent-primary); outline-offset: 2px; border-radius: 2px; }
 
   @media (max-width: 480px) { justify-content: center; }
 `;
@@ -459,9 +460,9 @@ const StatusBanner = styled(m.div)<{ $t: 'success' | 'error' }>`
   box-sizing: border-box;
   padding: 14px 16px;
   border-radius: 10px;
-  border: 1px solid ${p => p.$t === 'success' ? 'rgba(74,222,128,0.2)' : 'rgba(239,68,68,0.2)'};
-  background: ${p => p.$t === 'success' ? 'rgba(74,222,128,0.05)' : 'rgba(239,68,68,0.05)'};
-  color: ${p => p.$t === 'success' ? '#4ade80' : 'rgba(239,68,68,0.9)'};
+  border: 1px solid ${p => p.$t === 'success' ? 'rgba(63,185,80,0.2)' : 'rgba(239,68,68,0.2)'};
+  background: ${p => p.$t === 'success' ? 'rgba(63,185,80,0.05)' : 'rgba(239,68,68,0.05)'};
+  color: ${p => p.$t === 'success' ? 'var(--success)' : 'rgba(239,68,68,0.9)'};
   font-size: 0.875rem;
   line-height: 1.5;
 `;
@@ -470,7 +471,7 @@ const Spinner = () => (
   <m.span
     animate={{ rotate: 360 }}
     transition={{ repeat: Infinity, duration: 0.9, ease: 'linear' }}
-    style={{ display: 'inline-block', width: 13, height: 13, border: '2px solid rgba(9,9,11,0.2)', borderTopColor: '#09090b', borderRadius: '50%' }}
+    style={{ display: 'inline-block', width: 13, height: 13, border: '2px solid rgba(255,255,255,0.35)', borderTopColor: '#ffffff', borderRadius: '50%' }}
   />
 );
 
