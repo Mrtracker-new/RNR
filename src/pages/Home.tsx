@@ -32,19 +32,6 @@ const HeroSection = styled.section`
   padding-top: 130px;
   padding-bottom: 130px;
 
-  &::before {
-    content: '';
-    position: absolute;
-    top: -20%;
-    right: -10%;
-    width: 50vw;
-    height: 50vw;
-    background: radial-gradient(circle, rgba(100, 255, 218, 0.04) 0%, transparent 70%);
-    z-index: -1;
-    pointer-events: none;
-    filter: blur(60px);
-  }
-
   @media (min-width: 968px) and (max-width: 1280px) {
     padding-top: 130px;
     padding-bottom: 40px;
@@ -59,11 +46,6 @@ const HeroSection = styled.section`
     padding-top: 120px;
     padding-bottom: var(--spacing-4);
     overflow-x: clip;
-
-    &::before {
-      filter: blur(30px);
-      opacity: 0.5;
-    }
   }
 
   @media (max-width: 640px) {
@@ -127,14 +109,6 @@ const ProfileImageContainer = styled(m.div)`
 
   @media (max-width: 480px) { width: 200px; }
 
-  &::before {
-    content: '';
-    position: absolute;
-    inset: -20px;
-    background: radial-gradient(circle, rgba(100, 255, 218, 0.08) 0%, transparent 70%);
-    z-index: -1;
-    filter: blur(20px);
-  }
 `;
 
 const StylizedImage = styled.div`
@@ -172,7 +146,7 @@ const ResumePreviewContainer = styled.div`
   align-items: center;
   justify-content: center;
   overflow: hidden;
-  background: rgba(30, 41, 59, 0.98);
+  background: var(--bg-overlay);
   padding: 20px;
 
   img {
@@ -195,7 +169,7 @@ const ResumeHintText = styled.div`
   padding: 10px 18px;
   border-radius: var(--radius-lg);
   z-index: 10;
-  border: 1px solid rgba(100, 255, 218, 0.2);
+  border: 1px solid var(--accent-border);
   font-weight: 500;
   letter-spacing: 0.5px;
   pointer-events: none;
@@ -206,8 +180,8 @@ const RolePill = styled(m.div)`
   align-items: center;
   gap: var(--spacing-2);
   padding: var(--spacing-2) var(--spacing-5);
-  background: rgba(100, 255, 218, 0.04);
-  border: 1px solid rgba(100, 255, 218, 0.18);
+  background: var(--accent-subtle);
+  border: 1px solid var(--accent-border);
   border-radius: var(--radius-lg);
   margin-bottom: var(--spacing-4);
 
@@ -226,26 +200,21 @@ const RoleText = styled.span`
 const Headline = styled(m.h1)`
   font-size: clamp(2rem, 4.5vw, 4.5rem);
   font-weight: var(--font-extrabold);
-  line-height: 1.1;
-  letter-spacing: -0.03em;
+  line-height: 1.08;
+  letter-spacing: -0.035em;
   margin-bottom: var(--spacing-5);
   color: var(--dark-50);
-  background: linear-gradient(180deg, var(--dark-50) 0%, var(--dark-300) 100%);
-  -webkit-background-clip: text;
-  -webkit-text-fill-color: transparent;
-  background-clip: text;
 
   @media (min-width: 968px) and (max-width: 1280px) {
     font-size: clamp(2rem, 3.8vw, 3.5rem);
     margin-bottom: var(--spacing-4);
   }
 
+  /* Second line uses the neutral hierarchy — dimmed, not gradient-filled.
+     Emphasis comes from weight + color contrast, not a colored gradient. */
   span {
-    color: var(--accent-primary);
-    background: var(--accent-gradient);
-    -webkit-background-clip: text;
-    -webkit-text-fill-color: transparent;
-    background-clip: text;
+    color: var(--dark-400);
+    font-weight: var(--font-bold);
   }
 `;
 
@@ -367,10 +336,10 @@ const StatsBar = styled(m.div)`
   max-width: 100%;
   margin: var(--spacing-12) auto 0;
   padding: var(--spacing-5) var(--spacing-6);
-  background: rgba(30, 41, 59, 0.35);
-  border: 1px solid rgba(255, 255, 255, 0.08);
+  background: var(--bg-raised);
+  border: 1px solid var(--border-subtle);
   border-radius: var(--radius-2xl);
-  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.25);
+  box-shadow: var(--shadow-md);
   z-index: 10;
 
   @media (min-width: 1280px) {
@@ -380,9 +349,9 @@ const StatsBar = styled(m.div)`
     right: var(--spacing-4);
     max-width: calc(var(--breakpoint-lg) - var(--spacing-8));
     margin: 0 auto;
-    background: rgba(255, 255, 255, 0.02);
-    border: 1px solid rgba(255, 255, 255, 0.08);
-    box-shadow: 0 8px 32px rgba(0, 0, 0, 0.25);
+    background: var(--bg-raised);
+    border: 1px solid var(--border-subtle);
+    box-shadow: var(--shadow-md);
   }
 
   @media (max-width: 640px) {
@@ -497,8 +466,8 @@ const FeaturedGrid = styled.div`
 `;
 
 const FeaturedCard = styled(Link)`
-  background: rgba(30, 41, 59, 0.35);
-  border: 1px solid rgba(255, 255, 255, 0.06);
+  background: var(--bg-raised);
+  border: 1px solid var(--border-subtle);
   border-radius: var(--radius-xl);
   padding: var(--spacing-6);
   display: flex;
@@ -508,8 +477,8 @@ const FeaturedCard = styled(Link)`
   text-decoration: none;
 
   &:hover {
-    border-color: rgba(100, 255, 218, 0.25);
-    background: rgba(30, 41, 59, 0.55);
+    border-color: var(--accent-border);
+    background: var(--bg-overlay);
   }
 `;
 
@@ -637,7 +606,7 @@ const containerVariants: Variants = {
   hidden: { opacity: 0 },
   visible: {
     opacity: 1,
-    transition: { staggerChildren: 0.15, delayChildren: 0.2 }
+    transition: { staggerChildren: 0.07, delayChildren: 0.1 }
   }
 };
 
