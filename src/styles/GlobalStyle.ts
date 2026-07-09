@@ -1,4 +1,5 @@
-import styled, { createGlobalStyle } from 'styled-components';
+import styled, { createGlobalStyle, css } from 'styled-components';
+import { glassSurface, glassSurfaceHover, glassControl, glassControlHover } from './surfaces';
 
 export const GlobalStyle = createGlobalStyle`
   ::view-transition-old(root) { animation: vt-fade-out 200ms ease-out both; }
@@ -35,18 +36,10 @@ export const Grid = styled.div<{ $columns?: number; $gap?: string }>`
 `;
 
 export const Card = styled.div<{ $hover?: boolean }>`
-  background: var(--bg-raised);
-  border: 1px solid var(--border-subtle);
-  border-radius: var(--radius-xl);
+  ${glassSurface}
   padding: var(--spacing-8);
-  transition: border-color 0.22s ease, background 0.22s ease;
 
-  ${props => props.$hover && `
-    &:hover {
-      border-color: var(--border-strong);
-      background: var(--bg-overlay);
-    }
-  `}
+  ${props => props.$hover && glassSurfaceHover}
 
   @media (max-width: 768px) {
     padding: var(--spacing-6);
@@ -82,22 +75,16 @@ export const Button = styled.button<{ $variant?: 'primary' | 'secondary' | 'outl
         background: var(--accent-primary);
         color: #ffffff;
         border: 1px solid transparent;
-        box-shadow: var(--shadow-sm);
+        box-shadow: var(--shadow-sm), var(--control-highlight);
 
         &:hover { background: var(--accent-hover); }
         &:active { background: var(--accent-press); }
       `;
     } else if (variant === 'secondary') {
-      return `
-        background: var(--dark-800);
+      return css`
+        ${glassControl}
+        ${glassControlHover}
         color: var(--dark-100);
-        border-color: var(--border-subtle);
-
-        &:hover {
-          background: var(--dark-700);
-          border-color: var(--border-strong);
-        }
-        &:active { background: var(--dark-800); }
       `;
     } else if (variant === 'outline') {
       return `
