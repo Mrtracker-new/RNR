@@ -2,7 +2,6 @@ import { lazy, Suspense } from 'react';
 import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
 import { LazyMotion, domAnimation, AnimatePresence } from 'framer-motion';
 import styled from 'styled-components';
-import { GlobalStyle } from './styles/GlobalStyle';
 const Navbar = lazy(() => import('./components/Navbar'));
 const Footer = lazy(() => import('./components/Footer'));
 import { FullScreenLoading } from './components/LoadingSpinner';
@@ -132,7 +131,6 @@ function App() {
   return (
     <LazyMotion features={domAnimation} strict>
       <Router>
-        <GlobalStyle />
         <ScrollToTop />
         <Suspense fallback={null}>
           <ExitIntentPopup />

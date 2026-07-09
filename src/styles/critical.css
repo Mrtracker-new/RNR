@@ -39,6 +39,21 @@
   --bg-overlay: #16181d;
   --border-subtle: rgba(255, 255, 255, 0.06);
   --border-strong: rgba(255, 255, 255, 0.12);
+  --scrim: rgba(0, 0, 0, 0.6); /* modal/overlay backdrop dim */
+
+  /* Semantic text aliases — referenced by the ErrorBoundary fallback so it
+     matches the theme instead of falling back to raw #fff/#aaa. */
+  --text-primary:   var(--dark-50);
+  --text-secondary: var(--dark-400);
+
+  /* ── Hairline ramp — the ONE source for every white-alpha divider/border
+     that used to be hand-written as rgba(255,255,255,0.0x) across pages.
+     Compose these instead of inlining an alpha. ── */
+  --hairline-faint:  rgba(255, 255, 255, 0.04);
+  --hairline:        rgba(255, 255, 255, 0.06);
+  --hairline-strong: rgba(255, 255, 255, 0.09);
+  --hairline-bright: rgba(255, 255, 255, 0.14);
+  --divider:         rgba(255, 255, 255, 0.05);
 
   --success: #3fb950;
   --warning: #d29922;
@@ -48,6 +63,7 @@
   --font-sans: 'Inter', 'SF Pro Display', system-ui, -apple-system, BlinkMacSystemFont, sans-serif;
   --font-mono: 'JetBrains Mono', 'SF Mono', 'Fira Code', 'Consolas', monospace;
 
+  --text-2xs:  0.6875rem;
   --text-xs:   0.75rem;
   --text-sm:   0.875rem;
   --text-base: 1rem;
@@ -59,6 +75,15 @@
   --text-5xl:  3rem;
   --text-6xl:  3.75rem;
   --text-7xl:  4.5rem;
+
+  /* Letter-spacing scale — kills scattered raw em values. Tight for large
+     display headings, wide for uppercase micro-labels/eyebrows. */
+  --tracking-tighter: -0.03em;
+  --tracking-tight:   -0.02em;
+  --tracking-normal:  0;
+  --tracking-wide:    0.06em;
+  --tracking-wider:   0.1em;
+  --tracking-widest:  0.14em;
 
   --font-normal:    400;
   --font-medium:    500;
@@ -84,11 +109,27 @@
   --spacing-24: 6rem;
   --spacing-32: 8rem;
 
+  /* ── Breakpoint convention ─────────────────────────────────────────────
+     New/redesigned code uses exactly THREE stops. Everything migrates onto
+     these; the fragmented 380/400/480/560/580/900/960/968 stops are retired.
+       640px  → phone ⇄ small tablet
+       768px  → tablet ⇄ small laptop (also nav desktop⇄mobile cutover)
+       1024px → laptop ⇄ desktop
+     ────────────────────────────────────────────────────────────────────── */
   --breakpoint-sm:  640px;
   --breakpoint-md:  768px;
   --breakpoint-lg:  1024px;
   --breakpoint-xl:  1280px;
   --breakpoint-2xl: 1536px;
+
+  /* Shared content width — Navbar island, page Container, and Contact wrap
+     all resolve to the same measure so gutters line up across routes. */
+  --content-max: 1200px;
+
+  /* Section vertical rhythm — one value drives every Section's top/bottom
+     padding so page-to-page cadence is identical. */
+  --section-y:    var(--spacing-20);
+  --section-y-sm: var(--spacing-12);
 
   --shadow-sm:     0 1px 2px 0 rgba(0, 0, 0, 0.40);
   --shadow-md:     0 4px 12px -2px rgba(0, 0, 0, 0.35);
@@ -106,6 +147,11 @@
   --radius-xl:   1rem;
   --radius-2xl:  1.5rem;
   --radius-full: 50%;
+
+  /* Blog post-row thumbnail — shared by BlogCard <img> and Blog skeleton so
+     the two can't drift out of sync. */
+  --blog-thumb-w: 100px;
+  --blog-thumb-h: 68px;
 
   --transition-fast:   150ms cubic-bezier(0.4, 0, 0.2, 1);
   --transition-normal: 300ms cubic-bezier(0.4, 0, 0.2, 1);

@@ -1,13 +1,12 @@
-import styled, { createGlobalStyle, css } from 'styled-components';
+import styled, { css } from 'styled-components';
 import { glassSurface, glassSurfaceHover, glassControl, glassControlHover } from './surfaces';
 
-export const GlobalStyle = createGlobalStyle`
-  ::view-transition-old(root) { animation: vt-fade-out 200ms ease-out both; }
-  ::view-transition-new(root) { animation: vt-fade-in  200ms ease-in  both; }
-`;
+/* NB: global resets, keyframes, and ::view-transition rules live in
+   styles/critical.css (imported once via index.css). Don't re-declare them
+   here — this file exports layout primitives only. */
 
 export const Container = styled.div`
-  max-width: var(--breakpoint-xl);
+  max-width: var(--content-max);
   margin: 0 auto;
   padding: 0 var(--spacing-4);
 
@@ -16,11 +15,11 @@ export const Container = styled.div`
 `;
 
 export const Section = styled.section<{ $padding?: string }>`
-  padding: ${props => props.$padding || '80px 0'};
+  padding: ${props => props.$padding || 'var(--section-y) 0'};
   position: relative;
 
   @media (max-width: 768px) {
-    padding: ${props => props.$padding || '60px 0'};
+    padding: ${props => props.$padding || 'var(--section-y-sm) 0'};
   }
 `;
 
