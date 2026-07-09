@@ -24,7 +24,7 @@ const PageWrapper = styled.div`
 const Wrap = styled.div`
   box-sizing: border-box;
   width: 100%;
-  max-width: 1200px;
+  max-width: var(--content-max);
   margin: 0 auto;
   padding: 0 48px;
 
@@ -75,7 +75,7 @@ const IntroSection = styled.div`
 
 const PageLabel = styled.p`
   font-size: 0.68rem;
-  font-weight: 700;
+  font-weight: var(--font-bold);
   letter-spacing: 0.14em;
   text-transform: uppercase;
   color: var(--dark-600);
@@ -84,7 +84,7 @@ const PageLabel = styled.p`
 
 const Headline = styled.h1`
   font-size: clamp(1.85rem, 3vw, 2.6rem);
-  font-weight: 800;
+  font-weight: var(--font-extrabold);
   color: var(--dark-100);
   letter-spacing: -0.03em;
   line-height: 1.1;
@@ -107,7 +107,7 @@ const AvailPill = styled.div`
   border: 1px solid rgba(63, 185, 80, 0.22);
   border-radius: 999px;
   font-size: 0.78rem;
-  font-weight: 500;
+  font-weight: var(--font-medium);
   color: var(--success);
   width: fit-content;
 `;
@@ -145,7 +145,7 @@ const DetailsSection = styled.div`
 
 const BlockLabel = styled.p`
   font-size: 0.68rem;
-  font-weight: 700;
+  font-weight: var(--font-bold);
   letter-spacing: 0.14em;
   text-transform: uppercase;
   color: var(--dark-600);
@@ -172,7 +172,7 @@ const DetailsRow = styled.div`
 const DetailsKey = styled.dt`
   font-size: 0.85rem;
   color: var(--dark-600);
-  font-weight: 500;
+  font-weight: var(--font-medium);
   flex-shrink: 0;
 `;
 
@@ -248,7 +248,7 @@ const SocialIconBox = styled.span`
 
 const SocialName = styled.span`
   font-size: 0.875rem;
-  font-weight: 500;
+  font-weight: var(--font-medium);
   color: var(--dark-500);
   transition: color 0.18s ease;
 
@@ -263,7 +263,7 @@ const SocialRight = styled.div`
 
 const SocialHandle = styled.span`
   font-size: 0.72rem;
-  font-family: 'JetBrains Mono', monospace;
+  font-family: var(--font-mono);
   color: var(--dark-700);
 `;
 
@@ -297,7 +297,7 @@ const CardHead = styled.div`
 
 const CardTitle = styled.h2`
   font-size: 1.2rem;
-  font-weight: 700;
+  font-weight: var(--font-bold);
   color: var(--dark-200);
   letter-spacing: -0.02em;
   margin: 0 0 6px;
@@ -342,7 +342,7 @@ const FieldGroup = styled.div`
 
 const FieldLabel = styled.label`
   font-size: 0.72rem;
-  font-weight: 600;
+  font-weight: var(--font-semibold);
   letter-spacing: 0.06em;
   text-transform: uppercase;
   color: var(--dark-600);
@@ -420,7 +420,7 @@ const SubmitBtn = styled(m.button)`
   color: #ffffff;
   border: none;
   border-radius: 10px;
-  font-weight: 700;
+  font-weight: var(--font-bold);
   font-size: 0.875rem;
   cursor: pointer;
   display: flex;
