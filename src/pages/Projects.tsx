@@ -6,6 +6,7 @@ import SEO from '../components/SEO';
 import { projectsData, PROJECT_CATEGORIES } from '../data/projects';
 import type { Project } from '../data/projects';
 import { glassControl, glassPanel } from '../styles/surfaces';
+import { SectionHeading } from '../components/layout/primitives';
 
 /* ─── Design tokens used locally ─────────────────────────────────────────── */
 
@@ -35,7 +36,7 @@ const HeroRow = styled.div`
   justify-content: space-between;
   gap: var(--spacing-8);
   padding: var(--spacing-12) 0 var(--spacing-10);
-  border-bottom: 1px solid rgba(255, 255, 255, 0.06);
+  border-bottom: 1px solid var(--hairline);
   margin-bottom: var(--spacing-10);
 
   @media (max-width: 768px) {
@@ -50,9 +51,9 @@ const HeroRow = styled.div`
 const HeroLeft = styled(m.div)``;
 
 const PageLabel = styled.p`
-  font-size: 0.7rem;
+  font-size: var(--text-2xs);
   font-weight: var(--font-bold);
-  letter-spacing: 0.14em;
+  letter-spacing: var(--tracking-widest);
   text-transform: uppercase;
   color: var(--dark-600);
   margin-bottom: var(--spacing-3);
@@ -62,7 +63,7 @@ const PageTitle = styled(m.h1)`
   font-size: clamp(2.2rem, 5vw, 3.5rem);
   font-weight: var(--font-extrabold);
   color: var(--dark-50);
-  letter-spacing: -0.03em;
+  letter-spacing: var(--tracking-tighter);
   line-height: 1.05;
   margin-bottom: var(--spacing-4);
 `;
@@ -100,15 +101,15 @@ const StatNumber = styled.span`
   font-size: var(--text-3xl);
   font-weight: var(--font-extrabold);
   color: var(--dark-100);
-  letter-spacing: -0.03em;
+  letter-spacing: var(--tracking-tighter);
   line-height: 1;
 `;
 
 const StatLabel = styled.span`
   display: block;
-  font-size: 0.7rem;
+  font-size: var(--text-2xs);
   font-weight: var(--font-medium);
-  letter-spacing: 0.08em;
+  letter-spacing: var(--tracking-wide);
   text-transform: uppercase;
   color: var(--dark-600);
   margin-top: 3px;
@@ -117,7 +118,7 @@ const StatLabel = styled.span`
 const StatSeparator = styled.div`
   width: 1px;
   height: 32px;
-  background: rgba(255, 255, 255, 0.08);
+  background: var(--hairline-strong);
   margin: 0 var(--spacing-4);
 
   @media (max-width: 768px) { display: none; }
@@ -165,21 +166,21 @@ const FilterTab = styled.button<{ $active: boolean }>`
   position: relative;
 
   ${props => props.$active ? `
-    background: rgba(255, 255, 255, 0.09);
+    background: var(--hairline-strong);
     color: var(--dark-100);
   ` : `
     background: transparent;
     color: var(--dark-500);
-    &:hover { background: rgba(255, 255, 255, 0.04); color: var(--dark-300); }
+    &:hover { background: var(--hairline-faint); color: var(--dark-300); }
   `}
 `;
 
 const FilterCount = styled.span<{ $active: boolean }>`
-  font-size: 0.65rem;
+  font-size: var(--text-2xs);
   font-family: var(--font-mono);
   padding: 1px 6px;
   border-radius: 99px;
-  background: ${props => props.$active ? 'var(--accent-subtle)' : 'rgba(255,255,255,0.06)'};
+  background: ${props => props.$active ? 'var(--accent-subtle)' : 'var(--hairline)'};
   color: ${props => props.$active ? 'var(--accent-primary)' : 'var(--dark-600)'};
   font-weight: var(--font-semibold);
   transition: background 0.18s ease, color 0.18s ease;
@@ -187,21 +188,12 @@ const FilterCount = styled.span<{ $active: boolean }>`
 
 /* ─── Featured section ────────────────────────────────────────────────────── */
 
-const SectionLabel = styled.p`
-  font-size: 0.68rem;
-  font-weight: var(--font-bold);
-  letter-spacing: 0.12em;
-  text-transform: uppercase;
-  color: var(--dark-600);
-  margin-bottom: var(--spacing-6);
-`;
-
 const FeaturedList = styled.div`
   display: flex;
   flex-direction: column;
   gap: 1px;
   margin-bottom: var(--spacing-16);
-  background: rgba(255, 255, 255, 0.05);
+  background: var(--divider);
   border-radius: var(--radius-xl);
   overflow: hidden;
 
@@ -228,11 +220,11 @@ const FeaturedContent = styled.div`
   flex-direction: column;
   justify-content: space-between;
   gap: var(--spacing-6);
-  border-right: 1px solid rgba(255, 255, 255, 0.05);
+  border-right: 1px solid var(--divider);
 
   @media (max-width: 960px) {
     border-right: none;
-    border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+    border-bottom: 1px solid var(--divider);
     padding: var(--spacing-8) var(--spacing-6);
   }
 
@@ -246,9 +238,9 @@ const FeaturedMeta = styled.div`
 `;
 
 const FeaturedCategoryTag = styled.span`
-  font-size: 0.68rem;
+  font-size: var(--text-2xs);
   font-weight: var(--font-medium);
-  letter-spacing: 0.08em;
+  letter-spacing: var(--tracking-wide);
   text-transform: uppercase;
   color: var(--dark-500);
 `;
@@ -265,7 +257,7 @@ const FeaturedTitle = styled.h2`
   font-size: clamp(1.4rem, 3vw, 2rem);
   font-weight: var(--font-bold);
   color: var(--dark-50);
-  letter-spacing: -0.025em;
+  letter-spacing: var(--tracking-tight);
   line-height: 1.15;
 `;
 
@@ -293,7 +285,7 @@ const FeaturedTechRow = styled.div`
 const TechPill = styled.span`
   ${glassControl}
   border-radius: var(--radius-sm);
-  font-size: 0.7rem;
+  font-size: var(--text-2xs);
   font-family: var(--font-mono);
   color: var(--dark-500);
   padding: 2px 8px;
@@ -375,9 +367,9 @@ const PlaceholderIcon = styled.span`
 `;
 
 const PlaceholderCat = styled.span`
-  font-size: 0.65rem;
+  font-size: var(--text-2xs);
   font-weight: var(--font-medium);
-  letter-spacing: 0.1em;
+  letter-spacing: var(--tracking-wider);
   text-transform: uppercase;
   color: var(--dark-700);
 `;
@@ -391,7 +383,7 @@ const TableHeader = styled.div`
   grid-template-columns: 1fr 160px 180px 120px;
   gap: var(--spacing-4);
   padding: var(--spacing-2) var(--spacing-4) var(--spacing-3);
-  border-bottom: 1px solid rgba(255, 255, 255, 0.06);
+  border-bottom: 1px solid var(--hairline);
   margin-bottom: 2px;
 
   @media (max-width: 960px) { grid-template-columns: 1fr 140px 100px; }
@@ -399,9 +391,9 @@ const TableHeader = styled.div`
 `;
 
 const TableHeaderCell = styled.span`
-  font-size: 0.65rem;
+  font-size: var(--text-2xs);
   font-weight: var(--font-bold);
-  letter-spacing: 0.1em;
+  letter-spacing: var(--tracking-wider);
   text-transform: uppercase;
   color: var(--dark-600);
 `;
@@ -410,7 +402,7 @@ const TableBody = styled(m.div)`
   display: flex;
   flex-direction: column;
   gap: 1px;
-  background: rgba(255, 255, 255, 0.04);
+  background: var(--hairline-faint);
   border-radius: var(--radius-xl);
   overflow: hidden;
 `;
@@ -463,7 +455,7 @@ const RowName = styled.h3`
   font-size: var(--text-base);
   font-weight: var(--font-semibold);
   color: var(--dark-100);
-  letter-spacing: -0.01em;
+  letter-spacing: var(--tracking-tight);
   white-space: nowrap;
   overflow: hidden;
   text-overflow: ellipsis;
@@ -502,7 +494,7 @@ const RowTech = styled.div`
 const SmallTechPill = styled.span`
   ${glassControl}
   border-radius: var(--radius-sm);
-  font-size: 0.65rem;
+  font-size: var(--text-2xs);
   font-family: var(--font-mono);
   color: var(--dark-600);
   padding: 1px 6px;
@@ -522,7 +514,9 @@ const ModalOverlay = styled(m.div)`
   position: fixed;
   inset: 0;
   background: rgba(0, 0, 0, 0.8);
-  z-index: 1000;
+  /* Above the nav island (z:1200) and mobile menu (z:1100) so the modal —
+     and its close button — are never clipped by the fixed header. */
+  z-index: 2000;
   display: flex;
   align-items: center;
   justify-content: center;
@@ -570,12 +564,12 @@ const ModalScroller = styled.div`
   will-change: scroll-position;
   contain: layout style;
   scrollbar-width: thin;
-  scrollbar-color: rgba(255, 255, 255, 0.08) transparent;
+  scrollbar-color: var(--hairline-strong) transparent;
 
   &::-webkit-scrollbar { width: 4px; }
   &::-webkit-scrollbar-track { background: transparent; }
   &::-webkit-scrollbar-thumb {
-    background: rgba(255, 255, 255, 0.08);
+    background: var(--hairline-strong);
     border-radius: 99px;
   }
 
@@ -627,7 +621,7 @@ const CloseButton = styled.button`
   height: 36px;
   border-radius: 50%;
   background: rgba(0, 0, 0, 0.5);
-  border: 1px solid rgba(255, 255, 255, 0.12);
+  border: 1px solid var(--border-strong);
   color: var(--dark-300);
   display: flex;
   align-items: center;
@@ -637,7 +631,7 @@ const CloseButton = styled.button`
   transition: background 0.18s ease, color 0.18s ease;
   font-family: inherit;
 
-  &:hover { background: rgba(255, 255, 255, 0.1); color: var(--dark-50); }
+  &:hover { background: var(--border-strong); color: var(--dark-50); }
 `;
 
 const ModalMeta = styled.div`
@@ -648,9 +642,9 @@ const ModalMeta = styled.div`
 `;
 
 const ModalCatTag = styled.span`
-  font-size: 0.65rem;
+  font-size: var(--text-2xs);
   font-weight: var(--font-medium);
-  letter-spacing: 0.1em;
+  letter-spacing: var(--tracking-wider);
   text-transform: uppercase;
   color: var(--accent-primary);
   opacity: 0.8;
@@ -660,7 +654,7 @@ const ModalTitle = styled.h2`
   font-size: clamp(1.4rem, 3.5vw, 2rem);
   font-weight: var(--font-bold);
   color: var(--dark-50);
-  letter-spacing: -0.025em;
+  letter-spacing: var(--tracking-tight);
   line-height: 1.2;
   margin-bottom: var(--spacing-4);
 `;
@@ -675,7 +669,7 @@ const ModalLede = styled.p`
 
 const ModalDivider = styled.hr`
   border: none;
-  border-top: 1px solid rgba(255, 255, 255, 0.06);
+  border-top: 1px solid var(--hairline);
   margin: var(--spacing-6) 0;
 `;
 
@@ -686,16 +680,16 @@ const CaseStudySection = styled.div`
 
 const CaseStudyItem = styled.div`
   padding: var(--spacing-5) 0;
-  border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+  border-bottom: 1px solid var(--divider);
 
   &:last-child { border-bottom: none; padding-bottom: 0; }
   &:first-child { padding-top: 0; }
 `;
 
 const CaseStudyItemLabel = styled.p`
-  font-size: 0.68rem;
+  font-size: var(--text-2xs);
   font-weight: var(--font-bold);
-  letter-spacing: 0.12em;
+  letter-spacing: var(--tracking-wider);
   text-transform: uppercase;
   color: var(--dark-600);
   margin-bottom: var(--spacing-2);
@@ -708,9 +702,9 @@ const CaseStudyItemText = styled.p`
 `;
 
 const ModalSectionLabel = styled.p`
-  font-size: 0.68rem;
+  font-size: var(--text-2xs);
   font-weight: var(--font-bold);
-  letter-spacing: 0.12em;
+  letter-spacing: var(--tracking-wider);
   text-transform: uppercase;
   color: var(--dark-600);
   margin-bottom: var(--spacing-3);
@@ -726,7 +720,7 @@ const ModalTechRow = styled.div`
 const ModalTechTag = styled.span`
   ${glassControl}
   border-radius: var(--radius-sm);
-  font-size: 0.72rem;
+  font-size: var(--text-2xs);
   font-family: var(--font-mono);
   color: var(--dark-400);
   padding: 3px 10px;
@@ -759,8 +753,8 @@ const ModalActionLink = styled.a<{ $primary?: boolean }>`
   ` : `
     background: transparent;
     color: var(--dark-300);
-    border: 1px solid rgba(255,255,255,0.1);
-    &:hover { border-color: rgba(255,255,255,0.2); background: rgba(255,255,255,0.04); color: var(--dark-100); }
+    border: 1px solid var(--border-strong);
+    &:hover { border-color: var(--hairline-bright); background: var(--hairline-faint); color: var(--dark-100); }
   `}
 `;
 
@@ -1033,9 +1027,10 @@ const Projects: React.FC = () => {
               {/* ── Featured projects ── */}
               {featuredProjects.length > 0 && (
                 <div>
-                  <SectionLabel>
-                    Featured — {featuredProjects.length} project{featuredProjects.length !== 1 ? 's' : ''}
-                  </SectionLabel>
+                  <SectionHeading
+                    title="Featured"
+                    aside={`${featuredProjects.length} project${featuredProjects.length !== 1 ? 's' : ''}`}
+                  />
                   <FeaturedList>
                     {featuredProjects.map((project, i) => (
                       <FeaturedItem
@@ -1132,9 +1127,10 @@ const Projects: React.FC = () => {
               {/* ── All / other projects table ── */}
               {otherProjects.length > 0 && (
                 <ProjectsTableSection>
-                  <SectionLabel>
-                    {featuredProjects.length > 0 ? 'More Projects' : 'All Projects'} — {otherProjects.length}
-                  </SectionLabel>
+                  <SectionHeading
+                    title={featuredProjects.length > 0 ? 'More Projects' : 'All Projects'}
+                    aside={`${otherProjects.length} total`}
+                  />
 
                   <TableHeader aria-hidden="true">
                     <TableHeaderCell>Project</TableHeaderCell>
