@@ -1,5 +1,5 @@
 import React, { useState, useEffect, lazy, Suspense } from 'react';
-import styled from 'styled-components';
+import styled, { keyframes } from 'styled-components';
 import { m, AnimatePresence } from 'framer-motion';
 import { Helmet } from 'react-helmet-async';
 import { Container } from '../styles/GlobalStyle';
@@ -28,7 +28,7 @@ const HeroRow = styled.div`
   justify-content: space-between;
   gap: var(--spacing-8);
   padding: var(--spacing-12) 0 var(--spacing-10);
-  border-bottom: 1px solid rgba(255, 255, 255, 0.06);
+  border-bottom: 1px solid var(--hairline);
   margin-bottom: var(--spacing-10);
 
   @media (max-width: 768px) {
@@ -43,9 +43,9 @@ const HeroRow = styled.div`
 const HeroLeft = styled(m.div)``;
 
 const PageLabel = styled.p`
-  font-size: 0.7rem;
+  font-size: var(--text-2xs);
   font-weight: var(--font-bold);
-  letter-spacing: 0.14em;
+  letter-spacing: var(--tracking-widest);
   text-transform: uppercase;
   color: var(--dark-600);
   margin-bottom: var(--spacing-3);
@@ -55,7 +55,7 @@ const PageTitle = styled(m.h1)`
   font-size: clamp(2.2rem, 5vw, 3.5rem);
   font-weight: var(--font-extrabold);
   color: var(--dark-50);
-  letter-spacing: -0.03em;
+  letter-spacing: var(--tracking-tighter);
   line-height: 1.05;
   margin-bottom: var(--spacing-4);
 `;
@@ -145,12 +145,12 @@ const FilterTab = styled.button<{ $active: boolean }>`
   font-family: inherit;
 
   ${props => props.$active ? `
-    background: rgba(255, 255, 255, 0.09);
+    background: var(--hairline-strong);
     color: var(--dark-100);
   ` : `
     background: transparent;
     color: var(--dark-500);
-    &:hover { background: rgba(255, 255, 255, 0.04); color: var(--dark-300); }
+    &:hover { background: var(--hairline-faint); color: var(--dark-300); }
   `}
 `;
 
@@ -166,46 +166,62 @@ const PostList = styled(m.div)`
   /* BlogCard rows handle their own borders — no wrapper border needed */
 `;
 
+/* One shimmer keyframe, shared by every skeleton element. */
+const shimmer = keyframes`
+  0%   { opacity: 0.4; }
+  50%  { opacity: 0.7; }
+  100% { opacity: 0.4; }
+`;
+
 const SkeletonRow = styled.div`
   display: grid;
-  grid-template-columns: 1fr 100px;
+  grid-template-columns: 1fr var(--blog-thumb-w);
   gap: var(--spacing-6);
   padding: var(--spacing-6) 0;
-  border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+  border-bottom: 1px solid var(--divider);
 
   @media (max-width: 640px) { grid-template-columns: 1fr; }
 `;
 
-const SkeletonLine = styled.div<{ $w?: string; $h?: string; $mb?: string }>`
+const SkeletonLines = styled.div`
+  display: flex;
+  flex-direction: column;
+  gap: var(--spacing-3);
+`;
+
+const SkeletonLine = styled.div<{ $w?: string; $h?: string }>`
   height: ${p => p.$h ?? '14px'};
   width: ${p => p.$w ?? '100%'};
-  background: rgba(255, 255, 255, 0.04);
+  background: var(--hairline-faint);
   border-radius: var(--radius-sm);
-  margin-bottom: ${p => p.$mb ?? '0'};
-
-  @keyframes shimmer {
-    0%   { opacity: 0.4; }
-    50%  { opacity: 0.7; }
-    100% { opacity: 0.4; }
-  }
-  animation: shimmer 1.6s ease-in-out infinite;
+  animation: ${shimmer} 1.6s ease-in-out infinite;
 `;
 
 const SkeletonThumb = styled.div`
-  width: 100px;
-  height: 68px;
+  width: var(--blog-thumb-w);
+  height: var(--blog-thumb-h);
   border-radius: var(--radius-md);
-  background: rgba(255, 255, 255, 0.04);
-  animation: shimmer 1.6s ease-in-out infinite;
-
-  @keyframes shimmer {
-    0%   { opacity: 0.4; }
-    50%  { opacity: 0.7; }
-    100% { opacity: 0.4; }
-  }
+  background: var(--hairline-faint);
+  animation: ${shimmer} 1.6s ease-in-out infinite;
 
   @media (max-width: 640px) { display: none; }
 `;
+
+/* Single skeleton row — reused by the loading list and each card's Suspense
+   fallback so the two can never drift out of sync. */
+function SkeletonRowBlock() {
+  return (
+    <SkeletonRow>
+      <SkeletonLines>
+        <SkeletonLine $w="80px" $h="10px" />
+        <SkeletonLine $w="75%" $h="18px" />
+        <SkeletonLine $w="55%" $h="18px" />
+        <SkeletonLine $w="90%" $h="13px" />
+      </SkeletonLines>
+      <SkeletonThumb />
+    </SkeletonRow>
+  );
+}
 
 /* ─── States ──────────────────────────────────────────────────────────────── */
 
@@ -243,7 +259,7 @@ const FooterStrip = styled.div`
   align-items: center;
   justify-content: center;
   padding-top: var(--spacing-12);
-  border-top: 1px solid rgba(255, 255, 255, 0.05);
+  border-top: 1px solid var(--divider);
   margin-top: var(--spacing-4);
 `;
 
@@ -435,15 +451,7 @@ const Blog: React.FC = () => {
           {loading && (
             <div>
               {Array.from({ length: SKELETON_COUNT }).map((_, i) => (
-                <SkeletonRow key={i}>
-                  <div style={{ display: 'flex', flexDirection: 'column', gap: '10px' }}>
-                    <SkeletonLine $w="80px" $h="10px" />
-                    <SkeletonLine $w="75%" $h="18px" />
-                    <SkeletonLine $w="55%" $h="18px" />
-                    <SkeletonLine $w="90%" $h="13px" />
-                  </div>
-                  <SkeletonThumb />
-                </SkeletonRow>
+                <SkeletonRowBlock key={i} />
               ))}
             </div>
           )}
@@ -503,18 +511,7 @@ const Blog: React.FC = () => {
                     animate={{ opacity: 1 }}
                     transition={{ duration: 0.3, delay: index * 0.04 }}
                   >
-                    <Suspense
-                      fallback={
-                        <SkeletonRow>
-                          <div style={{ display: 'flex', flexDirection: 'column', gap: '10px' }}>
-                            <SkeletonLine $w="80px" $h="10px" />
-                            <SkeletonLine $w="75%" $h="18px" />
-                            <SkeletonLine $w="90%" $h="13px" />
-                          </div>
-                          <SkeletonThumb />
-                        </SkeletonRow>
-                      }
-                    >
+                    <Suspense fallback={<SkeletonRowBlock />}>
                       <BlogCard post={post} />
                     </Suspense>
                   </m.div>

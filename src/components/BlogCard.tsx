@@ -10,7 +10,7 @@ const Article = styled.article`
   align-items: start;
   gap: var(--spacing-6);
   padding: var(--spacing-6) 0;
-  border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+  border-bottom: 1px solid var(--divider);
   cursor: pointer;
   transition: none;
 
@@ -41,10 +41,10 @@ const PostMeta = styled.div`
 `;
 
 const PostDate = styled.time`
-  font-size: 0.72rem;
+  font-size: var(--text-2xs);
   font-family: var(--font-mono);
   color: var(--dark-600);
-  letter-spacing: 0.04em;
+  letter-spacing: var(--tracking-wide);
 `;
 
 const MetaDot = styled.span`
@@ -56,10 +56,10 @@ const MetaDot = styled.span`
 `;
 
 const PostTag = styled.span`
-  font-size: 0.68rem;
+  font-size: var(--text-2xs);
   font-weight: var(--font-medium);
   color: var(--dark-600);
-  letter-spacing: 0.04em;
+  letter-spacing: var(--tracking-wide);
 `;
 
 const PostTitle = styled.h3`
@@ -67,7 +67,7 @@ const PostTitle = styled.h3`
   font-weight: var(--font-semibold);
   color: var(--dark-200);
   line-height: 1.35;
-  letter-spacing: -0.015em;
+  letter-spacing: var(--tracking-tight);
   transition: color 0.18s ease;
 
   @media (max-width: 640px) { font-size: var(--text-base); }
@@ -98,8 +98,8 @@ const PostRight = styled.div`
 `;
 
 const PostThumb = styled.div`
-  width: 100px;
-  height: 68px;
+  width: var(--blog-thumb-w);
+  height: var(--blog-thumb-h);
   border-radius: var(--radius-md);
   overflow: hidden;
   background: var(--dark-900);
