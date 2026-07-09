@@ -3,6 +3,7 @@ import { Link, useLocation } from 'react-router-dom';
 import styled from 'styled-components';
 import { m, AnimatePresence } from 'framer-motion';
 import { scrollOptimizer } from '../utils/performance';
+import { glassPanel } from '../styles/surfaces';
 
 const FixedContainer = styled.div`
   position: fixed;
@@ -21,24 +22,19 @@ const FixedContainer = styled.div`
 `;
 
 const NavbarIsland = styled(m.nav)<{ $scrolled: boolean }>`
+  ${glassPanel}
   pointer-events: auto;
   width: 100%;
   max-width: 1200px;
-  background: rgba(9, 9, 11, 0.6);
-  backdrop-filter: blur(20px);
-  -webkit-backdrop-filter: blur(20px);
-  border: 1px solid rgba(255, 255, 255, 0.08);
-  border-radius: var(--radius-2xl);
   padding: var(--spacing-3) var(--spacing-6);
   display: flex;
   align-items: center;
   justify-content: space-between;
-  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.2);
   transition: all 0.4s cubic-bezier(0.16, 1, 0.3, 1);
 
   @media (min-width: 769px) {
     margin-top: ${props => props.$scrolled ? 'var(--spacing-2)' : 'var(--spacing-4)'};
-    background: ${props => props.$scrolled ? 'rgba(9, 9, 11, 0.85)' : 'rgba(9, 9, 11, 0.5)'};
+    background: ${props => props.$scrolled ? 'var(--panel-bg-hover)' : 'var(--panel-bg)'};
     min-width: 600px;
   }
 
@@ -47,9 +43,6 @@ const NavbarIsland = styled(m.nav)<{ $scrolled: boolean }>`
     border-top: none;
     border-left: none;
     border-right: none;
-    background: rgba(9, 9, 11, 0.95);
-    backdrop-filter: blur(10px);
-    -webkit-backdrop-filter: blur(10px);
     padding: var(--spacing-3) var(--spacing-4);
   }
 `;

@@ -2,6 +2,7 @@ import React, { lazy, Suspense } from 'react';
 import styled from 'styled-components';
 import { m, Variants } from 'framer-motion';
 import { Container } from '../styles/GlobalStyle';
+import { glassSurface, glassSurfaceHover, glassControl } from '../styles/surfaces';
 import SEO from '../components/SEO';
 import aboutImage from '../assets/images/Aboutme.webp';
 
@@ -317,11 +318,10 @@ const TimelineTags = styled.div`
 `;
 
 const TimelineTag = styled.span`
+  ${glassControl}
   font-size: 0.68rem;
   font-family: var(--font-mono);
   color: var(--dark-600);
-  background: rgba(255, 255, 255, 0.04);
-  border: 1px solid rgba(255, 255, 255, 0.07);
   padding: 2px 9px;
   border-radius: var(--radius-sm);
 `;
@@ -342,16 +342,9 @@ const SkillsGrid = styled.div`
 `;
 
 const SkillCard = styled(m.div)`
-  border: 1px solid rgba(255, 255, 255, 0.1);
-  border-radius: var(--radius-xl);
+  ${glassSurface}
+  ${glassSurfaceHover}
   padding: var(--spacing-8);
-  background: rgba(255, 255, 255, 0.03);
-  transition: border-color 0.22s ease, background 0.22s ease;
-
-  &:hover {
-    border-color: rgba(255, 255, 255, 0.16);
-    background: rgba(255, 255, 255, 0.05);
-  }
 
   @media (max-width: 768px) { padding: var(--spacing-6); }
 `;
@@ -389,11 +382,10 @@ const SkillChips = styled.div`
 `;
 
 const SkillChip = styled.span`
+  ${glassControl}
   font-size: 0.82rem;
   font-weight: var(--font-medium);
   color: var(--dark-300);
-  background: rgba(255, 255, 255, 0.04);
-  border: 1px solid rgba(255, 255, 255, 0.09);
   padding: 5px 12px;
   border-radius: var(--radius-md);
   transition: color 0.18s ease, border-color 0.18s ease, background 0.18s ease;
@@ -424,16 +416,14 @@ const FocusGrid = styled.div`
 `;
 
 const FocusCard = styled(m.div)`
-  border: 1px solid rgba(255, 255, 255, 0.07);
-  border-radius: var(--radius-xl);
+  ${glassSurface}
+  ${glassSurfaceHover}
   padding: var(--spacing-8);
-  background: rgba(255, 255, 255, 0.02);
   display: flex;
   flex-direction: column;
   gap: var(--spacing-3);
   position: relative;
   overflow: hidden;
-  transition: border-color 0.22s ease, background 0.22s ease;
 
   /* Left accent line slides up on hover */
   &::before {
@@ -448,11 +438,7 @@ const FocusCard = styled(m.div)`
     border-radius: 0 2px 0 0;
   }
 
-  &:hover {
-    border-color: rgba(255, 255, 255, 0.12);
-    background: rgba(255, 255, 255, 0.035);
-    &::before { height: 100%; }
-  }
+  &:hover::before { height: 100%; }
 
   @media (max-width: 768px) { padding: var(--spacing-6); }
 `;

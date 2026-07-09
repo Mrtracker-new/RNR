@@ -6,6 +6,7 @@ import { Container, Button } from '../styles/GlobalStyle';
 import SEO from '../components/SEO';
 import { projectsData } from '../data/projects';
 import type { Project } from '../data/projects';
+import { glassSurface, glassControl } from '../styles/surfaces';
 
 import { getLatestPosts, BlogPost } from '../utils/devto';
 
@@ -329,6 +330,8 @@ const AvailabilityBadge = styled(m.div)`
 /* ─── Stats bar ───────────────────────────────────────────────────────────── */
 
 const StatsBar = styled(m.div)`
+  ${glassSurface}
+  border-radius: var(--radius-2xl);
   position: relative;
   bottom: auto;
   left: auto;
@@ -336,10 +339,6 @@ const StatsBar = styled(m.div)`
   max-width: 100%;
   margin: var(--spacing-12) auto 0;
   padding: var(--spacing-5) var(--spacing-6);
-  background: var(--bg-raised);
-  border: 1px solid var(--border-subtle);
-  border-radius: var(--radius-2xl);
-  box-shadow: var(--shadow-md);
   z-index: 10;
 
   @media (min-width: 1280px) {
@@ -349,9 +348,6 @@ const StatsBar = styled(m.div)`
     right: var(--spacing-4);
     max-width: calc(var(--breakpoint-lg) - var(--spacing-8));
     margin: 0 auto;
-    background: var(--bg-raised);
-    border: 1px solid var(--border-subtle);
-    box-shadow: var(--shadow-md);
   }
 
   @media (max-width: 640px) {
@@ -466,9 +462,7 @@ const FeaturedGrid = styled.div`
 `;
 
 const FeaturedCard = styled(Link)`
-  background: var(--bg-raised);
-  border: 1px solid var(--border-subtle);
-  border-radius: var(--radius-xl);
+  ${glassSurface}
   padding: var(--spacing-6);
   display: flex;
   flex-direction: column;
@@ -534,12 +528,11 @@ const FeaturedCardTech = styled.div`
 `;
 
 const TechPill = styled.span`
+  ${glassControl}
+  border-radius: var(--radius-sm);
   font-size: 0.7rem;
   color: var(--dark-400);
-  background: rgba(255, 255, 255, 0.04);
-  border: 1px solid rgba(255, 255, 255, 0.06);
   padding: 2px 8px;
-  border-radius: var(--radius-sm);
 `;
 
 const ArrowIcon = styled.span`

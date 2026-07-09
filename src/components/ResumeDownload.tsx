@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 import styled from 'styled-components';
 import { m, AnimatePresence } from 'framer-motion';
 import { Button } from '../styles/GlobalStyle';
+import { glassSurface, glassControl } from '../styles/surfaces';
 
 interface ResumeDownloadProps {
   variant?: 'primary' | 'secondary' | 'outline';
@@ -59,13 +60,8 @@ const PreviewTooltip = styled(m.div) <{ $position: 'top' | 'right' | 'bottom' | 
 
 // Card container for the preview
 const PreviewCard = styled.div<{ $position: 'top' | 'right' | 'bottom' | 'left' }>`
-  background: var(--bg-overlay);
-  backdrop-filter: blur(20px);
-  -webkit-backdrop-filter: blur(20px);
-  border: 1px solid var(--border-strong);
-  border-radius: var(--radius-xl);
+  ${glassSurface}
   padding: var(--spacing-4);
-  box-shadow: var(--shadow-lg);
   width: 320px;
   
   /* Arrow pointing to button - changes based on position */
@@ -119,12 +115,11 @@ const PreviewCard = styled.div<{ $position: 'top' | 'right' | 'bottom' | 'left' 
 
 // Preview image container
 const PreviewImageContainer = styled.div`
+  ${glassControl}
   width: 100%;
-  background: var(--dark-800);
   border-radius: var(--radius-md);
   overflow: hidden;
   margin-bottom: var(--spacing-3);
-  border: 1px solid rgba(255, 255, 255, 0.05);
   position: relative;
   
   img {

@@ -3,6 +3,7 @@ import styled from 'styled-components';
 import { m, AnimatePresence } from 'framer-motion';
 import { Helmet } from 'react-helmet-async';
 import { Container } from '../styles/GlobalStyle';
+import { glassSurface } from '../styles/surfaces';
 import SEO from '../components/SEO';
 import { getAllPosts, BlogPost } from '../utils/devto';
 
@@ -109,11 +110,10 @@ const FilterRow = styled(m.div)`
 `;
 
 const FilterBar = styled.div`
+  ${glassSurface}
   display: flex;
   align-items: center;
   gap: 2px;
-  background: rgba(255, 255, 255, 0.03);
-  border: 1px solid rgba(255, 255, 255, 0.07);
   border-radius: var(--radius-lg);
   padding: 4px;
   /* Scroll horizontally if tags overflow — never break layout */

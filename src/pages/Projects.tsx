@@ -5,6 +5,7 @@ import { Container, Badge } from '../styles/GlobalStyle';
 import SEO from '../components/SEO';
 import { projectsData, PROJECT_CATEGORIES } from '../data/projects';
 import type { Project } from '../data/projects';
+import { glassControl, glassPanel } from '../styles/surfaces';
 
 /* ─── Design tokens used locally ─────────────────────────────────────────── */
 
@@ -132,12 +133,11 @@ const HeroStatsRow = styled.div`
 /* ─── Filter bar ──────────────────────────────────────────────────────────── */
 
 const FilterBar = styled(m.div)`
+  ${glassControl}
+  border-radius: var(--radius-lg);
   display: flex;
   align-items: center;
   gap: 2px;
-  background: rgba(255, 255, 255, 0.03);
-  border: 1px solid rgba(255, 255, 255, 0.07);
-  border-radius: var(--radius-lg);
   padding: 4px;
   width: fit-content;
   margin-bottom: var(--spacing-10);
@@ -291,13 +291,12 @@ const FeaturedTechRow = styled.div`
 `;
 
 const TechPill = styled.span`
+  ${glassControl}
+  border-radius: var(--radius-sm);
   font-size: 0.7rem;
   font-family: var(--font-mono);
   color: var(--dark-500);
-  background: rgba(255, 255, 255, 0.04);
-  border: 1px solid rgba(255, 255, 255, 0.06);
   padding: 2px 8px;
-  border-radius: var(--radius-sm);
 `;
 
 const FeaturedLinksRow = styled.div`
@@ -501,13 +500,12 @@ const RowTech = styled.div`
 `;
 
 const SmallTechPill = styled.span`
+  ${glassControl}
+  border-radius: var(--radius-sm);
   font-size: 0.65rem;
   font-family: var(--font-mono);
   color: var(--dark-600);
-  background: rgba(255, 255, 255, 0.04);
-  border: 1px solid rgba(255, 255, 255, 0.05);
   padding: 1px 6px;
-  border-radius: var(--radius-sm);
 `;
 
 const RowArrow = styled.span`
@@ -541,9 +539,7 @@ const ModalOverlay = styled(m.div)`
 `;
 
 const ModalPanel = styled(m.div)`
-  background: var(--bg-overlay);
-  border: 1px solid var(--border-subtle);
-  border-radius: var(--radius-2xl);
+  ${glassPanel}
   max-width: 860px;
   width: 100%;
   position: relative;
@@ -551,7 +547,6 @@ const ModalPanel = styled(m.div)`
   backface-visibility: hidden;
   -webkit-backface-visibility: hidden;
   will-change: transform;
-  box-shadow: 0 32px 64px rgba(0, 0, 0, 0.6);
 
   @media (max-width: 1024px) { max-width: 95vw; }
   @media (max-width: 768px) { max-width: 90vw; border-radius: var(--radius-xl); }
@@ -729,13 +724,12 @@ const ModalTechRow = styled.div`
 `;
 
 const ModalTechTag = styled.span`
+  ${glassControl}
+  border-radius: var(--radius-sm);
   font-size: 0.72rem;
   font-family: var(--font-mono);
   color: var(--dark-400);
-  background: rgba(255, 255, 255, 0.05);
-  border: 1px solid rgba(255, 255, 255, 0.08);
   padding: 3px 10px;
-  border-radius: var(--radius-sm);
 `;
 
 const ModalActionsRow = styled.div`

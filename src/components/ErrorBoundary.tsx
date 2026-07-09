@@ -1,5 +1,6 @@
 import React, { Component, ReactNode } from 'react';
 import styled from 'styled-components';
+import { glassSurface } from '../styles/surfaces';
 
 interface Props {
     children: ReactNode;
@@ -26,12 +27,10 @@ const ErrorFallback = styled.div`
 `;
 
 const ErrorContainer = styled.div`
+  ${glassSurface};
+  border-radius: var(--radius-2xl);
   max-width: 600px;
-  background: var(--bg-raised);
-  border-radius: 20px;
   padding: 3rem;
-  box-shadow: var(--shadow-lg);
-  border: 1px solid var(--border-subtle);
 `;
 
 const ErrorIcon = styled.div`

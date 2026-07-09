@@ -2,6 +2,7 @@ import React, { useState, useEffect, useCallback } from 'react';
 import styled from 'styled-components';
 import { m, AnimatePresence } from 'framer-motion';
 import { useNavigate } from 'react-router-dom';
+import { glassPanel, glassControl, glassControlHover } from '../styles/surfaces';
 
 interface ExitIntentPopupProps {
   headline?: string;
@@ -29,23 +30,13 @@ const Overlay = styled(m.div)`
 `;
 
 const Modal = styled(m.div)`
+  ${glassPanel};
   width: 100%;
   max-width: 420px;
   position: relative;
-  border-radius: 20px;
   padding: 44px 40px 36px;
   text-align: center;
   overflow: hidden;
-  background: var(--bg-overlay);
-  border: 1px solid var(--border-strong);
-  box-shadow:
-    0 0 0 1px rgba(255, 255, 255, 0.03),
-    var(--shadow-modal, 0 24px 64px rgba(0, 0, 0, 0.6));
-
-  @supports (backdrop-filter: blur(24px)) {
-    backdrop-filter: blur(28px);
-    -webkit-backdrop-filter: blur(28px);
-  }
 
   > * { position: relative; z-index: 1; }
 
@@ -133,11 +124,11 @@ const PrimaryBtn = styled.button`
 `;
 
 const SecondaryBtn = styled.button`
+  ${glassControl};
+  ${glassControlHover};
   width: 100%;
   padding: 13px 24px;
-  background: transparent;
   color: var(--dark-300);
-  border: 1px solid rgba(255, 255, 255, 0.1);
   border-radius: 10px;
   font-size: 0.9rem;
   font-weight: var(--font-medium);
@@ -146,8 +137,6 @@ const SecondaryBtn = styled.button`
   transition: background 0.2s ease, border-color 0.2s ease, color 0.2s ease;
 
   &:hover {
-    background: rgba(255, 255, 255, 0.05);
-    border-color: rgba(255, 255, 255, 0.18);
     color: var(--dark-100);
   }
 `;

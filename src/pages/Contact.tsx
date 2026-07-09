@@ -1,8 +1,9 @@
 import React, { useState } from 'react';
-import styled from 'styled-components';
+import styled, { css } from 'styled-components';
 import { m, AnimatePresence } from 'framer-motion';
 import SEO from '../components/SEO';
 import FAQSchema from '../components/FAQSchema';
+import { glassSurface, glassControl } from '../styles/surfaces';
 
 /* ══════════════════════════════════════════════════════════════════════════
    LAYOUT
@@ -222,11 +223,10 @@ const SocialLeft = styled.div`
 `;
 
 const SocialIconBox = styled.span`
+  ${glassControl}
   width: 32px;
   height: 32px;
-  border-radius: 8px;
-  background: rgba(255, 255, 255, 0.05);
-  border: 1px solid rgba(255, 255, 255, 0.07);
+  border-radius: var(--radius-md);
   display: flex;
   align-items: center;
   justify-content: center;
@@ -242,7 +242,7 @@ const SocialIconBox = styled.span`
 
   ${SocialLink}:hover & {
     color: var(--dark-200);
-    border-color: rgba(255, 255, 255, 0.12);
+    border-color: var(--control-border-hover);
   }
 `;
 
@@ -278,13 +278,11 @@ const ArrowSVG = () => (
    ══════════════════════════════════════════════════════════════════════════ */
 
 const FormCard = styled.div`
+  ${glassSurface}
   box-sizing: border-box;
   width: 100%;
   height: auto;
   min-height: fit-content;
-  border: 1px solid rgba(255, 255, 255, 0.09);
-  border-radius: 20px;
-  background: rgba(255, 255, 255, 0.025);
   overflow: hidden;
 `;
 
@@ -350,12 +348,12 @@ const FieldLabel = styled.label`
   color: var(--dark-600);
 `;
 
-const fieldBase = `
+const fieldBase = css`
+  ${glassControl}
   box-sizing: border-box;
   width: 100%;
   padding: 11px 14px;
-  background: rgba(255, 255, 255, 0.03);
-  border-radius: 10px;
+  border-radius: var(--radius-md);
   color: var(--dark-200);
   font-size: 0.875rem;
   font-family: inherit;
@@ -366,13 +364,13 @@ const fieldBase = `
 
   &:focus {
     outline: none;
-    background: rgba(255, 255, 255, 0.05);
+    background: var(--control-bg-hover);
   }
 `;
 
 const FieldInput = styled.input<{ $err?: boolean }>`
   ${fieldBase}
-  border: 1px solid ${p => p.$err ? 'rgba(239,68,68,0.55)' : 'rgba(255,255,255,0.08)'};
+  border: 1px solid ${p => p.$err ? 'rgba(239,68,68,0.55)' : 'var(--control-border)'};
   height: 44px; /* equal height across all inputs */
 
   &:focus {
@@ -383,7 +381,7 @@ const FieldInput = styled.input<{ $err?: boolean }>`
 
 const FieldTextarea = styled.textarea<{ $err?: boolean }>`
   ${fieldBase}
-  border: 1px solid ${p => p.$err ? 'rgba(239,68,68,0.55)' : 'rgba(255,255,255,0.08)'};
+  border: 1px solid ${p => p.$err ? 'rgba(239,68,68,0.55)' : 'var(--control-border)'};
   min-height: 160px;
   resize: vertical;
 
