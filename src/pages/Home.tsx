@@ -7,6 +7,7 @@ import SEO from '../components/SEO';
 import { projectsData } from '../data/projects';
 import type { Project } from '../data/projects';
 import { glassSurface, glassControl } from '../styles/surfaces';
+import { SectionHeading } from '../components/layout/primitives';
 
 import { getLatestPosts, BlogPost } from '../utils/devto';
 
@@ -22,6 +23,9 @@ const ResumeDownload = lazy(() => import('../components/ResumeDownload'));
 
 /* ─── Hero ────────────────────────────────────────────────────────────────── */
 
+/* Navbar-clearance offset for the hero top padding (fixed header height). */
+const HERO_TOP = 'calc(var(--spacing-32) + var(--spacing-px) * 2)'; /* 130px */
+
 const HeroSection = styled.section`
   min-height: 100svh;
   min-height: 100vh;
@@ -30,27 +34,26 @@ const HeroSection = styled.section`
   justify-content: center;
   align-items: center;
   position: relative;
-  padding-top: 130px;
-  padding-bottom: 130px;
+  padding-top: ${HERO_TOP};
+  padding-bottom: ${HERO_TOP};
 
-  @media (min-width: 968px) and (max-width: 1280px) {
-    padding-top: 130px;
-    padding-bottom: 40px;
+  @media (min-width: 1024px) and (max-width: 1280px) {
+    padding-bottom: var(--spacing-10);
   }
 
-  @media (max-width: 968px) {
+  @media (max-width: 1024px) {
     display: block;
     min-height: 0;
     min-height: unset;
     max-height: none;
     height: auto;
-    padding-top: 120px;
+    padding-top: calc(var(--spacing-24) + var(--spacing-6)); /* 120px */
     padding-bottom: var(--spacing-4);
     overflow-x: clip;
   }
 
   @media (max-width: 640px) {
-    padding-top: 100px;
+    padding-top: calc(var(--spacing-24) + var(--spacing-1)); /* 100px */
   }
 `;
 
@@ -333,27 +336,13 @@ const StatsBar = styled(m.div)`
   ${glassSurface}
   border-radius: var(--radius-2xl);
   position: relative;
-  bottom: auto;
-  left: auto;
-  right: auto;
   max-width: 100%;
   margin: var(--spacing-12) auto 0;
   padding: var(--spacing-5) var(--spacing-6);
   z-index: 10;
 
-  @media (min-width: 1280px) {
-    position: absolute;
-    bottom: var(--spacing-6);
-    left: var(--spacing-4);
-    right: var(--spacing-4);
-    max-width: calc(var(--breakpoint-lg) - var(--spacing-8));
-    margin: 0 auto;
-  }
-
   @media (max-width: 640px) {
     margin-top: var(--spacing-10);
-    margin-left: var(--spacing-2);
-    margin-right: var(--spacing-2);
     padding: var(--spacing-4) var(--spacing-3);
   }
 `;
@@ -406,8 +395,8 @@ const StatItem = styled.div`
     letter-spacing: 0.1em;
     white-space: nowrap;
 
-    @media (max-width: 768px) { font-size: var(--text-xs); letter-spacing: 0.05em; }
-    @media (max-width: 640px) { font-size: 0.7rem; letter-spacing: 0.03em; white-space: normal; }
+    @media (max-width: 768px) { font-size: var(--text-xs); letter-spacing: var(--tracking-wide); }
+    @media (max-width: 640px) { font-size: var(--text-2xs); letter-spacing: var(--tracking-wide); white-space: normal; }
   }
 `;
 
@@ -417,28 +406,6 @@ const FeaturedSection = styled.section`
   padding: var(--spacing-20) 0;
 
   @media (max-width: 768px) { padding: var(--spacing-16) 0; }
-`;
-
-const SectionHeader = styled.div`
-  display: flex;
-  align-items: baseline;
-  justify-content: space-between;
-  margin-bottom: var(--spacing-10);
-  gap: var(--spacing-4);
-
-  @media (max-width: 640px) {
-    flex-direction: column;
-    gap: var(--spacing-3);
-    margin-bottom: var(--spacing-8);
-  }
-`;
-
-const SectionLabel = styled.p`
-  font-size: var(--text-xs);
-  font-weight: var(--font-bold);
-  letter-spacing: 0.12em;
-  text-transform: uppercase;
-  color: var(--dark-500);
 `;
 
 const SectionLink = styled(Link)`
@@ -553,27 +520,15 @@ const BlogSection = styled.section`
   padding: var(--spacing-20) 0;
   position: relative;
 
-  @media (max-width: 968px) { padding: var(--spacing-10) 0 var(--spacing-4) 0; }
-  @media (max-width: 640px)  { padding: var(--spacing-8) 0 var(--spacing-3) 0; }
-`;
-
-const BlogHeader = styled.div`
-  text-align: center;
-  margin-bottom: var(--spacing-12);
-`;
-
-const BlogTitle = styled(m.h2)`
-  font-size: clamp(2rem, 4vw, 3rem);
-  font-weight: var(--font-bold);
-  color: var(--dark-50);
-  margin-bottom: var(--spacing-3);
+  @media (max-width: 1024px) { padding: var(--section-y-sm) 0; }
+  @media (max-width: 640px)  { padding: var(--section-y-sm) 0; }
 `;
 
 const BlogSubtitle = styled(m.p)`
   font-size: var(--text-base);
   color: var(--dark-400);
-  max-width: 600px;
-  margin: 0 auto var(--spacing-8);
+  max-width: 60ch;
+  margin: 0 0 var(--spacing-10);
 `;
 
 const BlogGrid = styled.div`
@@ -765,10 +720,11 @@ const Home: React.FC = () => {
       {featuredProjects.length > 0 && (
         <FeaturedSection>
           <Container>
-            <SectionHeader>
-              <SectionLabel>Featured Work</SectionLabel>
-              <SectionLink to="/projects">View all projects →</SectionLink>
-            </SectionHeader>
+            <SectionHeading
+              label="Featured Work"
+              title="Selected Projects"
+              aside={<SectionLink to="/projects">View all →</SectionLink>}
+            />
 
             <FeaturedGrid>
               {featuredProjects.map((project: Project, index: number) => (
@@ -808,22 +764,14 @@ const Home: React.FC = () => {
       {!loadingBlog && blogPosts.length > 0 && (
         <BlogSection>
           <Container>
-            <BlogHeader>
-              <BlogTitle
-                initial={{ opacity: 0, y: 20 }}
-                animate={{ opacity: 1, y: 0 }}
-                transition={{ duration: 0.6 }}
-              >
-                Technical Writing
-              </BlogTitle>
-              <BlogSubtitle
-                initial={{ opacity: 0, y: 20 }}
-                animate={{ opacity: 1, y: 0 }}
-                transition={{ duration: 0.6, delay: 0.1 }}
-              >
-                From encryption architecture to accessibility trade-offs — things I've shipped, broken, and rebuilt.
-              </BlogSubtitle>
-            </BlogHeader>
+            <SectionHeading label="Writing" title="Technical Writing" />
+            <BlogSubtitle
+              initial={{ opacity: 0, y: 20 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ duration: 0.6, delay: 0.1 }}
+            >
+              From encryption architecture to accessibility trade-offs — things I've shipped, broken, and rebuilt.
+            </BlogSubtitle>
 
             <BlogGrid>
               {blogPosts.map((post, index) => (
