@@ -10,7 +10,8 @@ const FixedContainer = styled.div`
   top: 0;
   left: 0;
   right: 0;
-  z-index: 1000;
+  /* Raised above MobileMenu (1100) so the toggle child stays tappable over the open menu. */
+  z-index: 1200;
   padding: var(--spacing-4);
   pointer-events: none;
   display: flex;
@@ -67,10 +68,10 @@ const NavLinks = styled.div`
   display: flex;
   gap: var(--spacing-1);
   position: relative;
-  background: rgba(255, 255, 255, 0.03);
-  padding: 4px;
+  background: var(--hairline-faint);
+  padding: var(--spacing-1);
   border-radius: var(--radius-lg);
-  border: 1px solid rgba(255, 255, 255, 0.05);
+  border: 1px solid var(--divider);
 
   @media (max-width: 768px) {
     display: none;
@@ -79,7 +80,7 @@ const NavLinks = styled.div`
 
 const NavItem = styled(Link)<{ $active: boolean }>`
   position: relative;
-  padding: 8px 16px;
+  padding: var(--spacing-2) var(--spacing-4);
   font-size: var(--text-sm);
   font-weight: var(--font-medium);
   color: ${props => props.$active ? 'var(--accent-primary)' : 'var(--dark-400)'};
@@ -100,7 +101,7 @@ const ActivePill = styled(m.div)`
   position: absolute;
   inset: 0;
   border-radius: var(--radius-md);
-  background: rgba(255, 255, 255, 0.08);
+  background: var(--hairline-strong);
   z-index: -1;
 `;
 
@@ -112,7 +113,7 @@ const MobileToggle = styled.button`
   padding: var(--spacing-2);
   cursor: pointer;
   z-index: 20;
-  font-size: 1.5rem;
+  font-size: var(--text-2xl);
 
   @media (max-width: 768px) {
     display: block;
@@ -126,8 +127,11 @@ const MobileMenu = styled(m.div)`
   right: 0;
   bottom: 0;
   background: var(--dark-950);
-  z-index: 15;
-  padding: 80px var(--spacing-6) var(--spacing-6);
+  /* Sits above page content but just below the nav island (z:1200) so the
+     logo + toggle stay visible/tappable over the open menu. */
+  z-index: 1100;
+  /* Top pad clears the fixed nav island so the first link isn't hidden. */
+  padding: var(--spacing-20) var(--spacing-6) var(--spacing-6);
   display: flex;
   flex-direction: column;
   gap: var(--spacing-4);
@@ -139,14 +143,14 @@ const MobileLink = styled(Link)`
   color: var(--dark-200);
   text-decoration: none;
   padding: var(--spacing-4);
-  border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+  border-bottom: 1px solid var(--divider);
   display: flex;
   justify-content: space-between;
   align-items: center;
 
   &:active {
     color: var(--accent-primary);
-    background: rgba(255, 255, 255, 0.02);
+    background: var(--hairline-faint);
   }
 `;
 

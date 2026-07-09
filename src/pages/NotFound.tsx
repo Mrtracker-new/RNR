@@ -17,7 +17,7 @@ const Wrapper = styled.div`
 
 const Code = styled(m.span)`
   font-size: clamp(6rem, 20vw, 10rem);
-  font-weight: 800;
+  font-weight: var(--font-extrabold);
   line-height: 1;
   color: var(--dark-800);
   letter-spacing: -0.05em;

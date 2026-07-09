@@ -3,7 +3,7 @@ import { Link } from 'react-router-dom';
 import styled from 'styled-components';
 
 const FooterWrapper = styled.footer`
-  border-top: 1px solid rgba(255, 255, 255, 0.06);
+  border-top: 1px solid var(--hairline);
   background: var(--dark-950);
   padding: var(--spacing-12) 0 var(--spacing-8);
 
@@ -97,9 +97,9 @@ const LinkGroup = styled.div`
 `;
 
 const LinkGroupLabel = styled.span`
-  font-size: 0.65rem;
+  font-size: var(--text-2xs);
   font-weight: var(--font-bold);
-  letter-spacing: 0.12em;
+  letter-spacing: var(--tracking-wider);
   text-transform: uppercase;
   color: var(--dark-600);
   margin-bottom: var(--spacing-1);
@@ -136,7 +136,7 @@ const BottomRow = styled.div`
   flex-wrap: wrap;
   gap: var(--spacing-2);
   padding-top: var(--spacing-5);
-  border-top: 1px solid rgba(255, 255, 255, 0.04);
+  border-top: 1px solid var(--hairline-faint);
 
   @media (max-width: 640px) {
     flex-direction: row;

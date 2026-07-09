@@ -20,7 +20,7 @@ const Overlay = styled(m.div)`
   position: fixed;
   inset: 0;
   z-index: 9999;
-  background: rgba(0, 0, 0, 0.6);
+  background: var(--scrim);
   backdrop-filter: blur(10px);
   -webkit-backdrop-filter: blur(10px);
   display: flex;
@@ -63,7 +63,7 @@ const CloseButton = styled.button`
   transition: background 0.2s ease, color 0.2s ease;
 
   &:hover {
-    background: rgba(255, 255, 255, 0.07);
+    background: var(--hairline-strong);
     color: var(--dark-300);
   }
 
@@ -83,7 +83,7 @@ const IconWrapper = styled.div`
 `;
 
 const Title = styled.h2`
-  font-size: 1.35rem;
+  font-size: var(--text-xl);
   font-weight: var(--font-bold);
   color: var(--dark-50);
   margin-bottom: 10px;
@@ -92,7 +92,7 @@ const Title = styled.h2`
 `;
 
 const Description = styled.p`
-  font-size: 0.9rem;
+  font-size: var(--text-sm);
   color: var(--dark-500);
   line-height: 1.7;
   max-width: 320px;
@@ -112,8 +112,8 @@ const PrimaryBtn = styled.button`
   background: var(--accent-primary);
   color: #ffffff;
   border: none;
-  border-radius: 10px;
-  font-size: 0.9rem;
+  border-radius: var(--radius-md);
+  font-size: var(--text-sm);
   font-weight: var(--font-semibold);
   letter-spacing: 0.01em;
   cursor: pointer;
@@ -129,8 +129,8 @@ const SecondaryBtn = styled.button`
   width: 100%;
   padding: 13px 24px;
   color: var(--dark-300);
-  border-radius: 10px;
-  font-size: 0.9rem;
+  border-radius: var(--radius-md);
+  font-size: var(--text-sm);
   font-weight: var(--font-medium);
   letter-spacing: 0.01em;
   cursor: pointer;
@@ -145,7 +145,7 @@ const DismissLink = styled.button`
   background: none;
   border: none;
   color: var(--dark-600);
-  font-size: 0.78rem;
+  font-size: var(--text-xs);
   cursor: pointer;
   margin-top: 18px;
   text-decoration: underline;
