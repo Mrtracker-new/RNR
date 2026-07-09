@@ -3,6 +3,7 @@ import styled from 'styled-components';
 import { m, Variants } from 'framer-motion';
 import { Container } from '../styles/GlobalStyle';
 import { glassSurface, glassSurfaceHover, glassControl } from '../styles/surfaces';
+import { SectionHeading } from '../components/layout/primitives';
 import SEO from '../components/SEO';
 import aboutImage from '../assets/images/Aboutme.webp';
 
@@ -34,55 +35,26 @@ const PageWrapper = styled.div`
 /* ─── Shared section divider ──────────────────────────────────────────────── */
 
 const Section = styled.section`
-  padding: var(--spacing-16) 0;
-  border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+  padding: var(--section-y) 0;
+  border-bottom: 1px solid var(--divider);
 
   &:last-of-type { border-bottom: none; padding-bottom: 0; }
 
-  @media (max-width: 768px) { padding: var(--spacing-10) 0; }
-  @media (max-width: 480px) { padding: var(--spacing-8) 0; }
+  @media (max-width: 768px) { padding: var(--section-y-sm) 0; }
 `;
 
-/* ─── Section heading row ─────────────────────────────────────────────────── */
-
-const SectionHeading = styled.div`
-  display: flex;
-  align-items: baseline;
-  justify-content: space-between;
-  gap: var(--spacing-4);
-  margin-bottom: var(--spacing-10);
-
-  @media (max-width: 640px) { margin-bottom: var(--spacing-7); }
-`;
-
-const SectionLabel = styled(m.p)`
-  font-size: 0.68rem;
-  font-weight: var(--font-bold);
-  letter-spacing: 0.14em;
-  text-transform: uppercase;
-  color: var(--dark-600);
-`;
-
-const SectionCount = styled.span`
-  font-size: 0.68rem;
-  font-family: var(--font-mono);
-  color: var(--dark-700);
-`;
+/* Section headers now use the shared <SectionHeading> primitive (real <h2>). */
 
 /* ══════════════════════════════════════════════════════════════════════════ */
 /* HERO                                                                       */
 /* ══════════════════════════════════════════════════════════════════════════ */
 
 const HeroSection = styled.section`
-  padding: var(--spacing-14) 0 var(--spacing-14);
-  border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+  padding: var(--section-y) 0;
+  border-bottom: 1px solid var(--divider);
 
   @media (max-width: 768px) {
-    padding: var(--spacing-8) 0 var(--spacing-10);
-  }
-
-  @media (max-width: 480px) {
-    padding: var(--spacing-6) 0 var(--spacing-8);
+    padding: var(--section-y-sm) 0;
   }
 `;
 
@@ -92,7 +64,7 @@ const HeroGrid = styled.div`
   gap: var(--spacing-14);
   align-items: start;
 
-  @media (max-width: 900px) {
+  @media (max-width: 1024px) {
     grid-template-columns: 1fr 220px;
     gap: var(--spacing-10);
   }
@@ -119,11 +91,12 @@ const HeroContent = styled.div`
 `;
 
 const HeroLabel = styled(m.p)`
-  font-size: 0.68rem;
-  font-weight: var(--font-bold);
-  letter-spacing: 0.14em;
+  font-family: var(--font-mono);
+  font-size: var(--text-2xs);
+  font-weight: var(--font-medium);
+  letter-spacing: var(--tracking-widest);
   text-transform: uppercase;
-  color: var(--dark-600);
+  color: var(--dark-400);
   margin-bottom: var(--spacing-4);
 `;
 
@@ -131,7 +104,7 @@ const HeroTitle = styled(m.h1)`
   font-size: clamp(2rem, 4.5vw, 3.2rem);
   font-weight: var(--font-extrabold);
   color: var(--dark-50);
-  letter-spacing: -0.03em;
+  letter-spacing: var(--tracking-tighter);
   line-height: 1.1;
   margin-bottom: var(--spacing-6);
 `;
@@ -164,7 +137,7 @@ const ImageFrame = styled.div`
   border-radius: var(--radius-2xl);
   overflow: hidden;
   aspect-ratio: 3 / 4;
-  border: 1px solid rgba(255, 255, 255, 0.08);
+  border: 1px solid var(--hairline-strong);
   background: var(--dark-900);
 
   img {
@@ -217,7 +190,7 @@ const Timeline = styled.div`
     top: 0;
     bottom: 0;
     width: 1px;
-    background: rgba(255, 255, 255, 0.06);
+    background: var(--hairline);
 
     @media (max-width: 560px) { display: none; }
   }
@@ -230,7 +203,7 @@ const TimelineItem = styled(m.div)`
   padding: var(--spacing-8) 0;
   position: relative;
 
-  & + & { border-top: 1px solid rgba(255, 255, 255, 0.04); }
+  & + & { border-top: 1px solid var(--hairline-faint); }
 
   /* Dot — centred on the vertical line (148px - 4.5px = ~144px left) */
   &::after {
@@ -242,7 +215,7 @@ const TimelineItem = styled(m.div)`
     height: 9px;
     border-radius: 50%;
     background: var(--dark-900);
-    border: 2px solid rgba(255, 255, 255, 0.14);
+    border: 2px solid var(--hairline-bright);
     transition: border-color 0.2s ease;
 
     @media (max-width: 560px) { display: none; }
@@ -271,7 +244,7 @@ const TimelineYear = styled.div`
 
 const YearPill = styled.span`
   display: inline-block;
-  font-size: 0.7rem;
+  font-size: var(--text-2xs);
   font-family: var(--font-mono);
   color: var(--accent-primary);
   background: var(--accent-subtle);
@@ -319,7 +292,7 @@ const TimelineTags = styled.div`
 
 const TimelineTag = styled.span`
   ${glassControl}
-  font-size: 0.68rem;
+  font-size: var(--text-2xs);
   font-family: var(--font-mono);
   color: var(--dark-600);
   padding: 2px 9px;
@@ -355,7 +328,7 @@ const SkillCardHeader = styled.div`
   gap: var(--spacing-2);
   margin-bottom: var(--spacing-6);
   padding-bottom: var(--spacing-4);
-  border-bottom: 1px solid rgba(255, 255, 255, 0.06);
+  border-bottom: 1px solid var(--hairline);
 `;
 
 const SkillDot = styled.span`
@@ -368,7 +341,7 @@ const SkillDot = styled.span`
 `;
 
 const SkillCategory = styled.h3`
-  font-size: 0.7rem;
+  font-size: var(--text-2xs);
   font-weight: var(--font-bold);
   letter-spacing: 0.12em;
   text-transform: uppercase;
@@ -383,7 +356,7 @@ const SkillChips = styled.div`
 
 const SkillChip = styled.span`
   ${glassControl}
-  font-size: 0.82rem;
+  font-size: var(--text-sm);
   font-weight: var(--font-medium);
   color: var(--dark-300);
   padding: 5px 12px;
@@ -444,7 +417,7 @@ const FocusCard = styled(m.div)`
 `;
 
 const FocusNumber = styled.span`
-  font-size: 0.68rem;
+  font-size: var(--text-2xs);
   font-family: var(--font-mono);
   color: var(--dark-700);
   letter-spacing: 0.08em;
@@ -467,7 +440,7 @@ const FocusBody = styled.p`
 
 const FocusDivider = styled.div`
   height: 1px;
-  background: rgba(255, 255, 255, 0.06);
+  background: var(--hairline);
   margin-top: var(--spacing-2);
 `;
 
@@ -479,7 +452,7 @@ const FocusProjects = styled.div`
 `;
 
 const FocusProject = styled.span`
-  font-size: 0.68rem;
+  font-size: var(--text-2xs);
   font-family: var(--font-mono);
   color: var(--dark-600);
   letter-spacing: 0.02em;
@@ -659,17 +632,11 @@ const About: React.FC = () => (
 
         {/* ══ TIMELINE ══════════════════════════════════════════════════════ */}
         <Section>
-          <SectionHeading>
-            <SectionLabel
-              initial={{ opacity: 0 }}
-              whileInView={{ opacity: 1 }}
-              transition={{ duration: 0.4 }}
-              viewport={{ once: true }}
-            >
-              The Road Here
-            </SectionLabel>
-            <SectionCount>{timelineData.length} milestones</SectionCount>
-          </SectionHeading>
+          <SectionHeading
+            label="Timeline"
+            title="The Road Here"
+            aside={`${timelineData.length} milestones`}
+          />
 
           <Timeline>
             {timelineData.map((item, i) => (
@@ -700,17 +667,11 @@ const About: React.FC = () => (
 
         {/* ══ SKILLS ════════════════════════════════════════════════════════ */}
         <Section>
-          <SectionHeading>
-            <SectionLabel
-              initial={{ opacity: 0 }}
-              whileInView={{ opacity: 1 }}
-              transition={{ duration: 0.4 }}
-              viewport={{ once: true }}
-            >
-              Skills & Stack
-            </SectionLabel>
-            <SectionCount>{totalSkills} tools</SectionCount>
-          </SectionHeading>
+          <SectionHeading
+            label="Capabilities"
+            title="Skills & Stack"
+            aside={`${totalSkills} tools`}
+          />
 
           <SkillsGrid>
             {skillsData.map((group, i) => (
@@ -736,17 +697,11 @@ const About: React.FC = () => (
 
         {/* ══ FOCUS AREAS ═══════════════════════════════════════════════════ */}
         <Section>
-          <SectionHeading>
-            <SectionLabel
-              initial={{ opacity: 0 }}
-              whileInView={{ opacity: 1 }}
-              transition={{ duration: 0.4 }}
-              viewport={{ once: true }}
-            >
-              What I Focus On
-            </SectionLabel>
-            <SectionCount>{focusAreas.length} areas</SectionCount>
-          </SectionHeading>
+          <SectionHeading
+            label="Direction"
+            title="What I Focus On"
+            aside={`${focusAreas.length} areas`}
+          />
 
           <FocusGrid>
             {focusAreas.map((area, i) => (
