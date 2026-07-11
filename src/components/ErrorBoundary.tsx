@@ -20,7 +20,7 @@ const ErrorFallback = styled.div`
   align-items: center;
   justify-content: center;
   min-height: 100vh;
-  padding: 2rem;
+  padding: var(--spacing-8);
   background: var(--bg-base);
   color: var(--dark-100);
   text-align: center;
@@ -30,12 +30,12 @@ const ErrorContainer = styled.div`
   ${glassSurface};
   border-radius: var(--radius-2xl);
   max-width: 600px;
-  padding: 3rem;
+  padding: var(--spacing-12);
 `;
 
 const ErrorIcon = styled.div`
   font-size: 4rem;
-  margin-bottom: 1.5rem;
+  margin-bottom: var(--spacing-6);
   animation: shake 0.5s ease-in-out;
 
   @keyframes shake {
@@ -47,21 +47,21 @@ const ErrorIcon = styled.div`
 
 const ErrorTitle = styled.h1`
   font-size: 2rem;
-  margin-bottom: 1rem;
+  margin-bottom: var(--spacing-4);
   color: var(--dark-50);
 `;
 
 const ErrorMessage = styled.p`
   font-size: 1.1rem;
-  margin-bottom: 2rem;
+  margin-bottom: var(--spacing-8);
   color: var(--dark-400);
-  line-height: 1.6;
+  line-height: var(--leading-relaxed);
 `;
 
 const ReloadButton = styled.button`
-  padding: 1rem 2.5rem;
+  padding: var(--spacing-4) var(--spacing-10);
   font-size: 1rem;
-  font-weight: 600;
+  font-weight: var(--font-semibold);
   color: #ffffff;
   background: var(--accent-primary);
   border: none;
@@ -74,21 +74,21 @@ const ReloadButton = styled.button`
 `;
 
 const ErrorDetails = styled.details`
-  margin-top: 2rem;
+  margin-top: var(--spacing-8);
   text-align: left;
   background: rgba(0, 0, 0, 0.2);
-  padding: 1rem;
+  padding: var(--spacing-4);
   border-radius: 10px;
-  font-family: 'Courier New', monospace;
-  font-size: 0.875rem;
+  font-family: var(--font-mono);
+  font-size: var(--text-sm);
   color: rgba(255, 255, 255, 0.7);
   max-height: 200px;
   overflow-y: auto;
 
   summary {
     cursor: pointer;
-    font-weight: 600;
-    margin-bottom: 0.5rem;
+    font-weight: var(--font-semibold);
+    margin-bottom: var(--spacing-2);
     color: rgba(255, 255, 255, 0.9);
   }
 

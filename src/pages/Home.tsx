@@ -6,8 +6,8 @@ import { Container, Button } from '../styles/GlobalStyle';
 import SEO from '../components/SEO';
 import { projectsData } from '../data/projects';
 import type { Project } from '../data/projects';
-import { glassSurface, glassControl } from '../styles/surfaces';
-import { SectionHeading } from '../components/layout/primitives';
+import { glassSurface } from '../styles/surfaces';
+import { SectionHeading, TechPill } from '../components/layout/primitives';
 import DecryptText from '../components/DecryptText';
 
 import { getLatestPosts, BlogPost } from '../utils/devto';
@@ -555,14 +555,6 @@ const FeaturedCardTech = styled.div`
   flex-wrap: wrap;
   gap: var(--spacing-2);
   margin-top: auto;
-`;
-
-const TechPill = styled.span`
-  ${glassControl}
-  border-radius: var(--radius-sm);
-  font-size: 0.7rem;
-  color: var(--dark-400);
-  padding: 2px 8px;
 `;
 
 const ArrowIcon = styled.span`

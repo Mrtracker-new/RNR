@@ -1,16 +1,6 @@
 import React from 'react';
 import styled, { keyframes } from 'styled-components';
 
-const spin = keyframes`
-  0% { transform: rotate(0deg); }
-  100% { transform: rotate(360deg); }
-`;
-
-const pulse = keyframes`
-  0%, 100% { opacity: 1; }
-  50% { opacity: 0.5; }
-`;
-
 const fadeIn = keyframes`
   from { opacity: 0; transform: scale(0.85); }
   to   { opacity: 1; transform: scale(1); }
@@ -29,38 +19,6 @@ const LoadingContainer = styled.div`
   gap: var(--spacing-4);
   padding: var(--spacing-8);
   animation: ${fadeIn} 0.3s ease both;
-`;
-
-const Spinner = styled.div<{ size?: 'sm' | 'md' | 'lg' }>`
-  ${props => {
-    const size = props.size || 'md';
-    const sizes = {
-      sm: '20px',
-      md: '32px',
-      lg: '48px'
-    };
-    return `width: ${sizes[size]}; height: ${sizes[size]};`;
-  }}
-
-  border: 2px solid var(--dark-800);
-  border-top: 2px solid var(--accent-primary);
-  border-radius: 50%;
-  animation: ${spin} 0.8s linear infinite;
-`;
-
-const DotsSpinner = styled.div`
-  display: flex;
-  gap: var(--spacing-2);
-`;
-
-const Dot = styled.div<{ $delay: number }>`
-  width: 6px;
-  height: 6px;
-  background: var(--accent-primary);
-  border-radius: 50%;
-  animation: ${pulse} 1.2s ease-in-out infinite;
-  animation-delay: ${props => props.$delay}s;
-  opacity: 0.8;
 `;
 
 const RippleSpinner = styled.div<{ size?: 'sm' | 'md' | 'lg' }>`
@@ -109,7 +67,6 @@ const LoadingText = styled.p<{ $variant?: 'default' | 'gradient' }>`
 `;
 
 interface LoadingSpinnerProps {
-  type?: 'spinner' | 'dots' | 'ripple';
   size?: 'sm' | 'md' | 'lg';
   text?: string;
   textVariant?: 'default' | 'gradient';
@@ -117,42 +74,20 @@ interface LoadingSpinnerProps {
 }
 
 const LoadingSpinner: React.FC<LoadingSpinnerProps> = ({
-  type = 'spinner',
   size = 'md',
   text = 'Loading...',
   textVariant = 'default',
   className
-}) => {
-  const renderSpinner = () => {
-    switch (type) {
-      case 'dots':
-        return (
-          <DotsSpinner>
-            {[0, 0.2, 0.4].map((delay, index) => (
-              <Dot key={index} $delay={delay} />
-            ))}
-          </DotsSpinner>
-        );
-      case 'ripple':
-        return (
-          <RippleSpinner size={size}>
-            {[0, 0.5].map((delay, index) => (
-              <RippleElement key={index} $delay={delay} />
-            ))}
-          </RippleSpinner>
-        );
-      default:
-        return <Spinner size={size} />;
-    }
-  };
-
-  return (
-    <LoadingContainer className={className}>
-      {renderSpinner()}
-      {text && <LoadingText $variant={textVariant}>{text}</LoadingText>}
-    </LoadingContainer>
-  );
-};
+}) => (
+  <LoadingContainer className={className}>
+    <RippleSpinner size={size}>
+      {[0, 0.5].map((delay, index) => (
+        <RippleElement key={index} $delay={delay} />
+      ))}
+    </RippleSpinner>
+    {text && <LoadingText $variant={textVariant}>{text}</LoadingText>}
+  </LoadingContainer>
+);
 
 // Full screen loading overlay
 export const LoadingOverlay = styled.div`
@@ -181,7 +116,6 @@ export const FullScreenLoading: React.FC<FullScreenLoadingProps> = ({
   return (
     <LoadingOverlay>
       <LoadingSpinner
-        type="ripple"
         size="lg"
         text={text}
         textVariant="gradient"

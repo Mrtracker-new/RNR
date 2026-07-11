@@ -1,4 +1,5 @@
 import styled from 'styled-components';
+import { glassControl } from '../../styles/surfaces';
 
 /*
  * Shared layout primitives.
@@ -18,6 +19,18 @@ export const MicroLabel = styled.p`
   letter-spacing: var(--tracking-widest);
   text-transform: uppercase;
   color: var(--dark-400);
+`;
+
+// ── Tech / stack pill ───────────────────────────────────────────────────────
+// Shared across Home featured cards and the Projects list. Mono micro-label
+// styling so stack tags read as code, consistent with the eyebrow system.
+export const TechPill = styled.span`
+  ${glassControl}
+  border-radius: var(--radius-sm);
+  font-size: var(--text-2xs);
+  font-family: var(--font-mono);
+  color: var(--dark-500);
+  padding: 2px 8px;
 `;
 
 // ── Section heading (real <h2>) ─────────────────────────────────────────────

@@ -6,7 +6,7 @@ import SEO from '../components/SEO';
 import { projectsData, PROJECT_CATEGORIES } from '../data/projects';
 import type { Project } from '../data/projects';
 import { glassControl, glassPanel } from '../styles/surfaces';
-import { SectionHeading } from '../components/layout/primitives';
+import { SectionHeading, TechPill } from '../components/layout/primitives';
 import DecryptText from '../components/DecryptText';
 
 /* ─── Design tokens used locally ─────────────────────────────────────────── */
@@ -283,14 +283,6 @@ const FeaturedTechRow = styled.div`
   gap: var(--spacing-2);
 `;
 
-const TechPill = styled.span`
-  ${glassControl}
-  border-radius: var(--radius-sm);
-  font-size: var(--text-2xs);
-  font-family: var(--font-mono);
-  color: var(--dark-500);
-  padding: 2px 8px;
-`;
 
 const FeaturedLinksRow = styled.div`
   display: flex;
