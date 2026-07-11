@@ -342,10 +342,22 @@ const FeaturedImagePane = styled.div`
     object-fit: cover;
     display: block;
     transition: transform 0.5s cubic-bezier(0.4, 0, 0.2, 1);
-    filter: brightness(0.75);
+    /* Keep thumbnails rich — slight contrast/saturation lift, near-full brightness. */
+    filter: contrast(1.05) saturate(1.06) brightness(0.98);
   }
 
-  &:hover img { transform: scale(1.04); filter: brightness(0.85); }
+  /* Edge vignette — melts bright/white thumbnails (e.g. Sortify) into the dark
+     frame without dulling the image centre. */
+  &::after {
+    content: '';
+    position: absolute;
+    inset: 0;
+    z-index: 1;
+    pointer-events: none;
+    box-shadow: inset 0 0 70px 12px rgba(0, 0, 0, 0.55);
+  }
+
+  &:hover img { transform: scale(1.04); filter: contrast(1.05) saturate(1.06) brightness(1.05); }
 
   @media (max-width: 960px) { min-height: 200px; }
 `;

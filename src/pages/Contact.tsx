@@ -350,6 +350,11 @@ const FieldLabel = styled.label`
 
 const fieldBase = css`
   ${glassControl}
+  /* Composite the translucent control tint over an opaque dark base so the
+     backdrop-filter no longer samples the page glow — inputs and the taller
+     textarea then read identically regardless of size or position. */
+  background-image: linear-gradient(var(--control-bg), var(--control-bg));
+  background-color: var(--dark-900);
   box-sizing: border-box;
   width: 100%;
   padding: 11px 14px;
@@ -364,7 +369,8 @@ const fieldBase = css`
 
   &:focus {
     outline: none;
-    background: var(--control-bg-hover);
+    background-image: linear-gradient(var(--control-bg-hover), var(--control-bg-hover));
+    background-color: var(--dark-900);
   }
 `;
 
