@@ -1,6 +1,6 @@
 import { lazy, Suspense } from 'react';
 import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
-import { LazyMotion, domAnimation, AnimatePresence } from 'framer-motion';
+import { LazyMotion, domAnimation, AnimatePresence, MotionConfig } from 'framer-motion';
 import styled from 'styled-components';
 const Navbar = lazy(() => import('./components/Navbar'));
 const Footer = lazy(() => import('./components/Footer'));
@@ -130,6 +130,7 @@ function AppRoutes() {
 function App() {
   return (
     <LazyMotion features={domAnimation} strict>
+      <MotionConfig reducedMotion="user">
       <Router>
         <ScrollToTop />
         <Suspense fallback={null}>
@@ -147,6 +148,7 @@ function App() {
           <Footer />
         </Suspense>
       </Router>
+      </MotionConfig>
     </LazyMotion>
   );
 }

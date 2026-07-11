@@ -367,6 +367,10 @@ const StatusDot = styled.span`
     border-radius: 50%;
     animation: ${dotPulse} 2.4s ease-in-out infinite;
   }
+
+  @media (prefers-reduced-motion: reduce) {
+    &::after { animation: none; }
+  }
 `;
 
 const AvailabilityBadge = styled(m.div)`

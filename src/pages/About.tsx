@@ -645,8 +645,7 @@ const About: React.FC = () => (
                 custom={i * 0.07}
                 variants={fadeUp}
                 initial="hidden"
-                whileInView="visible"
-                viewport={{ once: true, amount: 0.12 }}
+                animate="visible"
               >
                 <TimelineYear>
                   <YearPill>{item.year}</YearPill>
@@ -680,8 +679,7 @@ const About: React.FC = () => (
                 custom={i * 0.07}
                 variants={fadeUp}
                 initial="hidden"
-                whileInView="visible"
-                viewport={{ once: true, amount: 0.15 }}
+                animate="visible"
               >
                 <SkillCardHeader>
                   <SkillDot aria-hidden="true" />
@@ -710,8 +708,7 @@ const About: React.FC = () => (
                 custom={i * 0.07}
                 variants={fadeUp}
                 initial="hidden"
-                whileInView="visible"
-                viewport={{ once: true, amount: 0.12 }}
+                animate="visible"
               >
                 <FocusNumber>{area.number}</FocusNumber>
                 <FocusTitle>{area.title}</FocusTitle>

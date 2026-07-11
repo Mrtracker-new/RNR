@@ -133,6 +133,10 @@ const PulseDot = styled.span`
     0%   { transform: scale(0.8); opacity: 1; }
     100% { transform: scale(1.9); opacity: 0; }
   }
+
+  @media (prefers-reduced-motion: reduce) {
+    &::after { animation: none; }
+  }
 `;
 
 /* ─── Details table ─────────────────────────────────────────────────────── */
