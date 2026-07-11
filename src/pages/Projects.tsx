@@ -7,6 +7,7 @@ import { projectsData, PROJECT_CATEGORIES } from '../data/projects';
 import type { Project } from '../data/projects';
 import { glassControl, glassPanel } from '../styles/surfaces';
 import { SectionHeading } from '../components/layout/primitives';
+import DecryptText from '../components/DecryptText';
 
 /* ─── Design tokens used locally ─────────────────────────────────────────── */
 
@@ -1056,7 +1057,7 @@ const Projects: React.FC = () => {
                               )}
                             </FeaturedMeta>
                             <FeaturedTitle style={{ marginTop: 'var(--spacing-3)' }}>
-                              {project.title}
+                              <DecryptText text={project.title} />
                             </FeaturedTitle>
                             <FeaturedProblem style={{ marginTop: 'var(--spacing-3)' }}>
                               {project.caseStudy.problem}
@@ -1155,7 +1156,7 @@ const Projects: React.FC = () => {
                         <RowTitle>
                           <RowIcon aria-hidden="true">{project.icon}</RowIcon>
                           <RowTitleText>
-                            <RowName>{project.title}</RowName>
+                            <RowName><DecryptText text={project.title} /></RowName>
                             <RowProblem>{project.caseStudy.problem}</RowProblem>
                           </RowTitleText>
                         </RowTitle>

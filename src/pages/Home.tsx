@@ -8,6 +8,7 @@ import { projectsData } from '../data/projects';
 import type { Project } from '../data/projects';
 import { glassSurface, glassControl } from '../styles/surfaces';
 import { SectionHeading } from '../components/layout/primitives';
+import DecryptText from '../components/DecryptText';
 
 import { getLatestPosts, BlogPost } from '../utils/devto';
 
@@ -59,9 +60,9 @@ const HeroSection = styled.section`
 
 const HeroContent = styled(Container)`
   display: grid;
-  grid-template-columns: 1.2fr 0.8fr;
+  grid-template-columns: 1.35fr 0.65fr;
   gap: var(--spacing-12);
-  align-items: center;
+  align-items: start;
   z-index: 2;
   position: relative;
   width: 100%;
@@ -99,26 +100,88 @@ const TextContent = styled(m.div)`
 
 const ProfileImageContainer = styled(m.div)`
   width: 100%;
-  max-width: 420px;
+  max-width: 460px;
   aspect-ratio: 1;
   position: relative;
   margin: 0 auto;
+  /* Text column top-aligns; centre the portrait against it so it doesn't
+     float against the nav with dead space below. */
+  align-self: center;
+  transform: translateY(-14px);
 
-  @media (min-width: 968px) and (max-width: 1280px) { max-width: 320px; }
+  /* Accent frame — L-brackets on the top-left + bottom-right corners only.
+     Deliberate asymmetry that echoes the mono micro-label system. */
+  &::before,
+  &::after {
+    content: '';
+    position: absolute;
+    width: 30px;
+    height: 30px;
+    border: 1.5px solid var(--accent-primary);
+    pointer-events: none;
+    z-index: 3;
+  }
+
+  &::before {
+    top: -10px;
+    left: -10px;
+    border-right: none;
+    border-bottom: none;
+    border-top-left-radius: 5px;
+  }
+
+  &::after {
+    bottom: -10px;
+    right: -10px;
+    border-left: none;
+    border-top: none;
+    border-bottom-right-radius: 5px;
+  }
+
+  @media (min-width: 968px) and (max-width: 1280px) {
+    max-width: 340px;
+    transform: translateY(-8px);
+  }
 
   @media (max-width: 968px) {
     width: 240px;
     margin-bottom: var(--spacing-2);
+    transform: none; /* recentre when stacked */
   }
 
   @media (max-width: 480px) { width: 200px; }
+`;
 
+/* Mono coordinate ticks that sit against the accent corners. */
+const FrameTag = styled.span`
+  position: absolute;
+  font-family: var(--font-mono);
+  font-size: 10px;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: var(--accent-primary);
+  opacity: 0.7;
+  pointer-events: none;
+  z-index: 3;
+  white-space: nowrap;
+
+  @media (max-width: 480px) { display: none; }
+`;
+
+const FrameTagTL = styled(FrameTag)`
+  top: -9px;
+  left: 26px;
+`;
+
+const FrameTagBR = styled(FrameTag)`
+  bottom: -9px;
+  right: 26px;
 `;
 
 const StylizedImage = styled.div`
   width: 100%;
   height: 100%;
-  border-radius: var(--radius-2xl);
+  border-radius: var(--radius-lg);
   overflow: hidden;
   border: 1px solid rgba(255, 255, 255, 0.06);
   box-shadow: 0 20px 40px rgba(0, 0, 0, 0.3);
@@ -654,6 +717,8 @@ const Home: React.FC = () => {
           </TextContent>
 
           <ProfileImageContainer variants={itemVariants}>
+            <FrameTagTL aria-hidden="true">0x00</FrameTagTL>
+            <FrameTagBR aria-hidden="true">EOF</FrameTagBR>
             <AnimatePresence mode="wait">
               {!showResumePreview ? (
                 <StylizedImage
@@ -744,7 +809,9 @@ const Home: React.FC = () => {
                       <ArrowIcon aria-hidden="true">↗</ArrowIcon>
                     </FeaturedCardHeader>
 
-                    <FeaturedCardTitle>{project.title}</FeaturedCardTitle>
+                    <FeaturedCardTitle>
+                      <DecryptText text={project.title} />
+                    </FeaturedCardTitle>
                     <FeaturedCardDescription>{project.description}</FeaturedCardDescription>
 
                     <FeaturedCardTech>
