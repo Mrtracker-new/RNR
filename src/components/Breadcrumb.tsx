@@ -16,10 +16,14 @@ const Breadcrumb: React.FC = () => {
       { name: 'Home', url: baseUrl }
     ];
 
+    // Route → display label. Keeps the breadcrumb noun in sync with the nav
+    // (the /projects route is labelled "Work" everywhere user-facing).
+    const LABELS: Record<string, string> = { '/projects': 'Work' };
+
     const pathname = location.pathname;
     if (pathname !== '/' && pathname !== '') {
       const pageName = pathname.replace('/', '');
-      const formattedName = pageName.charAt(0).toUpperCase() + pageName.slice(1);
+      const formattedName = LABELS[pathname] ?? pageName.charAt(0).toUpperCase() + pageName.slice(1);
       items.push({
         name: formattedName,
         url: `${baseUrl}${pathname}`

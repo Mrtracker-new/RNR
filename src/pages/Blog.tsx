@@ -249,6 +249,12 @@ const StateLink = styled.a`
   color: var(--accent-primary);
   text-decoration: none;
   transition: opacity 0.18s ease;
+  /* Reset so the same component renders cleanly as <button> (filter reset). */
+  background: none;
+  border: none;
+  padding: 0;
+  cursor: pointer;
+  font-family: inherit;
   &:hover { opacity: 0.75; }
 `;
 
@@ -337,6 +343,14 @@ const Blog: React.FC = () => {
     };
     fetchPosts();
   }, []);
+
+  // If a re-fetch drops the tag the user had selected, clear the filter so the
+  // list falls back to all posts instead of silently emptying.
+  useEffect(() => {
+    if (activeTag && !posts.some(p => p.tags?.some(t => t.name === activeTag))) {
+      setActiveTag(null);
+    }
+  }, [posts, activeTag]);
 
   const tags = collectTags(posts);
 
@@ -490,6 +504,21 @@ const Blog: React.FC = () => {
                 rel="noopener noreferrer"
               >
                 Follow on Dev.to →
+              </StateLink>
+            </StateBox>
+          )}
+
+          {/* ── Filtered to nothing ── */}
+          {!loading && !error && posts.length > 0 && visiblePosts.length === 0 && (
+            <StateBox
+              initial={{ opacity: 0 }}
+              animate={{ opacity: 1 }}
+              transition={{ duration: 0.4 }}
+            >
+              <StateTitle>No articles match this filter</StateTitle>
+              <StateBody>That tag has no posts right now.</StateBody>
+              <StateLink as="button" type="button" onClick={() => setActiveTag(null)}>
+                Show all articles →
               </StateLink>
             </StateBox>
           )}
