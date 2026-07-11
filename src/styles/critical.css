@@ -85,6 +85,16 @@
   --tracking-wider:   0.1em;
   --tracking-widest:  0.14em;
 
+  /* Line-height scale — pairs with the tracking scale so no component hardcodes
+     a raw line-height. Tight for display headings, loose for body prose. */
+  --leading-none:    1.1;
+  --leading-tight:   1.25;
+  --leading-snug:    1.4;
+  --leading-normal:  1.5;
+  --leading-relaxed: 1.6;
+  --leading-body:    1.75;
+  --leading-loose:   1.8;
+
   --font-normal:    400;
   --font-medium:    500;
   --font-semibold:  600;

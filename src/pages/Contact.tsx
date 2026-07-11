@@ -76,7 +76,7 @@ const IntroSection = styled.div`
 const PageLabel = styled.p`
   font-size: 0.68rem;
   font-weight: var(--font-bold);
-  letter-spacing: 0.14em;
+  letter-spacing: var(--tracking-widest);
   text-transform: uppercase;
   color: var(--dark-600);
   margin: 0 0 20px;
@@ -86,15 +86,15 @@ const Headline = styled.h1`
   font-size: clamp(1.85rem, 3vw, 2.6rem);
   font-weight: var(--font-extrabold);
   color: var(--dark-100);
-  letter-spacing: -0.03em;
-  line-height: 1.1;
+  letter-spacing: var(--tracking-tighter);
+  line-height: var(--leading-none);
   margin: 0 0 16px;
 `;
 
 const Subline = styled.p`
   font-size: 0.95rem;
   color: var(--dark-400);
-  line-height: 1.75;
+  line-height: var(--leading-body);
   margin: 0 0 24px;
   max-width: 360px;
 `;
@@ -146,7 +146,7 @@ const DetailsSection = styled.div`
 const BlockLabel = styled.p`
   font-size: 0.68rem;
   font-weight: var(--font-bold);
-  letter-spacing: 0.14em;
+  letter-spacing: var(--tracking-widest);
   text-transform: uppercase;
   color: var(--dark-600);
   margin: 0 0 20px;
@@ -299,14 +299,14 @@ const CardTitle = styled.h2`
   font-size: 1.2rem;
   font-weight: var(--font-bold);
   color: var(--dark-200);
-  letter-spacing: -0.02em;
+  letter-spacing: var(--tracking-tight);
   margin: 0 0 6px;
 `;
 
 const CardSubtitle = styled.p`
   font-size: 0.85rem;
   color: var(--dark-600);
-  line-height: 1.6;
+  line-height: var(--leading-relaxed);
   margin: 0;
 `;
 
@@ -343,7 +343,7 @@ const FieldGroup = styled.div`
 const FieldLabel = styled.label`
   font-size: 0.72rem;
   font-weight: var(--font-semibold);
-  letter-spacing: 0.06em;
+  letter-spacing: var(--tracking-wide);
   text-transform: uppercase;
   color: var(--dark-600);
 `;
@@ -362,7 +362,7 @@ const fieldBase = css`
   color: var(--dark-200);
   font-size: 0.875rem;
   font-family: inherit;
-  line-height: 1.5;
+  line-height: var(--leading-normal);
   transition: border-color 0.18s ease, background 0.18s ease, box-shadow 0.18s ease;
 
   &::placeholder { color: var(--dark-700); }
@@ -401,7 +401,7 @@ const FieldError = styled(m.p)`
   font-size: 0.72rem;
   color: rgba(239, 68, 68, 0.85);
   margin: 0;
-  line-height: 1.4;
+  line-height: var(--leading-snug);
 `;
 
 /* Submit row — button left, email link right */
@@ -468,7 +468,7 @@ const StatusBanner = styled(m.div)<{ $t: 'success' | 'error' }>`
   background: ${p => p.$t === 'success' ? 'rgba(63,185,80,0.05)' : 'rgba(239,68,68,0.05)'};
   color: ${p => p.$t === 'success' ? 'var(--success)' : 'rgba(239,68,68,0.9)'};
   font-size: 0.875rem;
-  line-height: 1.5;
+  line-height: var(--leading-normal);
 `;
 
 const Spinner = () => (

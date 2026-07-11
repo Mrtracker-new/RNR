@@ -105,14 +105,14 @@ const HeroTitle = styled(m.h1)`
   font-weight: var(--font-extrabold);
   color: var(--dark-50);
   letter-spacing: var(--tracking-tighter);
-  line-height: 1.1;
+  line-height: var(--leading-none);
   margin-bottom: var(--spacing-6);
 `;
 
 const HeroBio = styled(m.p)`
   font-size: var(--text-base);
   color: var(--dark-400);
-  line-height: 1.8;
+  line-height: var(--leading-loose);
   margin-bottom: var(--spacing-8);
   max-width: 460px;
 `;
@@ -251,7 +251,7 @@ const YearPill = styled.span`
   border: 1px solid var(--accent-border);
   padding: 3px 9px;
   border-radius: var(--radius-md);
-  letter-spacing: 0.04em;
+  letter-spacing: var(--tracking-wide);
   white-space: nowrap;
 `;
 
@@ -265,8 +265,8 @@ const TimelineTitle = styled.h3`
   font-size: var(--text-lg);
   font-weight: var(--font-bold);
   color: var(--dark-100);
-  letter-spacing: -0.015em;
-  line-height: 1.25;
+  letter-spacing: var(--tracking-tight);
+  line-height: var(--leading-tight);
   margin-bottom: 3px;
 `;
 
@@ -280,7 +280,7 @@ const TimelineRole = styled.p`
 const TimelineDesc = styled.p`
   font-size: var(--text-sm);
   color: var(--dark-400);
-  line-height: 1.78;
+  line-height: var(--leading-body);
   margin-bottom: var(--spacing-4);
 `;
 
@@ -343,7 +343,7 @@ const SkillDot = styled.span`
 const SkillCategory = styled.h3`
   font-size: var(--text-2xs);
   font-weight: var(--font-bold);
-  letter-spacing: 0.12em;
+  letter-spacing: var(--tracking-wider);
   text-transform: uppercase;
   color: var(--dark-500);
 `;
@@ -363,7 +363,7 @@ const SkillChip = styled.span`
   border-radius: var(--radius-md);
   transition: color 0.18s ease, border-color 0.18s ease, background 0.18s ease;
   cursor: default;
-  line-height: 1.4;
+  line-height: var(--leading-snug);
   white-space: nowrap;
 
   &:hover {
@@ -420,21 +420,21 @@ const FocusNumber = styled.span`
   font-size: var(--text-2xs);
   font-family: var(--font-mono);
   color: var(--dark-700);
-  letter-spacing: 0.08em;
+  letter-spacing: var(--tracking-wide);
 `;
 
 const FocusTitle = styled.h3`
   font-size: var(--text-lg);
   font-weight: var(--font-semibold);
   color: var(--dark-100);
-  letter-spacing: -0.015em;
-  line-height: 1.25;
+  letter-spacing: var(--tracking-tight);
+  line-height: var(--leading-tight);
 `;
 
 const FocusBody = styled.p`
   font-size: var(--text-sm);
   color: var(--dark-500);
-  line-height: 1.75;
+  line-height: var(--leading-body);
   flex: 1;
 `;
 
@@ -455,7 +455,7 @@ const FocusProject = styled.span`
   font-size: var(--text-2xs);
   font-family: var(--font-mono);
   color: var(--dark-600);
-  letter-spacing: 0.02em;
+  letter-spacing: var(--tracking-normal);
 
   /* Dot separator — added via CSS so we don't clutter JSX */
   &:not(:last-child)::after {
