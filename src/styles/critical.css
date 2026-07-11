@@ -60,6 +60,11 @@
   --error: #f85149;
   --info: var(--accent-primary);
 
+  /* Channel triplets — compose translucent semantic fills inline as
+     rgba(var(--error-rgb), <alpha>) instead of scattering raw rgba(). */
+  --success-rgb: 63, 185, 80;
+  --error-rgb:   248, 81, 73;
+
   --font-sans: 'Inter', 'SF Pro Display', system-ui, -apple-system, BlinkMacSystemFont, sans-serif;
   --font-mono: 'JetBrains Mono', 'SF Mono', 'Fira Code', 'Consolas', monospace;
 

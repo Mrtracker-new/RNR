@@ -69,7 +69,7 @@ const InfoPanel = styled.div`
 
 const IntroSection = styled.div`
   padding-bottom: 40px;
-  border-bottom: 1px solid rgba(255, 255, 255, 0.06);
+  border-bottom: 1px solid var(--hairline);
   margin-bottom: 40px;
 `;
 
@@ -104,7 +104,7 @@ const AvailPill = styled.div`
   align-items: center;
   gap: 8px;
   padding: 6px 14px;
-  border: 1px solid rgba(63, 185, 80, 0.22);
+  border: 1px solid rgba(var(--success-rgb), 0.22);
   border-radius: 999px;
   font-size: 0.78rem;
   font-weight: var(--font-medium);
@@ -125,7 +125,7 @@ const PulseDot = styled.span`
     position: absolute;
     inset: -3px;
     border-radius: 50%;
-    background: rgba(63, 185, 80, 0.2);
+    background: rgba(var(--success-rgb), 0.2);
     animation: pulse 2s ease-out infinite;
   }
 
@@ -139,7 +139,7 @@ const PulseDot = styled.span`
 
 const DetailsSection = styled.div`
   padding-bottom: 40px;
-  border-bottom: 1px solid rgba(255, 255, 255, 0.06);
+  border-bottom: 1px solid var(--hairline);
   margin-bottom: 40px;
 `;
 
@@ -164,7 +164,7 @@ const DetailsRow = styled.div`
   align-items: baseline;
   gap: 16px;
   padding: 12px 0;
-  border-bottom: 1px solid rgba(255, 255, 255, 0.04);
+  border-bottom: 1px solid var(--hairline-faint);
 
   &:last-child { border-bottom: none; }
 `;
@@ -206,8 +206,8 @@ const SocialLink = styled.a`
   min-height: 44px; /* a11y touch target */
 
   &:hover {
-    background: rgba(255, 255, 255, 0.04);
-    border-color: rgba(255, 255, 255, 0.07);
+    background: var(--hairline-faint);
+    border-color: var(--hairline-strong);
   }
 
   &:focus-visible {
@@ -289,7 +289,7 @@ const FormCard = styled.div`
 const CardHead = styled.div`
   box-sizing: border-box;
   padding: 32px 32px 24px;
-  border-bottom: 1px solid rgba(255, 255, 255, 0.06);
+  border-bottom: 1px solid var(--hairline);
 
   @media (max-width: 1024px) { padding: 24px 24px 20px; }
   @media (max-width: 768px)  { padding: 20px 20px 16px; }
@@ -376,30 +376,30 @@ const fieldBase = css`
 
 const FieldInput = styled.input<{ $err?: boolean }>`
   ${fieldBase}
-  border: 1px solid ${p => p.$err ? 'rgba(239,68,68,0.55)' : 'var(--control-border)'};
+  border: 1px solid ${p => p.$err ? 'rgba(var(--error-rgb), 0.55)' : 'var(--control-border)'};
   height: 44px; /* equal height across all inputs */
 
   &:focus {
-    border-color: ${p => p.$err ? 'rgba(239,68,68,0.8)' : 'rgba(255,255,255,0.22)'};
-    box-shadow: 0 0 0 3px ${p => p.$err ? 'rgba(239,68,68,0.07)' : 'rgba(255,255,255,0.04)'};
+    border-color: ${p => p.$err ? 'rgba(var(--error-rgb), 0.8)' : 'rgba(255,255,255,0.22)'};
+    box-shadow: 0 0 0 3px ${p => p.$err ? 'rgba(var(--error-rgb), 0.07)' : 'var(--hairline-faint)'};
   }
 `;
 
 const FieldTextarea = styled.textarea<{ $err?: boolean }>`
   ${fieldBase}
-  border: 1px solid ${p => p.$err ? 'rgba(239,68,68,0.55)' : 'var(--control-border)'};
+  border: 1px solid ${p => p.$err ? 'rgba(var(--error-rgb), 0.55)' : 'var(--control-border)'};
   min-height: 160px;
   resize: vertical;
 
   &:focus {
-    border-color: ${p => p.$err ? 'rgba(239,68,68,0.8)' : 'rgba(255,255,255,0.22)'};
-    box-shadow: 0 0 0 3px ${p => p.$err ? 'rgba(239,68,68,0.07)' : 'rgba(255,255,255,0.04)'};
+    border-color: ${p => p.$err ? 'rgba(var(--error-rgb), 0.8)' : 'rgba(255,255,255,0.22)'};
+    box-shadow: 0 0 0 3px ${p => p.$err ? 'rgba(var(--error-rgb), 0.07)' : 'var(--hairline-faint)'};
   }
 `;
 
 const FieldError = styled(m.p)`
   font-size: 0.72rem;
-  color: rgba(239, 68, 68, 0.85);
+  color: rgba(var(--error-rgb), 0.85);
   margin: 0;
   line-height: var(--leading-snug);
 `;
@@ -464,9 +464,9 @@ const StatusBanner = styled(m.div)<{ $t: 'success' | 'error' }>`
   box-sizing: border-box;
   padding: 14px 16px;
   border-radius: 10px;
-  border: 1px solid ${p => p.$t === 'success' ? 'rgba(63,185,80,0.2)' : 'rgba(239,68,68,0.2)'};
-  background: ${p => p.$t === 'success' ? 'rgba(63,185,80,0.05)' : 'rgba(239,68,68,0.05)'};
-  color: ${p => p.$t === 'success' ? 'var(--success)' : 'rgba(239,68,68,0.9)'};
+  border: 1px solid ${p => p.$t === 'success' ? 'rgba(var(--success-rgb), 0.2)' : 'rgba(var(--error-rgb), 0.2)'};
+  background: ${p => p.$t === 'success' ? 'rgba(var(--success-rgb), 0.05)' : 'rgba(var(--error-rgb), 0.05)'};
+  color: ${p => p.$t === 'success' ? 'var(--success)' : 'rgba(var(--error-rgb), 0.9)'};
   font-size: 0.875rem;
   line-height: var(--leading-normal);
 `;
