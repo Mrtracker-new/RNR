@@ -90,7 +90,7 @@ const LoadingSpinner: React.FC<LoadingSpinnerProps> = ({
 );
 
 // Full screen loading overlay
-export const LoadingOverlay = styled.div`
+const LoadingOverlay = styled.div`
   position: fixed;
   top: 0;
   left: 0;

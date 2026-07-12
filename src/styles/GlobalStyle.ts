@@ -1,5 +1,5 @@
 import styled, { css } from 'styled-components';
-import { glassSurface, glassSurfaceHover, glassControl, glassControlHover } from './surfaces';
+import { glassControl, glassControlHover } from './surfaces';
 
 /* NB: global resets, keyframes, and ::view-transition rules live in
    styles/critical.css (imported once via index.css). Don't re-declare them
@@ -12,37 +12,6 @@ export const Container = styled.div`
 
   @media (min-width: 640px)  { padding: 0 var(--spacing-6); }
   @media (min-width: 1024px) { padding: 0 var(--spacing-8); }
-`;
-
-export const Section = styled.section<{ $padding?: string }>`
-  padding: ${props => props.$padding || 'var(--section-y) 0'};
-  position: relative;
-
-  @media (max-width: 768px) {
-    padding: ${props => props.$padding || 'var(--section-y-sm) 0'};
-  }
-`;
-
-export const Grid = styled.div<{ $columns?: number; $gap?: string }>`
-  display: grid;
-  grid-template-columns: repeat(${props => props.$columns || 1}, 1fr);
-  gap: ${props => props.$gap || 'var(--spacing-8)'};
-
-  @media (max-width: 768px) {
-    grid-template-columns: 1fr;
-    gap: ${props => props.$gap || 'var(--spacing-6)'};
-  }
-`;
-
-export const Card = styled.div<{ $hover?: boolean }>`
-  ${glassSurface}
-  padding: var(--spacing-8);
-
-  ${props => props.$hover && glassSurfaceHover}
-
-  @media (max-width: 768px) {
-    padding: var(--spacing-6);
-  }
 `;
 
 export const Button = styled.button<{ $variant?: 'primary' | 'secondary' | 'outline'; $size?: 'sm' | 'md' | 'lg' }>`

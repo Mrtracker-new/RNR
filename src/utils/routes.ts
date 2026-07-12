@@ -5,5 +5,3 @@ export const ROUTES = {
   BLOG: '/blog',
   CONTACT: '/contact',
 } as const;
-
-export type AppRoute = typeof ROUTES[keyof typeof ROUTES];
