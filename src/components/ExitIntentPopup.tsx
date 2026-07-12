@@ -1,8 +1,9 @@
-import React, { useState, useEffect, useCallback } from 'react';
+import React, { useState, useEffect, useCallback, useRef } from 'react';
 import styled from 'styled-components';
 import { m, AnimatePresence } from 'framer-motion';
 import { useNavigate } from 'react-router-dom';
 import { glassPanel, glassControl, glassControlHover } from '../styles/surfaces';
+import { useFocusTrap } from '../hooks/useFocusTrap';
 
 interface ExitIntentPopupProps {
   headline?: string;
@@ -179,6 +180,7 @@ const ExitIntentPopup: React.FC<ExitIntentPopupProps> = ({
   const [isVisible, setIsVisible] = useState(false);
   const [isActive, setIsActive] = useState(false);
   const navigate = useNavigate();
+  const modalRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
     const timer = setTimeout(() => setIsActive(true), activationDelay);
@@ -221,11 +223,8 @@ const ExitIntentPopup: React.FC<ExitIntentPopupProps> = ({
     return () => document.removeEventListener('mouseleave', onLeave);
   }, [isActive, handleOpen]);
 
-  useEffect(() => {
-    const onKey = (e: KeyboardEvent) => { if (e.key === 'Escape' && isVisible) handleClose(); };
-    if (isVisible) window.addEventListener('keydown', onKey);
-    return () => window.removeEventListener('keydown', onKey);
-  }, [isVisible, handleClose]);
+  // Trap focus in the dialog, close on Escape, and restore focus on close.
+  useFocusTrap(isVisible, modalRef, handleClose);
 
   return (
     <AnimatePresence>
@@ -239,6 +238,8 @@ const ExitIntentPopup: React.FC<ExitIntentPopupProps> = ({
           role="presentation"
         >
           <Modal
+            ref={modalRef}
+            tabIndex={-1}
             initial={{ scale: 0.97, opacity: 0, y: 10 }}
             animate={{ scale: 1, opacity: 1, y: 0 }}
             exit={{ scale: 0.97, opacity: 0, y: 10 }}

@@ -1,4 +1,4 @@
-import React, { useState, useMemo, useEffect, useCallback } from 'react';
+import React, { useState, useMemo, useEffect, useCallback, useRef } from 'react';
 import styled from 'styled-components';
 import { m, AnimatePresence } from 'framer-motion';
 import { Container, Badge } from '../styles/GlobalStyle';
@@ -7,6 +7,7 @@ import { projectsData, PROJECT_CATEGORIES } from '../data/projects';
 import type { Project } from '../data/projects';
 import { glassControl, glassPanel } from '../styles/surfaces';
 import { SectionHeading, TechPill } from '../components/layout/primitives';
+import { useFocusTrap } from '../hooks/useFocusTrap';
 import DecryptText from '../components/DecryptText';
 
 /* ─── Design tokens used locally ─────────────────────────────────────────── */
@@ -799,12 +800,10 @@ const caseStudyFields: { key: keyof Project['caseStudy']; label: string }[] = [
 ];
 
 const ProjectModal: React.FC<ModalProps> = ({ project, isOpen, onClose }) => {
-  const handleKey = useCallback((e: KeyboardEvent) => { if (e.key === 'Escape') onClose(); }, [onClose]);
+  const panelRef = useRef<HTMLDivElement>(null);
 
-  useEffect(() => {
-    if (isOpen) document.addEventListener('keydown', handleKey);
-    return () => document.removeEventListener('keydown', handleKey);
-  }, [isOpen, handleKey]);
+  // Trap focus in the dialog, close on Escape, and restore focus to the trigger.
+  useFocusTrap(isOpen, panelRef, onClose);
 
   useEffect(() => {
     if (!isOpen) return;
@@ -831,6 +830,8 @@ const ProjectModal: React.FC<ModalProps> = ({ project, isOpen, onClose }) => {
           onClick={onClose}
         >
           <ModalPanel
+            ref={panelRef}
+            tabIndex={-1}
             initial={{ opacity: 0, y: 24, scale: 0.97 }}
             animate={{ opacity: 1, y: 0, scale: 1 }}
             exit={{ opacity: 0, y: 16, scale: 0.97 }}
@@ -1044,10 +1045,6 @@ const Projects: React.FC = () => {
                         animate={{ opacity: 1 }}
                         transition={{ duration: 0.35, delay: i * 0.07 }}
                         onClick={() => openProject(project)}
-                        role="button"
-                        tabIndex={0}
-                        aria-label={`Open case study for ${project.title}`}
-                        onKeyDown={e => (e.key === 'Enter' || e.key === ' ') && openProject(project)}
                       >
                         <FeaturedContent>
                           <div>
@@ -1106,7 +1103,10 @@ const Projects: React.FC = () => {
                                   <DownloadSVG /> Download
                                 </InlineLink>
                               )}
-                              <ViewCaseStudyBtn onClick={() => openProject(project)}>
+                              <ViewCaseStudyBtn
+                                onClick={e => { e.stopPropagation(); openProject(project); }}
+                                aria-label={`Read the ${project.title} case study`}
+                              >
                                 Case study →
                               </ViewCaseStudyBtn>
                             </FeaturedLinksRow>
@@ -1154,8 +1154,13 @@ const Projects: React.FC = () => {
                         onClick={() => openProject(project)}
                         role="button"
                         tabIndex={0}
-                        aria-label={`Open case study for ${project.title}`}
-                        onKeyDown={e => (e.key === 'Enter' || e.key === ' ') && openProject(project)}
+                        aria-label={`${project.title}, ${project.category}. Open case study.`}
+                        onKeyDown={e => {
+                          if (e.key === 'Enter' || e.key === ' ') {
+                            e.preventDefault();
+                            openProject(project);
+                          }
+                        }}
                       >
                         <RowTitle>
                           <RowIcon aria-hidden="true">{project.icon}</RowIcon>

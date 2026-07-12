@@ -689,15 +689,12 @@ const Home: React.FC = () => {
               <Button as={Link} to="/contact" $variant="outline" $size="lg">
                 Start a Conversation
               </Button>
+              {/* Preview reveals on hover (mouse) or when the download control
+                  inside receives focus (keyboard) — focus/blur bubble up here. */}
               <div
                 onMouseEnter={() => { if (window.innerWidth > 968) setShowResumePreview(true); }}
                 onMouseLeave={() => { if (window.innerWidth > 968) setShowResumePreview(false); }}
-                onKeyDown={(e) => {
-                  if (e.key === 'Enter' || e.key === ' ') {
-                    e.preventDefault();
-                    setShowResumePreview(prev => !prev);
-                  }
-                }}
+                onFocus={() => { if (window.innerWidth > 968) setShowResumePreview(true); }}
                 onBlur={() => setShowResumePreview(false)}
               >
                 <Suspense fallback={null}>

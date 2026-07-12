@@ -1,9 +1,10 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import { Link, useLocation } from 'react-router-dom';
 import styled from 'styled-components';
 import { m, AnimatePresence } from 'framer-motion';
 import { scrollOptimizer } from '../utils/performance';
 import { glassPanel } from '../styles/surfaces';
+import { useFocusTrap } from '../hooks/useFocusTrap';
 
 const FixedContainer = styled.div`
   position: fixed;
@@ -166,6 +167,10 @@ const Navbar: React.FC = () => {
   const [scrolled, setScrolled]         = useState(false);
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
   const location = useLocation();
+  const menuRef = useRef<HTMLDivElement>(null);
+
+  // Trap focus in the open mobile menu, close on Escape, restore focus to toggle.
+  useFocusTrap(mobileMenuOpen, menuRef, () => setMobileMenuOpen(false));
 
   useEffect(() => {
     const handleScrollUpdate = ({ scrollY }: { scrollY: number }) => {
@@ -226,6 +231,8 @@ const Navbar: React.FC = () => {
       <AnimatePresence>
         {mobileMenuOpen && (
           <MobileMenu
+            ref={menuRef}
+            tabIndex={-1}
             id="mobile-menu"
             role="dialog"
             aria-modal="true"

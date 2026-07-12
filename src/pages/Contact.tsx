@@ -520,7 +520,7 @@ const Contact: React.FC = () => {
     if (errs[name as keyof FE]) setErrs(p => ({ ...p, [name]: undefined }));
   };
 
-  const validate = (): boolean => {
+  const validate = (): FE => {
     const e: FE = {};
     if (!form.name.trim())    e.name    = 'Name is required';
     if (!form.email.trim())   e.email   = 'Email is required';
@@ -529,12 +529,19 @@ const Contact: React.FC = () => {
     if (!form.message.trim()) e.message = 'Message is required';
     else if (form.message.length < 10) e.message = 'At least 10 characters';
     setErrs(e);
-    return !Object.keys(e).length;
+    return e;
   };
 
   const submit = async (e: React.FormEvent) => {
     e.preventDefault();
-    if (!validate()) return;
+    const found = validate();
+    if (Object.keys(found).length) {
+      // Move focus to the first invalid field so keyboard/SR users land on it.
+      const order: (keyof FE)[] = ['name', 'email', 'subject', 'message'];
+      const firstBad = order.find(k => found[k]);
+      if (firstBad) document.getElementById(`c-${firstBad}`)?.focus();
+      return;
+    }
     setBusy(true);
     setStatus(null);
     try {
@@ -625,6 +632,7 @@ const Contact: React.FC = () => {
                   data-netlify="true"
                   data-netlify-honeypot="bot-field"
                   onSubmit={submit}
+                  noValidate
                 >
                   <input type="hidden" name="form-name" value="contact" />
                   <p hidden><label>Don't fill this: <input name="bot-field" /></label></p>
@@ -635,6 +643,7 @@ const Contact: React.FC = () => {
                       <FieldLabel htmlFor="c-name">Name <span aria-hidden="true">*</span></FieldLabel>
                       <FieldInput
                         type="text" id="c-name" name="name" required aria-required="true"
+                        aria-invalid={!!errs.name}
                         aria-describedby={errs.name ? 'c-name-err' : undefined}
                         placeholder="Your name" value={form.name} onChange={change} $err={!!errs.name}
                       />
@@ -647,6 +656,7 @@ const Contact: React.FC = () => {
                       <FieldLabel htmlFor="c-email">Email <span aria-hidden="true">*</span></FieldLabel>
                       <FieldInput
                         type="email" id="c-email" name="email" required aria-required="true"
+                        aria-invalid={!!errs.email}
                         aria-describedby={errs.email ? 'c-email-err' : undefined}
                         placeholder="you@example.com" value={form.email} onChange={change} $err={!!errs.email}
                       />
@@ -661,6 +671,7 @@ const Contact: React.FC = () => {
                     <FieldLabel htmlFor="c-subject">Subject <span aria-hidden="true">*</span></FieldLabel>
                     <FieldInput
                       type="text" id="c-subject" name="subject" required aria-required="true"
+                      aria-invalid={!!errs.subject}
                       aria-describedby={errs.subject ? 'c-sub-err' : undefined}
                       placeholder="What's on your mind?" value={form.subject} onChange={change} $err={!!errs.subject}
                     />
@@ -674,6 +685,7 @@ const Contact: React.FC = () => {
                     <FieldLabel htmlFor="c-message">Message <span aria-hidden="true">*</span></FieldLabel>
                     <FieldTextarea
                       id="c-message" name="message" required aria-required="true"
+                      aria-invalid={!!errs.message}
                       aria-describedby={errs.message ? 'c-msg-err' : undefined}
                       placeholder="Tell me about the project, what you need, or just say hello…"
                       value={form.message} onChange={change} $err={!!errs.message}
