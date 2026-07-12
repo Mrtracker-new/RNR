@@ -26,10 +26,10 @@ const Wrap = styled.div`
   width: 100%;
   max-width: var(--content-max);
   margin: 0 auto;
-  padding: 0 48px;
+  padding: 0 var(--spacing-12);
 
-  @media (max-width: 1024px) { padding: 0 32px; }
-  @media (max-width: 640px)  { padding: 0 20px; }
+  @media (max-width: 1024px) { padding: 0 var(--spacing-8); }
+  @media (max-width: 640px)  { padding: 0 var(--spacing-5); }
 `;
 
 /**
@@ -40,17 +40,17 @@ const Wrap = styled.div`
 const Grid = styled.div`
   display: grid;
   grid-template-columns: minmax(320px, 420px) 1fr;
-  gap: 64px;
+  gap: var(--spacing-16);
   align-items: start;
 
   @media (max-width: 1024px) {
     grid-template-columns: minmax(280px, 380px) 1fr;
-    gap: 40px;
+    gap: var(--spacing-10);
   }
 
   @media (max-width: 768px) {
     grid-template-columns: 1fr;
-    gap: 32px;
+    gap: var(--spacing-8);
   }
 `;
 
@@ -68,9 +68,9 @@ const InfoPanel = styled.div`
 /* ─── Intro ─────────────────────────────────────────────────────────────── */
 
 const IntroSection = styled.div`
-  padding-bottom: 40px;
+  padding-bottom: var(--spacing-10);
   border-bottom: 1px solid var(--hairline);
-  margin-bottom: 40px;
+  margin-bottom: var(--spacing-10);
 `;
 
 const PageLabel = styled.p`
@@ -79,7 +79,7 @@ const PageLabel = styled.p`
   letter-spacing: var(--tracking-widest);
   text-transform: uppercase;
   color: var(--dark-600);
-  margin: 0 0 20px;
+  margin: 0 0 var(--spacing-5);
 `;
 
 const Headline = styled.h1`
@@ -88,21 +88,21 @@ const Headline = styled.h1`
   color: var(--dark-100);
   letter-spacing: var(--tracking-tighter);
   line-height: var(--leading-none);
-  margin: 0 0 16px;
+  margin: 0 0 var(--spacing-4);
 `;
 
 const Subline = styled.p`
   font-size: 0.95rem;
   color: var(--dark-400);
   line-height: var(--leading-body);
-  margin: 0 0 24px;
+  margin: 0 0 var(--spacing-6);
   max-width: 360px;
 `;
 
 const AvailPill = styled.div`
   display: inline-flex;
   align-items: center;
-  gap: 8px;
+  gap: var(--spacing-2);
   padding: 6px 14px;
   border: 1px solid rgba(var(--success-rgb), 0.22);
   border-radius: 999px;
@@ -142,9 +142,9 @@ const PulseDot = styled.span`
 /* ─── Details table ─────────────────────────────────────────────────────── */
 
 const DetailsSection = styled.div`
-  padding-bottom: 40px;
+  padding-bottom: var(--spacing-10);
   border-bottom: 1px solid var(--hairline);
-  margin-bottom: 40px;
+  margin-bottom: var(--spacing-10);
 `;
 
 const BlockLabel = styled.p`
@@ -153,7 +153,7 @@ const BlockLabel = styled.p`
   letter-spacing: var(--tracking-widest);
   text-transform: uppercase;
   color: var(--dark-600);
-  margin: 0 0 20px;
+  margin: 0 0 var(--spacing-5);
 `;
 
 const DetailsTable = styled.dl`
@@ -166,8 +166,8 @@ const DetailsRow = styled.div`
   display: flex;
   justify-content: space-between;
   align-items: baseline;
-  gap: 16px;
-  padding: 12px 0;
+  gap: var(--spacing-4);
+  padding: var(--spacing-3) 0;
   border-bottom: 1px solid var(--hairline-faint);
 
   &:last-child { border-bottom: none; }
@@ -223,7 +223,7 @@ const SocialLink = styled.a`
 const SocialLeft = styled.div`
   display: flex;
   align-items: center;
-  gap: 12px;
+  gap: var(--spacing-3);
 `;
 
 const SocialIconBox = styled.span`
@@ -292,11 +292,11 @@ const FormCard = styled.div`
 
 const CardHead = styled.div`
   box-sizing: border-box;
-  padding: 32px 32px 24px;
+  padding: var(--spacing-8) var(--spacing-8) var(--spacing-6);
   border-bottom: 1px solid var(--hairline);
 
-  @media (max-width: 1024px) { padding: 24px 24px 20px; }
-  @media (max-width: 768px)  { padding: 20px 20px 16px; }
+  @media (max-width: 1024px) { padding: var(--spacing-6) var(--spacing-6) var(--spacing-5); }
+  @media (max-width: 768px)  { padding: var(--spacing-5) var(--spacing-5) var(--spacing-4); }
 `;
 
 const CardTitle = styled.h2`
@@ -316,13 +316,13 @@ const CardSubtitle = styled.p`
 
 const CardBody = styled.form`
   box-sizing: border-box;
-  padding: 32px;
+  padding: var(--spacing-8);
   display: flex;
   flex-direction: column;
-  gap: 20px;
+  gap: var(--spacing-5);
 
-  @media (max-width: 1024px) { padding: 24px; }
-  @media (max-width: 768px)  { padding: 20px; }
+  @media (max-width: 1024px) { padding: var(--spacing-6); }
+  @media (max-width: 768px)  { padding: var(--spacing-5); }
 `;
 
 /* Name + Email side-by-side */
@@ -330,7 +330,7 @@ const FieldRow = styled.div`
   box-sizing: border-box;
   display: grid;
   grid-template-columns: repeat(2, minmax(0, 1fr));
-  gap: 16px;
+  gap: var(--spacing-4);
 
   @media (max-width: 580px) {
     grid-template-columns: 1fr;
@@ -413,9 +413,9 @@ const FormActions = styled.div`
   display: flex;
   align-items: center;
   justify-content: space-between;
-  gap: 16px;
+  gap: var(--spacing-4);
   flex-wrap: wrap;
-  padding-top: 4px; /* 24px total gap from last field via parent gap:20px + this 4px */
+  padding-top: var(--spacing-1); /* +spacing-1 on top of the parent's spacing-5 gap ≈ spacing-6 from the last field */
 
   @media (max-width: 480px) {
     flex-direction: column;
@@ -436,7 +436,7 @@ const SubmitBtn = styled(m.button)`
   display: flex;
   align-items: center;
   justify-content: center;
-  gap: 8px;
+  gap: var(--spacing-2);
   white-space: nowrap;
   min-height: 44px;
   transition: background 0.18s ease, opacity 0.18s ease;
