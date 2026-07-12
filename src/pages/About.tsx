@@ -558,7 +558,7 @@ const About: React.FC = () => (
       title="About Rolan Lobo — Software Developer"
       description="Rolan Lobo is a software developer from Karnataka, India, who crossed from precision manufacturing into software engineering. Specialising in privacy-focused tools, AES-256 encryption, zero-knowledge applications, and cross-platform software."
       keywords="About Rolan Lobo, Rolan RNR, Software Developer India, Privacy Tools Developer, Security Software Engineer, Freelance Developer India, Karnataka Developer, Open Source Developer"
-      image="https://rolan-rnr.netlify.app/og-social-card.png"
+      image="https://rolan-rnr.netlify.app/Social_card.png"
       url="https://rolan-rnr.netlify.app/about"
     />
 

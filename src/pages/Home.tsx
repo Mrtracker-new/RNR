@@ -662,7 +662,7 @@ const Home: React.FC = () => {
       <SEO
         title="Rolan Lobo — Software Developer"
         description="Rolan Lobo builds privacy-focused software — AES-256 encryption tools, zero-knowledge file sharing platforms, and offline-first applications. Open source. Karnataka, India."
-        image="https://rolan-rnr.netlify.app/og-social-card.png"
+        image="https://rolan-rnr.netlify.app/Social_card.png"
         url="https://rolan-rnr.netlify.app/"
       />
 

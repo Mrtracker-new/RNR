@@ -124,7 +124,7 @@ const SEO: React.FC<SEOProps> = ({
   title = 'Rolan Lobo — Full-Stack Developer & Security Engineer | Karnataka, India',
   description = 'Rolan Lobo is a full-stack developer from Karnataka, India, specializing in AES-256 encryption tools, privacy-focused applications, and production web software. Available for freelance and full-time remote roles.',
   keywords = 'Rolan Lobo, Rolan RNR, Full Stack Developer, Security Engineer, Software Engineer, Freelance Developer, React Developer, Python Developer, Flask Developer, AES-256 Encryption, Steganography, InvisioVault, BAR, CursorCam, Karnataka, India',
-  image = 'https://rolan-rnr.netlify.app/og-social-card.png',
+  image = 'https://rolan-rnr.netlify.app/Social_card.png',
   url = 'https://rolan-rnr.netlify.app/',
   type = 'website',
   publishedAt,
@@ -155,8 +155,8 @@ const SEO: React.FC<SEOProps> = ({
       <meta property="og:title" content={title} />
       <meta property="og:description" content={description} />
       <meta property="og:image" content={image} />
-      <meta property="og:image:width" content="1200" />
-      <meta property="og:image:height" content="630" />
+      <meta property="og:image:width" content="1536" />
+      <meta property="og:image:height" content="1024" />
       <meta property="og:image:alt" content="Rolan Lobo — Full-Stack Developer & Security Engineer" />
       <meta property="og:site_name" content={siteName} />
       <meta property="og:locale" content="en_US" />
