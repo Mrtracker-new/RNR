@@ -2,6 +2,111 @@ import React from 'react';
 import { Helmet } from 'react-helmet-async';
 
 
+/* Site-constant structured data. These blocks are identical on every route,
+   so they're serialized once at module load rather than on each render. */
+const PERSON_LD = JSON.stringify({
+  '@context': 'https://schema.org',
+  '@type': 'Person',
+  name: 'Rolan Lobo',
+  alternateName: ['Rolan RNR', 'RNR', 'Rolan rnr'],
+  url: 'https://rolan-rnr.netlify.app/',
+  image: 'https://rolan-rnr.netlify.app/logo512.png',
+  sameAs: [
+    'https://github.com/Mrtracker-new',
+    'https://www.linkedin.com/in/rolan-lobo/',
+    'https://dev.to/rolan_r_n_r'
+  ],
+  jobTitle: 'Full Stack Developer',
+  worksFor: {
+    '@type': 'Organization',
+    name: 'Freelance'
+  },
+  address: {
+    '@type': 'PostalAddress',
+    addressRegion: 'Karnataka',
+    addressCountry: 'India'
+  },
+  email: 'rolanlobo901@gmail.com',
+  knowsAbout: [
+    'JavaScript',
+    'TypeScript',
+    'React',
+    'Node.js',
+    'Python',
+    'Flask',
+    'MongoDB',
+    'Desktop Applications',
+    'Web Development',
+    'Software Engineering',
+    'Cybersecurity',
+    'Data Encryption',
+    'Steganography',
+    'Polyglot Files',
+    'File Hiding',
+    'Cryptography',
+    'Security Applications',
+    'Mobile App Development',
+    'React Native',
+    'Flutter',
+    'Freelance Development'
+  ]
+});
+
+const WEBSITE_LD = JSON.stringify({
+  '@context': 'https://schema.org',
+  '@type': 'WebSite',
+  name: 'Rolan Lobo — Developer & Builder',
+  alternateName: ['Rolan RNR', 'Rolan Lobo', 'RNR'],
+  url: 'https://rolan-rnr.netlify.app/',
+  author: {
+    '@type': 'Person',
+    name: 'Rolan Lobo',
+    alternateName: 'Rolan RNR'
+  }
+});
+
+const ORGANIZATION_LD = JSON.stringify({
+  '@context': 'https://schema.org',
+  '@type': 'Organization',
+  '@id': 'https://rolan-rnr.netlify.app/#organization',
+  name: 'Rolan Lobo — Developer & Builder',
+  alternateName: ['RNR', 'Rolan RNR', 'Rolan Lobo'],
+  url: 'https://rolan-rnr.netlify.app/',
+  logo: {
+    '@type': 'ImageObject',
+    url: 'https://rolan-rnr.netlify.app/logo512.png',
+    width: 512,
+    height: 512
+  },
+  description: 'Full-stack developer and builder specializing in security applications, modern web products, and desktop software that solves real problems.',
+  brand: {
+    '@type': 'Brand',
+    name: 'Rolan Lobo'
+  },
+  foundingDate: '2023',
+  founder: {
+    '@type': 'Person',
+    name: 'Rolan Lobo',
+    alternateName: 'Rolan RNR'
+  },
+  address: {
+    '@type': 'PostalAddress',
+    addressRegion: 'Karnataka',
+    addressCountry: 'IN'
+  },
+  contactPoint: {
+    '@type': 'ContactPoint',
+    email: 'rolanlobo901@gmail.com',
+    contactType: 'Customer Service',
+    availableLanguage: ['English', 'Hindi', 'Kannada']
+  },
+  sameAs: [
+    'https://github.com/Mrtracker-new',
+    'https://www.linkedin.com/in/rolan-lobo/',
+    'https://dev.to/rolan_r_n_r'
+  ]
+});
+
 interface SEOProps {
   title?: string;
   description?: string;
@@ -39,7 +144,10 @@ const SEO: React.FC<SEOProps> = ({
       <meta name="description" content={description} />
       <meta name="keywords" content={keywords} />
       <meta name="author" content="Rolan Lobo (Rolan RNR)" />
-      <link rel="canonical" href={url} />
+      {/* Only assert a canonical on indexable pages. noIndex routes (e.g. 404)
+          don't pass a url, so emitting one here would wrongly canonicalize
+          them to the homepage. */}
+      {!noIndex && <link rel="canonical" href={url} />}
 
       {/* Open Graph / Facebook */}
       <meta property="og:type" content={type} />
@@ -93,121 +201,14 @@ const SEO: React.FC<SEOProps> = ({
       <meta name="language" content="English" />
       <meta name="theme-color" content="#0a0b0d" />
 
-      {/* hreflang */}
-      <link rel="alternate" hrefLang="en" href={url} />
-      <link rel="alternate" hrefLang="x-default" href="https://rolan-rnr.netlify.app/" />
+      {/* hreflang — indexable pages only, for the same reason as the canonical */}
+      {!noIndex && <link rel="alternate" hrefLang="en" href={url} />}
+      {!noIndex && <link rel="alternate" hrefLang="x-default" href="https://rolan-rnr.netlify.app/" />}
 
-      {/* Structured Data (JSON-LD) - Person Schema */}
-      <script type="application/ld+json">
-        {JSON.stringify({
-          '@context': 'https://schema.org',
-          '@type': 'Person',
-          name: 'Rolan Lobo',
-          alternateName: ['Rolan RNR', 'RNR', 'Rolan rnr'],
-          url: 'https://rolan-rnr.netlify.app/',
-          image: 'https://rolan-rnr.netlify.app/logo512.png',
-          sameAs: [
-            'https://github.com/Mrtracker-new',
-            'https://www.linkedin.com/in/rolan-lobo/',
-            'https://dev.to/rolan_r_n_r'
-          ],
-          jobTitle: 'Full Stack Developer',
-          worksFor: {
-            '@type': 'Organization',
-            name: 'Freelance'
-          },
-          address: {
-            '@type': 'PostalAddress',
-            addressRegion: 'Karnataka',
-            addressCountry: 'India'
-          },
-          email: 'rolanlobo901@gmail.com',
-          knowsAbout: [
-            'JavaScript',
-            'TypeScript',
-            'React',
-            'Node.js',
-            'Python',
-            'Flask',
-            'MongoDB',
-            'Desktop Applications',
-            'Web Development',
-            'Software Engineering',
-            'Cybersecurity',
-            'Data Encryption',
-            'Steganography',
-            'Polyglot Files',
-            'File Hiding',
-            'Cryptography',
-            'Security Applications',
-            'Mobile App Development',
-            'React Native',
-            'Flutter',
-            'Freelance Development'
-          ]
-        })}
-      </script>
-
-      {/* Structured Data (JSON-LD) - Website Schema */}
-      <script type="application/ld+json">
-        {JSON.stringify({
-          '@context': 'https://schema.org',
-          '@type': 'WebSite',
-          name: 'Rolan Lobo — Developer & Builder',
-          alternateName: ['Rolan RNR', 'Rolan Lobo', 'RNR'],
-          url: 'https://rolan-rnr.netlify.app/',
-          author: {
-            '@type': 'Person',
-            name: 'Rolan Lobo',
-            alternateName: 'Rolan RNR'
-          }
-        })}
-      </script>
-
-      {/* Structured Data (JSON-LD) - Organization Schema (Self-Branded) */}
-      <script type="application/ld+json">
-        {JSON.stringify({
-          '@context': 'https://schema.org',
-          '@type': 'Organization',
-          '@id': 'https://rolan-rnr.netlify.app/#organization',
-          name: 'Rolan Lobo — Developer & Builder',
-          alternateName: ['RNR', 'Rolan RNR', 'Rolan Lobo'],
-          url: 'https://rolan-rnr.netlify.app/',
-          logo: {
-            '@type': 'ImageObject',
-            url: 'https://rolan-rnr.netlify.app/logo512.png',
-            width: 512,
-            height: 512
-          },
-          description: 'Full-stack developer and builder specializing in security applications, modern web products, and desktop software that solves real problems.',
-          brand: {
-            '@type': 'Brand',
-            name: 'Rolan Lobo'
-          },
-          foundingDate: '2023',
-          founder: {
-            '@type': 'Person',
-            name: 'Rolan Lobo',
-            alternateName: 'Rolan RNR'
-          },
-          address: {
-            '@type': 'PostalAddress',
-            addressRegion: 'Karnataka',
-            addressCountry: 'IN'
-          },
-          contactPoint: {
-            '@type': 'ContactPoint',
-            email: 'rolanlobo901@gmail.com',
-            contactType: 'Customer Service',
-            availableLanguage: ['English', 'Hindi', 'Kannada']
-          },
-          sameAs: [
-            'https://github.com/Mrtracker-new',
-            'https://www.linkedin.com/in/rolan-lobo/',
-            'https://dev.to/rolan_r_n_r'
-          ]
-        })}
-      </script>
+      {/* Structured Data (JSON-LD) — site constants, serialized once at module scope */}
+      <script type="application/ld+json">{PERSON_LD}</script>
+      <script type="application/ld+json">{WEBSITE_LD}</script>
+      <script type="application/ld+json">{ORGANIZATION_LD}</script>
     </Helmet>
   );
 };
