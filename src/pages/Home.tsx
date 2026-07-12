@@ -10,6 +10,7 @@ import type { Project } from '../data/projects';
 import { glassSurface } from '../styles/surfaces';
 import { SectionHeading, TechPill } from '../components/layout/primitives';
 import DecryptText from '../components/DecryptText';
+import { useMediaQuery } from '../hooks/useMediaQuery';
 
 import { getLatestPosts, BlogPost } from '../utils/devto';
 
@@ -27,6 +28,10 @@ const ResumeDownload = lazy(() => import('../components/ResumeDownload'));
 
 /* Navbar-clearance offset for the hero top padding (fixed header height). */
 const HERO_TOP = 'calc(var(--spacing-32) + var(--spacing-px) * 2)'; /* 130px */
+
+/* Desktop boundary for the hover-only resume preview. Mirrors the 968px
+   breakpoint the hero CSS uses so JS and layout agree on "desktop". */
+const DESKTOP_QUERY = '(min-width: 969px)';
 
 const HeroSection = styled.section`
   min-height: 100svh;
@@ -633,6 +638,7 @@ const Home: React.FC = () => {
   const [blogPosts, setBlogPosts] = useState<BlogPost[]>([]);
   const [loadingBlog, setLoadingBlog] = useState(true);
   const [showResumePreview, setShowResumePreview] = useState(false);
+  const isDesktop = useMediaQuery(DESKTOP_QUERY);
 
   const featuredProjects = projectsData.filter((p: Project) => p.featured);
 
@@ -704,9 +710,9 @@ const Home: React.FC = () => {
               {/* Preview reveals on hover (mouse) or when the download control
                   inside receives focus (keyboard) — focus/blur bubble up here. */}
               <div
-                onMouseEnter={() => { if (window.innerWidth > 968) setShowResumePreview(true); }}
-                onMouseLeave={() => { if (window.innerWidth > 968) setShowResumePreview(false); }}
-                onFocus={() => { if (window.innerWidth > 968) setShowResumePreview(true); }}
+                onMouseEnter={() => { if (isDesktop) setShowResumePreview(true); }}
+                onMouseLeave={() => { if (isDesktop) setShowResumePreview(false); }}
+                onFocus={() => { if (isDesktop) setShowResumePreview(true); }}
                 onBlur={() => setShowResumePreview(false)}
               >
                 <Suspense fallback={null}>
