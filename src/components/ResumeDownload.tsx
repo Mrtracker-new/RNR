@@ -178,7 +178,7 @@ const ResumeDownload: React.FC<ResumeDownloadProps> = ({
           >
             <PreviewCard $position={tooltipPosition}>
               <PreviewImageContainer>
-                <img src="/Resume_preview.webp" alt="Resume Preview" />
+                <img src="/Resume_preview.avif" alt="Resume Preview" />
               </PreviewImageContainer>
               <HintText>
                 <span>Click</span> to download full resume

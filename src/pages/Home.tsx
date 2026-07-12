@@ -12,12 +12,12 @@ import DecryptText from '../components/DecryptText';
 
 import { getLatestPosts, BlogPost } from '../utils/devto';
 
-const profileImage    = '/images/Home_dp.webp';
-const profileImage900 = '/images/Home_dp_900.webp';
-const profileImage600 = '/images/Home_dp_600.webp';
-const profileImage450 = '/images/Home_dp_450.webp';
-const profileImage300 = '/images/Home_dp_300.webp';
-const profileImage150 = '/images/Home_dp_150.webp';
+const profileImage    = '/images/Home_dp.avif';
+const profileImage900 = '/images/Home_dp_900.avif';
+const profileImage600 = '/images/Home_dp_600.avif';
+const profileImage450 = '/images/Home_dp_450.avif';
+const profileImage300 = '/images/Home_dp_300.avif';
+const profileImage150 = '/images/Home_dp_150.avif';
 
 const BlogCard     = lazy(() => import('../components/BlogCard'));
 const ResumeDownload = lazy(() => import('../components/ResumeDownload'));
@@ -743,7 +743,7 @@ const Home: React.FC = () => {
                   transition={{ duration: 0.3 }}
                 >
                   <ResumePreviewContainer>
-                    <img src="/Resume_preview.webp" alt="Resume Preview" />
+                    <img src="/Resume_preview.avif" alt="Resume Preview" />
                   </ResumePreviewContainer>
                   <ResumeHintText>Click button to download full resume</ResumeHintText>
                 </StylizedImage>

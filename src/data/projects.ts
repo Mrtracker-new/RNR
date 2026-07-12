@@ -1,11 +1,11 @@
-import invisioVaultDesktopImg from '../assets/images/InvisioVault_Suit.webp';
-import invisioVaultWebImg from '../assets/images/InvisioVault.webp';
-import barLogoImg from '../assets/images/BAR_logo.webp';
-import barWebImg from '../assets/images/BAR_web.webp';
-import sortifyImg from '../assets/images/Sortify.webp';
-import ytDownloaderImg from '../assets/images/YT.webp';
-import linkNestImg from '../assets/images/LN.webp';
-import contactManagerImg from '../assets/images/Contact_Manager.webp';
+import invisioVaultDesktopImg from '../assets/images/InvisioVault_Suit.avif';
+import invisioVaultWebImg from '../assets/images/InvisioVault.avif';
+import barLogoImg from '../assets/images/BAR_logo.avif';
+import barWebImg from '../assets/images/BAR_web.avif';
+import sortifyImg from '../assets/images/Sortify.avif';
+import ytDownloaderImg from '../assets/images/YT.avif';
+import linkNestImg from '../assets/images/LN.avif';
+import contactManagerImg from '../assets/images/Contact_Manager.avif';
 
 export interface Project {
   id: number;

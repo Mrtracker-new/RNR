@@ -5,7 +5,7 @@ import { Container } from '../styles/GlobalStyle';
 import { glassSurface, glassSurfaceHover, glassControl } from '../styles/surfaces';
 import { SectionHeading } from '../components/layout/primitives';
 import SEO from '../components/SEO';
-import aboutImage from '../assets/images/Aboutme.webp';
+import aboutImage from '../assets/images/Aboutme.avif';
 
 const ResumeDownload = lazy(() => import('../components/ResumeDownload'));
 
