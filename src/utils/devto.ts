@@ -124,13 +124,13 @@ export async function getLatestPosts(limit = 3): Promise<BlogPost[]> {
     }
 }
 
+/**
+ * Fetch every post. Unlike getLatestPosts, this propagates failures so callers
+ * can tell a real API outage apart from a genuinely empty feed: a successful
+ * response with no posts still resolves to [], only a network/API error throws.
+ */
 export async function getAllPosts(): Promise<BlogPost[]> {
-    try {
-        return await getPosts();
-    } catch (error) {
-        console.error('Error fetching blog posts from Dev.to:', error);
-        return [];
-    }
+    return getPosts();
 }
 
 export function formatPostDate(dateString: string): string {
