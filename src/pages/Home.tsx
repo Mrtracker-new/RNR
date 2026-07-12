@@ -1,6 +1,7 @@
 import React, { useState, useEffect, lazy, Suspense } from 'react';
 import styled, { keyframes } from 'styled-components';
 import { m, Variants, AnimatePresence } from 'framer-motion';
+import { Helmet } from 'react-helmet-async';
 import { Link } from 'react-router-dom';
 import { Container, Button } from '../styles/GlobalStyle';
 import SEO from '../components/SEO';
@@ -658,6 +659,17 @@ const Home: React.FC = () => {
         image="https://rolan-rnr.netlify.app/og-social-card.png"
         url="https://rolan-rnr.netlify.app/"
       />
+
+      {/* Preload the LCP hero image on the home route only (not every route). */}
+      <Helmet>
+        <link
+          rel="preload"
+          as="image"
+          type="image/avif"
+          href="/images/Home_dp_450.avif"
+          fetchPriority="high"
+        />
+      </Helmet>
 
       <HeroSection>
         <HeroContent

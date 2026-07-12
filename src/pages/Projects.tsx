@@ -934,6 +934,14 @@ const Projects: React.FC = () => {
 
   const closeModal = useCallback(() => setIsModalOpen(false), []);
 
+  // Counts are derived from the static projectsData — compute once, not per render.
+  const categoryCounts = useMemo(
+    () => Object.fromEntries(
+      PROJECT_CATEGORIES.map(cat => [cat, CATEGORY_META[cat]?.count(projectsData) ?? 0])
+    ) as Record<string, number>,
+    []
+  );
+
   const filteredProjects = useMemo(() => {
     if (selectedCategory === 'All') return projectsData;
     return projectsData.filter(p => p.category === selectedCategory);
@@ -1015,7 +1023,7 @@ const Projects: React.FC = () => {
               >
                 {CATEGORY_META[cat]?.label ?? cat}
                 <FilterCount $active={selectedCategory === cat}>
-                  {CATEGORY_META[cat]?.count(projectsData) ?? 0}
+                  {categoryCounts[cat] ?? 0}
                 </FilterCount>
               </FilterTab>
             ))}
