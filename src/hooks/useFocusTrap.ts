@@ -1,4 +1,4 @@
-import { useEffect, RefObject } from 'react';
+import { useEffect, useRef, RefObject } from 'react';
 
 const FOCUSABLE = [
   'a[href]',
@@ -18,12 +18,22 @@ const FOCUSABLE = [
  *
  * The container should have `tabIndex={-1}` so it can receive focus when it
  * holds no focusable children.
+ *
+ * `onEscape` is read through a ref so an inline callback doesn't tear down and
+ * re-run the trap (which would bounce focus back to the first item) on every
+ * parent render.
  */
 export function useFocusTrap(
   active: boolean,
   containerRef: RefObject<HTMLElement | null>,
   onEscape?: () => void
 ): void {
+  const onEscapeRef = useRef(onEscape);
+
+  useEffect(() => {
+    onEscapeRef.current = onEscape;
+  }, [onEscape]);
+
   useEffect(() => {
     if (!active) return;
     const container = containerRef.current;
@@ -44,7 +54,7 @@ export function useFocusTrap(
 
     const onKeyDown = (e: KeyboardEvent) => {
       if (e.key === 'Escape') {
-        onEscape?.();
+        onEscapeRef.current?.();
         return;
       }
       if (e.key !== 'Tab') return;
@@ -75,9 +85,19 @@ export function useFocusTrap(
     return () => {
       cancelAnimationFrame(raf);
       document.removeEventListener('keydown', onKeyDown);
-      if (previouslyFocused && typeof previouslyFocused.focus === 'function') {
-        previouslyFocused.focus();
-      }
+
+      /* Restore on the next task so sibling cleanups (notably removing the
+         background's inert attribute) run first — focusing into a still-inert
+         subtree is silently ignored by the browser. */
+      setTimeout(() => {
+        if (
+          previouslyFocused &&
+          document.contains(previouslyFocused) &&
+          typeof previouslyFocused.focus === 'function'
+        ) {
+          previouslyFocused.focus();
+        }
+      }, 0);
     };
-  }, [active, containerRef, onEscape]);
+  }, [active, containerRef]);
 }
