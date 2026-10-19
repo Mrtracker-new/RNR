@@ -22,6 +22,9 @@ export default defineConfig({
   build: {
     outDir: 'build',
     sourcemap: false,
+    // Never base64-inline images: they are content-hashed files that should be
+    // cached, and inlining them bloats the JS (and the prerendered srcset).
+    assetsInlineLimit: 0,
     minify: 'terser',
     terserOptions: {
       compress: {
@@ -36,15 +39,7 @@ export default defineConfig({
     },
     chunkSizeWarningLimit: 400,
     rollupOptions: {
-      treeshake: {
-        preset: 'recommended',
-        moduleSideEffects: (id) => {
-          if (id.endsWith('.css')) return true;
-          if (id.includes('node_modules/framer-motion')) return false;
-          if (id.includes('node_modules/styled-components')) return false;
-          return true;
-        },
-      },
+      treeshake: { preset: 'recommended' },
       output: {
         compact: true,
         manualChunks(id) {
