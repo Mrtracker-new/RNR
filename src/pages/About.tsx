@@ -6,6 +6,7 @@ import { glassSurface, glassSurfaceHover, glassControl } from '../styles/surface
 import { SectionHeading } from '../components/layout/primitives';
 import SEO from '../components/SEO';
 import aboutImage from '../assets/images/Aboutme.avif';
+import { OG_IMAGE, SITE_URL } from '../utils/site';
 
 const ResumeDownload = lazy(() => import('../components/ResumeDownload'));
 
@@ -509,7 +510,11 @@ const skillsData = [
   },
   {
     category: 'Backend',
-    skills: ['Python', 'Flask', 'Node.js', 'REST APIs', 'Database Design', 'Authentication'],
+    skills: ['Python', 'Flask', 'FastAPI', 'Node.js', 'REST APIs', 'Database Design', 'Authentication'],
+  },
+  {
+    category: 'Systems & AI',
+    skills: ['Rust', 'Tauri', 'SQLite', 'PCAP Analysis', 'AI-Assisted Planning', 'Deterministic Pipelines'],
   },
   {
     category: 'Tools & Workflow',
@@ -546,6 +551,12 @@ const focusAreas = [
     body: 'One problem, the right platform. Web, Windows, Android, iOS — choosing the best tool per target rather than forcing a single stack everywhere.',
     projects: ['YT-Downloader', 'Contact Manager', 'Sortify'],
   },
+  {
+    number: '05',
+    title: 'Systems & Applied AI',
+    body: 'Rust and Tauri for local-first systems work, paired with AI where it earns its place: reasoning over deterministic results, never replacing them.',
+    projects: ['NetPlus', 'BuildWise AI', 'YT Downloader — Desktop'],
+  },
 ];
 
 const totalSkills = skillsData.reduce((n, g) => n + g.skills.length, 0);
@@ -556,10 +567,10 @@ const About: React.FC = () => (
   <>
     <SEO
       title="About Rolan Lobo — Software Developer"
-      description="Rolan Lobo is a software developer from Karnataka, India, who crossed from precision manufacturing into software engineering. Specialising in privacy-focused tools, AES-256 encryption, zero-knowledge applications, and cross-platform software."
+      description="Rolan Lobo is a software developer from Karnataka, India, who crossed from precision manufacturing into software engineering. Specialising in privacy-focused tools, Rust and Tauri systems software, AES-256 encryption, zero-knowledge applications, and AI-assisted planning tools."
       keywords="About Rolan Lobo, Rolan RNR, Software Developer India, Privacy Tools Developer, Security Software Engineer, Freelance Developer India, Karnataka Developer, Open Source Developer"
-      image="https://rolan-rnr.netlify.app/Social_card.png"
-      url="https://rolan-rnr.netlify.app/about"
+      image={OG_IMAGE}
+      url={`${SITE_URL}/about`}
     />
 
     <PageWrapper>
@@ -621,8 +632,11 @@ const About: React.FC = () => (
                 <img
                   src={aboutImage}
                   alt="Rolan Lobo — Software Developer"
-                  loading="lazy"
+                  loading="eager"
+                  fetchPriority="high"
                   decoding="async"
+                  width={1463}
+                  height={1952}
                 />
               </ImageFrame>
             </HeroImage>

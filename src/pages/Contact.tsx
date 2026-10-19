@@ -4,6 +4,9 @@ import { m, AnimatePresence } from 'framer-motion';
 import SEO from '../components/SEO';
 import FAQSchema from '../components/FAQSchema';
 import { glassSurface, glassControl } from '../styles/surfaces';
+import { DevToSVG, GitHubSVG, InstagramSVG, LinkedInSVG } from '../components/icons';
+import { AVAILABILITY, EMAIL, SITE_URL, SOCIALS } from '../utils/site';
+import { FAQ_ITEMS } from '../data/faq';
 
 /* ══════════════════════════════════════════════════════════════════════════
    LAYOUT
@@ -190,6 +193,50 @@ const DetailsVal = styled.dd`
 /* ─── Social links ──────────────────────────────────────────────────────── */
 
 const SocialsSection = styled.div``;
+
+/* ─── FAQ ───────────────────────────────────────────────────────────────── */
+
+const FaqSection = styled.section`
+  margin-top: var(--spacing-16);
+  padding-top: var(--spacing-12);
+  border-top: 1px solid var(--hairline);
+`;
+
+const FaqTitle = styled.h2`
+  font-size: clamp(1.4rem, 2.5vw, 1.9rem);
+  font-weight: var(--font-bold);
+  color: var(--dark-100);
+  letter-spacing: var(--tracking-tight);
+  margin-bottom: var(--spacing-6);
+`;
+
+const FaqList = styled.dl`
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: var(--spacing-6) var(--spacing-8);
+  margin: 0;
+
+  @media (max-width: 768px) { grid-template-columns: 1fr; }
+`;
+
+const FaqItem = styled.div`
+  padding: var(--spacing-4) 0;
+  border-top: 1px solid var(--hairline-faint);
+`;
+
+const FaqQuestion = styled.dt`
+  font-size: var(--text-base);
+  font-weight: var(--font-semibold);
+  color: var(--dark-200);
+  margin-bottom: var(--spacing-2);
+`;
+
+const FaqAnswer = styled.dd`
+  margin: 0;
+  font-size: var(--text-sm);
+  color: var(--dark-400);
+  line-height: var(--leading-body);
+`;
 
 const SocialList = styled.div`
   display: flex;
@@ -426,7 +473,7 @@ const FormActions = styled.div`
 const SubmitBtn = styled(m.button)`
   box-sizing: border-box;
   padding: 11px 28px;
-  background: var(--accent-primary);
+  background: var(--accent-fill);
   color: #ffffff;
   border: none;
   border-radius: 10px;
@@ -441,8 +488,8 @@ const SubmitBtn = styled(m.button)`
   min-height: 44px;
   transition: background 0.18s ease, opacity 0.18s ease;
 
-  &:hover:not(:disabled) { background: var(--accent-hover); }
-  &:active:not(:disabled) { background: var(--accent-press); }
+  &:hover:not(:disabled) { background: var(--accent-fill-hover); }
+  &:active:not(:disabled) { background: var(--accent-fill-press); }
   &:disabled { opacity: 0.5; cursor: not-allowed; }
   &:focus-visible { outline: 2px solid var(--accent-primary); outline-offset: 2px; }
 
@@ -483,21 +530,19 @@ const Spinner = () => (
   />
 );
 
-/* ─── SVG icons ──────────────────────────────────────────────────────────── */
-
-const GitHubSVG    = () => <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 0c-6.626 0-12 5.373-12 12 0 5.302 3.438 9.8 8.207 11.387.599.111.793-.261.793-.577v-2.234c-3.338.726-4.033-1.416-4.033-1.416-.546-1.387-1.333-1.756-1.333-1.756-1.089-.745.083-.729.083-.729 1.205.084 1.839 1.237 1.839 1.237 1.07 1.834 2.807 1.304 3.492.997.107-.775.418-1.305.762-1.604-2.665-.305-5.467-1.334-5.467-5.931 0-1.311.469-2.381 1.236-3.221-.124-.303-.535-1.524.117-3.176 0 0 1.008-.322 3.301 1.23.957-.266 1.983-.399 3.003-.404 1.02.005 2.047.138 3.006.404 2.291-1.552 3.297-1.23 3.297-1.23.653 1.653.242 2.874.118 3.176.77.84 1.235 1.911 1.235 3.221 0 4.609-2.807 5.624-5.479 5.921.43.372.823 1.102.823 2.222v3.293c0 .319.192.694.801.576 4.765-1.589 8.199-6.086 8.199-11.386 0-6.627-5.373-12-12-12z"/></svg>;
-const LinkedInSVG  = () => <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M20.447 20.452h-3.554v-5.569c0-1.328-.027-3.037-1.852-3.037-1.853 0-2.136 1.445-2.136 2.939v5.667H9.351V9h3.414v1.561h.046c.477-.9 1.637-1.85 3.37-1.85 3.601 0 4.267 2.37 4.267 5.455v6.286zM5.337 7.433c-1.144 0-2.063-.926-2.063-2.065 0-1.138.92-2.063 2.063-2.063 1.14 0 2.064.925 2.064 2.063 0 1.139-.925 2.065-2.064 2.065zm1.782 13.019H3.555V9h3.564v11.452zM22.225 0H1.771C.792 0 0 .774 0 1.729v20.542C0 23.227.792 24 1.771 24h20.451C23.2 24 24 23.227 24 22.271V1.729C24 .774 23.2 0 22.222 0h.003z"/></svg>;
-const InstagramSVG = () => <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 2.163c3.204 0 3.584.012 4.85.07 3.252.148 4.771 1.691 4.919 4.919.058 1.265.069 1.645.069 4.849 0 3.205-.012 3.584-.069 4.849-.149 3.225-1.664 4.771-4.919 4.919-1.266.058-1.644.07-4.85.07-3.204 0-3.584-.012-4.849-.07-3.26-.149-4.771-1.699-4.919-4.92-.058-1.265-.07-1.644-.07-4.849 0-3.204.013-3.583.07-4.849.149-3.227 1.664-4.771 4.919-4.919 1.266-.057 1.645-.069 4.849-.069zm0-2.163c-3.259 0-3.667.014-4.947.072-4.358.2-6.78 2.618-6.98 6.98-.059 1.281-.073 1.689-.073 4.948 0 3.259.014 3.668.072 4.948.2 4.358 2.618 6.78 6.98 6.98 1.281.058 1.689.072 4.948.072 3.259 0 3.668-.014 4.948-.072 4.354-.2 6.782-2.618 6.979-6.98.059-1.28.073-1.689.073-4.948 0-3.259-.014-3.667-.072-4.947-.196-4.354-2.617-6.78-6.979-6.98-1.281-.059-1.69-.073-4.949-.073zm0 5.838c-3.403 0-6.162 2.759-6.162 6.162s2.759 6.163 6.162 6.163 6.162-2.759 6.162-6.163c0-3.403-2.759-6.162-6.162-6.162zm0 10.162c-2.209 0-4-1.79-4-4 0-2.209 1.791-4 4-4s4 1.791 4 4c0 2.21-1.791 4-4 4zm6.406-11.845c-.796 0-1.441.645-1.441 1.44s.645 1.44 1.441 1.44c.795 0 1.439-.645 1.439-1.44s-.644-1.44-1.439-1.44z"/></svg>;
-const DevToSVG     = () => <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M7.42 10.05c-.18-.16-.46-.23-.84-.23H6l.02 2.44.04 2.45.56-.02c.41 0 .63-.07.83-.26.24-.24.26-.36.26-2.2 0-1.91-.02-1.96-.29-2.18zM0 4.94v14.12h24V4.94H0zM8.56 15.3c-.44.58-1.06.77-2.53.77H4.71V8.53h1.4c1.67 0 2.16.18 2.6.9.27.43.29.6.32 2.57.05 2.23-.02 2.73-.47 3.3zm5.09-5.47h-2.47v1.77h1.52v1.28l-.72.04-.75.03v1.77l1.22.03 1.2.04v1.28h-1.6c-1.53 0-1.6-.01-1.87-.3l-.3-.28v-3.16c0-3.02.01-3.18.25-3.48.23-.31.25-.31 1.88-.31h1.64v1.29zm4.68 5.45c-.17.43-.64.79-1 .79-.18 0-.45-.15-.67-.39-.32-.32-.45-.63-.82-2.08l-.9-3.39-.45-1.67h.76c.4 0 .75.02.75.05 0 .06 1.16 4.54 1.26 4.83.04.15.32-.7.73-2.3l.66-2.52.74-.04c.4-.02.74 0 .74.04 0 .14-1.67 6.38-1.8 6.68z"/></svg>;
-
 /* ─── Data ────────────────────────────────────────────────────────────────── */
 
-const socials = [
-  { name: 'GitHub',    handle: 'Mrtracker-new', href: 'https://github.com/Mrtracker-new',        Icon: GitHubSVG    },
-  { name: 'LinkedIn',  handle: 'rolan-lobo',     href: 'https://www.linkedin.com/in/rolan-lobo/', Icon: LinkedInSVG  },
-  { name: 'Instagram', handle: 'rolan_r_n_r',    href: 'https://www.instagram.com/rolan_r_n_r/',  Icon: InstagramSVG },
-  { name: 'Dev.to',    handle: 'rolan_r_n_r',    href: 'https://dev.to/rolan_r_n_r',              Icon: DevToSVG     },
-];
+const SOCIAL_ICONS: Record<string, React.ComponentType<{ size?: number }>> = {
+  GitHub: GitHubSVG,
+  LinkedIn: LinkedInSVG,
+  Instagram: InstagramSVG,
+  'Dev.to': DevToSVG,
+};
+
+const socials = SOCIALS.map(social => ({
+  ...social,
+  Icon: SOCIAL_ICONS[social.name],
+}));
 
 /* ─── Types ───────────────────────────────────────────────────────────────── */
 
@@ -555,7 +600,7 @@ const Contact: React.FC = () => {
       const res = await fetch('/', { method: 'POST', headers: { 'Content-Type': 'application/x-www-form-urlencoded' }, body: body.toString() });
       if (res.ok) { setStatus({ t: 'success', msg: "Got it — I'll reply within 24 hours." }); setForm({ name: '', email: '', subject: '', message: '' }); }
       else throw new Error();
-    } catch { setStatus({ t: 'error', msg: 'Something went wrong. Email me directly at rolanlobo901@gmail.com' }); }
+    } catch { setStatus({ t: 'error', msg: `Something went wrong. Email me directly at ${EMAIL}` }); }
     finally { setBusy(false); }
   };
 
@@ -565,7 +610,7 @@ const Contact: React.FC = () => {
         title="Work With Me — Rolan Lobo"
         description="Open to freelance, contract, and full-time roles. Privacy-first engineering, cross-platform development, and encryption tools. Reply within 24 hours."
         keywords="Contact Rolan Lobo, Rolan RNR, Hire Software Developer, Freelance Developer India, Privacy Developer, Security Software Consultant"
-        url="https://rolan-rnr.netlify.app/contact"
+        url={`${SITE_URL}/contact`}
       />
       <FAQSchema />
 
@@ -587,7 +632,7 @@ const Contact: React.FC = () => {
                 </Subline>
                 <AvailPill>
                   <PulseDot aria-hidden="true" />
-                  Open for Q3 2026
+                  {AVAILABILITY}
                 </AvailPill>
               </IntroSection>
 
@@ -645,7 +690,7 @@ const Contact: React.FC = () => {
                         type="text" id="c-name" name="name" required aria-required="true"
                         aria-invalid={!!errs.name}
                         aria-describedby={errs.name ? 'c-name-err' : undefined}
-                        placeholder="Your name" value={form.name} onChange={change} $err={!!errs.name}
+                        placeholder="Your name" value={form.name} onChange={change} $err={!!errs.name} maxLength={100} autoComplete="name"
                       />
                       <AnimatePresence>
                         {errs.name && <FieldError id="c-name-err" role="alert" initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }}>{errs.name}</FieldError>}
@@ -658,7 +703,7 @@ const Contact: React.FC = () => {
                         type="email" id="c-email" name="email" required aria-required="true"
                         aria-invalid={!!errs.email}
                         aria-describedby={errs.email ? 'c-email-err' : undefined}
-                        placeholder="you@example.com" value={form.email} onChange={change} $err={!!errs.email}
+                        placeholder="you@example.com" value={form.email} onChange={change} $err={!!errs.email} maxLength={254} autoComplete="email"
                       />
                       <AnimatePresence>
                         {errs.email && <FieldError id="c-email-err" role="alert" initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }}>{errs.email}</FieldError>}
@@ -673,7 +718,7 @@ const Contact: React.FC = () => {
                       type="text" id="c-subject" name="subject" required aria-required="true"
                       aria-invalid={!!errs.subject}
                       aria-describedby={errs.subject ? 'c-sub-err' : undefined}
-                      placeholder="What's on your mind?" value={form.subject} onChange={change} $err={!!errs.subject}
+                      placeholder="What's on your mind?" value={form.subject} onChange={change} $err={!!errs.subject} maxLength={150}
                     />
                     <AnimatePresence>
                       {errs.subject && <FieldError id="c-sub-err" role="alert" initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }}>{errs.subject}</FieldError>}
@@ -688,7 +733,7 @@ const Contact: React.FC = () => {
                       aria-invalid={!!errs.message}
                       aria-describedby={errs.message ? 'c-msg-err' : undefined}
                       placeholder="Tell me about the project, what you need, or just say hello…"
-                      value={form.message} onChange={change} $err={!!errs.message}
+                      value={form.message} onChange={change} $err={!!errs.message} maxLength={5000}
                     />
                     <AnimatePresence>
                       {errs.message && <FieldError id="c-msg-err" role="alert" initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }}>{errs.message}</FieldError>}
@@ -700,7 +745,7 @@ const Contact: React.FC = () => {
                     <SubmitBtn type="submit" disabled={busy} whileTap={{ scale: 0.97 }}>
                       {busy ? <><Spinner />Sending…</> : 'Send message'}
                     </SubmitBtn>
-                    <DirectLink href="mailto:rolanlobo901@gmail.com" aria-label="Email Rolan directly">
+                    <DirectLink href={`mailto:${EMAIL}`} aria-label="Email Rolan directly">
                       or email directly
                     </DirectLink>
                   </FormActions>
@@ -745,6 +790,18 @@ const Contact: React.FC = () => {
             </m.div>
 
           </Grid>
+
+          <FaqSection aria-labelledby="contact-faq-title">
+            <FaqTitle id="contact-faq-title">Common questions</FaqTitle>
+            <FaqList>
+              {FAQ_ITEMS.map(item => (
+                <FaqItem key={item.question}>
+                  <FaqQuestion>{item.question}</FaqQuestion>
+                  <FaqAnswer>{item.answer}</FaqAnswer>
+                </FaqItem>
+              ))}
+            </FaqList>
+          </FaqSection>
         </Wrap>
       </PageWrapper>
     </>

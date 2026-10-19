@@ -1,18 +1,18 @@
-import React, { useState, useEffect, lazy, Suspense } from 'react';
+import React, { useState, lazy, Suspense } from 'react';
 import styled, { keyframes } from 'styled-components';
 import { m, Variants, AnimatePresence } from 'framer-motion';
 import { Helmet } from 'react-helmet-async';
 import { Link } from 'react-router-dom';
 import { Container, Button } from '../styles/GlobalStyle';
 import SEO from '../components/SEO';
-import { projectsData } from '../data/projects';
+import { projectsData, PROJECT_CATEGORIES, projectPath } from '../data/projects';
 import type { Project } from '../data/projects';
 import { glassSurface } from '../styles/surfaces';
 import { SectionHeading, TechPill } from '../components/layout/primitives';
 import DecryptText from '../components/DecryptText';
-import { useMediaQuery } from '../hooks/useMediaQuery';
-
-import { getLatestPosts, BlogPost } from '../utils/devto';
+import { CategoryIcon, ArrowUpRightSVG } from '../components/icons';
+import { useDevtoPosts } from '../hooks/useDevtoPosts';
+import { BLOG_INTRO, CODING_START_YEAR, OG_IMAGE, SITE_URL } from '../utils/site';
 
 const profileImage    = '/images/Home_dp.avif';
 const profileImage900 = '/images/Home_dp_900.avif';
@@ -28,10 +28,6 @@ const ResumeDownload = lazy(() => import('../components/ResumeDownload'));
 
 /* Navbar-clearance offset for the hero top padding (fixed header height). */
 const HERO_TOP = 'calc(var(--spacing-32) + var(--spacing-px) * 2)'; /* 130px */
-
-/* Desktop boundary for the hover-only resume preview. Mirrors the 968px
-   breakpoint the hero CSS uses so JS and layout agree on "desktop". */
-const DESKTOP_QUERY = '(min-width: 969px)';
 
 const HeroSection = styled.section`
   min-height: 100svh;
@@ -165,8 +161,8 @@ const FrameTag = styled.span`
   font-size: 10px;
   letter-spacing: 0.14em;
   text-transform: uppercase;
-  color: var(--accent-primary);
-  opacity: 0.7;
+  color: var(--accent-text);
+  opacity: 0.9;
   pointer-events: none;
   z-index: 3;
   white-space: nowrap;
@@ -449,28 +445,30 @@ const StatItem = styled.div`
     min-width: 0;
     width: 100%;
   }
+`;
 
-  h3 {
-    font-size: var(--text-4xl);
-    font-weight: var(--font-bold);
-    color: var(--dark-100);
-    line-height: 1;
-    white-space: nowrap;
+/* The hero stats are numbers, not section headings — keeping them out of the
+   heading outline stops assistive tech announcing a skipped level. */
+const StatValue = styled.span`
+  font-size: var(--text-4xl);
+  font-weight: var(--font-bold);
+  color: var(--dark-100);
+  line-height: 1;
+  white-space: nowrap;
 
-    @media (max-width: 768px) { font-size: var(--text-3xl); }
-    @media (max-width: 640px) { font-size: var(--text-2xl); }
-  }
+  @media (max-width: 768px) { font-size: var(--text-3xl); }
+  @media (max-width: 640px) { font-size: var(--text-2xl); }
+`;
 
-  p {
-    font-size: var(--text-sm);
-    color: var(--dark-400);
-    text-transform: uppercase;
-    letter-spacing: 0.1em;
-    white-space: nowrap;
+const StatLabel = styled.span`
+  font-size: var(--text-sm);
+  color: var(--dark-400);
+  text-transform: uppercase;
+  letter-spacing: 0.1em;
+  white-space: nowrap;
 
-    @media (max-width: 768px) { font-size: var(--text-xs); letter-spacing: var(--tracking-wide); }
-    @media (max-width: 640px) { font-size: var(--text-2xs); letter-spacing: var(--tracking-wide); white-space: normal; }
-  }
+  @media (max-width: 768px) { font-size: var(--text-xs); letter-spacing: var(--tracking-wide); }
+  @media (max-width: 640px) { font-size: var(--text-2xs); letter-spacing: var(--tracking-wide); white-space: normal; }
 `;
 
 /* ─── Featured projects strip ─────────────────────────────────────────────── */
@@ -635,35 +633,20 @@ const itemVariants: Variants = {
 /* ─── Component ───────────────────────────────────────────────────────────── */
 
 const Home: React.FC = () => {
-  const [blogPosts, setBlogPosts] = useState<BlogPost[]>([]);
-  const [loadingBlog, setLoadingBlog] = useState(true);
   const [showResumePreview, setShowResumePreview] = useState(false);
-  const isDesktop = useMediaQuery(DESKTOP_QUERY);
+  const { posts: blogPosts, loading: loadingBlog, error: blogError } = useDevtoPosts(3);
 
   const featuredProjects = projectsData.filter((p: Project) => p.featured);
-
-  useEffect(() => {
-    const fetchBlogPosts = async () => {
-      try {
-        const posts = await getLatestPosts(3);
-        setBlogPosts(posts);
-      } catch (error) {
-        console.error('Error fetching blog posts:', error);
-      } finally {
-        setLoadingBlog(false);
-      }
-    };
-
-    fetchBlogPosts();
-  }, []);
+  const yearsBuilding = new Date().getFullYear() - CODING_START_YEAR;
+  const platformCount = PROJECT_CATEGORIES.length - 1;
 
   return (
     <>
       <SEO
         title="Rolan Lobo — Software Developer"
-        description="Rolan Lobo builds privacy-focused software — AES-256 encryption tools, zero-knowledge file sharing platforms, and offline-first applications. Open source. Karnataka, India."
-        image="https://rolan-rnr.netlify.app/Social_card.png"
-        url="https://rolan-rnr.netlify.app/"
+        description="Rolan Lobo builds privacy-first, systems, and AI-assisted planning software — AES-256 encryption tools, zero-knowledge sharing platforms, Rust desktop apps, and offline-first products. Karnataka, India."
+        image={OG_IMAGE}
+        url={SITE_URL + '/'}
       />
 
       {/* Preload the LCP hero image on the home route only (not every route). */}
@@ -686,7 +669,7 @@ const Home: React.FC = () => {
         >
           <TextContent>
             <RolePill variants={itemVariants}>
-              <RoleText>Software Developer · Privacy &amp; Security Tools</RoleText>
+              <RoleText>Software Developer · Privacy, Systems &amp; AI Tools</RoleText>
             </RolePill>
 
             <Headline variants={itemVariants}>
@@ -696,8 +679,8 @@ const Home: React.FC = () => {
 
             <Subheadline variants={itemVariants}>
               I build software that doesn't overshare — file encryption tools, zero-knowledge sharing
-              platforms, and privacy-first desktop apps. From web to Windows to Android, with security
-              at every layer.
+              platforms, privacy-first desktop apps, and AI-assisted planning engines like BuildWise
+              AI. Web, Windows and Android, with security at every layer.
             </Subheadline>
 
             <CTAContainer variants={itemVariants}>
@@ -709,16 +692,14 @@ const Home: React.FC = () => {
               </Button>
               {/* Preview reveals on hover (mouse) or when the download control
                   inside receives focus (keyboard) — focus/blur bubble up here. */}
-              <div
-                onMouseEnter={() => { if (isDesktop) setShowResumePreview(true); }}
-                onMouseLeave={() => { if (isDesktop) setShowResumePreview(false); }}
-                onFocus={() => { if (isDesktop) setShowResumePreview(true); }}
-                onBlur={() => setShowResumePreview(false)}
-              >
-                <Suspense fallback={null}>
-                  <ResumeDownload variant="outline" size="lg" showTooltip={false} />
-                </Suspense>
-              </div>
+              <Suspense fallback={null}>
+                <ResumeDownload
+                  variant="outline"
+                  size="lg"
+                  showTooltip={false}
+                  onPreviewChange={setShowResumePreview}
+                />
+              </Suspense>
             </CTAContainer>
 
             <AvailabilityBadge variants={itemVariants}>
@@ -777,16 +758,16 @@ const Home: React.FC = () => {
         >
           <StatsContent>
             <StatItem>
-              <h3>10+</h3>
-              <p>Products Shipped</p>
+              <StatValue>{projectsData.length}</StatValue>
+              <StatLabel>Products Shipped</StatLabel>
             </StatItem>
             <StatItem>
-              <h3>3+</h3>
-              <p>Years Building</p>
+              <StatValue>{yearsBuilding}+</StatValue>
+              <StatLabel>Years Building</StatLabel>
             </StatItem>
             <StatItem>
-              <h3>4</h3>
-              <p>Platforms</p>
+              <StatValue>{platformCount}</StatValue>
+              <StatLabel>Platforms</StatLabel>
             </StatItem>
           </StatsContent>
         </StatsBar>
@@ -810,13 +791,17 @@ const Home: React.FC = () => {
                   animate={{ opacity: 1, y: 0 }}
                   transition={{ duration: 0.4, delay: index * 0.08 }}
                 >
-                  <FeaturedCard to="/projects">
+                  <FeaturedCard to={projectPath(project.slug)}>
                     <FeaturedCardHeader>
                       <FeaturedCardMeta>
-                        <FeaturedCardIcon aria-hidden="true">{project.icon}</FeaturedCardIcon>
+                        <FeaturedCardIcon aria-hidden="true">
+                        <CategoryIcon category={project.category} />
+                      </FeaturedCardIcon>
                         <FeaturedCardCategory>{project.category}</FeaturedCardCategory>
                       </FeaturedCardMeta>
-                      <ArrowIcon aria-hidden="true">↗</ArrowIcon>
+                      <ArrowIcon aria-hidden="true">
+                        <ArrowUpRightSVG size={18} />
+                      </ArrowIcon>
                     </FeaturedCardHeader>
 
                     <FeaturedCardTitle>
@@ -838,7 +823,7 @@ const Home: React.FC = () => {
       )}
 
       {/* Blog */}
-      {!loadingBlog && blogPosts.length > 0 && (
+      {!loadingBlog && !blogError && blogPosts.length > 0 && (
         <BlogSection>
           <Container>
             <SectionHeading label="Writing" title="Technical Writing" />
@@ -847,7 +832,7 @@ const Home: React.FC = () => {
               animate={{ opacity: 1, y: 0 }}
               transition={{ duration: 0.6, delay: 0.1 }}
             >
-              From encryption architecture to accessibility trade-offs — things I've shipped, broken, and rebuilt.
+              {BLOG_INTRO}
             </BlogSubtitle>
 
             <BlogGrid>

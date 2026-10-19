@@ -5,7 +5,10 @@ import { Helmet } from 'react-helmet-async';
 import { Container } from '../styles/GlobalStyle';
 import { glassSurface } from '../styles/surfaces';
 import SEO from '../components/SEO';
-import { getAllPosts, BlogPost } from '../utils/devto';
+import type { BlogPost } from '../utils/devto';
+import { useDevtoPosts } from '../hooks/useDevtoPosts';
+import { ExternalSVG } from '../components/icons';
+import { BLOG_INTRO, SITE_URL } from '../utils/site';
 
 const BlogCard = lazy(() => import('../components/BlogCard'));
 
@@ -283,24 +286,6 @@ const FooterStripLink = styled.a`
   &:hover { color: var(--dark-200); }
 `;
 
-/* ─── SVG ─────────────────────────────────────────────────────────────────── */
-
-const ExternalSVG = () => (
-  <svg
-    viewBox="0 0 16 16"
-    fill="none"
-    stroke="currentColor"
-    strokeWidth="1.5"
-    strokeLinecap="round"
-    strokeLinejoin="round"
-    aria-hidden="true"
-  >
-    <path d="M6 3H3a1 1 0 0 0-1 1v8a1 1 0 0 0 1 1h8a1 1 0 0 0 1-1V9" />
-    <polyline points="10 3 13 3 13 6" />
-    <line x1="7" y1="9" x2="13" y2="3" />
-  </svg>
-);
-
 /* ─── Constants ───────────────────────────────────────────────────────────── */
 
 const SKELETON_COUNT = 6;
@@ -323,26 +308,8 @@ function collectTags(posts: BlogPost[]): string[] {
 /* ─── Component ───────────────────────────────────────────────────────────── */
 
 const Blog: React.FC = () => {
-  const [posts, setPosts] = useState<BlogPost[]>([]);
-  const [loading, setLoading] = useState(true);
-  const [error, setError] = useState(false);
+  const { posts, loading, error } = useDevtoPosts();
   const [activeTag, setActiveTag] = useState<string | null>(null);
-
-  useEffect(() => {
-    const fetchPosts = async () => {
-      try {
-        setLoading(true);
-        setError(false);
-        const fetched = await getAllPosts();
-        setPosts(fetched);
-      } catch {
-        setError(true);
-      } finally {
-        setLoading(false);
-      }
-    };
-    fetchPosts();
-  }, []);
 
   // If a re-fetch drops the tag the user had selected, clear the filter so the
   // list falls back to all posts instead of silently emptying.
@@ -364,7 +331,7 @@ const Blog: React.FC = () => {
         title="Technical Writing — Rolan Lobo"
         description="Technical articles on encryption, React, Python, security engineering, and privacy-first software. Published on Dev.to."
         keywords="Rolan Lobo blog, Dev.to articles, web development, React, Python, AES-256, security tools, steganography, software engineering"
-        url="https://rolan-rnr.netlify.app/blog"
+        url={`${SITE_URL}/blog`}
         type="website"
       />
 
@@ -377,13 +344,13 @@ const Blog: React.FC = () => {
             name: 'Technical Writing — Rolan Lobo',
             description:
               'Technical articles by Rolan Lobo published on Dev.to. Topics include encryption, React, Python, TypeScript, security tools, and software engineering.',
-            url: 'https://rolan-rnr.netlify.app/blog',
+            url: `${SITE_URL}/blog`,
             inLanguage: 'en-US',
             author: {
               '@type': 'Person',
               name: 'Rolan Lobo',
               alternateName: 'Rolan RNR',
-              url: 'https://rolan-rnr.netlify.app/',
+              url: `${SITE_URL}/`,
               sameAs: [
                 'https://dev.to/rolan_r_n_r',
                 'https://github.com/Mrtracker-new',
@@ -394,7 +361,7 @@ const Blog: React.FC = () => {
         </script>
       </Helmet>
 
-      <PageWrapper>
+      <PageWrapper data-blog-state={loading ? 'loading' : error ? 'error' : 'ready'}>
         <Container>
 
           {/* ── Hero ── */}
@@ -407,8 +374,7 @@ const Blog: React.FC = () => {
               <PageLabel>Writing</PageLabel>
               <PageTitle>Technical Writing</PageTitle>
               <PageSubtitle>
-                From encryption architecture to accessibility trade-offs —
-                things I've shipped, broken, and rebuilt.
+                {BLOG_INTRO}
               </PageSubtitle>
             </HeroLeft>
 

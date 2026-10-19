@@ -40,7 +40,7 @@ const HomeLink = styled(m(Link))`
   align-items: center;
   gap: var(--spacing-2);
   padding: var(--spacing-3) var(--spacing-8);
-  background: var(--accent-primary);
+  background: var(--accent-fill);
   color: #ffffff;
   font-weight: var(--font-semibold);
   border-radius: var(--radius-md);
@@ -48,7 +48,7 @@ const HomeLink = styled(m(Link))`
   transition: background var(--transition-normal);
 
   &:hover {
-    background: var(--accent-hover);
+    background: var(--accent-fill-hover);
     color: #ffffff;
   }
 `;
