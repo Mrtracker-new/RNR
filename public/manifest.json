@@ -1,7 +1,7 @@
 {
   "short_name": "Rolan",
-  "name": "Rolan - Portfolio",
-  "description": "Rolan Lobo - Full Stack Developer & Software Engineer",
+  "name": "Rolan Lobo — Portfolio",
+  "description": "Rolan Lobo — software developer building privacy-first, systems, and AI-assisted planning software.",
   "icons": [
     {
       "src": "favicon.ico",
@@ -16,11 +16,12 @@
     {
       "src": "logo512.png",
       "type": "image/png",
-      "sizes": "512x512"
+      "sizes": "512x512",
+      "purpose": "any maskable"
     }
   ],
   "start_url": "/",
   "display": "standalone",
-  "theme_color": "#09090b",
-  "background_color": "#09090b"
+  "theme_color": "#070809",
+  "background_color": "#070809"
 }
