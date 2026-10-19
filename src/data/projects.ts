@@ -1,21 +1,56 @@
-import invisioVaultDesktopImg from '../assets/images/InvisioVault_Suit.avif';
-import invisioVaultWebImg from '../assets/images/InvisioVault.avif';
-import barLogoImg from '../assets/images/BAR_logo.avif';
-import barWebImg from '../assets/images/BAR_web.avif';
-import sortifyImg from '../assets/images/Sortify.avif';
-import ytDownloaderImg from '../assets/images/YT.avif';
-import linkNestImg from '../assets/images/LN.avif';
-import contactManagerImg from '../assets/images/Contact_Manager.avif';
-import netPlusImg from '../assets/images/NetPlus.avif';
-import ytDownloaderDesktopImg from '../assets/images/YT_Downloader.avif';
+
+const originals = import.meta.glob<string>('../assets/images/*.avif', {
+  eager: true,
+  query: '?url',
+  import: 'default',
+});
+const variants400 = import.meta.glob<string>('../assets/images/*-400w.avif', {
+  eager: true,
+  query: '?url',
+  import: 'default',
+});
+const variants800 = import.meta.glob<string>('../assets/images/*-800w.avif', {
+  eager: true,
+  query: '?url',
+  import: 'default',
+});
+
+/* Resolves an image by filename and pairs it with the generated 400w/800w
+   variants. Keeps the responsive sources next to the data that owns them. */
+function projectImage(file: string): { src: string; srcSet?: string } {
+  const src = originals[`../assets/images/${file}`];
+  if (!src) throw new Error(`Unknown project image: ${file}`);
+
+  const stem = file.replace(/\.avif$/, '');
+  const srcSet = [
+    variants400[`../assets/images/${stem}-400w.avif`] && `${variants400[`../assets/images/${stem}-400w.avif`]} 400w`,
+    variants800[`../assets/images/${stem}-800w.avif`] && `${variants800[`../assets/images/${stem}-800w.avif`]} 800w`,
+  ].filter(Boolean).join(', ');
+
+  return { src, srcSet: srcSet || undefined };
+}
+
+const buildWise = projectImage('buildwise-ai-logo-banner.avif');
+const invisioVaultDesktop = projectImage('InvisioVault_Suit.avif');
+const invisioVaultWeb = projectImage('InvisioVault.avif');
+const barLogo = projectImage('BAR_logo.avif');
+const barWeb = projectImage('BAR_web.avif');
+const sortify = projectImage('Sortify.avif');
+const ytDownloader = projectImage('YT.avif');
+const linkNest = projectImage('LN.avif');
+const contactManager = projectImage('Contact_Manager.avif');
+const netPlus = projectImage('NetPlus.avif');
+const ytDownloaderDesktop = projectImage('YT_Downloader.avif');
 
 export interface Project {
+  /* Stable key for React and links — not an ordering hint. */
   id: number;
+  /* URL segment for the case-study page (/projects/<slug>). */
+  slug: string;
   title: string;
   category: string;
   description: string;
   longDescription: string;
-  achievementStatement?: string;
   caseStudy: {
     problem: string;
     solution: string;
@@ -27,14 +62,38 @@ export interface Project {
   download?: string;
   liveDemo?: string;
   featured: boolean;
-  icon: string;
-  bgColor: string;
   image?: string;
+  /* Generated 400w/800w sources paired with the full-size fallback. */
+  imageSrcSet?: string;
+  /* How the image fills its frame. Defaults to 'cover' (screenshots); use
+     'contain' for wide logo lockups that must not be cropped. */
+  imageFit?: 'cover' | 'contain';
 }
 
 export const projectsData: Project[] = [
   {
+    id: 13,
+    slug: 'buildwise-ai',
+    title: 'BuildWise AI',
+    category: 'Web Application',
+    description: 'Drop a pin anywhere and get a full civil-engineering feasibility report in seconds — MCDA land suitability, IS 1893 seismic and flood stress, CPWD cost benchmarks, Vastu orientation, and a generated architectural blueprint, compiled into a print-grade PDF dossier.',
+    longDescription: 'BuildWise AI turns a single map pin into a complete construction plan. Pick any plot via MapLibre click, address geosearch, or WGS84 coordinates, and the FastAPI backend runs a deterministic civil core against CPWD DSR benchmarks, IS 1893 seismic zoning, and NBC 2016 rules — then layers Groq/Gemini reasoning on top, with a zero-key offline fallback when no model is configured.\n\nA dissection-based spatial CSP solver generates floor plans from an architect placement knowledge base and non-negotiable topological invariants, rendered as an interactive SVG blueprint. Every analysis compiles into a ReportLab vector PDF dossier with an executive scorecard, a 174mm blueprint, and a room schedule.\n\nBuilt entirely on open infrastructure — OpenFreeMap, Esri World Imagery, OpenTopoMap, USGS, Open-Meteo, and Copernicus Sentinel-2 — so there are no paid API keys anywhere in the stack.',
+    caseStudy: {
+      problem: 'Site feasibility is slow, expensive, and fragmented. Before buying land, a builder has to commission separate surveys for land suitability, flood risk, seismic zoning, budget, and orientation — each with its own consultant, timeline, and invoice. Small developers and self-builders usually skip the analysis entirely and discover the problems after purchase.',
+      solution: 'Built a geo-based planning platform that runs the whole feasibility stack from one map pin: MCDA land-suitability scoring, IS 1893 seismic and flood stress, CPWD cost estimation, Vastu orientation, and a CSP-solved generative floor plan. A deterministic civil core keeps the maths auditable, while Groq/Gemini adapters add reasoning with a zero-key offline fallback.',
+      impact: 'Produces a print-grade PDF dossier — executive scorecard, vector blueprint, and room schedule — in seconds. Runs entirely on open data (OpenFreeMap, Esri, USGS, Open-Meteo, Sentinel-2), so there are zero paid APIs. Validated by a 236-test backend suite, a 145-test placement regression suite, and a 9-viewport Puppeteer UI audit.',
+      learnings: 'Constraint solving is where architectural plausibility lives or dies — early layouts were geometrically valid but unlivable until topological invariants (door adjacency, wet-zone grouping, daylight access) became hard constraints rather than heuristics. Also learned to keep the deterministic civil core strictly separate from the LLM layer: numbers must never come from a model. Would add per-region building-code profiles next so the engine is not tied to Indian standards.',
+    },
+    technologies: ['React 19', 'TypeScript', 'FastAPI', 'Python', 'MapLibre GL', 'Groq', 'Gemini', 'ReportLab'],
+    github: 'https://github.com/Mrtracker-new/BuildWise_AI',
+    featured: true,
+    image: buildWise.src,
+    imageSrcSet: buildWise.srcSet,
+    imageFit: 'contain',
+  },
+  {
     id: 1,
+    slug: 'invisiovault-r',
     title: 'InvisioVault_R',
     category: 'Desktop Application',
     description: 'Hides any file — documents, videos, entire folders — inside ordinary PNG or JPG images using AES-256 encryption and LSB steganography. Zero detectable metadata change. Zero cloud dependency. Free, open-source Windows desktop app.',
@@ -49,12 +108,12 @@ export const projectsData: Project[] = [
     github: 'https://github.com/Mrtracker-new/InvisioVault_R',
     download: 'https://github.com/Mrtracker-new/InvisioVault_R/releases/',
     featured: true,
-    icon: '🔒',
-    bgColor: '#0a0f1e',
-    image: invisioVaultDesktopImg,
+    image: invisioVaultDesktop.src,
+    imageSrcSet: invisioVaultDesktop.srcSet,
   },
   {
     id: 2,
+    slug: 'bar-desktop',
     title: 'BAR — Desktop',
     category: 'Desktop Application',
     description: 'Offline desktop app for professionals handling time-sensitive confidential documents. AES-256-GCM encryption + PBKDF2 key derivation + timed self-destruct. No installation, no cloud, no trace.',
@@ -69,12 +128,12 @@ export const projectsData: Project[] = [
     github: 'https://github.com/Mrtracker-new/BAR',
     download: 'https://github.com/Mrtracker-new/BAR/releases/download/v1.0/BAR.exe',
     featured: true,
-    icon: '🔥',
-    bgColor: '#0a0a0a',
-    image: barLogoImg,
+    image: barLogo.src,
+    imageSrcSet: barLogo.srcSet,
   },
   {
     id: 3,
+    slug: 'sortify',
     title: 'Sortify',
     category: 'Desktop Application',
     description: 'Automatic file organizer and manager for Windows. Smart desktop software that sorts and organizes files by type, date, and format. Clean cluttered folders instantly with one-click file organization.',
@@ -89,12 +148,12 @@ export const projectsData: Project[] = [
     github: 'https://github.com/Mrtracker-new/Sortify',
     download: 'https://github.com/Mrtracker-new/Sortify/releases/download/v1.0/Sortify_Setup.exe',
     featured: true,
-    icon: '📁',
-    bgColor: '#000000',
-    image: sortifyImg,
+    image: sortify.src,
+    imageSrcSet: sortify.srcSet,
   },
   {
     id: 4,
+    slug: 'invisiovault-web',
     title: 'InvisioVault — Web',
     category: 'Web Application',
     description: 'Browser-based steganography and polyglot file tool. Hide files inside images via LSB embedding, or generate dual-format polyglot files — a PNG that is simultaneously a valid ZIP. No installation. Works on any device.',
@@ -109,12 +168,12 @@ export const projectsData: Project[] = [
     github: 'https://github.com/Mrtracker-new/InvisioVault',
     liveDemo: 'https://invisio-vault.vercel.app/',
     featured: false,
-    icon: '🌐',
-    bgColor: '#0a0f1e',
-    image: invisioVaultWebImg,
+    image: invisioVaultWeb.src,
+    imageSrcSet: invisioVaultWeb.srcSet,
   },
   {
     id: 5,
+    slug: 'yt-downloader',
     title: 'YT-Downloader',
     category: 'Web Application',
     description: 'Full-stack tool for streaming binary media data through an Express API. Wraps yt-dlp to handle format conversion and quality selection, with zero server-side storage and direct browser streaming.',
@@ -129,12 +188,12 @@ export const projectsData: Project[] = [
     github: 'https://github.com/Mrtracker-new/YT-Downloader',
     liveDemo: 'https://yt-rnr.onrender.com/',
     featured: false,
-    icon: '📺',
-    bgColor: '#000000',
-    image: ytDownloaderImg,
+    image: ytDownloader.src,
+    imageSrcSet: ytDownloader.srcSet,
   },
   {
     id: 6,
+    slug: 'cursorcam',
     title: 'CursorCam',
     category: 'Web Application',
     description: 'Hands-free mouse control via webcam using MediaPipe facial landmark detection. Maps head pitch and yaw angles to screen coordinates in real-time at under 50ms latency. Built for users with motor disabilities or RSI.',
@@ -148,11 +207,10 @@ export const projectsData: Project[] = [
     technologies: ['Python', 'Flask', 'JavaScript', 'MediaPipe', 'Computer Vision'],
     github: 'https://github.com/Mrtracker-new/CursorCam',
     featured: false,
-    icon: '👁️',
-    bgColor: '#000000',
   },
   {
     id: 7,
+    slug: 'rnr-portfolio',
     title: 'RNR Portfolio',
     category: 'Web Application',
     description: 'This portfolio. Custom-built React + TypeScript SPA with Framer Motion, code-split lazy loading, and accessibility-first component architecture. Scores 95+ across Lighthouse Performance, Accessibility, and SEO.',
@@ -166,11 +224,10 @@ export const projectsData: Project[] = [
     technologies: ['React', 'TypeScript', 'Styled-Components', 'Framer Motion', 'Vite', 'Netlify'],
     github: 'https://github.com/Mrtracker-new/RNR',
     featured: false,
-    icon: '💼',
-    bgColor: '#000000',
   },
   {
     id: 8,
+    slug: 'contact-manager',
     title: 'Contact-Manager',
     category: 'Android App',
     description: 'Free contact management app for Android. Organize contacts with notes, files, and links. Clean, responsive contact manager with search, edit, and backup features. APK available for download.',
@@ -186,12 +243,12 @@ export const projectsData: Project[] = [
     liveDemo: 'https://contact-manager-rnr.vercel.app/',
     download: 'https://github.com/Mrtracker-new/Contact-manager/releases/download/v1.0/Contact-Manager.apk',
     featured: false,
-    icon: '📱',
-    bgColor: '#000000',
-    image: contactManagerImg,
+    image: contactManager.src,
+    imageSrcSet: contactManager.srcSet,
   },
   {
     id: 9,
+    slug: 'linknest',
     title: 'LinkNest',
     category: 'Android App',
     description: 'Offline-first Android and iOS app for organising links, documents, and notes. Local SQLite database, full-text search, category and tag system. Zero internet permission. A genuinely private alternative to Pocket and Raindrop.io.',
@@ -206,17 +263,16 @@ export const projectsData: Project[] = [
     github: 'https://github.com/Mrtracker-new/LinkNest',
     download: 'https://github.com/Mrtracker-new/LinkNest/releases/download/v2.0/LinkNest-v2.0.apk',
     featured: false,
-    icon: '🔗',
-    bgColor: '#000000',
-    image: linkNestImg,
+    image: linkNest.src,
+    imageSrcSet: linkNest.srcSet,
   },
   {
     id: 10,
+    slug: 'bar-web',
     title: 'BAR — Web',
     category: 'Web Application',
     description: "A privacy-first web platform for encrypted self-destructing file sharing and end-to-end encrypted ephemeral chat. Files self-destruct on a timer or after a set number of views. What you share stays yours — until it's gone.",
     longDescription: "Most platforms treat your data like a permanent record. BAR treats it like a secret.\n\nBurn After Reading is a full-stack web application I built to solve a real gap: people needed a way to share sensitive files and have real-time private conversations without leaving a permanent digital footprint.\n\nFiles are encrypted before they hit the server. Each file can be configured to self-destruct after a time limit or a set number of views. The Burn Chat feature provides end-to-end encrypted real-time messaging that automatically disappears — powered by ECDH key exchange and AES-GCM, so the server never holds readable content.\n\nThe architecture is built on zero-knowledge principles: even I can't read what users share. OTP verification, webhook support, brute-force protection, and secure session handling are all baked in from day one — not bolted on as an afterthought.",
-    achievementStatement: "Developed BAR (Burn After Reading), a privacy-focused web application for encrypted self-destructing file sharing and end-to-end encrypted ephemeral messaging — implementing AES-256 encryption, ECDH key exchange, zero-knowledge architecture, OTP verification, WebSocket real-time communication, webhooks, and brute-force protection.",
     caseStudy: {
       problem: "Traditional file-sharing and messaging platforms keep your data long after you're done with it. Passwords, contracts, and sensitive conversations sit on servers with no expiry. Users have no real control over who accesses their content or for how long — creating serious privacy and compliance risks.",
       solution: "Built a zero-knowledge web platform where files are encrypted client-side before upload. Each share is given a configurable TTL (time-to-live) or view count limit, after which the content is permanently destroyed. Burn Chat adds real-time E2E encrypted messaging via WebSockets using ECDH key exchange, so the server acts as a relay — never as a reader.",
@@ -227,12 +283,12 @@ export const projectsData: Project[] = [
     github: 'https://github.com/Mrtracker-new/BAR-Web',
     liveDemo: 'https://bar-rnr.vercel.app/',
     featured: true,
-    icon: '🔥',
-    bgColor: '#000000',
-    image: barWebImg,
+    image: barWeb.src,
+    imageSrcSet: barWeb.srcSet,
   },
   {
     id: 11,
+    slug: 'netplus',
     title: 'NetPlus',
     category: 'Desktop Application',
     description: 'Local-first network observability platform built with Rust, React, and Tauri for packet decoding, flow reconstruction, protocol exploration, and security analysis with PCAP/PCAPNG processing at its core.',
@@ -246,12 +302,12 @@ export const projectsData: Project[] = [
     technologies: ['Rust', 'Tauri', 'React', 'TypeScript', 'SQLite', 'PCAP'],
     github: 'https://github.com/Mrtracker-new/NetPlus',
     featured: true,
-    icon: '📡',
-    bgColor: '#0a0f1e',
-    image: netPlusImg,
+    image: netPlus.src,
+    imageSrcSet: netPlus.srcSet,
   },
   {
     id: 12,
+    slug: 'yt-downloader-desktop',
     title: 'YT Downloader — Desktop',
     category: 'Desktop Application',
     description: 'Native desktop media downloader built with Rust, Tauri, and React. Supports up to 8K video, multiple audio formats, playlists, subtitles, SponsorBlock, and concurrent downloads.',
@@ -266,11 +322,17 @@ export const projectsData: Project[] = [
     github: 'https://github.com/Mrtracker-new/YT_Download',
     download: 'https://github.com/Mrtracker-new/YT_Download/releases/',
     featured: true,
-    icon: '🎬',
-    bgColor: '#000000',
-    image: ytDownloaderDesktopImg,
+    image: ytDownloaderDesktop.src,
+    imageSrcSet: ytDownloaderDesktop.srcSet,
   },
 ];
 
 export const PROJECT_CATEGORIES = ['All', 'Desktop Application', 'Web Application', 'Android App'] as const;
+
+export const projectPath = (slug: string): string => `/projects/${slug}`;
+
+export function getProjectBySlug(slug: string | undefined): Project | null {
+  if (!slug) return null;
+  return projectsData.find(project => project.slug === slug) ?? null;
+}
 export type ProjectCategory = typeof PROJECT_CATEGORIES[number];
