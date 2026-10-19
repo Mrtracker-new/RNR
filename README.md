@@ -1,11 +1,11 @@
 <div align="center">
 
-# 🚀 RNR — Rolan's Digital HQ
+# RNR — Rolan's Digital HQ
 
 **A portfolio that actually has a personality. Wild concept, right?**
 
-[![Live Demo](https://img.shields.io/badge/🌐_See_It_Live-rolan--rnr.netlify.app-FF2D20?style=for-the-badge&logo=netlify&logoColor=white)](https://rolan-rnr.netlify.app/)
-[![GitHub](https://img.shields.io/badge/📦_Source_Code-GitHub-181717?style=for-the-badge&logo=github&logoColor=white)](https://github.com/Mrtracker-new/RNR)
+[![Live Demo](https://img.shields.io/badge/See_It_Live-rolan--rnr.netlify.app-FF2D20?style=for-the-badge&logo=netlify&logoColor=white)](https://rolan-rnr.netlify.app/)
+[![GitHub](https://img.shields.io/badge/Source_Code-GitHub-181717?style=for-the-badge&logo=github&logoColor=white)](https://github.com/Mrtracker-new/RNR)
 
 <br />
 
@@ -19,172 +19,185 @@
 
 ---
 
-## 👋 So, what even is this?
+## So, what even is this?
 
 This is my personal portfolio — built from scratch, no templates, no "I'm passionate about synergising innovative solutions" energy.
 
-Just clean UI, smooth page transitions, real projects with actual case studies, and a live blog powered by the Dev.to API. It's my corner of the internet. Come hang.
+Clean UI, real projects with actual case studies, and a live blog powered by the Dev.to API.
 
 ---
 
-## ⚡ Performance — here's the receipts
+## Performance & quality
 
-| Metric | Result |
-|--------|--------|
-| 🏎️ Lighthouse Performance | **94+** |
-| 📦 JavaScript (gzipped) | **~160 KB total, split across 20+ chunks** — you only download what the page needs |
-| 🗜️ Compression | **Gzip + Brotli** pre-generated at build time |
-| 🧩 Code Splitting | **Every page + heavy component lazy-loads** (11 lazy components, 5 vendor chunks) |
-| 🕸️ Prerendering | **Every route ships as real static HTML** — crawlers never see an empty shell |
-| ♿ Accessibility | **Focus traps, `:focus-visible` rings, skip links, ARIA dialogs, reduced-motion support** |
-| 🔒 Security Headers | **Strict CSP, HSTS preload, X-Frame-Options: DENY, Permissions-Policy, Referrer-Policy** |
+Facts only, checked against the build in this repo (last verified 18 Oct 2026):
 
-Everything lazy-loads. `console.log` is stripped in production. Source maps are off. Your data plan and your inspector are both safe. 😅
+| Area | What the build actually does |
+|------|------------------------------|
+| Code splitting | Every page and the heavy components lazy-load; React, router, motion, styled-components and Helmet each get a vendor chunk |
+| Compression | Gzip **and** Brotli files are pre-generated at build time |
+| Prerendering | `/`, `/about`, `/projects`, `/blog`, `/contact` and every case study at `/projects/<slug>` ship as real static HTML, plus a prerendered `404.html` |
+| Images | AVIF banners with 400w/800w variants and `srcset`; the hero portrait has six widths |
+| Accessibility | Skip link, focus traps with background `inert`, route-change focus, `:focus-visible` rings, reduced-motion support, WCAG AA text contrast |
+| Security headers | CSP without inline scripts, HSTS, `X-Frame-Options: DENY`, CORP/COOP, Permissions-Policy |
+
+### Lighthouse
+
+Measured against the production build on this machine (`npm run preview`, Lighthouse v13.5.0, 19 Oct 2026):
+
+| Page | Preset | Performance | Accessibility | Best Practices | SEO |
+|------|--------|-------------|---------------|----------------|-----|
+| `/` | Desktop | **98** | **100** | **100** | **100** |
+| `/` | Mobile | 82 | **100** | **100** | **100** |
+| `/projects` | Desktop | **98** | **100** | **100** | **100** |
 
 ---
 
-## 🛠️ Tech Stack
+## Tech Stack
 
 | Tool | Why I picked it |
 |------|----------------|
 | **React 19** | Bleeding edge. I like living dangerously. |
 | **TypeScript 5.7** | Because `undefined is not a function` ruins lives. |
-| **Vite 6 + Terser** | Fastest build tool I've used. Minifies like a champ. |
+| **Vite 6 + Terser** | Fast builds, aggressive minification. |
 | **Styled Components v6** | CSS-in-JS. Judge me. I regret nothing. |
 | **Framer Motion 12** | The secret behind all the *whoosh* effects. |
-| **React Router v7** | Handles URL routing cleanly. |
-| **React Helmet Async** | Per-page SEO meta tags + JSON-LD structured data. |
-| **Puppeteer (build-time only)** | Prerenders every route to static HTML after each build. |
-| **Dev.to API** | Live blog posts, no API key needed. 🎉 |
+| **React Router v7** | URL routing without ceremony. |
+| **React Helmet Async** | The only owner of per-page meta tags and JSON-LD. |
+| **Puppeteer (build-time only)** | Prerenders every route to static HTML. |
+| **Dev.to API** | Live blog posts, no API key needed. |
 
 ---
 
-## 🗂️ What's inside
+## What's inside
 
 ```
 src/
 ├── pages/                    # The main "rooms" of the site
-│   ├── Home.tsx              # Hero section, first impressions matter
-│   ├── About.tsx             # The lore, the origin story
-│   ├── Projects.tsx          # Trophy cabinet — page logic only
-│   ├── projects/             # ...its styled-components, icons & case-study modal
-│   ├── Blog.tsx              # Thoughts, fetched live from Dev.to
-│   ├── Contact.tsx           # Slide into my DMs (professionally)
-│   └── NotFound.tsx          # 404 — you wandered off, buddy
+│   ├── Home.tsx              # Hero, stats, selected work, latest writing
+│   ├── About.tsx             # Timeline, skills, focus areas
+│   ├── Projects.tsx          # Filters, featured rows, project table
+│   ├── projects/             # Styled components + case-study modal
+│   ├── Blog.tsx              # Posts fetched from Dev.to
+│   ├── Contact.tsx           # Form, details, socials, visible FAQ
+│   └── NotFound.tsx          # 404
 │
 ├── components/               # Reusable pieces
-│   ├── Navbar.tsx            # Responsive nav with focus-trapped mobile menu
-│   ├── Footer.tsx            # The bottom (still important)
-│   ├── SEO.tsx               # Meta tags, OG/Twitter cards, JSON-LD schemas
-│   ├── DecryptText.tsx       # The Matrix-y text scramble effect
+│   ├── Navbar.tsx            # Focus-trapped, portaled mobile menu
+│   ├── Footer.tsx            # Nav, socials, copy-email
+│   ├── SEO.tsx               # Meta tags, OG/Twitter cards, JSON-LD
+│   ├── Breadcrumb.tsx        # BreadcrumbList for known sub-pages only
+│   ├── FAQSchema.tsx         # FAQPage markup backed by visible content
+│   ├── DecryptText.tsx       # Text scramble with an sr-only real label
 │   ├── LoadingSpinner.tsx    # Full-screen loader while chunks arrive
-│   ├── ErrorBoundary.tsx     # Catches crashes so the whole app doesn't explode
-│   ├── ExitIntentPopup.tsx   # Gently begs you not to leave 😂
-│   ├── ResumeDownload.tsx    # One-click CV grab
-│   ├── BlogCard.tsx          # Cards for each Dev.to article
-│   ├── Breadcrumb.tsx        # Tells you where you are
-│   ├── FAQSchema.tsx         # FAQPage JSON-LD for rich results
-│   ├── ScrollToTop.tsx       # Resets scroll on route change
-│   └── layout/primitives.tsx # Shared SectionHeading / MicroLabel / TechPill
+│   ├── ErrorBoundary.tsx     # Route + app error fallbacks
+│   ├── ExitIntentPopup.tsx   # Suppressed on /contact and over dialogs
+│   ├── ResumeDownload.tsx    # Hover/focus/Escape resume preview
+│   ├── BlogCard.tsx          # Dev.to article rows
+│   ├── ScrollToTop.tsx       # Scroll reset + focus handoff
+│   ├── icons.tsx             # Shared SVG glyphs
+│   └── layout/primitives.tsx # SectionHeading / MicroLabel / TechPill
 │
 ├── data/
-│   └── projects.ts           # All project data lives here (edit this to add projects)
+│   ├── projects.ts           # All project data (edit this to add projects)
+│   └── faq.ts                # One FAQ list for UI + structured data
 │
 ├── hooks/
-│   ├── useFocusTrap.ts       # Tab-cycling, Esc-to-close, focus restore for dialogs
-│   ├── useMediaQuery.ts      # Resize-reactive CSS media query subscription
-│   └── useViewTransition.ts  # View Transition API wrapper (Framer Motion fallback)
+│   ├── useFocusTrap.ts       # Tab cycling, Esc to close, focus restore
+│   ├── useScrollLock.ts      # Reference-counted page scroll lock
+│   ├── useBackgroundInert.ts # Inert background while a dialog is open
+│   ├── useDevtoPosts.ts      # Shared Dev.to cache subscription
+│   └── useMediaQuery.ts      # Resize-reactive media query
 │
 ├── utils/
-│   ├── devto.ts              # Dev.to fetch + memory/localStorage cache (SWR-style)
-│   ├── performance.ts        # ScrollOptimizer & perf helpers
+│   ├── devto.ts              # Dev.to fetch + validated memory/localStorage cache
+│   ├── site.ts               # URL, email, socials, nav, shared copy
 │   └── routes.ts             # Typed route constants
 │
 ├── styles/
-│   ├── critical.css          # Design tokens, resets, global focus styles
-│   ├── GlobalStyle.ts        # Shared layout primitives (Container, Button, Badge)
-│   └── surfaces.ts           # Glassmorphism surface mixins
+│   ├── critical.css          # Tokens, resets, global focus styles
+│   ├── GlobalStyle.ts        # Container, Button, Badge
+│   └── surfaces.ts           # Surface mixins
 │
-├── assets/                   # Static assets (AVIF images, icons, resume)
-├── App.tsx                   # Root: routing, lazy loading, transitions
-└── index.tsx                 # Entry point — where it all starts
-
-scripts/
-├── update-sitemap.mjs        # Prebuild: keeps sitemap lastmod dates fresh
-└── prerender.mjs             # Postbuild: Puppeteer visits every route → static HTML
+├── assets/                   # Project images (plus generated 400w/800w variants)
+├── App.tsx                   # Routing, lazy loading, shell
+└── index.tsx                 # Entry point
 ```
 
 ---
 
-## 🏗️ Build setup (the nerdy bits)
+## Build pipeline
 
-`npm run build` is actually a three-stage pipeline:
+`npm run build` does three things:
 
-1. **Prebuild** — `update-sitemap.mjs` refreshes the sitemap's `lastmod` dates
-2. **Build** — `tsc -b` type-checks, then Vite bundles with:
-   - **Terser** minification — 2 passes, `console.log` dropped, dead code gone
-   - **Gzip + Brotli** compression via `vite-plugin-compression`
-   - **Manual vendor splitting** — react, motion, router, styled, and helmet each get their own chunk
-   - **Tree shaking** — Framer Motion and Styled Components side-effects excluded
-3. **Postbuild** — `prerender.mjs` spins up a local server over `build/`, drives headless Chrome through every route, and writes the fully-rendered HTML back to static paths. Crawlers get real content with zero JavaScript. (In Netlify CI, `netlify-plugin-chromium` supplies the browser.)
+1. **Type check** — `tsc -b`
+2. **Bundle** — Vite + Terser, gzip/Brotli compression, manual vendor chunks
+3. **Postbuild**:
+   - `generate-sitemap.mjs` writes `build/sitemap.xml`, taking each `lastmod` from the last git commit that touched that page
+   - `prerender.mjs` serves the clean SPA shell, visits every route, waits for the rendered `<h1>` (and for the blog to settle), inlines styled-components CSS, and writes static HTML — including `404.html`
+   - `verify-build.mjs` then asserts every written document is crawlable: exactly one title, description, canonical and robots tag, one `<h1>` on each page, a `noindex` and canonical-free `404.html`, a sitemap that lists every indexable URL, and a present social card. A regression fails the build.
 
-Security headers live in `netlify.toml` — strict CSP, HSTS preload, X-Frame-Options, Permissions-Policy — the full stack.
+Security headers and the 404 rule live in `netlify.toml`. There is no second `_headers` / `_redirects` file to drift out of sync.
+
+### Checks
+
+```bash
+npm run lint     # ESLint (flat config)
+npm test         # Vitest: project data, site config, date formatting
+npm run build    # type check → bundle → sitemap + prerender
+```
+
+CI runs the same three commands on every push to `master` and every pull request.
 
 ---
 
-## 🚀 Run it yourself
+## Run it yourself
 
-**You'll need:** Node.js v18+ and the urge to poke around someone else's code.
+**You'll need:** Node.js 20+ and the urge to poke around someone else's code.
 
 ```bash
-# 1. Grab the code
 git clone https://github.com/Mrtracker-new/RNR.git
 cd RNR
 
-# 2. Install dependencies (get a coffee ☕ — it takes a sec)
 npm install
-
-# 3. Fire it up
 npm run dev
 ```
 
 Open `http://localhost:5173` and you're in.
 
 ```bash
-npm run build    # Sitemap update → type check → Vite bundle → prerender all routes
-npm run preview  # Preview the production build locally before deploying
+npm run preview  # preview the production build locally
 ```
 
-> **Heads up:** the prerender step needs a Chrome install. It auto-detects the usual
+> **Heads up:** the prerender step needs Chrome. It auto-detects the usual
 > locations on Windows/macOS/Linux, or you can point it somewhere with the
 > `CHROME_PATH` env var. `npm run dev` doesn't need any of this.
 
-### 🔐 Environment setup
+### Environment setup
 
 ```bash
 cp .env.example .env.local
 ```
 
-Only one variable you actually need: `VITE_DEVTO_USERNAME` — set it to your Dev.to handle and the blog page is live. Everything else in `.env.example` is optional or build-time only.
+Only one variable matters: `VITE_DEVTO_USERNAME`. Set it to your Dev.to handle and the blog page is live. Production values belong in the Netlify dashboard.
 
 ---
 
-## 📬 Let's connect
+## Let's connect
 
-- 🌍 **Portfolio** → [rolan-rnr.netlify.app](https://rolan-rnr.netlify.app/)
-- 💻 **GitHub** → [@Mrtracker-new](https://github.com/Mrtracker-new)
-- 📝 **Blog** → [dev.to/rolan_r_n_r](https://dev.to/rolan_r_n_r)
-- 📧 **Email** → [rolanlobo901@gmail.com](mailto:rolanlobo901@gmail.com)
-- 📍 **Based in** → India 🇮🇳
+- **Portfolio** — [rolan-rnr.netlify.app](https://rolan-rnr.netlify.app/)
+- **GitHub** — [@Mrtracker-new](https://github.com/Mrtracker-new)
+- **Blog** — [dev.to/rolan_r_n_r](https://dev.to/rolan_r_n_r)
+- **Email** — [rolanlobo901@gmail.com](mailto:rolanlobo901@gmail.com)
+- **Based in** — India
 
 ---
 
 <div align="center">
 
-*Made with ❤️, an embarrassing amount of ☕, and way too many `console.log`s — which are now gone in prod, RIP.*
+*Made with care, an embarrassing amount of coffee, and way too many `console.log`s — which are now gone in prod, RIP.*
 
 **— Rolan**
 
-⭐ If you liked it, a star goes a long way!
+If you liked it, a star goes a long way.
 
 </div>
