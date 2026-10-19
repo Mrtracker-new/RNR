@@ -5,7 +5,7 @@
 **A portfolio that actually has a personality. Wild concept, right?**
 
 [![Live Demo](https://img.shields.io/badge/See_It_Live-rolan--rnr.netlify.app-FF2D20?style=for-the-badge&logo=netlify&logoColor=white)](https://rolan-rnr.netlify.app/)
-[![GitHub](https://img.shields.io/badge/Source_Code-GitHub-181717?style=for-the-badge&logo=github&logoColor=white)](https://github.com/Mrtracker-new/RNR)
+[![GitHub](https://img.shields.io/badge/Source_Code-GitHub-181717?style=for-the-badge&logo=github&logoColor=white)](https://github.com/rolan-r-n-r/RNR)
 
 <br />
 
@@ -155,7 +155,7 @@ CI runs the same three commands on every push to `master` and every pull request
 **You'll need:** Node.js 20+ and the urge to poke around someone else's code.
 
 ```bash
-git clone https://github.com/Mrtracker-new/RNR.git
+git clone https://github.com/rolan-r-n-r/RNR.git
 cd RNR
 
 npm install
@@ -185,7 +185,7 @@ Only one variable matters: `VITE_DEVTO_USERNAME`. Set it to your Dev.to handle a
 ## Let's connect
 
 - **Portfolio** — [rolan-rnr.netlify.app](https://rolan-rnr.netlify.app/)
-- **GitHub** — [@Mrtracker-new](https://github.com/Mrtracker-new)
+- **GitHub** — [@rolan-r-n-r](https://github.com/rolan-r-n-r)
 - **Blog** — [dev.to/rolan_r_n_r](https://dev.to/rolan_r_n_r)
 - **Email** — [rolanlobo901@gmail.com](mailto:rolanlobo901@gmail.com)
 - **Based in** — India

@@ -42,7 +42,7 @@ export interface Social {
 }
 
 export const SOCIALS: Social[] = [
-  { name: 'GitHub', handle: 'Mrtracker-new', href: 'https://github.com/Mrtracker-new' },
+  { name: 'GitHub', handle: 'rolan-r-n-r', href: 'https://github.com/rolan-r-n-r' },
   { name: 'LinkedIn', handle: 'rolan-lobo', href: 'https://www.linkedin.com/in/rolan-lobo/' },
   { name: 'Instagram', handle: 'rolan_r_n_r', href: 'https://www.instagram.com/rolan_r_n_r/' },
   { name: 'Dev.to', handle: 'rolan_r_n_r', href: 'https://dev.to/rolan_r_n_r' },

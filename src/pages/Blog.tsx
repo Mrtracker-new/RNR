@@ -353,7 +353,7 @@ const Blog: React.FC = () => {
               url: `${SITE_URL}/`,
               sameAs: [
                 'https://dev.to/rolan_r_n_r',
-                'https://github.com/Mrtracker-new',
+                'https://github.com/rolan-r-n-r',
                 'https://www.linkedin.com/in/rolan-lobo/',
               ],
             },
