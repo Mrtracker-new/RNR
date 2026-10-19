@@ -3,93 +3,52 @@
   <head>
     <meta charset="utf-8" />
     <link rel="icon" href="/favicon.ico" />
-    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=5, viewport-fit=cover" />
-    <meta name="theme-color" content="#0a0b0d" />
-    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
-    <meta http-equiv="x-dns-prefetch-control" content="on" />
+    <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
+    <meta name="theme-color" content="#070809" />
     <meta name="format-detection" content="telephone=no" />
     <meta name="mobile-web-app-capable" content="yes" />
     <meta name="apple-mobile-web-app-capable" content="yes" />
     <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
-
-    <link rel="preconnect" href="https://fonts.googleapis.com" />
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-    <link rel="dns-prefetch" href="https://dev.to" />
-    <link rel="dns-prefetch" href="https://res.cloudinary.com" />
-
-    <link
-      rel="stylesheet"
-      href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap"
-      media="print"
-      onload="this.media='all'"
-    />
-    <link
-      rel="stylesheet"
-      href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500;600&display=optional"
-      media="print"
-      onload="this.media='all'"
-    />
-    <noscript>
-      <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" />
-      <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500;600&display=swap" />
-    </noscript>
-
-    <style>
-      *, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
-      body { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', sans-serif; background-color: #0a0b0d; color: #eceef0; }
-      #root { min-height: 100vh; overflow-x: hidden; max-width: 100vw; }
-    </style>
-
-    <title>Rolan Lobo — Software Developer</title>
-    <meta
-      name="description"
-      content="Rolan Lobo builds privacy-focused software — AES-256 encryption tools, zero-knowledge file sharing platforms, offline-first Android apps, and computer vision experiments. Open source. Based in Karnataka, India."
-    />
-    <meta name="keywords" content="Rolan Lobo, Software Developer, Privacy Tools, Security Software, AES-256 Encryption, Zero-Knowledge, Open Source, Desktop Applications, Android Apps, Computer Vision, Karnataka India, Freelance Developer" />
-    <meta name="author" content="Rolan Lobo" />
-    <meta name="robots" content="index, follow" />
-    <meta name="language" content="English" />
-    <meta name="revisit-after" content="7 days" />
-    <meta name="rating" content="general" />
+    <meta name="apple-mobile-web-app-title" content="Rolan Lobo" />
+    <meta name="referrer" content="strict-origin-when-cross-origin" />
 
     <meta name="google-site-verification" content="BMHKQxsBW7s7l3Gt1ZZQVThuHZXcOylqxF3ktxdaMh4" />
     <meta name="msvalidate.01" content="F4905437E7C6EE0E43C7F93C18D926FC" />
 
-    <meta property="og:type" content="website" />
-    <meta property="og:url" content="https://rolan-rnr.netlify.app/" />
-    <meta property="og:title" content="Rolan Lobo — Software Developer" />
-    <meta property="og:description" content="Privacy-focused software developer building encryption tools, zero-knowledge platforms, and offline-first applications. Open source." />
-    <meta property="og:image" content="https://rolan-rnr.netlify.app/Social_card.png" />
-    <meta property="og:image:width" content="1536" />
-    <meta property="og:image:height" content="1024" />
-    <meta property="og:image:alt" content="Rolan Lobo — Software Developer" />
-    <meta property="og:site_name" content="Rolan Lobo" />
-    <meta property="og:locale" content="en_US" />
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link rel="dns-prefetch" href="https://dev.to" />
+    <link rel="dns-prefetch" href="https://media.dev.to" />
 
-    <meta name="twitter:card" content="summary_large_image" />
-    <meta name="twitter:url" content="https://rolan-rnr.netlify.app/" />
-    <meta name="twitter:title" content="Rolan Lobo — Software Developer" />
-    <meta name="twitter:description" content="Privacy-focused software developer building encryption tools, zero-knowledge platforms, and offline-first applications." />
-    <meta name="twitter:image" content="https://rolan-rnr.netlify.app/Social_card.png" />
-    <meta name="twitter:image:alt" content="Rolan Lobo — Software Developer" />
+    <link
+      rel="stylesheet"
+      href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap"
+    />
+    <link
+      rel="stylesheet"
+      href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500;600&display=swap"
+    />
 
-    <meta name="referrer" content="strict-origin-when-cross-origin" />
-    <link rel="canonical" href="https://rolan-rnr.netlify.app/" />
-    <meta name="apple-mobile-web-app-title" content="Rolan Lobo" />
+    <style>
+      *, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
+      body {
+        font-family: 'Inter', 'SF Pro Display', system-ui, -apple-system, BlinkMacSystemFont, sans-serif;
+        background-color: #070809;
+        color: #eceef0;
+      }
+      html, body { overflow-x: clip; }
+      #root { min-height: 100vh; max-width: 100%; }
+    </style>
+
+    <!-- No static title element here: the page component owns the document
+         title (see components/SEO.tsx). A placeholder would survive as a
+         second title in the document. -->
 
     <link rel="apple-touch-icon" href="/logo192.png" />
     <link rel="manifest" href="/manifest.json" />
   </head>
   <body>
     <noscript>You need to enable JavaScript to run this app.</noscript>
-
-    <form name="contact" netlify netlify-honeypot="bot-field" hidden>
-      <input type="text" name="name" />
-      <input type="email" name="email" />
-      <input type="text" name="subject" />
-      <textarea name="message"></textarea>
-    </form>
-
     <div id="root"></div>
     <script type="module" src="/src/index.tsx"></script>
   </body>
