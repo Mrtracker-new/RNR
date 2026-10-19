@@ -40,13 +40,13 @@ export const Button = styled.button<{ $variant?: 'primary' | 'secondary' | 'outl
     const variant = props.$variant || 'primary';
     if (variant === 'primary') {
       return `
-        background: var(--accent-primary);
+        background: var(--accent-fill);
         color: #ffffff;
         border: 1px solid transparent;
         box-shadow: var(--shadow-sm), var(--control-highlight);
 
-        &:hover { background: var(--accent-hover); }
-        &:active { background: var(--accent-press); }
+        &:hover { background: var(--accent-fill-hover); }
+        &:active { background: var(--accent-fill-press); }
       `;
     } else if (variant === 'secondary') {
       return css`

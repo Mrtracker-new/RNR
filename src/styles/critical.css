@@ -1,21 +1,19 @@
 :root {
-  --primary-50: #fafafa;
-  --primary-600: #3b82f6;
-  --primary-900: #0f172a;
-
   /* ── Single brand accent — electric blue. Used for ~5% of pixels only:
      CTAs, links, focus rings, active states. No gradients, no glow. ── */
   --accent-primary: #3b82f6;
-  --accent-hover: #5c9bff;
-  --accent-press: #2e6fe0;
   --accent-subtle: rgba(59, 130, 246, 0.10);
   --accent-border: rgba(59, 130, 246, 0.30);
-  /* Legacy aliases kept so existing references resolve to the one accent
-     instead of the old teal/violet. Gradient is now a flat accent fill. */
-  --accent-secondary: #3b82f6;
-  --accent-tertiary: #3b82f6;
-  --accent-gradient: #3b82f6;
-  --accent-glow: rgba(59, 130, 246, 0.22);
+
+  /* Two accent steps for the two jobs white-on-blue can't share. Filled
+     buttons carry white text, so the fill steps down: #3b82f6 gives white only
+     3.7:1, #2563eb gives 5.2:1. Small accent text steps up instead: #3b82f6 is
+     3.1:1 on --bg-base and 3.4:1 on a raised surface, #7ab0fd clears 4.5:1 on
+     both. Accent borders and decorative fills keep --accent-primary. */
+  --accent-fill: #2563eb;
+  --accent-fill-hover: #1d4ed8;
+  --accent-fill-press: #1e40af;
+  --accent-text: #7ab0fd;
 
   /* ── Cool-grey neutral ramp with a faint blue undertone (not pure zinc).
      Names preserved (--dark-*) so no component needs renaming. ── */
@@ -23,13 +21,13 @@
   --dark-100: #eceef0;
   --dark-200: #d3d6da;
   --dark-300: #b3b7bd;
-  --dark-400: #8a8f98;
-  --dark-350: #a0a5ac;
-  --dark-500: #6b7079;
-  --dark-600: #4c515a;
-  --dark-700: #363a41;
+  /* 400–700 are used for real text, so every step clears WCAG AA (4.5:1)
+     against --bg-base. Do not darken these without re-checking contrast. */
+  --dark-400: #9ba1aa;
+  --dark-500: #8f959e;
+  --dark-600: #858b95;
+  --dark-700: #7c828c;
   --dark-800: #22252b;
-  --dark-850: #191c21;
   --dark-900: #131519;
   --dark-950: #0a0b0d;
 
@@ -40,11 +38,6 @@
   --border-subtle: rgba(255, 255, 255, 0.06);
   --border-strong: rgba(255, 255, 255, 0.12);
   --scrim: rgba(0, 0, 0, 0.6); /* modal/overlay backdrop dim */
-
-  /* Semantic text aliases — referenced by the ErrorBoundary fallback so it
-     matches the theme instead of falling back to raw #fff/#aaa. */
-  --text-primary:   var(--dark-50);
-  --text-secondary: var(--dark-400);
 
   /* ── Hairline ramp — the ONE source for every white-alpha divider/border
      that used to be hand-written as rgba(255,255,255,0.0x) across pages.
@@ -58,7 +51,6 @@
   --success: #3fb950;
   --warning: #d29922;
   --error: #f85149;
-  --info: var(--accent-primary);
 
   /* Channel triplets — compose translucent semantic fills inline as
      rgba(var(--error-rgb), <alpha>) instead of scattering raw rgba(). */
@@ -77,9 +69,7 @@
   --text-2xl:  1.5rem;
   --text-3xl:  1.875rem;
   --text-4xl:  2.25rem;
-  --text-5xl:  3rem;
   --text-6xl:  3.75rem;
-  --text-7xl:  4.5rem;
 
   /* Letter-spacing scale — kills scattered raw em values. Tight for large
      display headings, wide for uppercase micro-labels/eyebrows. */
@@ -107,7 +97,6 @@
   --font-extrabold: 800;
 
   --spacing-px: 1px;
-  --spacing-0:  0;
   --spacing-1:  0.25rem;
   --spacing-2:  0.5rem;
   --spacing-3:  0.75rem;
@@ -131,11 +120,7 @@
        768px  → tablet ⇄ small laptop (also nav desktop⇄mobile cutover)
        1024px → laptop ⇄ desktop
      ────────────────────────────────────────────────────────────────────── */
-  --breakpoint-sm:  640px;
-  --breakpoint-md:  768px;
-  --breakpoint-lg:  1024px;
   --breakpoint-xl:  1280px;
-  --breakpoint-2xl: 1536px;
 
   /* Shared content width — Navbar island, page Container, and Contact wrap
      all resolve to the same measure so gutters line up across routes. */
@@ -149,19 +134,12 @@
   --shadow-sm:     0 1px 2px 0 rgba(0, 0, 0, 0.40);
   --shadow-md:     0 4px 12px -2px rgba(0, 0, 0, 0.35);
   --shadow-lg:     0 12px 32px -6px rgba(0, 0, 0, 0.45);
-  --shadow-xl:     0 24px 64px -12px rgba(0, 0, 0, 0.60);
-  /* Elevation is done with borders + neutral shadow, not colored glow.
-     Accent aliases now carry a crisp shadow, not a teal halo. */
-  --shadow-accent: 0 4px 12px -2px rgba(0, 0, 0, 0.35);
-  --shadow-hover:  0 12px 32px -6px rgba(0, 0, 0, 0.45);
 
-  --radius-none: 0;
   --radius-sm:   0.25rem;
   --radius-md:   0.5rem;
   --radius-lg:   0.75rem;
   --radius-xl:   1rem;
   --radius-2xl:  1.5rem;
-  --radius-full: 50%;
 
   /* Blog post-row thumbnail — shared by BlogCard <img> and Blog skeleton so
      the two can't drift out of sync. */
@@ -170,8 +148,6 @@
 
   --transition-fast:   150ms cubic-bezier(0.4, 0, 0.2, 1);
   --transition-normal: 300ms cubic-bezier(0.4, 0, 0.2, 1);
-  --transition-slow:   500ms cubic-bezier(0.4, 0, 0.2, 1);
-  --transition-spring: 300ms cubic-bezier(0.175, 0.885, 0.32, 1.275);
 
   /* ── Surface recipe tokens ─────────────────────────────────────────────
      Composite so an entire visual language swaps at the token layer, not
@@ -190,16 +166,13 @@
   --surface-shadow:        var(--shadow-md);
   --surface-blur:          none;
   --surface-highlight:     inset 0 0 0 transparent;
-  --surface-radius:        var(--radius-xl);
 
   --panel-bg:              var(--bg-overlay);
   --panel-bg-hover:        var(--bg-overlay);
   --panel-border:          var(--border-strong);
-  --panel-border-hover:    var(--border-strong);
   --panel-shadow:          var(--shadow-lg);
   --panel-blur:            none;
   --panel-highlight:       inset 0 0 0 transparent;
-  --panel-radius:          var(--radius-2xl);
 
   --control-bg:            var(--dark-800);
   --control-bg-hover:      var(--dark-700);
@@ -229,7 +202,6 @@
   --panel-bg:              rgba(16, 18, 22, 0.55);
   --panel-bg-hover:        rgba(16, 18, 22, 0.70);
   --panel-border:          rgba(255, 255, 255, 0.10);
-  --panel-border-hover:    rgba(255, 255, 255, 0.18);
   --panel-shadow:          0 12px 40px rgba(0, 0, 0, 0.45);
   --panel-blur:            blur(28px) saturate(150%);
   --panel-highlight:       inset 0 1px 0 rgba(255, 255, 255, 0.12);
@@ -265,9 +237,13 @@
 }
 
 html {
-  scroll-behavior: smooth;
+  /* No global `scroll-behavior: smooth`: it also animates wheel and keyboard
+     scrolling, which makes the page feel stuck under main-thread work. Route
+     changes ask for smooth scrolling explicitly instead. */
   font-size: 16px;
-  overflow-x: hidden;
+  /* `clip` trims horizontal bleed without turning the root into a scroll
+     container — `hidden` here can swallow wheel/touch scrolling. */
+  overflow-x: clip;
   scroll-padding-top: 80px;
 }
 
@@ -276,16 +252,16 @@ body {
   background: var(--bg-base);
   color: var(--dark-100);
   line-height: 1.6;
-  overflow-x: hidden;
+  overflow-x: clip;
   min-height: 100vh;
   position: relative;
   -webkit-overflow-scrolling: touch;
-  overscroll-behavior: none;
 }
 
 #root {
-  overflow-x: hidden;
-  max-width: 100vw;
+  /* `100%`, not `100vw`: viewport units include the scrollbar, which used to
+     push the page ~15px wider than the window on desktop. */
+  max-width: 100%;
 }
 
 /* Flat base — no ambient colored glow. A near-invisible top vignette adds
@@ -398,48 +374,10 @@ img {
   border: 0;
 }
 
-/* Retired gradient text — now a solid bright monochrome emphasis.
-   Kept as a class so any residual usage degrades gracefully. */
-.text-gradient {
-  color: var(--dark-50);
-  -webkit-text-fill-color: currentColor;
-}
-
-@keyframes pulse {
-  0%, 100% { opacity: 1; }
-  50%       { opacity: 0.5; }
-}
-
-@keyframes spin {
-  from { transform: rotate(0deg); }
-  to   { transform: rotate(360deg); }
-}
-
-.animate-pulse { animation: pulse 2s cubic-bezier(0.4, 0, 0.6, 1) infinite; }
-.animate-spin  { animation: spin 1s linear infinite; }
-
-@keyframes vt-fade-out {
-  from { opacity: 1; }
-  to   { opacity: 0; }
-}
-
-@keyframes vt-fade-in {
-  from { opacity: 0; }
-  to   { opacity: 1; }
-}
-
-::view-transition-old(root) { animation: vt-fade-out 200ms ease-out both; }
-::view-transition-new(root) { animation: vt-fade-in  200ms ease-in  both; }
-
 @media (prefers-reduced-motion: reduce) {
   *, *::before, *::after {
     animation-duration: 0.001s !important;
     animation-iteration-count: 1 !important;
     transition-duration: 0.001s !important;
   }
-
-  html { scroll-behavior: auto; }
-
-  ::view-transition-old(root),
-  ::view-transition-new(root) { animation: none !important; }
 }
