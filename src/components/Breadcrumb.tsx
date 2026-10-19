@@ -1,56 +1,28 @@
 import React from 'react';
 import { Helmet } from 'react-helmet-async';
 import { useLocation } from 'react-router-dom';
-
-interface BreadcrumbItem {
-  name: string;
-  url: string;
-}
+import { NAV, SITE_URL } from '../utils/site';
 
 const Breadcrumb: React.FC = () => {
-  const location = useLocation();
-  const baseUrl = 'https://rolan-rnr.netlify.app';
+  const { pathname } = useLocation();
 
-  const getBreadcrumbItems = (): BreadcrumbItem[] => {
-    const items: BreadcrumbItem[] = [
-      { name: 'Home', url: baseUrl }
-    ];
-
-    // Route → display label. Keeps the breadcrumb noun in sync with the nav
-    // (the /projects route is labelled "Work" everywhere user-facing).
-    const LABELS: Record<string, string> = { '/projects': 'Work' };
-
-    const pathname = location.pathname;
-    if (pathname !== '/' && pathname !== '') {
-      const pageName = pathname.replace('/', '');
-      const formattedName = LABELS[pathname] ?? pageName.charAt(0).toUpperCase() + pageName.slice(1);
-      items.push({
-        name: formattedName,
-        url: `${baseUrl}${pathname}`
-      });
-    }
-
-    return items;
-  };
-
-  const breadcrumbItems = getBreadcrumbItems();
+  /* Home is a single-item trail and unknown paths (404) are not part of the
+     site hierarchy, so neither should advertise a BreadcrumbList. */
+  const current = NAV.find(item => item.path === pathname && item.path !== '/');
+  if (!current) return null;
 
   const breadcrumbSchema = {
     '@context': 'https://schema.org',
     '@type': 'BreadcrumbList',
-    itemListElement: breadcrumbItems.map((item, index) => ({
-      '@type': 'ListItem',
-      position: index + 1,
-      name: item.name,
-      item: item.url
-    }))
+    itemListElement: [
+      { '@type': 'ListItem', position: 1, name: 'Home', item: `${SITE_URL}/` },
+      { '@type': 'ListItem', position: 2, name: current.label, item: `${SITE_URL}${current.path}` },
+    ],
   };
 
   return (
     <Helmet>
-      <script type="application/ld+json">
-        {JSON.stringify(breadcrumbSchema)}
-      </script>
+      <script type="application/ld+json">{JSON.stringify(breadcrumbSchema)}</script>
     </Helmet>
   );
 };

@@ -1,6 +1,7 @@
-import React, { useState } from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 import { Link } from 'react-router-dom';
 import styled from 'styled-components';
+import { EMAIL, NAV, SOCIALS } from '../utils/site';
 
 const FooterWrapper = styled.footer`
   border-top: 1px solid var(--hairline);
@@ -193,25 +194,71 @@ const CopyEmailButton = styled.button`
   font-family: inherit;
 
   &:hover { color: var(--accent-primary); }
+
+  @media (max-width: 640px) { font-size: var(--text-xs); }
 `;
+
+type CopyState = 'idle' | 'copied' | 'failed';
+
+async function copyText(value: string): Promise<boolean> {
+  try {
+    if (navigator.clipboard?.writeText) {
+      await navigator.clipboard.writeText(value);
+      return true;
+    }
+  } catch {
+    // Permission denied / insecure context — fall through to the legacy path.
+  }
+
+  try {
+    const textarea = document.createElement('textarea');
+    textarea.value = value;
+    textarea.setAttribute('readonly', '');
+    textarea.style.position = 'fixed';
+    textarea.style.opacity = '0';
+    document.body.appendChild(textarea);
+    textarea.select();
+    const copied = document.execCommand('copy');
+    document.body.removeChild(textarea);
+    return copied;
+  } catch {
+    return false;
+  }
+}
 
 const Footer: React.FC = () => {
   const year = new Date().getFullYear();
-  const [emailCopied, setEmailCopied] = useState(false);
+  const [copyState, setCopyState] = useState<CopyState>('idle');
+  const resetTimer = useRef<ReturnType<typeof setTimeout> | null>(null);
 
-  const handleCopyEmail = () => {
-    navigator.clipboard.writeText('rolanlobo901@gmail.com').then(() => {
-      setEmailCopied(true);
-      setTimeout(() => setEmailCopied(false), 2000);
-    });
+  useEffect(() => () => {
+    if (resetTimer.current) clearTimeout(resetTimer.current);
+  }, []);
+
+  const handleCopyEmail = async () => {
+    const copied = await copyText(EMAIL);
+    setCopyState(copied ? 'copied' : 'failed');
+
+    if (resetTimer.current) clearTimeout(resetTimer.current);
+    if (copied) {
+      resetTimer.current = setTimeout(() => setCopyState('idle'), 2500);
+    }
   };
+
+  const copyLabel = copyState === 'copied' ? '✓ Copied!' : 'Email';
+  const statusMessage =
+    copyState === 'copied'
+      ? 'Email address copied to clipboard.'
+      : copyState === 'failed'
+        ? 'Could not copy — use the email link instead.'
+        : '';
 
   return (
     <FooterWrapper>
       <Inner>
         <TopRow>
           <BrandBlock>
-            <BrandName to="/" aria-label="Rolan Lobo — home">
+            <BrandName to="/">
               <BrandFullName>Rolan Lobo</BrandFullName>
               <BrandShorthand>RNR</BrandShorthand>
             </BrandName>
@@ -223,27 +270,39 @@ const Footer: React.FC = () => {
           <LinksBlock>
             <LinkGroup>
               <LinkGroupLabel>Navigation</LinkGroupLabel>
-              <NavLink to="/">Home</NavLink>
-              <NavLink to="/about">About</NavLink>
-              <NavLink to="/projects">Work</NavLink>
-              <NavLink to="/blog">Blog</NavLink>
-              <NavLink to="/contact">Contact</NavLink>
+              {NAV.map(item => (
+                <NavLink key={item.path} to={item.path}>{item.label}</NavLink>
+              ))}
             </LinkGroup>
 
             <LinkGroup>
               <LinkGroupLabel>Connect</LinkGroupLabel>
-              <ExternalLink href="https://github.com/Mrtracker-new" target="_blank" rel="noopener noreferrer">
-                GitHub
-              </ExternalLink>
-              <ExternalLink href="https://www.linkedin.com/in/rolan-lobo/" target="_blank" rel="noopener noreferrer">
-                LinkedIn
-              </ExternalLink>
-              <ExternalLink href="https://dev.to/rolan_r_n_r" target="_blank" rel="noopener noreferrer">
-                Dev.to
-              </ExternalLink>
-              <CopyEmailButton onClick={handleCopyEmail} aria-label="Copy email address to clipboard" title="rolanlobo901@gmail.com">
-                {emailCopied ? '✓ Copied!' : 'Email'}
-              </CopyEmailButton>
+              {SOCIALS.map(social => (
+                <ExternalLink
+                  key={social.name}
+                  href={social.href}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                >
+                  {social.name}
+                </ExternalLink>
+              ))}
+              {copyState === 'failed' ? (
+                <ExternalLink href={`mailto:${EMAIL}`} title={EMAIL}>
+                  Email
+                </ExternalLink>
+              ) : (
+                <CopyEmailButton
+                  onClick={handleCopyEmail}
+                  aria-label={copyState === 'copied' ? 'Email address copied' : 'Copy email address to clipboard'}
+                  title={EMAIL}
+                >
+                  {copyLabel}
+                </CopyEmailButton>
+              )}
+              <span role="status" aria-live="polite" className="sr-only">
+                {statusMessage}
+              </span>
             </LinkGroup>
           </LinksBlock>
         </TopRow>

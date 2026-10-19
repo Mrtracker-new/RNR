@@ -1,32 +1,37 @@
 import React from 'react';
 import { Helmet } from 'react-helmet-async';
+import {
+  EMAIL,
+  OG_IMAGE,
+  OG_IMAGE_HEIGHT,
+  OG_IMAGE_TYPE,
+  OG_IMAGE_WIDTH,
+  SITE_DESCRIPTION,
+  SITE_NAME,
+  SITE_TITLE,
+  SITE_URL,
+  SOCIAL_PROFILE_URLS,
+  TWITTER_HANDLE,
+} from '../utils/site';
 
-
-/* Site-constant structured data. These blocks are identical on every route,
-   so they're serialized once at module load rather than on each render. */
+/* Site-constant structured data. These blocks are identical on every route, so
+   they're serialized once at module load rather than on each render. */
 const PERSON_LD = JSON.stringify({
   '@context': 'https://schema.org',
   '@type': 'Person',
-  name: 'Rolan Lobo',
+  name: SITE_NAME,
   alternateName: ['Rolan RNR', 'RNR', 'Rolan rnr'],
-  url: 'https://rolan-rnr.netlify.app/',
-  image: 'https://rolan-rnr.netlify.app/logo512.png',
-  sameAs: [
-    'https://github.com/Mrtracker-new',
-    'https://www.linkedin.com/in/rolan-lobo/',
-    'https://dev.to/rolan_r_n_r'
-  ],
-  jobTitle: 'Full Stack Developer',
-  worksFor: {
-    '@type': 'Organization',
-    name: 'Freelance'
-  },
+  url: `${SITE_URL}/`,
+  image: `${SITE_URL}/logo512.png`,
+  sameAs: SOCIAL_PROFILE_URLS,
+  jobTitle: 'Software Developer',
+  worksFor: { '@type': 'Organization', name: 'Freelance' },
   address: {
     '@type': 'PostalAddress',
     addressRegion: 'Karnataka',
-    addressCountry: 'India'
+    addressCountry: 'India',
   },
-  email: 'rolanlobo901@gmail.com',
+  email: EMAIL,
   knowsAbout: [
     'JavaScript',
     'TypeScript',
@@ -34,77 +39,75 @@ const PERSON_LD = JSON.stringify({
     'Node.js',
     'Python',
     'Flask',
-    'MongoDB',
+    'FastAPI',
+    'Rust',
+    'Tauri',
+    'SQLite',
+    'WebSockets',
     'Desktop Applications',
     'Web Development',
+    'Android Development',
+    'Flutter',
+    'Computer Vision',
     'Software Engineering',
     'Cybersecurity',
     'Data Encryption',
+    'AES-256',
+    'ECDH Key Exchange',
+    'Zero-Knowledge Architecture',
     'Steganography',
-    'Polyglot Files',
-    'File Hiding',
-    'Cryptography',
-    'Security Applications',
-    'Mobile App Development',
-    'React Native',
-    'Flutter',
-    'Freelance Development'
-  ]
+    'Network Protocol Analysis',
+    'AI-Assisted Planning',
+  ],
 });
 
 const WEBSITE_LD = JSON.stringify({
   '@context': 'https://schema.org',
   '@type': 'WebSite',
   name: 'Rolan Lobo — Developer & Builder',
-  alternateName: ['Rolan RNR', 'Rolan Lobo', 'RNR'],
-  url: 'https://rolan-rnr.netlify.app/',
+  alternateName: ['Rolan RNR', SITE_NAME, 'RNR'],
+  url: `${SITE_URL}/`,
   author: {
     '@type': 'Person',
-    name: 'Rolan Lobo',
-    alternateName: 'Rolan RNR'
-  }
+    name: SITE_NAME,
+    alternateName: 'Rolan RNR',
+  },
 });
 
 const ORGANIZATION_LD = JSON.stringify({
   '@context': 'https://schema.org',
   '@type': 'Organization',
-  '@id': 'https://rolan-rnr.netlify.app/#organization',
+  '@id': `${SITE_URL}/#organization`,
   name: 'Rolan Lobo — Developer & Builder',
-  alternateName: ['RNR', 'Rolan RNR', 'Rolan Lobo'],
-  url: 'https://rolan-rnr.netlify.app/',
+  alternateName: ['RNR', 'Rolan RNR', SITE_NAME],
+  url: `${SITE_URL}/`,
   logo: {
     '@type': 'ImageObject',
-    url: 'https://rolan-rnr.netlify.app/logo512.png',
+    url: `${SITE_URL}/logo512.png`,
     width: 512,
-    height: 512
+    height: 512,
   },
-  description: 'Full-stack developer and builder specializing in security applications, modern web products, and desktop software that solves real problems.',
-  brand: {
-    '@type': 'Brand',
-    name: 'Rolan Lobo'
-  },
-  foundingDate: '2023',
+  description:
+    'Software developer building privacy-first tools, systems software, and AI-assisted planning applications.',
+  brand: { '@type': 'Brand', name: SITE_NAME },
+  foundingDate: '2019',
   founder: {
     '@type': 'Person',
-    name: 'Rolan Lobo',
-    alternateName: 'Rolan RNR'
+    name: SITE_NAME,
+    alternateName: 'Rolan RNR',
   },
   address: {
     '@type': 'PostalAddress',
     addressRegion: 'Karnataka',
-    addressCountry: 'IN'
+    addressCountry: 'IN',
   },
   contactPoint: {
     '@type': 'ContactPoint',
-    email: 'rolanlobo901@gmail.com',
+    email: EMAIL,
     contactType: 'Customer Service',
-    availableLanguage: ['English', 'Hindi', 'Kannada']
+    availableLanguage: ['English', 'Hindi', 'Kannada'],
   },
-  sameAs: [
-    'https://github.com/Mrtracker-new',
-    'https://www.linkedin.com/in/rolan-lobo/',
-    'https://dev.to/rolan_r_n_r'
-  ]
+  sameAs: SOCIAL_PROFILE_URLS,
 });
 
 interface SEOProps {
@@ -120,58 +123,55 @@ interface SEOProps {
   noIndex?: boolean;
 }
 
+const DEFAULT_KEYWORDS =
+  'Rolan Lobo, Rolan RNR, Software Developer, Security Engineer, Freelance Developer, React Developer, Python Developer, Rust Developer, Flask Developer, AES-256 Encryption, Steganography, InvisioVault, BAR, CursorCam, BuildWise AI, Karnataka, India';
+
 const SEO: React.FC<SEOProps> = ({
-  title = 'Rolan Lobo — Full-Stack Developer & Security Engineer | Karnataka, India',
-  description = 'Rolan Lobo is a full-stack developer from Karnataka, India, specializing in AES-256 encryption tools, privacy-focused applications, and production web software. Available for freelance and full-time remote roles.',
-  keywords = 'Rolan Lobo, Rolan RNR, Full Stack Developer, Security Engineer, Software Engineer, Freelance Developer, React Developer, Python Developer, Flask Developer, AES-256 Encryption, Steganography, InvisioVault, BAR, CursorCam, Karnataka, India',
-  image = 'https://rolan-rnr.netlify.app/Social_card.png',
-  url = 'https://rolan-rnr.netlify.app/',
+  title = SITE_TITLE,
+  description = SITE_DESCRIPTION,
+  keywords = DEFAULT_KEYWORDS,
+  image = OG_IMAGE,
+  url = `${SITE_URL}/`,
   type = 'website',
   publishedAt,
   modifiedAt,
   tags,
-  noIndex = false
+  noIndex = false,
 }) => {
-
   const siteName = 'Rolan Lobo — Developer & Builder';
-  const twitterHandle = '@RolanLobo4';
 
   return (
     <Helmet>
-      {/* Primary Meta Tags */}
       <title>{title}</title>
-      <meta name="title" content={title} />
       <meta name="description" content={description} />
       <meta name="keywords" content={keywords} />
       <meta name="author" content="Rolan Lobo (Rolan RNR)" />
-      {/* Only assert a canonical on indexable pages. noIndex routes (e.g. 404)
-          don't pass a url, so emitting one here would wrongly canonicalize
-          them to the homepage. */}
+
+      {/* Only indexable pages get a canonical. noIndex routes (e.g. 404) would
+          otherwise be canonicalised to the page passed in `url`. */}
       {!noIndex && <link rel="canonical" href={url} />}
 
-      {/* Open Graph / Facebook */}
       <meta property="og:type" content={type} />
       <meta property="og:url" content={url} />
       <meta property="og:title" content={title} />
       <meta property="og:description" content={description} />
       <meta property="og:image" content={image} />
-      <meta property="og:image:width" content="1536" />
-      <meta property="og:image:height" content="1024" />
-      <meta property="og:image:alt" content="Rolan Lobo — Full-Stack Developer & Security Engineer" />
+      <meta property="og:image:type" content={OG_IMAGE_TYPE} />
+      <meta property="og:image:width" content={String(OG_IMAGE_WIDTH)} />
+      <meta property="og:image:height" content={String(OG_IMAGE_HEIGHT)} />
+      <meta property="og:image:alt" content={title} />
       <meta property="og:site_name" content={siteName} />
       <meta property="og:locale" content="en_US" />
 
-      {/* Twitter */}
       <meta name="twitter:card" content="summary_large_image" />
-      <meta name="twitter:site" content={twitterHandle} />
-      <meta name="twitter:creator" content={twitterHandle} />
+      <meta name="twitter:site" content={TWITTER_HANDLE} />
+      <meta name="twitter:creator" content={TWITTER_HANDLE} />
       <meta name="twitter:url" content={url} />
       <meta name="twitter:title" content={title} />
       <meta name="twitter:description" content={description} />
       <meta name="twitter:image" content={image} />
-      <meta name="twitter:image:alt" content="Rolan Lobo — Full-Stack Developer & Security Engineer" />
+      <meta name="twitter:image:alt" content={title} />
 
-      {/* Article Open Graph Tags */}
       {type === 'article' && publishedAt && (
         <meta property="article:published_time" content={publishedAt} />
       )}
@@ -185,7 +185,6 @@ const SEO: React.FC<SEOProps> = ({
         <meta key={tag} property="article:tag" content={tag} />
       ))}
 
-      {/* Dev.to RSS Alternate Feed */}
       <link
         rel="alternate"
         type="application/rss+xml"
@@ -193,19 +192,18 @@ const SEO: React.FC<SEOProps> = ({
         href="https://dev.to/feed/rolan_r_n_r"
       />
 
-      {/* Additional Meta Tags */}
-      {noIndex
-        ? <meta name="robots" content="noindex, nofollow" />
-        : <meta name="robots" content="index, follow, max-image-preview:large, max-snippet:-1, max-video-preview:-1" />
-      }
-      <meta name="language" content="English" />
-      <meta name="theme-color" content="#0a0b0d" />
+      {noIndex ? (
+        <meta name="robots" content="noindex, nofollow" />
+      ) : (
+        <meta
+          name="robots"
+          content="index, follow, max-image-preview:large, max-snippet:-1, max-video-preview:-1"
+        />
+      )}
 
-      {/* hreflang — indexable pages only, for the same reason as the canonical */}
       {!noIndex && <link rel="alternate" hrefLang="en" href={url} />}
-      {!noIndex && <link rel="alternate" hrefLang="x-default" href="https://rolan-rnr.netlify.app/" />}
+      {!noIndex && <link rel="alternate" hrefLang="x-default" href={`${SITE_URL}/`} />}
 
-      {/* Structured Data (JSON-LD) — site constants, serialized once at module scope */}
       <script type="application/ld+json">{PERSON_LD}</script>
       <script type="application/ld+json">{WEBSITE_LD}</script>
       <script type="application/ld+json">{ORGANIZATION_LD}</script>

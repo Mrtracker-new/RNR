@@ -1,10 +1,13 @@
 import React, { useState, useEffect, useRef } from 'react';
+import { createPortal } from 'react-dom';
 import { Link, useLocation } from 'react-router-dom';
 import styled from 'styled-components';
 import { m, AnimatePresence } from 'framer-motion';
-import { scrollOptimizer } from '../utils/performance';
 import { glassPanel } from '../styles/surfaces';
 import { useFocusTrap } from '../hooks/useFocusTrap';
+import { useScrollLock } from '../hooks/useScrollLock';
+import { useBackgroundInert } from '../hooks/useBackgroundInert';
+import { NAV } from '../utils/site';
 
 const FixedContainer = styled.div`
   position: fixed;
@@ -155,34 +158,86 @@ const MobileLink = styled(Link)`
   }
 `;
 
-const navItems = [
-  { path: '/',         label: 'Home'    },
-  { path: '/about',    label: 'About'   },
-  { path: '/projects', label: 'Work'    },
-  { path: '/blog',     label: 'Blog'    },
-  { path: '/contact',  label: 'Contact' },
-];
-
 const Navbar: React.FC = () => {
-  const [scrolled, setScrolled]         = useState(false);
+  const [scrolled, setScrolled] = useState(false);
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
   const location = useLocation();
   const menuRef = useRef<HTMLDivElement>(null);
 
   // Trap focus in the open mobile menu, close on Escape, restore focus to toggle.
   useFocusTrap(mobileMenuOpen, menuRef, () => setMobileMenuOpen(false));
+  useScrollLock(mobileMenuOpen);
+
+  // The menu is portaled out of #root, so only the page content behind it is inert.
+  useBackgroundInert(mobileMenuOpen, '#main-content, footer');
 
   useEffect(() => {
-    const handleScrollUpdate = ({ scrollY }: { scrollY: number }) => {
-      setScrolled(scrollY > 20);
+    let frame = 0;
+
+    const update = () => {
+      cancelAnimationFrame(frame);
+      frame = requestAnimationFrame(() => setScrolled(window.scrollY > 20));
     };
-    const unsubscribe = scrollOptimizer.subscribe(handleScrollUpdate);
-    return () => { if (unsubscribe) unsubscribe(); };
+
+    update();
+    window.addEventListener('scroll', update, { passive: true });
+    return () => {
+      cancelAnimationFrame(frame);
+      window.removeEventListener('scroll', update);
+    };
   }, []);
 
+  // Close the menu when navigation completes.
   useEffect(() => {
-    document.body.style.overflow = mobileMenuOpen ? 'hidden' : 'unset';
-  }, [mobileMenuOpen]);
+    setMobileMenuOpen(false);
+  }, [location.pathname]);
+
+  const menu = (
+    <AnimatePresence>
+      {mobileMenuOpen && (
+        <MobileMenu
+          ref={menuRef}
+          tabIndex={-1}
+          id="mobile-menu"
+          role="dialog"
+          aria-modal="true"
+          aria-label="Navigation"
+          initial={{ opacity: 0, y: -20 }}
+          animate={{ opacity: 1, y: 0 }}
+          exit={{ opacity: 0, y: -20 }}
+          transition={{ type: 'spring', damping: 25, stiffness: 200 }}
+        >
+          {NAV.map((item, index) => (
+            <m.div
+              key={item.path}
+              initial={{ opacity: 0, x: -20 }}
+              animate={{ opacity: 1, x: 0 }}
+              transition={{ delay: index * 0.05 }}
+            >
+              <MobileLink to={item.path} onClick={() => setMobileMenuOpen(false)}>
+                {item.label}
+                {location.pathname === item.path && (
+                  <m.span
+                    layoutId="mobile-dot"
+                    style={{ width: 8, height: 8, borderRadius: '50%', background: 'var(--accent-primary)' }}
+                  />
+                )}
+              </MobileLink>
+            </m.div>
+          ))}
+
+          <m.div
+            style={{ marginTop: 'auto', textAlign: 'center', color: 'var(--dark-500)', fontSize: '0.85rem' }}
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            transition={{ delay: 0.4 }}
+          >
+            © {new Date().getFullYear()} Rolan Lobo
+          </m.div>
+        </MobileMenu>
+      )}
+    </AnimatePresence>
+  );
 
   return (
     <>
@@ -198,7 +253,7 @@ const Navbar: React.FC = () => {
           </Logo>
 
           <NavLinks>
-            {navItems.map((item) => {
+            {NAV.map((item) => {
               const isActive = location.pathname === item.path;
               return (
                 <div key={item.path} style={{ position: 'relative' }}>
@@ -218,7 +273,7 @@ const Navbar: React.FC = () => {
           </NavLinks>
 
           <MobileToggle
-            onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
+            onClick={() => setMobileMenuOpen(open => !open)}
             aria-label={mobileMenuOpen ? 'Close navigation menu' : 'Open navigation menu'}
             aria-expanded={mobileMenuOpen}
             aria-controls="mobile-menu"
@@ -228,51 +283,7 @@ const Navbar: React.FC = () => {
         </NavbarIsland>
       </FixedContainer>
 
-      <AnimatePresence>
-        {mobileMenuOpen && (
-          <MobileMenu
-            ref={menuRef}
-            tabIndex={-1}
-            id="mobile-menu"
-            role="dialog"
-            aria-modal="true"
-            aria-label="Navigation"
-            initial={{ opacity: 0, y: -20 }}
-            animate={{ opacity: 1, y: 0 }}
-            exit={{ opacity: 0, y: -20 }}
-            transition={{ type: 'spring', damping: 25, stiffness: 200 }}
-          >
-            {navItems.map((item, index) => (
-              <m.div
-                key={item.path}
-                initial={{ opacity: 0, x: -20 }}
-                animate={{ opacity: 1, x: 0 }}
-                transition={{ delay: index * 0.05 }}
-              >
-                <MobileLink to={item.path} onClick={() => setMobileMenuOpen(false)}
-                >
-                  {item.label}
-                  {location.pathname === item.path && (
-                    <m.span
-                      layoutId="mobile-dot"
-                      style={{ width: 8, height: 8, borderRadius: '50%', background: 'var(--accent-primary)' }}
-                    />
-                  )}
-                </MobileLink>
-              </m.div>
-            ))}
-
-            <m.div
-              style={{ marginTop: 'auto', textAlign: 'center', color: 'var(--dark-500)', fontSize: '0.85rem' }}
-              initial={{ opacity: 0 }}
-              animate={{ opacity: 1 }}
-              transition={{ delay: 0.4 }}
-            >
-              © {new Date().getFullYear()} Rolan Lobo
-            </m.div>
-          </MobileMenu>
-        )}
-      </AnimatePresence>
+      {createPortal(menu, document.body)}
     </>
   );
 };
