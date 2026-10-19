@@ -2,33 +2,45 @@
   "name": "portfolio",
   "version": "0.1.0",
   "private": true,
-  "homepage": "https://rolan-rnr.netlify.app",
+  "type": "module",
+  "engines": {
+    "node": ">=20"
+  },
+  "packageManager": "npm@10.9.2",
   "dependencies": {
     "framer-motion": "^12.23.12",
     "react": "^19.1.1",
     "react-dom": "^19.1.1",
     "react-helmet-async": "^3.0.0",
-    "react-router-dom": "^7.8.0",
+    "react-router-dom": "^7.18.4",
     "styled-components": "^6.1.19"
   },
   "devDependencies": {
+    "@eslint/js": "^9.39.5",
     "@types/node": "^22.0.0",
     "@types/react": "^19.1.10",
     "@types/react-dom": "^19.1.7",
     "@vitejs/plugin-react": "^4.5.0",
     "babel-plugin-styled-components": "^2.3.0",
+    "eslint": "^9.39.5",
+    "globals": "^16.5.0",
     "netlify-plugin-chromium": "^1.1.4",
+    "prettier": "^3.9.10",
     "puppeteer-core": "^25.2.1",
     "terser": "^5.48.0",
     "typescript": "~5.7.0",
+    "typescript-eslint": "^8.71.2",
     "vite": "^6.0.0",
-    "vite-plugin-compression": "^0.5.1"
+    "vite-plugin-compression": "^0.5.1",
+    "vitest": "^5.0.5"
   },
   "scripts": {
     "dev": "vite",
-    "prebuild": "node scripts/update-sitemap.mjs",
     "build": "tsc -b && vite build",
-    "postbuild": "node scripts/prerender.mjs",
-    "preview": "vite preview"
+    "postbuild": "node scripts/generate-sitemap.mjs && node scripts/prerender.mjs && node scripts/verify-build.mjs",
+    "preview": "vite preview",
+    "lint": "eslint .",
+    "format": "prettier --write .",
+    "test": "vitest run"
   }
 }

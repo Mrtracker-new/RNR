@@ -4,7 +4,6 @@
 /node_modules
 /.pnp
 .pnp.js
-package-lock.json
 yarn.lock
 pnpm-lock.yaml
 
@@ -112,6 +111,7 @@ tmp/
 .vuepress/dist
 .serverless/
 .fusebox/
+.freebuff/
 
 # User Data & Sensitive Information
 user_data/
