@@ -1,20 +1,21 @@
-import React, { useState, useMemo, useCallback } from 'react';
+import React, { useState, useMemo } from 'react';
+import { Link } from 'react-router-dom';
 import { m, AnimatePresence } from 'framer-motion';
 import { Container } from '../styles/GlobalStyle';
 import SEO from '../components/SEO';
-import { projectsData, PROJECT_CATEGORIES } from '../data/projects';
+import { projectsData, PROJECT_CATEGORIES, projectPath } from '../data/projects';
 import type { Project } from '../data/projects';
 import { SectionHeading, TechPill } from '../components/layout/primitives';
 import DecryptText from '../components/DecryptText';
-import { GitHubSVG, ExternalSVG, DownloadSVG } from './projects/icons';
-import ProjectModal from './projects/ProjectModal';
+import { SITE_URL } from '../utils/site';
+import { CategoryIcon, GitHubSVG, ExternalSVG, DownloadSVG } from '../components/icons';
 import {
   PageWrapper, HeroRow, HeroLeft, PageLabel, PageTitle, PageSubtitle,
   HeroRight, HeroStatsRow, StatBlock, StatNumber, StatLabel, StatSeparator,
   FilterBar, FilterTab, FilterCount,
   FeaturedList, FeaturedItem, FeaturedContent, FeaturedMeta, FeaturedCategoryTag,
-  FeaturedDot, FeaturedTitle, FeaturedProblem, FeaturedBottom, FeaturedTechRow,
-  FeaturedLinksRow, InlineLink, ViewCaseStudyBtn, FeaturedImagePane,
+  FeaturedTitle, FeaturedProblem, FeaturedBottom, FeaturedTechRow,
+  FeaturedLinksRow, InlineLink, ViewCaseStudyBtn, FeaturedTitleButton, FeaturedImagePane,
   ImagePlaceholder, PlaceholderIcon, PlaceholderCat,
   ProjectsTableSection, TableHeader, TableHeaderCell, TableBody, TableRow,
   RowTitle, RowIcon, RowTitleText, RowName, RowProblem, RowCategory, RowTech,
@@ -31,15 +32,6 @@ const CATEGORY_META: Record<string, { label: string; count: (p: Project[]) => nu
 
 const Projects: React.FC = () => {
   const [selectedCategory, setSelectedCategory] = useState('All');
-  const [selectedProject, setSelectedProject] = useState<Project | null>(null);
-  const [isModalOpen, setIsModalOpen] = useState(false);
-
-  const openProject = useCallback((p: Project) => {
-    setSelectedProject(p);
-    setIsModalOpen(true);
-  }, []);
-
-  const closeModal = useCallback(() => setIsModalOpen(false), []);
 
   // Counts are derived from the static projectsData — compute once, not per render.
   const categoryCounts = useMemo(
@@ -68,9 +60,9 @@ const Projects: React.FC = () => {
     <>
       <SEO
         title="My Work — Rolan Lobo"
-        description="Real problems, real solutions. Encryption tools, zero-knowledge platforms, local-first network observability, desktop media utilities, and mobile apps — with case studies for each."
-        keywords="Steganography, AES-256 Encryption, NetPlus, NetPulse, YT Downloader, Rust, Tauri, InvisioVault, BAR, Sortify, React, Python, Privacy Software, Rolan Lobo"
-        url="https://rolan-rnr.netlify.app/projects"
+        description="Real problems, real solutions. AI-assisted construction planning, encryption tools, zero-knowledge platforms, local-first network observability, desktop media utilities, and mobile apps — with case studies for each."
+        keywords="BuildWise AI, Site Feasibility, MapLibre, FastAPI, Steganography, AES-256 Encryption, NetPlus, NetPulse, YT Downloader, Rust, Tauri, InvisioVault, BAR, Sortify, React, Python, Privacy Software, Rolan Lobo"
+        url={`${SITE_URL}/projects`}
       />
 
       <PageWrapper>
@@ -106,11 +98,10 @@ const Projects: React.FC = () => {
                   <StatNumber>{projectsData.filter(p => p.featured).length}</StatNumber>
                   <StatLabel>Featured</StatLabel>
                 </StatBlock>
-                <StatSeparator aria-hidden="true" />
-                <StatBlock>
-                  <StatNumber>4</StatNumber>
-                  <StatLabel>Platforms</StatLabel>
-                </StatBlock>
+                <StatSeparator aria-hidden="true" />                  <StatBlock>
+                    <StatNumber>{PROJECT_CATEGORIES.length - 1}</StatNumber>
+                    <StatLabel>Platforms</StatLabel>
+                  </StatBlock>
               </HeroStatsRow>
             </HeroRight>
           </HeroRow>
@@ -159,21 +150,20 @@ const Projects: React.FC = () => {
                         initial={{ opacity: 0 }}
                         animate={{ opacity: 1 }}
                         transition={{ duration: 0.35, delay: i * 0.07 }}
-                        onClick={() => openProject(project)}
                       >
                         <FeaturedContent>
                           <div>
                             <FeaturedMeta>
                               <FeaturedCategoryTag>{project.category}</FeaturedCategoryTag>
-                              {project.icon && (
-                                <>
-                                  <FeaturedDot aria-hidden="true" />
-                                  <span aria-hidden="true" style={{ fontSize: '0.9rem' }}>{project.icon}</span>
-                                </>
-                              )}
                             </FeaturedMeta>
                             <FeaturedTitle style={{ marginTop: 'var(--spacing-3)' }}>
-                              <DecryptText text={project.title} />
+                              <FeaturedTitleButton
+                                as={Link}
+                                to={projectPath(project.slug)}
+                                aria-label={`Read the ${project.title} case study`}
+                              >
+                                <DecryptText text={project.title} />
+                              </FeaturedTitleButton>
                             </FeaturedTitle>
                             <FeaturedProblem style={{ marginTop: 'var(--spacing-3)' }}>
                               {project.caseStudy.problem}
@@ -191,7 +181,6 @@ const Projects: React.FC = () => {
                                 href={project.github}
                                 target="_blank"
                                 rel="noopener noreferrer"
-                                onClick={e => e.stopPropagation()}
                                 title="Source code"
                               >
                                 <GitHubSVG /> Code
@@ -201,7 +190,6 @@ const Projects: React.FC = () => {
                                   href={project.liveDemo}
                                   target="_blank"
                                   rel="noopener noreferrer"
-                                  onClick={e => e.stopPropagation()}
                                   title="Live demo"
                                 >
                                   <ExternalSVG /> Demo
@@ -212,14 +200,14 @@ const Projects: React.FC = () => {
                                   href={project.download}
                                   target="_blank"
                                   rel="noopener noreferrer"
-                                  onClick={e => e.stopPropagation()}
                                   title="Download"
                                 >
                                   <DownloadSVG /> Download
                                 </InlineLink>
                               )}
                               <ViewCaseStudyBtn
-                                onClick={e => { e.stopPropagation(); openProject(project); }}
+                                as={Link}
+                                to={projectPath(project.slug)}
                                 aria-label={`Read the ${project.title} case study`}
                               >
                                 Case study →
@@ -230,10 +218,21 @@ const Projects: React.FC = () => {
 
                         <FeaturedImagePane>
                           {project.image ? (
-                            <img src={project.image} alt={project.title} loading="lazy" decoding="async" />
+                            <img
+                              src={project.image}
+                              srcSet={project.imageSrcSet}
+                              sizes="(max-width: 960px) 100vw, 360px"
+                              alt={project.title}
+                              loading={i === 0 ? 'eager' : 'lazy'}
+                              fetchPriority={i === 0 ? 'high' : 'auto'}
+                              decoding="async"
+                              style={project.imageFit === 'contain' ? { objectFit: 'contain' } : undefined}
+                            />
                           ) : (
                             <ImagePlaceholder>
-                              <PlaceholderIcon aria-hidden="true">{project.icon}</PlaceholderIcon>
+                              <PlaceholderIcon aria-hidden="true">
+                                <CategoryIcon category={project.category} size={40} />
+                              </PlaceholderIcon>
                               <PlaceholderCat>{project.category}</PlaceholderCat>
                             </ImagePlaceholder>
                           )}
@@ -252,7 +251,7 @@ const Projects: React.FC = () => {
                     aside={`${otherProjects.length} total`}
                   />
 
-                  <TableHeader aria-hidden="true">
+                  <TableHeader>
                     <TableHeaderCell>Project</TableHeaderCell>
                     <TableHeaderCell>Category</TableHeaderCell>
                     <TableHeaderCell>Stack</TableHeaderCell>
@@ -266,21 +265,17 @@ const Projects: React.FC = () => {
                         initial={{ opacity: 0 }}
                         animate={{ opacity: 1 }}
                         transition={{ duration: 0.3, delay: i * 0.05 }}
-                        onClick={() => openProject(project)}
-                        role="button"
-                        tabIndex={0}
-                        aria-label={`${project.title}, ${project.category}. Open case study.`}
-                        onKeyDown={e => {
-                          if (e.key === 'Enter' || e.key === ' ') {
-                            e.preventDefault();
-                            openProject(project);
-                          }
-                        }}
                       >
                         <RowTitle>
-                          <RowIcon aria-hidden="true">{project.icon}</RowIcon>
+                          <RowIcon aria-hidden="true">
+                            <CategoryIcon category={project.category} size={16} />
+                          </RowIcon>
                           <RowTitleText>
-                            <RowName><DecryptText text={project.title} /></RowName>
+                            <RowName>
+                              <Link to={projectPath(project.slug)} aria-label={`Read the ${project.title} case study`}>
+                                <DecryptText text={project.title} />
+                              </Link>
+                            </RowName>
                             <RowProblem>{project.caseStudy.problem}</RowProblem>
                           </RowTitleText>
                         </RowTitle>
@@ -318,8 +313,6 @@ const Projects: React.FC = () => {
           </AnimatePresence>
         </Container>
       </PageWrapper>
-
-      <ProjectModal project={selectedProject} isOpen={isModalOpen} onClose={closeModal} />
     </>
   );
 };

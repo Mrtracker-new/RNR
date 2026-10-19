@@ -3,7 +3,7 @@ import { m } from 'framer-motion';
 import { glassControl } from '../../styles/surfaces';
 
 /* Styled-components for the Projects page shell: hero, filter bar, the featured
-   list, and the "more projects" table. Modal styling lives in ProjectModal. */
+   list, and the "more projects" table. Case-study pages style themselves. */
 
 /* ─── Page hero ───────────────────────────────────────────────────────────── */
 
@@ -168,7 +168,7 @@ export const FilterCount = styled.span<{ $active: boolean }>`
   padding: 1px 6px;
   border-radius: 99px;
   background: ${props => props.$active ? 'var(--accent-subtle)' : 'var(--hairline)'};
-  color: ${props => props.$active ? 'var(--accent-primary)' : 'var(--dark-600)'};
+  color: ${props => props.$active ? 'var(--accent-text)' : 'var(--dark-600)'};
   font-weight: var(--font-semibold);
   transition: background 0.18s ease, color 0.18s ease;
 `;
@@ -191,7 +191,6 @@ export const FeaturedItem = styled(m.div)`
   display: grid;
   grid-template-columns: 1fr 360px;
   background: var(--dark-950);
-  cursor: pointer;
   transition: background 0.2s ease;
 
   &:hover { background: var(--bg-overlay); }
@@ -232,20 +231,28 @@ export const FeaturedCategoryTag = styled.span`
   color: var(--dark-500);
 `;
 
-export const FeaturedDot = styled.span`
-  width: 3px;
-  height: 3px;
-  border-radius: 50%;
-  background: var(--dark-700);
-  flex-shrink: 0;
-`;
-
 export const FeaturedTitle = styled.h2`
   font-size: clamp(1.4rem, 3vw, 2rem);
   font-weight: var(--font-bold);
   color: var(--dark-50);
   letter-spacing: var(--tracking-tight);
   line-height: 1.15;
+`;
+
+export const FeaturedTitleButton = styled.button`
+  font: inherit;
+  color: inherit;
+  letter-spacing: inherit;
+  line-height: inherit;
+  text-align: left;
+  background: none;
+  border: none;
+  padding: 0;
+  cursor: pointer;
+  text-decoration: none;
+  transition: color 0.18s ease;
+
+  &:hover { color: var(--accent-primary); }
 `;
 
 export const FeaturedProblem = styled.p`
@@ -301,6 +308,7 @@ export const ViewCaseStudyBtn = styled.button`
   align-items: center;
   gap: 5px;
   padding: 0;
+  text-decoration: none;
   transition: color 0.18s ease;
   font-family: inherit;
 
@@ -404,7 +412,6 @@ export const TableRow = styled(m.div)`
   align-items: center;
   padding: var(--spacing-5) var(--spacing-6);
   background: var(--dark-950);
-  cursor: pointer;
   transition: background 0.18s ease;
 
   &:hover {
@@ -442,6 +449,7 @@ export const RowTitleText = styled.div`
 `;
 
 export const RowName = styled.h3`
+  a { color: inherit; }
   font-size: var(--text-base);
   font-weight: var(--font-semibold);
   color: var(--dark-100);
