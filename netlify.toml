@@ -28,7 +28,7 @@
     Permissions-Policy = "camera=(), microphone=(), geolocation=(), payment=(), usb=()"
     # styled-components injects <style> tags at runtime, which requires
     # 'unsafe-inline' for styles only. No inline scripts are emitted.
-    Content-Security-Policy = "default-src 'self'; script-src 'self'; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com; font-src 'self' https://fonts.gstatic.com; img-src 'self' data: blob: https://media.dev.to https://res.cloudinary.com; connect-src 'self' https://dev.to; frame-ancestors 'none'; base-uri 'none'; object-src 'none'; form-action 'self'; frame-src 'none'; upgrade-insecure-requests;"
+    Content-Security-Policy = "default-src 'self'; script-src 'self'; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com; font-src 'self' https://fonts.gstatic.com; img-src 'self' data: blob: https://*.dev.to https://dev.to https://*.amazonaws.com https://res.cloudinary.com; connect-src 'self' https://dev.to https://*.dev.to; frame-ancestors 'none'; base-uri 'none'; object-src 'none'; form-action 'self'; frame-src 'none'; upgrade-insecure-requests;"
 
 [[headers]]
   for = "/*.html"

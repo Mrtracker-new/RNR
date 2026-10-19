@@ -12,6 +12,7 @@ export const SITE_DESCRIPTION = brand.description;
 
 export const EMAIL = brand.email;
 export const TWITTER_HANDLE = brand.twitterHandle;
+export const DEVTO_USERNAME = (brand as { devtoUsername?: string }).devtoUsername ?? 'rolan_r_n_r';
 
 export const OG_IMAGE = `${SITE_URL}/Social_card.jpg`;
 export const OG_IMAGE_WIDTH = 1200;

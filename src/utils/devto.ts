@@ -10,10 +10,12 @@ export interface BlogPost {
     tags?: Array<{ name: string; slug: string }>;
 }
 
-const DEVTO_USERNAME = import.meta.env.VITE_DEVTO_USERNAME || '';
+import { DEVTO_USERNAME as DEFAULT_DEVTO_USERNAME } from './site';
+
+const DEVTO_USERNAME = import.meta.env.VITE_DEVTO_USERNAME || DEFAULT_DEVTO_USERNAME;
 const DEVTO_API = 'https://dev.to/api';
 const CACHE_KEY = 'rnr_devto_posts';
-const CACHE_VERSION = 2;
+const CACHE_VERSION = 3;
 const CACHE_TTL_MS = 60 * 60 * 1000; // 1 hour
 
 interface CacheEntry {
@@ -59,6 +61,7 @@ function readLocalCache(): CacheEntry | null {
             entry.version === CACHE_VERSION &&
             typeof entry.fetchedAt === 'number' &&
             Array.isArray(entry.posts) &&
+            entry.posts.length > 0 &&
             entry.posts.every(isBlogPost);
 
         if (!valid) {
@@ -73,6 +76,7 @@ function readLocalCache(): CacheEntry | null {
 }
 
 function writeLocalCache(posts: BlogPost[]): void {
+    if (!posts || posts.length === 0) return;
     try {
         const entry: CacheEntry = { version: CACHE_VERSION, posts, fetchedAt: Date.now() };
         localStorage.setItem(CACHE_KEY, JSON.stringify(entry));
@@ -91,6 +95,11 @@ function mapDevtoPost(raw: Record<string, unknown>): BlogPost {
         slug: t.toLowerCase().replace(/\s+/g, '-'),
     }));
 
+    const coverUrl =
+        (raw.cover_image as string) ||
+        (raw.social_image as string) ||
+        undefined;
+
     return {
         id: String(raw.id),
         title: raw.title as string,
@@ -98,7 +107,7 @@ function mapDevtoPost(raw: Record<string, unknown>): BlogPost {
         slug: raw.slug as string,
         url: raw.url as string,
         publishedAt: (raw.published_at as string) || new Date().toISOString(),
-        ...(raw.cover_image ? { coverImage: { url: raw.cover_image as string } } : {}),
+        ...(coverUrl ? { coverImage: { url: coverUrl } } : {}),
         author: {
             name: (raw.user as Record<string, string>)?.name || 'Rolan Lobo',
             profilePicture: (raw.user as Record<string, string>)?.profile_image || undefined,
