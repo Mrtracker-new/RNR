@@ -1,9 +1,13 @@
 import React, { useState, useEffect, useCallback, useRef } from 'react';
+import { createPortal } from 'react-dom';
 import styled from 'styled-components';
 import { m, AnimatePresence } from 'framer-motion';
-import { useNavigate } from 'react-router-dom';
+import { useLocation, useNavigate } from 'react-router-dom';
 import { glassPanel, glassControl, glassControlHover } from '../styles/surfaces';
 import { useFocusTrap } from '../hooks/useFocusTrap';
+import { useScrollLock } from '../hooks/useScrollLock';
+import { useBackgroundInert } from '../hooks/useBackgroundInert';
+import { ROUTES } from '../utils/routes';
 
 interface ExitIntentPopupProps {
   headline?: string;
@@ -15,6 +19,24 @@ interface ExitIntentPopupProps {
   onSecondaryAction?: () => void;
   secondaryActionPath?: string;
   activationDelay?: number;
+}
+
+const SEEN_KEY = 'hasSeenExitPopup';
+
+function readSeen(): boolean {
+  try {
+    return sessionStorage.getItem(SEEN_KEY) === 'true';
+  } catch {
+    return false;
+  }
+}
+
+function markSeen(): void {
+  try {
+    sessionStorage.setItem(SEEN_KEY, 'true');
+  } catch {
+    // Storage blocked (private mode) — the popup simply may appear again.
+  }
 }
 
 const Overlay = styled(m.div)`
@@ -110,7 +132,7 @@ const ButtonGroup = styled.div`
 const PrimaryBtn = styled.button`
   width: 100%;
   padding: 13px 24px;
-  background: var(--accent-primary);
+  background: var(--accent-fill);
   color: #ffffff;
   border: none;
   border-radius: var(--radius-md);
@@ -120,8 +142,8 @@ const PrimaryBtn = styled.button`
   cursor: pointer;
   transition: background 0.2s ease;
 
-  &:hover { background: var(--accent-hover); }
-  &:active { background: var(--accent-press); }
+  &:hover { background: var(--accent-fill-hover); }
+  &:active { background: var(--accent-fill-press); }
 `;
 
 const SecondaryBtn = styled.button`
@@ -174,12 +196,13 @@ const ExitIntentPopup: React.FC<ExitIntentPopupProps> = ({
   primaryActionPath,
   secondaryActionLabel = "Start a Conversation →",
   onSecondaryAction,
-  secondaryActionPath = "/contact",
+  secondaryActionPath = ROUTES.CONTACT,
   activationDelay = 3000,
 }) => {
   const [isVisible, setIsVisible] = useState(false);
   const [isActive, setIsActive] = useState(false);
   const navigate = useNavigate();
+  const { pathname } = useLocation();
   const modalRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
@@ -187,13 +210,21 @@ const ExitIntentPopup: React.FC<ExitIntentPopupProps> = ({
     return () => clearTimeout(timer);
   }, [activationDelay]);
 
+  useScrollLock(isVisible);
+  useBackgroundInert(isVisible);
+  useFocusTrap(isVisible, modalRef, () => setIsVisible(false));
+
   const handleOpen = useCallback(() => {
-    const hasSeen = sessionStorage.getItem('hasSeenExitPopup');
-    if (!hasSeen && isActive) {
-      setIsVisible(true);
-      sessionStorage.setItem('hasSeenExitPopup', 'true');
-    }
-  }, [isActive]);
+    if (!isActive || readSeen()) return;
+
+    // No exit pitch on the page it points at, or on top of another dialog.
+    if (pathname === ROUTES.CONTACT) return;
+    if (document.querySelector('[role="dialog"][aria-modal="true"]')) return;
+    if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) return;
+
+    setIsVisible(true);
+    markSeen();
+  }, [isActive, pathname]);
 
   const handleClose = useCallback(() => setIsVisible(false), []);
 
@@ -223,10 +254,7 @@ const ExitIntentPopup: React.FC<ExitIntentPopupProps> = ({
     return () => document.removeEventListener('mouseleave', onLeave);
   }, [isActive, handleOpen]);
 
-  // Trap focus in the dialog, close on Escape, and restore focus on close.
-  useFocusTrap(isVisible, modalRef, handleClose);
-
-  return (
+  const dialog = (
     <AnimatePresence>
       {isVisible && (
         <Overlay
@@ -282,6 +310,8 @@ const ExitIntentPopup: React.FC<ExitIntentPopupProps> = ({
       )}
     </AnimatePresence>
   );
+
+  return createPortal(dialog, document.body);
 };
 
 export default ExitIntentPopup;

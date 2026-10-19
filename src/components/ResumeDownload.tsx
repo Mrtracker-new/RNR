@@ -1,29 +1,29 @@
-import React, { useState } from 'react';
+import React, { useCallback, useEffect, useRef, useState } from 'react';
 import styled from 'styled-components';
 import { m, AnimatePresence } from 'framer-motion';
 import { Button } from '../styles/GlobalStyle';
 import { glassSurface, glassControl } from '../styles/surfaces';
+import { DownloadSVG } from './icons';
 
 interface ResumeDownloadProps {
   variant?: 'primary' | 'secondary' | 'outline';
   size?: 'sm' | 'md' | 'lg';
   tooltipPosition?: 'top' | 'right' | 'bottom' | 'left';
   showTooltip?: boolean;
+  /** Notified whenever the preview opens or closes (hover, focus or Escape). */
+  onPreviewChange?: (previewing: boolean) => void;
 }
 
-// Wrapper to position the tooltip relative to the button
 const ResumeButtonWrapper = styled.div`
   position: relative;
   display: inline-block;
 `;
 
-// Tooltip container that appears on hover
 const PreviewTooltip = styled(m.div) <{ $position: 'top' | 'right' | 'bottom' | 'left' }>`
   position: absolute;
   z-index: 1000;
   pointer-events: none;
-  
-  /* Position variants */
+
   ${props => {
     switch (props.$position) {
       case 'top':
@@ -51,30 +51,27 @@ const PreviewTooltip = styled(m.div) <{ $position: 'top' | 'right' | 'bottom' | 
         `;
     }
   }}
-  
-  /* Responsive positioning */
+
   @media (max-width: 768px) {
-    display: none; /* Hide on mobile to avoid issues */
+    display: none;
   }
 `;
 
-// Card container for the preview
 const PreviewCard = styled.div<{ $position: 'top' | 'right' | 'bottom' | 'left' }>`
   ${glassSurface}
   padding: var(--spacing-4);
   width: 320px;
-  
-  /* Arrow pointing to button - changes based on position */
+
   &::after {
     content: '';
     position: absolute;
     width: 0;
     height: 0;
-    
+
     ${props => {
-    switch (props.$position) {
-      case 'top':
-        return `
+      switch (props.$position) {
+        case 'top':
+          return `
             bottom: -8px;
             left: 50%;
             transform: translateX(-50%);
@@ -82,16 +79,16 @@ const PreviewCard = styled.div<{ $position: 'top' | 'right' | 'bottom' | 'left' 
             border-right: 8px solid transparent;
             border-top: 8px solid var(--bg-overlay);
           `;
-      case 'right':
-        return `
+        case 'right':
+          return `
             left: -8px;
             top: 24px;
             border-top: 8px solid transparent;
             border-bottom: 8px solid transparent;
             border-right: 8px solid var(--bg-overlay);
           `;
-      case 'bottom':
-        return `
+        case 'bottom':
+          return `
             top: -8px;
             left: 50%;
             transform: translateX(-50%);
@@ -99,8 +96,8 @@ const PreviewCard = styled.div<{ $position: 'top' | 'right' | 'bottom' | 'left' 
             border-right: 8px solid transparent;
             border-bottom: 8px solid var(--bg-overlay);
           `;
-      case 'left':
-        return `
+        case 'left':
+          return `
             right: -8px;
             top: 50%;
             transform: translateY(-50%);
@@ -108,12 +105,11 @@ const PreviewCard = styled.div<{ $position: 'top' | 'right' | 'bottom' | 'left' 
             border-bottom: 8px solid transparent;
             border-left: 8px solid var(--bg-overlay);
           `;
-    }
-  }}
+      }
+    }}
   }
 `;
 
-// Preview image container
 const PreviewImageContainer = styled.div`
   ${glassControl}
   width: 100%;
@@ -121,7 +117,7 @@ const PreviewImageContainer = styled.div`
   overflow: hidden;
   margin-bottom: var(--spacing-3);
   position: relative;
-  
+
   img {
     width: 100%;
     height: auto;
@@ -130,13 +126,12 @@ const PreviewImageContainer = styled.div`
   }
 `;
 
-// Hint text
 const HintText = styled.p`
   font-size: var(--text-xs);
   color: var(--dark-400);
   text-align: center;
   margin: 0;
-  
+
   span {
     color: var(--accent-primary);
     font-weight: var(--font-medium);
@@ -147,14 +142,41 @@ const ResumeDownload: React.FC<ResumeDownloadProps> = ({
   variant = 'outline',
   size = 'lg',
   tooltipPosition = 'top',
-  showTooltip = true
+  showTooltip = true,
+  onPreviewChange,
 }) => {
-  const [isHovering, setIsHovering] = useState(false);
+  const [previewing, setPreviewing] = useState(false);
+  const wrapperRef = useRef<HTMLDivElement>(null);
+  const onPreviewChangeRef = useRef(onPreviewChange);
+
+  useEffect(() => {
+    onPreviewChangeRef.current = onPreviewChange;
+  }, [onPreviewChange]);
+
+  useEffect(() => {
+    onPreviewChangeRef.current?.(previewing);
+  }, [previewing]);
+
+  const setPreview = useCallback((next: boolean) => setPreviewing(next), []);
+
+  useEffect(() => {
+    if (!previewing) return;
+    const onKeyDown = (e: KeyboardEvent) => {
+      if (e.key === 'Escape') setPreviewing(false);
+    };
+    document.addEventListener('keydown', onKeyDown);
+    return () => document.removeEventListener('keydown', onKeyDown);
+  }, [previewing]);
 
   return (
     <ResumeButtonWrapper
-      onMouseEnter={() => setIsHovering(true)}
-      onMouseLeave={() => setIsHovering(false)}
+      ref={wrapperRef}
+      onMouseEnter={() => setPreview(true)}
+      onMouseLeave={() => setPreview(false)}
+      onFocus={() => setPreview(true)}
+      onBlur={(e: React.FocusEvent<HTMLDivElement>) => {
+        if (!e.currentTarget.contains(e.relatedTarget as Node | null)) setPreview(false);
+      }}
     >
       <Button
         as="a"
@@ -162,15 +184,16 @@ const ResumeDownload: React.FC<ResumeDownloadProps> = ({
         download="Rolan_Lobo_Resume.pdf"
         $variant={variant}
         $size={size}
-        aria-label="Download Rolan Lobo's Resume"
+        aria-label="Download Resume — Rolan Lobo (PDF)"
       >
-        📄 Download Resume
+        <DownloadSVG /> Download Resume
       </Button>
 
       <AnimatePresence>
-        {showTooltip && isHovering && (
+        {showTooltip && previewing && (
           <PreviewTooltip
             $position={tooltipPosition}
+            aria-hidden="true"
             initial={{ opacity: 0, y: 10 }}
             animate={{ opacity: 1, y: 0 }}
             exit={{ opacity: 0, y: 10 }}
@@ -178,7 +201,7 @@ const ResumeDownload: React.FC<ResumeDownloadProps> = ({
           >
             <PreviewCard $position={tooltipPosition}>
               <PreviewImageContainer>
-                <img src="/Resume_preview.avif" alt="Resume Preview" />
+                <img src="/Resume_preview.avif" alt="" loading="lazy" decoding="async" />
               </PreviewImageContainer>
               <HintText>
                 <span>Click</span> to download full resume

@@ -107,7 +107,6 @@ const LoadingOverlay = styled.div`
 
 interface FullScreenLoadingProps {
   text?: string;
-  onComplete?: () => void;
 }
 
 export const FullScreenLoading: React.FC<FullScreenLoadingProps> = ({
@@ -124,4 +123,3 @@ export const FullScreenLoading: React.FC<FullScreenLoadingProps> = ({
   );
 };
 
-export default LoadingSpinner;

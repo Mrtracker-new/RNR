@@ -18,8 +18,8 @@ interface DecryptTextProps {
  * Renders `text` with a left-to-right "decrypt" reveal: each character cycles
  * through cipher glyphs, then locks to its final value. Runs once when the
  * element scrolls into view, and replays on hover. Falls back to static text
- * when the user prefers reduced motion. The real string is always exposed via
- * aria-label so assistive tech never reads the scramble.
+ * when the user prefers reduced motion. Assistive tech reads a visually hidden
+ * copy of the real string; the animated node is hidden from it.
  */
 const DecryptText: React.FC<DecryptTextProps> = ({
   text,
@@ -94,12 +94,8 @@ const DecryptText: React.FC<DecryptTextProps> = ({
   }, [run]);
 
   return (
-    <Tag
-      ref={ref}
-      className={className}
-      aria-label={text}
-      onMouseEnter={replayOnHover ? run : undefined}
-    >
+    <Tag ref={ref} className={className} onMouseEnter={replayOnHover ? run : undefined}>
+      <span className="sr-only">{text}</span>
       <span aria-hidden="true">{display}</span>
     </Tag>
   );

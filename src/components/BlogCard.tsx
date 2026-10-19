@@ -1,6 +1,7 @@
 import React from 'react';
 import styled from 'styled-components';
 import { BlogPost, formatPostDate } from '../utils/devto';
+import { ArrowUpRightSVG } from './icons';
 
 
 
@@ -137,13 +138,10 @@ const BlogCard: React.FC<BlogCardProps> = ({ post }) => {
   const primaryTag = post.tags?.[0];
 
   return (
-    <Article
-      as="a"
-      href={post.url}
-      target="_blank"
-      rel="noopener noreferrer"
-      aria-label={`Read "${post.title}" on Dev.to`}
-    >
+    /* No aria-label here: the card's own text (title, summary, date) is the
+       link's accessible name. A label that omits the visible text fails
+       label-content-name-mismatch. */
+    <Article as="a" href={post.url} target="_blank" rel="noopener noreferrer">
       <PostLeft>
         <PostMeta>
           <PostDate dateTime={post.publishedAt}>{formattedDate}</PostDate>
@@ -173,7 +171,9 @@ const BlogCard: React.FC<BlogCardProps> = ({ post }) => {
             />
           </PostThumb>
         )}
-        <PostArrow className="post-arrow" aria-hidden="true">↗</PostArrow>
+        <PostArrow className="post-arrow" aria-hidden="true">
+          <ArrowUpRightSVG size={16} />
+        </PostArrow>
       </PostRight>
     </Article>
   );

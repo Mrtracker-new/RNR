@@ -1,6 +1,7 @@
 import React, { Component, ReactNode } from 'react';
 import styled from 'styled-components';
 import { glassSurface } from '../styles/surfaces';
+import { ShieldSVG } from './icons';
 
 interface Props {
     children: ReactNode;
@@ -63,15 +64,61 @@ const ReloadButton = styled.button`
   font-size: 1rem;
   font-weight: var(--font-semibold);
   color: #ffffff;
-  background: var(--accent-primary);
+  background: var(--accent-fill);
   border: none;
   border-radius: 50px;
   cursor: pointer;
   transition: background 0.2s ease;
 
-  &:hover { background: var(--accent-hover); }
-  &:active { background: var(--accent-press); }
+  &:hover { background: var(--accent-fill-hover); }
+  &:active { background: var(--accent-fill-press); }
 `;
+
+const PageErrorWrapper = styled.div`
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  min-height: 60vh;
+  padding: 2rem;
+  text-align: center;
+  color: var(--text-secondary, #aaa);
+
+  h2 {
+    font-size: 1.5rem;
+    margin-bottom: 0.75rem;
+    color: var(--text-primary, #fff);
+  }
+
+  button {
+    margin-top: 1.25rem;
+    padding: 0.6rem 1.5rem;
+    border: 1px solid var(--accent-primary, #3b82f6);
+    border-radius: 999px;
+    background: transparent;
+    color: var(--accent-primary, #3b82f6);
+    cursor: pointer;
+    font-size: 0.95rem;
+    transition: background 0.2s;
+
+    &:hover {
+      background: var(--accent-primary, #3b82f6);
+      color: #fff;
+    }
+  }
+`;
+
+/* Inline fallback used by route-level boundaries so a single page can fail
+   without taking the whole shell down. */
+export function PageError({ message }: { message: string }) {
+    return (
+        <PageErrorWrapper role="alert">
+            <h2>{message}</h2>
+            <p>Please try refreshing the page.</p>
+            <button onClick={() => window.location.reload()}>Reload</button>
+        </PageErrorWrapper>
+    );
+}
 
 const ErrorDetails = styled.details`
   margin-top: var(--spacing-8);
@@ -122,8 +169,6 @@ class ErrorBoundary extends Component<Props, State> {
             errorInfo
         });
 
-        // TODO: Send error to error tracking service (e.g., Sentry)
-        // Example: Sentry.captureException(error, { errorInfo });
     }
 
     handleReload = (): void => {
@@ -139,7 +184,9 @@ class ErrorBoundary extends Component<Props, State> {
             return (
                 <ErrorFallback>
                     <ErrorContainer>
-                        <ErrorIcon>🛡️</ErrorIcon>
+                        <ErrorIcon>
+                            <ShieldSVG size={56} />
+                        </ErrorIcon>
                         <ErrorTitle>Oops! Something went wrong</ErrorTitle>
                         <ErrorMessage>
                             We're sorry for the inconvenience. An unexpected error occurred while rendering this page.
