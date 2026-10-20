@@ -21,7 +21,7 @@ export const Button = styled.button<{ $variant?: 'primary' | 'secondary' | 'outl
   gap: var(--spacing-2);
   border-radius: var(--radius-md);
   font-weight: var(--font-medium);
-  transition: var(--transition-normal);
+  transition: background var(--transition-fast), border-color var(--transition-fast), color var(--transition-fast), box-shadow var(--transition-fast);
   cursor: pointer;
   text-decoration: none;
   border: 1px solid transparent;

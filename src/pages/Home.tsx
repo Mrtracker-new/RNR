@@ -1,6 +1,6 @@
-import React, { useState, lazy, Suspense } from 'react';
+import React, { useState } from 'react';
 import styled, { keyframes } from 'styled-components';
-import { m, Variants, AnimatePresence } from 'framer-motion';
+import { m, Variants } from 'framer-motion';
 import { Helmet } from 'react-helmet-async';
 import { Link } from 'react-router-dom';
 import { Container, Button } from '../styles/GlobalStyle';
@@ -13,6 +13,8 @@ import DecryptText from '../components/DecryptText';
 import { CategoryIcon, ArrowUpRightSVG } from '../components/icons';
 import { useDevtoPosts } from '../hooks/useDevtoPosts';
 import { BLOG_INTRO, CODING_START_YEAR, OG_IMAGE, SITE_URL } from '../utils/site';
+import BlogCard from '../components/BlogCard';
+import ResumeDownload from '../components/ResumeDownload';
 
 const profileImage    = '/images/Home_dp.avif';
 const profileImage900 = '/images/Home_dp_900.avif';
@@ -20,9 +22,6 @@ const profileImage600 = '/images/Home_dp_600.avif';
 const profileImage450 = '/images/Home_dp_450.avif';
 const profileImage300 = '/images/Home_dp_300.avif';
 const profileImage150 = '/images/Home_dp_150.avif';
-
-const BlogCard     = lazy(() => import('../components/BlogCard'));
-const ResumeDownload = lazy(() => import('../components/ResumeDownload'));
 
 /* ─── Hero ────────────────────────────────────────────────────────────────── */
 
@@ -195,7 +194,19 @@ const StylizedImage = styled.div`
     inset: 0;
     box-shadow: inset 0 0 20px rgba(0, 0, 0, 0.4);
     pointer-events: none;
+    z-index: 2;
   }
+`;
+
+const ProfileLayer = styled.div<{ $visible: boolean }>`
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  opacity: ${props => props.$visible ? 1 : 0};
+  pointer-events: ${props => props.$visible ? 'auto' : 'none'};
+  transition: opacity 0.3s ease;
+  z-index: 1;
 
   img {
     width: 100%;
@@ -205,6 +216,17 @@ const StylizedImage = styled.div`
   }
 
   &:hover img { transform: scale(1.04); }
+`;
+
+const ResumePreviewLayer = styled.div<{ $visible: boolean }>`
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  opacity: ${props => props.$visible ? 1 : 0};
+  pointer-events: ${props => props.$visible ? 'auto' : 'none'};
+  transition: opacity 0.3s ease;
+  z-index: 1;
 `;
 
 const ResumePreviewContainer = styled.div`
@@ -242,6 +264,7 @@ const ResumeHintText = styled.div`
   font-weight: 500;
   letter-spacing: 0.5px;
   pointer-events: none;
+  white-space: nowrap;
 `;
 
 const RolePill = styled(m.div)`
@@ -649,7 +672,7 @@ const Home: React.FC = () => {
         url={SITE_URL + '/'}
       />
 
-      {/* Preload the LCP hero image on the home route only (not every route). */}
+      {/* Preload the LCP hero image and resume preview on the home route. */}
       <Helmet>
         <link
           rel="preload"
@@ -657,6 +680,12 @@ const Home: React.FC = () => {
           type="image/avif"
           href="/images/Home_dp_450.avif"
           fetchPriority="high"
+        />
+        <link
+          rel="prefetch"
+          as="image"
+          type="image/avif"
+          href="/Resume_preview.avif"
         />
       </Helmet>
 
@@ -690,16 +719,14 @@ const Home: React.FC = () => {
               <Button as={Link} to="/contact" $variant="outline" $size="lg">
                 Start a Conversation
               </Button>
-              {/* Preview reveals on hover (mouse) or when the download control
-                  inside receives focus (keyboard) — focus/blur bubble up here. */}
-              <Suspense fallback={null}>
-                <ResumeDownload
-                  variant="outline"
-                  size="lg"
-                  showTooltip={false}
-                  onPreviewChange={setShowResumePreview}
-                />
-              </Suspense>
+              {/* Preview reveals smoothly on hover (mouse) or when the download control
+                  inside receives focus (keyboard). */}
+              <ResumeDownload
+                variant="outline"
+                size="lg"
+                showTooltip={false}
+                onPreviewChange={setShowResumePreview}
+              />
             </CTAContainer>
 
             <AvailabilityBadge variants={itemVariants}>
@@ -711,43 +738,27 @@ const Home: React.FC = () => {
           <ProfileImageContainer variants={itemVariants}>
             <FrameTagTL aria-hidden="true">0x00</FrameTagTL>
             <FrameTagBR aria-hidden="true">EOF</FrameTagBR>
-            <AnimatePresence mode="wait">
-              {!showResumePreview ? (
-                <StylizedImage
-                  as={m.div}
-                  key="profile"
-                  initial={{ opacity: 1 }}
-                  exit={{ opacity: 0 }}
-                  transition={{ duration: 0.3 }}
-                >
-                  <img
-                    src={profileImage450}
-                    srcSet={`${profileImage150} 150w, ${profileImage300} 300w, ${profileImage450} 450w, ${profileImage600} 600w, ${profileImage900} 900w, ${profileImage} 1673w`}
-                    sizes="(max-width: 968px) 280px, 450px"
-                    alt="Rolan Lobo — Software Developer"
-                    fetchPriority="high"
-                    loading="eager"
-                    decoding="sync"
-                    width={450}
-                    height={450}
-                  />
-                </StylizedImage>
-              ) : (
-                <StylizedImage
-                  as={m.div}
-                  key="resume"
-                  initial={{ opacity: 0 }}
-                  animate={{ opacity: 1 }}
-                  exit={{ opacity: 0 }}
-                  transition={{ duration: 0.3 }}
-                >
-                  <ResumePreviewContainer>
-                    <img src="/Resume_preview.avif" alt="Resume Preview" />
-                  </ResumePreviewContainer>
-                  <ResumeHintText>Click button to download full resume</ResumeHintText>
-                </StylizedImage>
-              )}
-            </AnimatePresence>
+            <StylizedImage>
+              <ProfileLayer $visible={!showResumePreview}>
+                <img
+                  src={profileImage450}
+                  srcSet={`${profileImage150} 150w, ${profileImage300} 300w, ${profileImage450} 450w, ${profileImage600} 600w, ${profileImage900} 900w, ${profileImage} 1673w`}
+                  sizes="(max-width: 968px) 280px, 450px"
+                  alt="Rolan Lobo — Software Developer"
+                  fetchPriority="high"
+                  loading="eager"
+                  decoding="sync"
+                  width={450}
+                  height={450}
+                />
+              </ProfileLayer>
+              <ResumePreviewLayer $visible={showResumePreview} aria-hidden={!showResumePreview}>
+                <ResumePreviewContainer>
+                  <img src="/Resume_preview.avif" alt="Resume Preview" loading="eager" decoding="async" />
+                </ResumePreviewContainer>
+                <ResumeHintText>Click button to download full resume</ResumeHintText>
+              </ResumePreviewLayer>
+            </StylizedImage>
           </ProfileImageContainer>
         </HeroContent>
 
@@ -843,9 +854,7 @@ const Home: React.FC = () => {
                   animate={{ opacity: 1, y: 0 }}
                   transition={{ duration: 0.4, delay: index * 0.1 }}
                 >
-                  <Suspense fallback={<div style={{ height: '400px' }} />}>
-                    <BlogCard post={post} />
-                  </Suspense>
+                  <BlogCard post={post} />
                 </m.div>
               ))}
             </BlogGrid>

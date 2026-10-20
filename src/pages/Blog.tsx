@@ -1,6 +1,6 @@
-import React, { useState, useEffect, lazy, Suspense } from 'react';
+import React, { useState, useEffect } from 'react';
 import styled, { keyframes } from 'styled-components';
-import { m, AnimatePresence } from 'framer-motion';
+import { m } from 'framer-motion';
 import { Helmet } from 'react-helmet-async';
 import { Container } from '../styles/GlobalStyle';
 import { glassSurface } from '../styles/surfaces';
@@ -9,8 +9,7 @@ import type { BlogPost } from '../utils/devto';
 import { useDevtoPosts } from '../hooks/useDevtoPosts';
 import { ExternalSVG } from '../components/icons';
 import { BLOG_INTRO, SITE_URL } from '../utils/site';
-
-const BlogCard = lazy(() => import('../components/BlogCard'));
+import BlogCard from '../components/BlogCard';
 
 /* ─── Layout ──────────────────────────────────────────────────────────────── */
 
@@ -165,7 +164,14 @@ const PostCount = styled.p`
 
 /* ─── Post list ───────────────────────────────────────────────────────────── */
 
-const PostList = styled(m.div)`
+const postListFadeIn = keyframes`
+  from { opacity: 0.7; transform: translateY(3px); }
+  to   { opacity: 1; transform: translateY(0); }
+`;
+
+const PostList = styled.div`
+  min-height: 240px;
+  animation: ${postListFadeIn} 0.15s cubic-bezier(0.16, 1, 0.3, 1);
   /* BlogCard rows handle their own borders — no wrapper border needed */
 `;
 
@@ -491,28 +497,11 @@ const Blog: React.FC = () => {
 
           {/* ── Post list ── */}
           {!loading && !error && visiblePosts.length > 0 && (
-            <AnimatePresence mode="wait">
-              <PostList
-                key={activeTag ?? 'all'}
-                initial={{ opacity: 0 }}
-                animate={{ opacity: 1 }}
-                exit={{ opacity: 0 }}
-                transition={{ duration: 0.2 }}
-              >
-                {visiblePosts.map((post, index) => (
-                  <m.div
-                    key={post.id}
-                    initial={{ opacity: 0 }}
-                    animate={{ opacity: 1 }}
-                    transition={{ duration: 0.3, delay: index * 0.04 }}
-                  >
-                    <Suspense fallback={<SkeletonRowBlock />}>
-                      <BlogCard post={post} />
-                    </Suspense>
-                  </m.div>
-                ))}
-              </PostList>
-            </AnimatePresence>
+            <PostList key={activeTag ?? 'all'}>
+              {visiblePosts.map((post) => (
+                <BlogCard key={post.id} post={post} />
+              ))}
+            </PostList>
           )}
 
           {/* ── Footer strip ── */}

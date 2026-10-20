@@ -245,6 +245,7 @@ html {
      container — `hidden` here can swallow wheel/touch scrolling. */
   overflow-x: clip;
   scroll-padding-top: 80px;
+  scrollbar-gutter: stable;
 }
 
 body {

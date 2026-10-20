@@ -164,6 +164,8 @@ const BlogCard: React.FC<BlogCardProps> = ({ post }) => {
             <img
               src={post.coverImage.url}
               alt=""
+              width={100}
+              height={68}
               loading="lazy"
               decoding="async"
               crossOrigin="anonymous"
