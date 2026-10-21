@@ -180,7 +180,7 @@ const ResumeDownload: React.FC<ResumeDownloadProps> = ({
     >
       <Button
         as="a"
-        href="/resume_rolan_lobo.pdf"
+        href="/Rolan_Lobo_Resume.pdf"
         download="Rolan_Lobo_Resume.pdf"
         $variant={variant}
         $size={size}

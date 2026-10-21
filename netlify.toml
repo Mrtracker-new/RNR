@@ -8,6 +8,12 @@
 [[plugins]]
   package = "netlify-plugin-chromium"
 
+# Legacy resume path redirect
+[[redirects]]
+  from = "/resume_rolan_lobo.pdf"
+  to = "/Rolan_Lobo_Resume.pdf"
+  status = 301
+
 # Unknown paths get the prerendered 404 page with a real 404 status. Known
 # routes are served from their own static index.html files before this rule.
 [[redirects]]

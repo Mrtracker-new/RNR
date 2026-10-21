@@ -234,7 +234,7 @@ const ExitIntentPopup: React.FC<ExitIntentPopupProps> = ({
     } else if (primaryActionPath) {
       navigate(primaryActionPath);
     } else {
-      window.open('/resume_rolan_lobo.pdf', '_blank', 'noopener,noreferrer');
+      window.open('/Rolan_Lobo_Resume.pdf', '_blank', 'noopener,noreferrer');
     }
     handleClose();
   }, [onPrimaryAction, primaryActionPath, navigate, handleClose]);
